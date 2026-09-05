@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f3eee4;
+  --paper-2: #e8e0d2;
+  --card: #fbf7ef;
+  --ink: #1c1916;
+  --ink-2: #3f3832;
+  --muted: #6d645b;
+  --line: #d4c8b6;
+  --rust: #b4532a;
+  --rust-soft: #f3e2d6;
+  --moss: #3d5a4c;
+  --background: var(--paper);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-ibm-plex-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: #e8c4b0;
+  color: var(--ink);
+}
+
+.guide-prose h2 {
+  margin-top: 2.4rem;
+  margin-bottom: 0.7rem;
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-size: 1.65rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  scroll-margin-top: 6rem;
+}
+
+.guide-prose h3 {
+  margin-top: 1.6rem;
+  margin-bottom: 0.45rem;
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: var(--ink);
+  scroll-margin-top: 6rem;
+}
+
+.guide-prose p,
+.guide-prose li {
+  color: var(--ink-2);
+  line-height: 1.7;
+}
+
+.guide-prose p + p {
+  margin-top: 1rem;
+}
+
+.guide-prose ul,
+.guide-prose ol {
+  margin: 0.9rem 0 1.1rem;
+  padding-left: 1.2rem;
+}
+
+.guide-prose ul {
+  list-style: disc;
+}
+
+.guide-prose ol {
+  list-style: decimal;
+}
+
+.guide-prose li + li {
+  margin-top: 0.35rem;
+}
+
+.guide-prose a {
+  color: var(--rust);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--rust) 35%, transparent);
+}
+
+.guide-prose a:hover {
+  text-decoration-color: var(--rust);
+}
+
+.guide-prose strong {
+  color: var(--ink);
+  font-weight: 650;
+}

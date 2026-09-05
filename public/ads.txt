@@ -1,0 +1,5 @@
+# ads.txt placeholder for bayheatguide.com
+# Replace the sample line with real seller accounts before serving ads.
+# Format: <advertising-system-domain>, <seller-account-id>, <DIRECT|RESELLER>, <certification-authority-id>
+#
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
