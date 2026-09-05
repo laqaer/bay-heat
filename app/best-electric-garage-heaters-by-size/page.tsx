@@ -118,6 +118,10 @@ export default function SizeGuidePage() {
           <Link href="/best-ceiling-mount-garage-heaters-under-200">
             ceiling-mount units under $200
           </Link>
+          . Ceiling versus wall is{" "}
+          <Link href="/wall-mount-vs-ceiling-garage-heater">
+            joist load, throw, and headroom
+          </Link>
           .
         </li>
       </ul>
@@ -170,7 +174,12 @@ export default function SizeGuidePage() {
         <li>
           <strong>The garage door is usually the largest hole.</strong> An
           uninsulated door can undo a correctly sized heater. Weatherstrip and an
-          insulated door often beat a jump from 5 kW to 7.5 kW.
+          insulated door often beat a jump from 5 kW to 7.5 kW. The sequence is
+          on{" "}
+          <Link href="/insulate-garage-before-heater-upgrade">
+            seal and insulate first
+          </Link>
+          .
         </li>
         <li>
           <strong>Concrete and vehicles are thermal mass.</strong> A cold slab

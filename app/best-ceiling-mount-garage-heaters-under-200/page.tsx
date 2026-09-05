@@ -125,6 +125,11 @@ export default function CeilingGuidePage() {
         Why people pick it: the wattage switch is on the unit, so you can
         derate without opening a jumper diagram. The thermostat is on the
         front. Louvers and a tilt bracket let you aim at a bay or a door.
+        Whether that bracket belongs on joists or a wall is{" "}
+        <Link href="/wall-mount-vs-ceiling-garage-heater">
+          wall-mount vs ceiling-mount
+        </Link>
+        .
       </p>
       <p>
         Why it still fails in the field: it is 5 kW of air. In an uninsulated

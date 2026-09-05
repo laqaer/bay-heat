@@ -141,7 +141,13 @@ export default function HeatTypeGuidePage() {
       </p>
       <p>In that building, the ranked list is:</p>
       <ol>
-        <li>weatherstrip, threshold, and an insulated door,</li>
+        <li>
+          weatherstrip, threshold, and an insulated door (see{" "}
+          <Link href="/insulate-garage-before-heater-upgrade">
+            seal first vs more watts
+          </Link>
+          ),
+        </li>
         <li>infrared or directed radiant at the occupied zone,</li>
         <li>then more watts of forced-air, if the panel can take them.</li>
       </ol>
