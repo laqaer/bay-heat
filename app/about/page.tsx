@@ -26,7 +26,7 @@ export default function AboutPage() {
         <p className="mt-4 text-lg leading-8 text-[var(--ink-2)]">
           BayHeat Guide is a comparison site for electric garage and workshop
           heaters. It is published by {site.publisher}. The public domain for
-          this property is {site.domain} (not wired yet). Contact:{" "}
+          this property is {site.domain}. Contact:{" "}
           <a href={`mailto:${site.email}`}>{site.email}</a>.
         </p>
 

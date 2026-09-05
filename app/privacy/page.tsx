@@ -32,8 +32,8 @@ export default function PrivacyPage() {
         <h2>Information we may collect</h2>
         <ul>
           <li>
-            <strong>Server and hosting logs.</strong> Our host (intended:
-            Vercel) and any CDN may receive IP address, user agent, referrer,
+            <strong>Server and hosting logs.</strong> Our host (Vercel) and any
+            CDN may receive IP address, user agent, referrer,
             and request path as part of delivering pages. We use that to operate
             and debug the site, not to build a marketing profile.
           </li>
