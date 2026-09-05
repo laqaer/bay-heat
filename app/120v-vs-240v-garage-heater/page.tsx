@@ -169,7 +169,8 @@ export default function VoltageGuidePage() {
       </p>
       <p>
         If the panel cannot take the load, the useful options are: a smaller
-        heater plus insulation,{" "}
+        heater plus{" "}
+        <Link href="/insulate-garage-before-heater-upgrade">insulation</Link>,{" "}
         <Link href="/forced-air-vs-infrared-garage-heater">
           infrared at the bench
         </Link>

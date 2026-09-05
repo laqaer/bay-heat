@@ -31,6 +31,20 @@ const steps = [
     href: "/best-electric-garage-heaters-by-size",
     label: "Size by garage",
   },
+  {
+    n: "04",
+    title: "Seal the envelope before you buy more watts",
+    body: "An insulated door and weatherstrip often beat a jump from 5 kW to 7.5 kW. Infiltration and a cold slab fake an undersized heater. Panel capacity is the hard stop.",
+    href: "/insulate-garage-before-heater-upgrade",
+    label: "Insulate first",
+  },
+  {
+    n: "05",
+    title: "Wall versus ceiling is joist load and throw",
+    body: "Ceiling units throw across the bay if the joists can take 25–30 lb and you have the headroom. Wall mounts win on low ceilings and one work zone. The manual’s clearance wins.",
+    href: "/wall-mount-vs-ceiling-garage-heater",
+    label: "Wall vs ceiling",
+  },
 ];
 
 export default function HomePage() {
@@ -48,8 +62,9 @@ export default function HomePage() {
             <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--ink-2)]">
               BayHeat Guide is a boring comparison site for electric garage and
               workshop heat: 120 V vs 240 V, forced-air vs infrared, portable vs
-              ceiling-mount. No star ratings. No invented coverage claims. The
-              breaker and the insulation decide more than the box art.
+              ceiling-mount, wall vs ceiling, and whether to seal the building
+              before buying more watts. No star ratings. No invented coverage
+              claims. The breaker and the insulation decide more than the box art.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -83,8 +98,11 @@ export default function HomePage() {
               </li>
               <li>
                 <strong className="text-[var(--ink)]">Uninsulated door:</strong>{" "}
-                more watts will not fix infiltration. Seal and insulate first, or
-                heat the person, not the bay.
+                more watts will not fix infiltration.{" "}
+                <Link href="/insulate-garage-before-heater-upgrade">
+                  Seal and insulate first
+                </Link>
+                , or heat the person, not the bay.
               </li>
             </ul>
           </aside>

@@ -7,7 +7,7 @@ export const site = {
   publisher: "Laqaer Products",
   tagline: "Boring, specific advice for electric garage and workshop heaters.",
   description:
-    "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, size, and heat type — 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount.",
+    "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, and whether to seal the building before buying more watts.",
   locale: "en-US",
   updated: "2026-09-04",
 } as const;
@@ -96,6 +96,32 @@ export const guides: Guide[] = [
     summary:
       "On a 15 A circuit, treat ~12 A as the continuous ceiling. A 1,500 W milkhouse heater is 12.5 A — it wants to be the only load.",
     decision: "Stuck with a regular 120 V outlet?",
+    updated: "2026-09-04",
+  },
+  {
+    href: "/wall-mount-vs-ceiling-garage-heater",
+    title: "Wall-mount vs ceiling-mount garage heaters",
+    h1: "Wall-mount vs ceiling-mount: joist load, throw, and headroom",
+    description:
+      "When a hardwired electric garage heater belongs on the ceiling versus a wall: joist load, throw direction, headroom, and the clearance the manual actually requires.",
+    navLabel: "Wall vs ceiling",
+    kind: "guide",
+    summary:
+      "Ceiling units throw across the bay if the joists can take 25–30 lb. Wall mounts win on low ceilings and one work zone. The manual’s clearance is the rule, not a blog height.",
+    decision: "Can the ceiling take the unit, or is the heat needed on one wall?",
+    updated: "2026-09-04",
+  },
+  {
+    href: "/insulate-garage-before-heater-upgrade",
+    title: "Insulate the garage before a heater upgrade",
+    h1: "Seal and insulate first, or buy more watts?",
+    description:
+      "Why an insulated door and weatherstrip often beat a jump from 5 kW to 7.5 kW, when infiltration and slab mass fake an undersized heater, and when more watts are still required.",
+    navLabel: "Insulate first",
+    kind: "guide",
+    summary:
+      "More watts heat the air you are already leaking. Door, weatherstrip, and sill usually beat a larger breaker. Panel capacity is the hard stop.",
+    decision: "Is the building leaking the heat you already paid for?",
     updated: "2026-09-04",
   },
 ];
