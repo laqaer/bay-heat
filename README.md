@@ -3,7 +3,7 @@
 Boring comparison site for electric garage and workshop heaters: 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, and seal-first vs more watts.
 
 **Brand:** BayHeat Guide  
-**Domain:** [bayheatguide.com](https://bayheatguide.com) (reserved; not wired yet)  
+**Domain:** [bayheatguide.com](https://bayheatguide.com) (live on Vercel; production domain wired, www → apex)  
 **Contact:** [hello@bayheatguide.com](mailto:hello@bayheatguide.com)  
 **Publisher:** Laqaer Products
 
@@ -41,7 +41,7 @@ npm run build
 1. Import `laqaer/bay-heat`.
 2. Framework preset: **Next.js**. Leave build/output commands at defaults (`next build`).
 3. No environment variables are required for the editorial site.
-4. Point `bayheatguide.com` at the project when DNS is ready.
+4. Production domain `bayheatguide.com` is wired (apex 200, www → apex). The default Vercel hostname `bay-heat.vercel.app` remains available for previews.
 5. Replace `public/ads.txt` and affiliate placeholders before serving ads or live retailer links.
 
 ## Routes
