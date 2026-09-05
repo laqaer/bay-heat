@@ -7,7 +7,7 @@ export const site = {
   publisher: "Laqaer Products",
   tagline: "Boring, specific advice for electric garage and workshop heaters.",
   description:
-    "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, size, and heat type — 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount.",
+    "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, and whether to seal the building before buying more watts.",
   locale: "en-US",
   updated: "2026-09-04",
 } as const;

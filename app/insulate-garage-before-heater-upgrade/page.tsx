@@ -26,7 +26,7 @@ const toc = [
   { id: "slab", label: "Slab and thermal mass" },
   { id: "more-watts", label: "When more watts are still required" },
   { id: "wrong-path", label: "When resistance heat is the wrong path" },
-  { id: "after-seal", label: "Heat type after you seal" },
+  { id: "after-seal", label: "Forced-air once the door holds" },
 ];
 
 export default function InsulateFirstGuidePage() {
@@ -41,14 +41,15 @@ export default function InsulateFirstGuidePage() {
         turn a sealing problem into a panel problem.
       </p>
       <p>
-        This page is the envelope conversation that belongs next to{" "}
+        This page is the envelope conversation that belongs after you know the
+        circuit and the heat type, and after you have a wattage bracket from{" "}
         <Link href="/best-electric-garage-heaters-by-size">
           wattage by garage size
         </Link>
-        . The size brackets already split insulated versus drafty. Here the
-        decision is ordered: seal and insulate first, then decide whether the
-        existing watts are short, then decide whether electric resistance is
-        still the right fuel.
+        . The size brackets already split insulated versus drafty. Seal-first
+        here is the still-cold / upgrade path: when the bay stays cold, or you
+        are about to jump from 5 kW to 7.5 kW, fix the envelope before you buy
+        more watts. Then pick the mount.
       </p>
       <p>
         We are not going to invent a payback year, an R-value that “pays for
@@ -223,8 +224,8 @@ export default function InsulateFirstGuidePage() {
 
       <h2 id="more-watts">When more watts are still required</h2>
       <p>
-        Sealing first is not a slogan that forbids a larger heater. After the
-        door and the obvious leaks, you still need more watts when:
+        Sealing before more watts is not a slogan that forbids a larger heater.
+        After the door and the obvious leaks, you still need more watts when:
       </p>
       <ul>
         <li>
@@ -282,19 +283,23 @@ export default function InsulateFirstGuidePage() {
       </p>
       <p>
         Undersized service plus an uninsulated door is the expensive way to
-        learn the order: envelope, then circuit, then cabinet. The mount
-        question (wall versus ceiling) comes after those three. See{" "}
+        skip the hub order. Name the circuit, pick heat type, then size the
+        watts. If the bay is still cold or you are about to jump from 5 kW to
+        7.5 kW, seal the envelope before more watts. Then decide wall versus
+        ceiling. See{" "}
         <Link href="/wall-mount-vs-ceiling-garage-heater">
           wall-mount vs ceiling-mount
         </Link>{" "}
         when you are actually hanging steel.
       </p>
 
-      <h2 id="after-seal">Heat type after you seal</h2>
+      <h2 id="after-seal">Forced-air once the door holds</h2>
       <p>
-        Once the door stops leaking, forced-air becomes a reasonable way to
-        make the bay itself less miserable. That is the closed-door, some
-        insulation case on{" "}
+        Heat type is already decided by this point. Sealing does not reopen
+        that fork. It is what makes a forced-air choice actually hold air. Once
+        the door stops leaking, whole-bay fan-forced heat can make the space
+        itself less miserable. That is the closed-door, some insulation case
+        on{" "}
         <Link href="/forced-air-vs-infrared-garage-heater">
           forced-air vs infrared
         </Link>
@@ -318,12 +323,15 @@ export default function InsulateFirstGuidePage() {
         weatherstrip “adds 10 degrees” as a measurement we will repeat.
       </p>
       <p>
-        Next: if the envelope now matches the insulated column, size the
-        circuit and the cabinet on{" "}
-        <Link href="/best-electric-garage-heaters-by-size">the size page</Link>
-        {" "}and{" "}
-        <Link href="/120v-vs-240v-garage-heater">120 V vs 240 V</Link>. If you
-        only occupy a bench, stay on{" "}
+        Next: if the envelope now matches the insulated column and you are
+        hanging a hardwired unit, pick the mount on{" "}
+        <Link href="/wall-mount-vs-ceiling-garage-heater">
+          wall vs ceiling
+        </Link>
+        . If the insulated column still asks for more watts than the circuit
+        can feed, that is a{" "}
+        <Link href="/120v-vs-240v-garage-heater">panel conversation</Link>,
+        not a second milkhouse heater. If you only occupy a bench, stay on{" "}
         <Link href="/portable-garage-heaters-15a-circuit">15 A portables</Link>{" "}
         or directed radiant, and stop shopping for more fan.
       </p>
