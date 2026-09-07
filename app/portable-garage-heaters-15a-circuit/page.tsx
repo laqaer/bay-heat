@@ -81,6 +81,12 @@ export default function PortableGuidePage() {
         </Link>{" "}
         and the wattage brackets on the{" "}
         <Link href="/best-electric-garage-heaters-by-size">size guide</Link>.
+        It is cheaper per hour than a 5 kW unit only because it is fewer
+        watts —{" "}
+        <Link href="/electric-garage-heater-operating-cost">
+          cost-to-run math
+        </Link>
+        , not a 120 V discount.
       </p>
 
       <h2 id="other-portables">Other 15 A portables, without the mythology</h2>

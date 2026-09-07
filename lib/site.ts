@@ -7,9 +7,9 @@ export const site = {
   publisher: "Laqaer Products",
   tagline: "Boring, specific advice for electric garage and workshop heaters.",
   description:
-    "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, and whether to seal the building before buying more watts.",
+    "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, whether to seal the building before buying more watts, and what those watts cost to run.",
   locale: "en-US",
-  updated: "2026-09-05",
+  updated: "2026-09-07",
 } as const;
 
 export const affiliateDisclosure =
@@ -123,6 +123,19 @@ export const guides: Guide[] = [
       "More watts heat the air you are already leaking. Door, weatherstrip, and sill usually beat a larger breaker. Panel capacity is the hard stop.",
     decision: "Is the building leaking the heat you already paid for?",
     updated: "2026-09-04",
+  },
+  {
+    href: "/electric-garage-heater-operating-cost",
+    title: "How much an electric garage heater costs to run",
+    h1: "How much an electric garage heater costs to run: watts × hours × your rate",
+    description:
+      "kWh math from the nameplate: (watts ÷ 1,000) × hours × the $/kWh on your bill. Example rates only — not a national average. Voltage does not change the rate; duty cycle and the envelope change the hours.",
+    navLabel: "Cost to run",
+    kind: "guide",
+    summary:
+      "Cost is nameplate watts, hours the element is actually on, and the rate on your bill. A 1,500 W portable is cheap per hour because it is spot heat, not because 120 V is efficient.",
+    decision: "What will the watts actually cost to run?",
+    updated: "2026-09-07",
   },
 ];
 

@@ -45,6 +45,13 @@ const steps = [
     href: "/wall-mount-vs-ceiling-garage-heater",
     label: "Wall vs ceiling",
   },
+  {
+    n: "06",
+    title: "Price the hours, not the box",
+    body: "kWh is nameplate watts ÷ 1,000 × hours the element is actually on. Use the rate on your bill. Voltage does not change $/kWh — only how many watts you can deliver.",
+    href: "/electric-garage-heater-operating-cost",
+    label: "Cost to run",
+  },
 ];
 
 export default function HomePage() {
@@ -62,9 +69,10 @@ export default function HomePage() {
             <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--ink-2)]">
               BayHeat Guide is a boring comparison site for electric garage and
               workshop heat: 120 V vs 240 V, forced-air vs infrared, portable vs
-              ceiling-mount, wall vs ceiling, and whether to seal the building
-              before buying more watts. No star ratings. No invented coverage
-              claims. The breaker and the insulation decide more than the box art.
+              ceiling-mount, wall vs ceiling, whether to seal the building
+              before buying more watts, and what those watts cost to run. No
+              star ratings. No invented coverage claims. The breaker and the
+              insulation decide more than the box art.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link

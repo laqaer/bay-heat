@@ -211,7 +211,12 @@ export default function SizeGuidePage() {
         territory. If you only have a regular outlet, stay on{" "}
         <Link href="/portable-garage-heaters-15a-circuit">15 A portables</Link>.
         If you have not checked the panel yet, start with{" "}
-        <Link href="/120v-vs-240v-garage-heater">120 V vs 240 V</Link>.
+        <Link href="/120v-vs-240v-garage-heater">120 V vs 240 V</Link>. If you
+        want the bill math after you pick a nameplate, use{" "}
+        <Link href="/electric-garage-heater-operating-cost">
+          cost to run
+        </Link>
+        .
       </p>
     </GuideChrome>
   );
