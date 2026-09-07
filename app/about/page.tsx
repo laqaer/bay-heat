@@ -35,9 +35,10 @@ export default function AboutPage() {
           <p>
             A small set of bookmarkable guides: circuit reality, bay sizing,
             forced-air versus infrared, the 5 kW ceiling-mount aisle, 15 A
-            portables, wall versus ceiling mount, and whether to seal the
-            garage before buying more watts. The hub at the homepage is a
-            decision tree, not a doorway page stuffed with synonyms.
+            portables, wall versus ceiling mount, whether to seal the
+            garage before buying more watts, and what those watts cost to
+            run. The hub at the homepage is a decision tree, not a doorway
+            page stuffed with synonyms.
           </p>
           <ul>
             {guides.map((guide) => (

@@ -171,7 +171,11 @@ export default function InsulateFirstGuidePage() {
         Stack effect and wind get worse as the delta-T grows. A door that is
         merely mediocre at 40 °F outside is a gale at 10 °F. Adding watts
         without touching the sill scales the electric bill faster than it
-        scales comfort.
+        scales comfort. Hours-on is the bill; see{" "}
+        <Link href="/electric-garage-heater-operating-cost">
+          operating cost
+        </Link>
+        .
       </p>
       <p>
         Infrared changes the failure mode, it does not repeal infiltration.

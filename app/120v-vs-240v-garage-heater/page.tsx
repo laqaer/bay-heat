@@ -100,7 +100,12 @@ export default function VoltageGuidePage() {
         neutral, depending on the unit). It is not “twice as efficient.”
         Resistance heat is essentially 100% efficient at the point of use on
         either voltage. 240 V is how you deliver more watts without doubling the
-        current on a 120 V conductor.
+        current on a 120 V conductor. Dollars per kWh do not change with
+        voltage — see{" "}
+        <Link href="/electric-garage-heater-operating-cost">
+          what those watts cost to run
+        </Link>
+        .
       </p>
       <p>
         A 5,000 W heater at 240 V is about 20.9 A. The same 5,000 W at 120 V

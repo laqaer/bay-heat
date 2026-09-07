@@ -32,8 +32,12 @@ export default function HeatTypeGuidePage() {
       <p>
         Forced-air (fan-forced) electric heaters warm air and throw it across
         the bay. Infrared / radiant heaters warm surfaces and people in the beam.
-        Both convert nearly all of their watts into heat. They do not solve the
-        same problem.
+        Both convert nearly all of their watts into heat. Same watts at the
+        meter are the same dollars — see{" "}
+        <Link href="/electric-garage-heater-operating-cost">
+          operating cost
+        </Link>
+        . They do not solve the same problem.
       </p>
       <p>
         If you want the whole garage to feel like a room, you are buying air

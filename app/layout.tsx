@@ -44,6 +44,7 @@ export const metadata: Metadata = {
     "ceiling mount garage heater",
     "forced air vs infrared",
     "15 amp space heater",
+    "electric garage heater operating cost",
   ],
   openGraph: {
     type: "website",
