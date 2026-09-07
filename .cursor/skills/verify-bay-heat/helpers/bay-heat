@@ -1,0 +1,726 @@
+#!/usr/bin/env node
+"use strict";
+
+const { spawn, execFileSync } = require("child_process");
+const fs = require("fs");
+const http = require("http");
+const path = require("path");
+
+const SKILL_DIR = path.resolve(__dirname, "..");
+const DEFAULT_ROOT = path.resolve(__dirname, "../../../..");
+const DEFAULT_PORT = 4317;
+const DEFAULT_HOST = "127.0.0.1";
+const READY_MS = 90_000;
+
+function env(name, fallback) {
+  const value = process.env[name];
+  return value == null || value === "" ? fallback : value;
+}
+
+function repoRoot() {
+  return path.resolve(env("BAYHEAT_ROOT", DEFAULT_ROOT));
+}
+
+function port() {
+  return Number(env("BAYHEAT_PORT", String(DEFAULT_PORT)));
+}
+
+function host() {
+  return env("BAYHEAT_HOST", DEFAULT_HOST);
+}
+
+function mode() {
+  const value = env("BAYHEAT_MODE", "dev");
+  if (value !== "dev" && value !== "start") {
+    throw new Error(`BAYHEAT_MODE must be dev or start, got ${value}`);
+  }
+  return value;
+}
+
+function runDir() {
+  return path.resolve(env("BAYHEAT_RUN_DIR", `/tmp/bay-heat-verify-${port()}`));
+}
+
+function evidenceDir() {
+  return path.resolve(env("BAYHEAT_EVIDENCE", path.join(SKILL_DIR, "evidence")));
+}
+
+function instancePath() {
+  return path.join(runDir(), "instance.json");
+}
+
+function logPath() {
+  return path.join(runDir(), "next.log");
+}
+
+function baseUrl() {
+  return `http://${host()}:${port()}`;
+}
+
+function nextBin() {
+  return path.join(repoRoot(), "node_modules", ".bin", "next");
+}
+
+function usage() {
+  return `bay-heat — drive a local BayHeat Guide instance
+
+Usage:
+  bay-heat launch
+  bay-heat doctor
+  bay-heat url
+  bay-heat get <path> [--expect <text>]...
+  bay-heat follow --from <path> --name <link text> [--expect <text>]...
+  bay-heat snapshot <path> --dir <dir> [--screenshot]
+  bay-heat screenshot <path> --out <file>
+  bay-heat seo [--dir <dir>]
+  bay-heat cleanup
+
+Environment:
+  BAYHEAT_ROOT      repo root (default: ${DEFAULT_ROOT})
+  BAYHEAT_PORT      listen port (default: ${DEFAULT_PORT})
+  BAYHEAT_HOST      bind/connect host (default: ${DEFAULT_HOST})
+  BAYHEAT_MODE      dev | start (default: dev)
+  BAYHEAT_RUN_DIR   pid/log dir (default: /tmp/bay-heat-verify-$PORT)
+  BAYHEAT_EVIDENCE  proof dir (default: ${path.join(SKILL_DIR, "evidence")})
+  BAYHEAT_CHROME    Chrome/Chromium binary (optional)
+
+Cleanup never deletes BAYHEAT_EVIDENCE.`;
+}
+
+function die(message, code = 1) {
+  process.stderr.write(`${message}\n`);
+  process.exit(code);
+}
+
+function writeJson(file, data) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`);
+}
+
+function readJson(file) {
+  if (!fs.existsSync(file)) return null;
+  return JSON.parse(fs.readFileSync(file, "utf8"));
+}
+
+function pidAlive(pid) {
+  if (!pid) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function listenersOnPort(listenPort) {
+  try {
+    const out = execFileSync("lsof", ["-nP", `-iTCP:${listenPort}`, "-sTCP:LISTEN", "-t"], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+    return out
+      .split(/\s+/)
+      .map((value) => Number(value.trim()))
+      .filter((value) => Number.isInteger(value) && value > 0);
+  } catch {
+    return [];
+  }
+}
+
+function stripTags(html) {
+  return decodeEntities(
+    String(html)
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim(),
+  );
+}
+
+function decodeEntities(text) {
+  return text
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, " ");
+}
+
+function matchAll(html, regex) {
+  return [...html.matchAll(regex)];
+}
+
+function inspectHtml(html, url) {
+  const title = stripTags((html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1] || "");
+  const headings = {};
+  for (const level of [1, 2, 3]) {
+    headings[`h${level}`] = matchAll(html, new RegExp(`<h${level}[^>]*>([\\s\\S]*?)</h${level}>`, "gi")).map((m) =>
+      stripTags(m[1]),
+    );
+  }
+  const canonical = ((html.match(/<link[^>]+rel=["']canonical["'][^>]*>/i) || [])[0] || "").match(
+    /href=["']([^"']+)["']/,
+  )?.[1] || "";
+  const jsonLd = matchAll(html, /<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi)
+    .map((m) => {
+      try {
+        return JSON.parse(m[1]);
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean);
+  const jsonLdTypes = jsonLd.flatMap((block) => {
+    const items = Array.isArray(block) ? block : [block];
+    return items.map((item) => item["@type"]).filter(Boolean);
+  });
+  const links = matchAll(html, /<a([^>]*)>([\s\S]*?)<\/a>/gi).map((m) => ({
+    href: (m[1].match(/href=["']([^"']+)["']/) || [])[1] || "",
+    name: stripTags(m[2]),
+  })).filter((link) => link.href && link.name);
+  const navs = matchAll(html, /<nav([^>]*)>([\s\S]*?)<\/nav>/gi).map((m) => ({
+    label: ((m[1].match(/aria-label=["']([^"']+)["']/) || [])[1] || "").trim(),
+    links: matchAll(m[2], /<a([^>]*)>([\s\S]*?)<\/a>/gi).map((a) => ({
+      href: (a[1].match(/href=["']([^"']+)["']/) || [])[1] || "",
+      name: stripTags(a[2]),
+    })),
+  }));
+  return {
+    url,
+    title,
+    h1: headings.h1[0] || "",
+    headings,
+    canonical,
+    jsonLdTypes,
+    jsonLd,
+    links,
+    navs,
+  };
+}
+
+function request(pathname) {
+  const url = new URL(pathname.startsWith("http") ? pathname : pathname || "/", baseUrl());
+  return new Promise((resolve, reject) => {
+    const req = http.get(url, { timeout: 15_000 }, (res) => {
+      const chunks = [];
+      res.on("data", (chunk) => chunks.push(chunk));
+      res.on("end", () => {
+        const body = Buffer.concat(chunks).toString("utf8");
+        resolve({
+          url: url.toString(),
+          status: res.statusCode,
+          headers: res.headers,
+          body,
+        });
+      });
+    });
+    req.on("error", reject);
+    req.on("timeout", () => {
+      req.destroy(new Error(`timeout fetching ${url}`));
+    });
+  });
+}
+
+async function fetchInspect(pathname) {
+  const res = await request(pathname);
+  const contentType = String(res.headers["content-type"] || "");
+  const inspected = contentType.includes("text/html") ? inspectHtml(res.body, res.url) : null;
+  return { ...res, contentType, inspected };
+}
+
+function printInspect(result) {
+  const info = result.inspected;
+  process.stdout.write(`status: ${result.status}\n`);
+  process.stdout.write(`url: ${result.url}\n`);
+  process.stdout.write(`content-type: ${result.contentType}\n`);
+  if (!info) {
+    process.stdout.write(`body-bytes: ${Buffer.byteLength(result.body)}\n`);
+    return;
+  }
+  process.stdout.write(`title: ${info.title}\n`);
+  process.stdout.write(`h1: ${info.h1}\n`);
+  if (info.canonical) process.stdout.write(`canonical: ${info.canonical}\n`);
+  if (info.jsonLdTypes.length) process.stdout.write(`json-ld: ${info.jsonLdTypes.join(", ")}\n`);
+  const primary = info.navs.find((nav) => nav.label === "Primary");
+  if (primary) {
+    process.stdout.write(`primary-nav: ${primary.links.map((link) => link.name).join(" | ")}\n`);
+  }
+}
+
+function expectTexts(result, expects) {
+  for (const needle of expects) {
+    if (!result.body.includes(needle)) {
+      die(`missing expected text ${JSON.stringify(needle)} in ${result.url}`);
+    }
+  }
+}
+
+function parseArgs(argv) {
+  const args = { _: [] };
+  for (let i = 0; i < argv.length; i += 1) {
+    const token = argv[i];
+    if (token.startsWith("--")) {
+      const key = token.slice(2);
+      const next = argv[i + 1];
+      if (next == null || next.startsWith("--")) {
+        args[key] = true;
+      } else if (key === "expect" || key === "name") {
+        args[key] = args[key] || [];
+        if (key === "name") args[key] = next;
+        else args[key].push(next);
+        i += 1;
+      } else {
+        args[key] = next;
+        i += 1;
+      }
+    } else {
+      args._.push(token);
+    }
+  }
+  if (typeof args.name !== "string") args.name = args.name || "";
+  args.expect = args.expect || [];
+  return args;
+}
+
+function findChrome() {
+  const candidates = [
+    env("BAYHEAT_CHROME", ""),
+    "/usr/local/bin/google-chrome",
+    "/usr/bin/google-chrome",
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+  ].filter(Boolean);
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return null;
+}
+
+function screenshot(pathname, outFile) {
+  const chrome = findChrome();
+  if (!chrome) die("no Chrome/Chromium found; set BAYHEAT_CHROME");
+  const abs = path.resolve(outFile);
+  fs.mkdirSync(path.dirname(abs), { recursive: true });
+  const url = new URL(pathname.startsWith("http") ? pathname : pathname || "/", baseUrl()).toString();
+  execFileSync(
+    chrome,
+    [
+      "--headless=new",
+      "--disable-gpu",
+      "--no-sandbox",
+      "--disable-dev-shm-usage",
+      "--hide-scrollbars",
+      "--window-size=1280,900",
+      "--virtual-time-budget=8000",
+      `--screenshot=${abs}`,
+      url,
+    ],
+    { stdio: ["ignore", "ignore", "pipe"] },
+  );
+  if (!fs.existsSync(abs) || fs.statSync(abs).size < 100) {
+    die(`screenshot failed: ${abs}`);
+  }
+  return abs;
+}
+
+function textSnapshot(inspected) {
+  const lines = [
+    `URL: ${inspected.url}`,
+    `TITLE: ${inspected.title}`,
+    `H1: ${inspected.h1}`,
+    `CANONICAL: ${inspected.canonical}`,
+    `JSON_LD: ${inspected.jsonLdTypes.join(", ")}`,
+    "",
+    "HEADINGS",
+  ];
+  for (const [level, values] of Object.entries(inspected.headings)) {
+    for (const value of values) lines.push(`${level.toUpperCase()}: ${value}`);
+  }
+  lines.push("", "NAVS");
+  for (const nav of inspected.navs) {
+    lines.push(`NAV[${nav.label || "untitled"}]: ${nav.links.map((link) => `${link.name} -> ${link.href}`).join(" | ")}`);
+  }
+  lines.push("", "LINKS");
+  for (const link of inspected.links) {
+    lines.push(`${link.name} -> ${link.href}`);
+  }
+  return `${lines.join("\n")}\n`;
+}
+
+function readInstance() {
+  return readJson(instancePath());
+}
+
+async function waitReady() {
+  const deadline = Date.now() + READY_MS;
+  let lastError = "not ready";
+  while (Date.now() < deadline) {
+    try {
+      const result = await fetchInspect("/");
+      if (result.status === 200 && result.body.includes("BayHeat Guide")) return result;
+      lastError = `status ${result.status}`;
+    } catch (error) {
+      lastError = error.message;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 400));
+  }
+  throw new Error(`instance did not become ready: ${lastError}`);
+}
+
+async function cmdLaunch() {
+  const listenPort = port();
+  const existing = readInstance();
+  if (existing && pidAlive(existing.pid)) {
+    const owned = listenersOnPort(listenPort).includes(existing.pid) || listenersOnPort(listenPort).length > 0;
+    if (owned) {
+      try {
+        const result = await fetchInspect("/");
+        if (result.status === 200 && result.body.includes("BayHeat Guide")) {
+          process.stdout.write(`already running pid=${existing.pid} ${baseUrl()}\n`);
+          return;
+        }
+      } catch {
+        // fall through and restart
+      }
+    }
+  }
+
+  const foreign = listenersOnPort(listenPort);
+  if (foreign.length && !(existing && foreign.includes(existing.pid))) {
+    die(`port ${listenPort} is already in use by pid(s) ${foreign.join(", ")}. Pick another BAYHEAT_PORT; do not drive a foreign instance.`);
+  }
+
+  if (!fs.existsSync(nextBin())) {
+    die(`missing ${nextBin()}. Run npm install in ${repoRoot()} first.`);
+  }
+
+  fs.mkdirSync(runDir(), { recursive: true });
+  const logFd = fs.openSync(logPath(), "w");
+  const args =
+    mode() === "start"
+      ? ["start", "--hostname", host(), "--port", String(listenPort)]
+      : ["dev", "--hostname", host(), "--port", String(listenPort)];
+  const child = spawn(nextBin(), args, {
+    cwd: repoRoot(),
+    detached: true,
+    stdio: ["ignore", logFd, logFd],
+    env: { ...process.env, PORT: String(listenPort) },
+  });
+  fs.closeSync(logFd);
+  child.unref();
+  writeJson(instancePath(), {
+    pid: child.pid,
+    port: listenPort,
+    host: host(),
+    mode: mode(),
+    root: repoRoot(),
+    startedAt: new Date().toISOString(),
+    url: baseUrl(),
+  });
+
+  try {
+    await waitReady();
+  } catch (error) {
+    process.stderr.write(fs.existsSync(logPath()) ? fs.readFileSync(logPath(), "utf8") : "");
+    die(error.message);
+  }
+  process.stdout.write(`launched pid=${child.pid} ${baseUrl()} log=${logPath()}\n`);
+}
+
+async function cmdDoctor() {
+  const instance = readInstance();
+  const listenPort = port();
+  const listeners = listenersOnPort(listenPort);
+  const report = {
+    ok: false,
+    url: baseUrl(),
+    port: listenPort,
+    host: host(),
+    mode: mode(),
+    pid: instance?.pid || null,
+    pidAlive: instance ? pidAlive(instance.pid) : false,
+    listeners,
+    owned: false,
+    title: "",
+    h1: "",
+    identity: false,
+  };
+
+  if (!instance) {
+    printDoctor(report, "no instance.json — this run did not launch the server");
+    die("doctor failed");
+  }
+  if (!pidAlive(instance.pid)) {
+    printDoctor(report, `pid ${instance.pid} is not alive`);
+    die("doctor failed");
+  }
+  if (instance.port !== listenPort || instance.host !== host()) {
+    printDoctor(report, `instance file is ${instance.host}:${instance.port}, env is ${host()}:${listenPort}`);
+    die("doctor failed");
+  }
+  report.owned = listeners.includes(instance.pid) || listeners.length > 0;
+  if (listeners.length === 0) {
+    printDoctor(report, `nothing is listening on ${listenPort}`);
+    die("doctor failed");
+  }
+
+  let result;
+  try {
+    result = await fetchInspect("/");
+  } catch (error) {
+    printDoctor(report, error.message);
+    die("doctor failed");
+  }
+  report.title = result.inspected?.title || "";
+  report.h1 = result.inspected?.h1 || "";
+  report.identity =
+    result.status === 200 &&
+    report.title.includes("BayHeat Guide") &&
+    report.h1.includes("Choose the electric garage heater that matches the circuit you have.");
+  report.ok = report.pidAlive && report.identity;
+  printDoctor(report, report.ok ? "instance is ours and serving BayHeat Guide" : "identity check failed");
+  if (!report.ok) die("doctor failed");
+}
+
+function printDoctor(report, note) {
+  process.stdout.write(`ok: ${report.ok ? "yes" : "no"}\n`);
+  process.stdout.write(`url: ${report.url}\n`);
+  process.stdout.write(`pid: ${report.pid || "none"}\n`);
+  process.stdout.write(`pidAlive: ${report.pidAlive}\n`);
+  process.stdout.write(`listeners: ${report.listeners.join(",") || "none"}\n`);
+  process.stdout.write(`title: ${report.title}\n`);
+  process.stdout.write(`h1: ${report.h1}\n`);
+  process.stdout.write(`note: ${note}\n`);
+}
+
+async function cmdGet(args) {
+  const pathname = args._[1];
+  if (!pathname) die("usage: bay-heat get <path> [--expect <text>]...");
+  const result = await fetchInspect(pathname);
+  printInspect(result);
+  if (result.status >= 400) die(`unexpected status ${result.status}`);
+  expectTexts(result, args.expect);
+}
+
+function resolveHref(fromPath, href) {
+  if (href.startsWith("#")) return `${fromPath.split("#")[0]}${href}`;
+  return new URL(href, new URL(fromPath, baseUrl())).pathname + new URL(href, new URL(fromPath, baseUrl())).search;
+}
+
+async function cmdFollow(args) {
+  const from = args.from;
+  const name = args.name;
+  if (!from || !name) die('usage: bay-heat follow --from <path> --name "<link text>" [--expect <text>]...');
+  const source = await fetchInspect(from);
+  if (!source.inspected) die(`${from} is not HTML`);
+  const match = source.inspected.links.find((link) => link.name === name) ||
+    source.inspected.links.find((link) => link.name.includes(name));
+  if (!match) {
+    die(`no link named ${JSON.stringify(name)} on ${from}. Have: ${source.inspected.links.map((l) => l.name).join(" | ")}`);
+  }
+  const destPath = resolveHref(from, match.href);
+  process.stdout.write(`follow: ${name} -> ${match.href}\n`);
+  const result = await fetchInspect(destPath);
+  printInspect(result);
+  if (result.status >= 400) die(`unexpected status ${result.status}`);
+  expectTexts(result, args.expect);
+}
+
+async function cmdSnapshot(args) {
+  const pathname = args._[1];
+  const dir = args.dir;
+  if (!pathname || !dir) die("usage: bay-heat snapshot <path> --dir <dir> [--screenshot]");
+  const result = await fetchInspect(pathname);
+  if (result.status >= 400) die(`unexpected status ${result.status}`);
+  expectTexts(result, args.expect);
+  const dest = path.resolve(dir);
+  fs.mkdirSync(dest, { recursive: true });
+  const slug = (args.label || pathname.replace(/[^\w]+/g, "-").replace(/^-|-$/g, "") || "root");
+  fs.writeFileSync(path.join(dest, `${slug}.html`), result.body);
+  if (result.inspected) {
+    fs.writeFileSync(path.join(dest, `${slug}.txt`), textSnapshot(result.inspected));
+  }
+  writeJson(path.join(dest, `${slug}.meta.json`), {
+    capturedAt: new Date().toISOString(),
+    status: result.status,
+    url: result.url,
+    contentType: result.contentType,
+    title: result.inspected?.title || "",
+    h1: result.inspected?.h1 || "",
+    canonical: result.inspected?.canonical || "",
+    jsonLdTypes: result.inspected?.jsonLdTypes || [],
+  });
+  if (args.screenshot) {
+    const png = path.join(dest, `${slug}.png`);
+    screenshot(pathname, png);
+    process.stdout.write(`screenshot: ${png}\n`);
+  }
+  process.stdout.write(`snapshot: ${dest}\n`);
+  printInspect(result);
+}
+
+function cmdScreenshot(args) {
+  const pathname = args._[1];
+  const out = args.out;
+  if (!pathname || !out) die("usage: bay-heat screenshot <path> --out <file>");
+  const file = screenshot(pathname, out);
+  process.stdout.write(`screenshot: ${file}\n`);
+}
+
+async function cmdSeo(args) {
+  const dest = args.dir ? path.resolve(args.dir) : null;
+  if (dest) fs.mkdirSync(dest, { recursive: true });
+
+  const robots = await request("/robots.txt");
+  const sitemap = await request("/sitemap.xml");
+  const ads = await request("/ads.txt");
+  const checks = [];
+
+  function check(name, ok, detail) {
+    checks.push({ name, ok, detail });
+    process.stdout.write(`${ok ? "pass" : "FAIL"} ${name}: ${detail}\n`);
+  }
+
+  check("robots-status", robots.status === 200, `status ${robots.status}`);
+  check("robots-allow", robots.body.includes("Allow: /"), "Allow: /");
+  check(
+    "robots-sitemap",
+    robots.body.includes("https://bayheatguide.com/sitemap.xml"),
+    "sitemap points at production host",
+  );
+  check("sitemap-status", sitemap.status === 200, `status ${sitemap.status}`);
+  for (const loc of [
+    "https://bayheatguide.com</loc>",
+    "https://bayheatguide.com/120v-vs-240v-garage-heater",
+    "https://bayheatguide.com/about",
+    "https://bayheatguide.com/privacy",
+    "https://bayheatguide.com/best-electric-garage-heaters-by-size",
+    "https://bayheatguide.com/forced-air-vs-infrared-garage-heater",
+    "https://bayheatguide.com/best-ceiling-mount-garage-heaters-under-200",
+    "https://bayheatguide.com/portable-garage-heaters-15a-circuit",
+    "https://bayheatguide.com/wall-mount-vs-ceiling-garage-heater",
+    "https://bayheatguide.com/insulate-garage-before-heater-upgrade",
+  ]) {
+    const label = loc.replace("https://bayheatguide.com", "").replace("</loc>", "/") || "/";
+    check(`sitemap:${label}`, sitemap.body.includes(loc), loc);
+  }
+  check("ads-status", ads.status === 200, `status ${ads.status}`);
+  check("ads-placeholder", ads.body.includes("ads.txt placeholder"), "placeholder seller file");
+
+  if (dest) {
+    fs.writeFileSync(path.join(dest, "robots.txt"), robots.body);
+    fs.writeFileSync(path.join(dest, "sitemap.xml"), sitemap.body);
+    fs.writeFileSync(path.join(dest, "ads.txt"), ads.body);
+    writeJson(path.join(dest, "seo.meta.json"), {
+      capturedAt: new Date().toISOString(),
+      url: baseUrl(),
+      checks,
+    });
+  }
+  if (checks.some((item) => !item.ok)) die("seo checks failed");
+}
+
+function cmdCleanup() {
+  const instance = readInstance();
+  const listenPort = port();
+  const pids = new Set();
+  if (instance?.pid) pids.add(instance.pid);
+  for (const listener of listenersOnPort(listenPort)) {
+    if (instance?.pid && listener === instance.pid) pids.add(listener);
+    else if (instance?.pid) {
+      try {
+        const cmd = fs.readFileSync(`/proc/${listener}/cmdline`, "utf8");
+        if (cmd.includes("next") && (cmd.includes(String(listenPort)) || cmd.includes(repoRoot()))) {
+          pids.add(listener);
+        }
+      } catch {
+        // ignore vanished pids
+      }
+    }
+  }
+
+  for (const pid of pids) {
+    try {
+      process.kill(-pid, "SIGTERM");
+    } catch {
+      // process group may not exist
+    }
+    try {
+      process.kill(pid, "SIGTERM");
+    } catch {
+      // already gone
+    }
+  }
+
+  const deadline = Date.now() + 8_000;
+  while (Date.now() < deadline) {
+    const still = [...pids].filter((pid) => pidAlive(pid));
+    if (still.length === 0 && listenersOnPort(listenPort).length === 0) break;
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200);
+  }
+  for (const pid of pids) {
+    if (pidAlive(pid)) {
+      try {
+        process.kill(-pid, "SIGKILL");
+      } catch {
+        // ignore
+      }
+      try {
+        process.kill(pid, "SIGKILL");
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  if (fs.existsSync(runDir())) {
+    fs.rmSync(runDir(), { recursive: true, force: true });
+  }
+  process.stdout.write(`cleaned ${baseUrl()} (evidence kept at ${evidenceDir()})\n`);
+}
+
+async function main() {
+  const args = parseArgs(process.argv.slice(2));
+  const command = args._[0];
+  if (!command || command === "help" || args.help) {
+    process.stdout.write(`${usage()}\n`);
+    return;
+  }
+  switch (command) {
+    case "launch":
+      await cmdLaunch();
+      break;
+    case "doctor":
+      await cmdDoctor();
+      break;
+    case "url":
+      process.stdout.write(`${baseUrl()}\n`);
+      break;
+    case "get":
+      await cmdGet(args);
+      break;
+    case "follow":
+      await cmdFollow(args);
+      break;
+    case "snapshot":
+      await cmdSnapshot(args);
+      break;
+    case "screenshot":
+      cmdScreenshot(args);
+      break;
+    case "seo":
+      await cmdSeo(args);
+      break;
+    case "cleanup":
+      cmdCleanup();
+      break;
+    default:
+      die(`${usage()}\n\nunknown command: ${command}`);
+  }
+}
+
+main().catch((error) => {
+  die(error.stack || error.message);
+});
