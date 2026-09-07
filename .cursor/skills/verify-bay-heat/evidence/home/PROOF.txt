@@ -1,0 +1,21 @@
+feature: home
+entry: Start with voltage
+instance: http://127.0.0.1:4317/
+commands:
+  bay-heat launch
+  bay-heat doctor
+  bay-heat get / --expect "Decision tree" --expect "All guides"
+  bay-heat follow --from / --name "Start with voltage"
+  bay-heat snapshot / --dir evidence/home --screenshot
+  bay-heat snapshot /120v-vs-240v-garage-heater --dir evidence/home --screenshot
+observed:
+  doctor: ok yes; pid 1967; next-server listener 1978
+  home title: BayHeat Guide — choose an electric garage heater by circuit and size
+  home h1: Choose the electric garage heater that matches the circuit you have.
+  follow: Start with voltage -> /120v-vs-240v-garage-heater
+  destination h1: 120V vs 240V garage heaters: what your circuit can actually run
+  destination json-ld: WebSite, Article, BreadcrumbList
+artifacts:
+  root.html root.txt root.meta.json root.png
+  120v-vs-240v-garage-heater.html 120v-vs-240v-garage-heater.txt
+  120v-vs-240v-garage-heater.meta.json 120v-vs-240v-garage-heater.png

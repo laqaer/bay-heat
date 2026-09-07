@@ -1,0 +1,8 @@
+ok: yes
+url: http://127.0.0.1:4317
+pid: 1967
+pidAlive: true
+listeners: 1978
+title: BayHeat Guide — choose an electric garage heater by circuit and size
+h1: Choose the electric garage heater that matches the circuit you have.
+note: instance is ours and serving BayHeat Guide

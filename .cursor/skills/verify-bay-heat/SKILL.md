@@ -48,10 +48,10 @@ Pass means all of:
 
 - `/tmp/bay-heat-verify-$PORT/instance.json` exists and its `pid` is alive
 - that file's host/port match `BAYHEAT_HOST` / `BAYHEAT_PORT`
-- something is listening on that port
-- `GET /` is 200
+- `GET /` is 200 (this is the listen check; `next-server` is often a child of the recorded pid)
 - `<title>` contains `BayHeat Guide`
 - `h1` is `Choose the electric garage heater that matches the circuit you have.`
+- if a listener pid is visible, it is in that launch pid's process tree
 
 If doctor fails, do not drive. Launch this run's instance, or stop. A page that looks like BayHeat on a port you did not start is a foreign instance.
 
@@ -162,7 +162,7 @@ If a drive fails, run cleanup before the next launch so port 4317 is not strande
 | `bay-heat seo [--dir <dir>]` | Assert robots/sitemap/ads.txt |
 | `bay-heat cleanup` | Tear down this instance; keep evidence |
 
-Chrome is `/usr/local/bin/google-chrome` or `BAYHEAT_CHROME`. Screenshots use `--headless=new --no-sandbox`. If Chrome is missing, HTTP snapshots still prove content; say the screenshot step was blocked.
+Chrome is `/usr/local/bin/google-chrome` or `BAYHEAT_CHROME`. Screenshots use `--headless=new --no-sandbox` and a disposable `--user-data-dir` under `/tmp/bay-heat-chrome-*`. If Chrome exits slowly after writing the PNG, the helper still accepts the file. If Chrome is missing, HTTP snapshots still prove content; say the screenshot step was blocked.
 
 ## Isolate and concurrency
 

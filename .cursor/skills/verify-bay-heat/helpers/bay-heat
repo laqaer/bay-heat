@@ -112,19 +112,101 @@ function pidAlive(pid) {
   }
 }
 
+function parseProcNet(file, listenPort) {
+  if (!fs.existsSync(file)) return [];
+  const inodes = [];
+  const lines = fs.readFileSync(file, "utf8").split("\n").slice(1);
+  for (const line of lines) {
+    const parts = line.trim().split(/\s+/);
+    if (parts.length < 10) continue;
+    const [ipPort, state, inode] = [parts[1], parts[3], parts[9]];
+    if (state !== "0A") continue;
+    const portHex = ipPort.split(":")[1];
+    if (portHex && parseInt(portHex, 16) === listenPort) inodes.push(inode);
+  }
+  return inodes;
+}
+
+function pidsForSocketInodes(inodes) {
+  if (inodes.length === 0) return [];
+  const wanted = new Set(inodes.map(String));
+  const pids = [];
+  for (const entry of fs.readdirSync("/proc")) {
+    if (!/^\d+$/.test(entry)) continue;
+    const fdDir = `/proc/${entry}/fd`;
+    let fds;
+    try {
+      fds = fs.readdirSync(fdDir);
+    } catch {
+      continue;
+    }
+    for (const fd of fds) {
+      let target = "";
+      try {
+        target = fs.readlinkSync(`${fdDir}/${fd}`);
+      } catch {
+        continue;
+      }
+      const match = target.match(/^socket:\[(\d+)\]$/);
+      if (match && wanted.has(match[1])) {
+        pids.push(Number(entry));
+        break;
+      }
+    }
+  }
+  return pids;
+}
+
 function listenersOnPort(listenPort) {
+  const inodes = [
+    ...parseProcNet("/proc/net/tcp", listenPort),
+    ...parseProcNet("/proc/net/tcp6", listenPort),
+  ];
+  const fromProc = pidsForSocketInodes(inodes);
+  if (fromProc.length) return [...new Set(fromProc)];
   try {
     const out = execFileSync("lsof", ["-nP", `-iTCP:${listenPort}`, "-sTCP:LISTEN", "-t"], {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
     });
-    return out
-      .split(/\s+/)
-      .map((value) => Number(value.trim()))
-      .filter((value) => Number.isInteger(value) && value > 0);
+    return [
+      ...new Set(
+        out
+          .split(/\s+/)
+          .map((value) => Number(value.trim()))
+          .filter((value) => Number.isInteger(value) && value > 0),
+      ),
+    ];
   } catch {
     return [];
   }
+}
+
+function descendantPids(rootPid) {
+  const children = new Map();
+  for (const entry of fs.readdirSync("/proc")) {
+    if (!/^\d+$/.test(entry)) continue;
+    try {
+      const stat = fs.readFileSync(`/proc/${entry}/stat`, "utf8");
+      const close = stat.lastIndexOf(")");
+      const rest = stat.slice(close + 2).split(" ");
+      const ppid = Number(rest[1]);
+      if (!children.has(ppid)) children.set(ppid, []);
+      children.get(ppid).push(Number(entry));
+    } catch {
+      // vanished
+    }
+  }
+  const out = [];
+  const stack = [rootPid];
+  while (stack.length) {
+    const pid = stack.pop();
+    for (const child of children.get(pid) || []) {
+      out.push(child);
+      stack.push(child);
+    }
+  }
+  return out;
 }
 
 function stripTags(html) {
@@ -304,21 +386,33 @@ function screenshot(pathname, outFile) {
   const abs = path.resolve(outFile);
   fs.mkdirSync(path.dirname(abs), { recursive: true });
   const url = new URL(pathname.startsWith("http") ? pathname : pathname || "/", baseUrl()).toString();
-  execFileSync(
-    chrome,
-    [
-      "--headless=new",
-      "--disable-gpu",
-      "--no-sandbox",
-      "--disable-dev-shm-usage",
-      "--hide-scrollbars",
-      "--window-size=1280,900",
-      "--virtual-time-budget=8000",
-      `--screenshot=${abs}`,
-      url,
-    ],
-    { stdio: ["ignore", "ignore", "pipe"] },
-  );
+  const profile = fs.mkdtempSync(path.join("/tmp", "bay-heat-chrome-"));
+  try {
+    execFileSync(
+      chrome,
+      [
+        "--headless=new",
+        "--disable-gpu",
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--hide-scrollbars",
+        "--no-first-run",
+        "--no-default-browser-check",
+        `--user-data-dir=${profile}`,
+        "--window-size=1280,900",
+        "--virtual-time-budget=8000",
+        `--screenshot=${abs}`,
+        url,
+      ],
+      { stdio: ["ignore", "ignore", "pipe"], timeout: 45_000 },
+    );
+  } catch (error) {
+    if (!fs.existsSync(abs) || fs.statSync(abs).size < 100) {
+      die(`screenshot failed: ${error.message}`);
+    }
+  } finally {
+    fs.rmSync(profile, { recursive: true, force: true });
+  }
   if (!fs.existsSync(abs) || fs.statSync(abs).size < 100) {
     die(`screenshot failed: ${abs}`);
   }
@@ -460,11 +554,8 @@ async function cmdDoctor() {
     printDoctor(report, `instance file is ${instance.host}:${instance.port}, env is ${host()}:${listenPort}`);
     die("doctor failed");
   }
-  report.owned = listeners.includes(instance.pid) || listeners.length > 0;
-  if (listeners.length === 0) {
-    printDoctor(report, `nothing is listening on ${listenPort}`);
-    die("doctor failed");
-  }
+  const tree = [instance.pid, ...descendantPids(instance.pid)];
+  report.owned = listeners.some((pid) => tree.includes(pid));
 
   let result;
   try {
@@ -479,8 +570,19 @@ async function cmdDoctor() {
     result.status === 200 &&
     report.title.includes("BayHeat Guide") &&
     report.h1.includes("Choose the electric garage heater that matches the circuit you have.");
+  // HTTP identity plus our live launch pid is the source of truth. Listener
+  // enumeration can miss next-server children when lsof is empty.
   report.ok = report.pidAlive && report.identity;
-  printDoctor(report, report.ok ? "instance is ours and serving BayHeat Guide" : "identity check failed");
+  if (report.ok && listeners.length && !report.owned) {
+    printDoctor(report, `port ${listenPort} answers as BayHeat but the listener pid is not in our process tree`);
+    die("doctor failed");
+  }
+  printDoctor(
+    report,
+    report.ok
+      ? "instance is ours and serving BayHeat Guide"
+      : "identity check failed",
+  );
   if (!report.ok) die("doctor failed");
 }
 
@@ -626,9 +728,12 @@ function cmdCleanup() {
   const instance = readInstance();
   const listenPort = port();
   const pids = new Set();
-  if (instance?.pid) pids.add(instance.pid);
+  if (instance?.pid) {
+    pids.add(instance.pid);
+    for (const child of descendantPids(instance.pid)) pids.add(child);
+  }
   for (const listener of listenersOnPort(listenPort)) {
-    if (instance?.pid && listener === instance.pid) pids.add(listener);
+    if (instance?.pid && (listener === instance.pid || pids.has(listener))) pids.add(listener);
     else if (instance?.pid) {
       try {
         const cmd = fs.readFileSync(`/proc/${listener}/cmdline`, "utf8");
