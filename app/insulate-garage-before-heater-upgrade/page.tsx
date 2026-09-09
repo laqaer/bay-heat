@@ -278,12 +278,15 @@ export default function InsulateFirstGuidePage() {
       <p>
         If the panel cannot take the circuit, the useful electric options
         shrink to: keep the smaller heater and finish the envelope, or spend
-        the same 1.5 kW on infrared at the bench. The non-electric options
-        (gas unit heater, mini-split, wood) exist. They have their own
-        combustion, refrigerant, and install rules. We will not write a fake
-        comparison matrix for equipment this site does not specify from a
-        current nameplate. If you leave resistance heat, leave this decision
-        tree; do not bolt a 5 kW cabinet onto a lighting circuit as a protest.
+        the same 1.5 kW on infrared at the bench. Propane is the common fuel
+        fork when you need more BTU than the panel will feed — that comparison
+        is{" "}
+        <Link href="/electric-vs-propane-garage-heater">
+          electric vs propane
+        </Link>
+        , with the CO, moisture, and listing caveats. Mini-splits and wood
+        exist; they stay outside this site. Do not bolt a 5 kW cabinet onto
+        a lighting circuit as a protest.
       </p>
       <p>
         Undersized service plus an uninsulated door is the expensive way to

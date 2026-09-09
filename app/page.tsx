@@ -52,6 +52,13 @@ const steps = [
     href: "/electric-garage-heater-operating-cost",
     label: "Cost to run",
   },
+  {
+    n: "07",
+    title: "Electric until the building or the panel says otherwise",
+    body: "Attached and reasonably sealed bays stay electric. Propane can win BTU in a drafty detached shop if it is listed and vented for that job — not as an unvented torch in a sealed attached garage.",
+    href: "/electric-vs-propane-garage-heater",
+    label: "Electric vs propane",
+  },
 ];
 
 export default function HomePage() {

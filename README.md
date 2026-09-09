@@ -1,6 +1,6 @@
 # BayHeat Guide
 
-Boring comparison site for electric garage and workshop heaters: 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, seal-first vs more watts, and operating cost (watts × hours × your rate).
+Boring comparison site for electric garage and workshop heaters: 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, seal-first vs more watts, operating cost (watts × hours × your rate), and electric vs propane.
 
 **Brand:** BayHeat Guide  
 **Domain:** [bayheatguide.com](https://bayheatguide.com) (live on Vercel; production domain wired, www → apex)  
@@ -57,6 +57,7 @@ npm run build
 | `/wall-mount-vs-ceiling-garage-heater` | Joist load, throw, headroom, wall vs ceiling |
 | `/insulate-garage-before-heater-upgrade` | Seal/insulate first vs buying more watts |
 | `/electric-garage-heater-operating-cost` | Nameplate watts × hours × your $/kWh (example rates only) |
+| `/electric-vs-propane-garage-heater` | Electric vs propane: attached air, shop BTU, CO/venting, cost method |
 | `/about` | Brand, editorial standards, contact |
 | `/privacy` | Privacy policy for a content + affiliate site |
 | `/robots.txt` | Generated |

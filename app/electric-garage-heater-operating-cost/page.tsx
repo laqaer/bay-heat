@@ -61,7 +61,12 @@ export default function OperatingCostGuidePage() {
       <p>
         If a listing promises a monthly bill or a “saves $X versus propane”
         figure without your hours and your rate, it invented the inputs. We
-        will not invent them either.
+        will not invent them either. The fuel-comparison method — kWh × your
+        rate versus gallons × your propane price — is on{" "}
+        <Link href="/electric-vs-propane-garage-heater">
+          electric vs propane
+        </Link>
+        .
       </p>
 
       <Callout title="Example rates — use your bill">
