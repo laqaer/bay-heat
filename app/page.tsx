@@ -77,7 +77,8 @@ export default function HomePage() {
               BayHeat Guide is a boring comparison site for electric garage and
               workshop heat: 120 V vs 240 V, forced-air vs infrared, portable vs
               ceiling-mount, wall vs ceiling, whether to seal the building
-              before buying more watts, and what those watts cost to run. No
+              before buying more watts, what those watts cost to run, and when
+              electric is enough versus a listed propane shop heater. No
               star ratings. No invented coverage claims. The breaker and the
               insulation decide more than the box art.
             </p>

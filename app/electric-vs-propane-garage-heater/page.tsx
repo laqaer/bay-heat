@@ -111,7 +111,7 @@ export default function ElectricVsPropaneGuidePage() {
         rows={[
           [
             "Indoor-rated unvented (cabinet / radiant, ODS)",
-            "About 4–18 k BTU/h",
+            "About 4–18 k BTU/h listing band",
             "Into the room",
             "Only if the listing and manual allow the enclosure you have; still CO + moisture",
           ],
@@ -161,7 +161,9 @@ export default function ElectricVsPropaneGuidePage() {
       <p>
         Heat is heat at the conversion. <strong>1 kW ≈ 3,412 BTU/h.</strong>{" "}
         Use that to read both nameplates. Do not use it to claim a 5 kW
-        ceiling unit matches a 60 k BTU torpedo in a leaky bay.
+        ceiling unit matches a 60 k BTU torpedo in a leaky bay. Indoor-rated
+        unvented heaters list across about 4–18 k BTU/h; the 4–9 k cabinet
+        row is the common portable nameplate, not a second class.
       </p>
 
       <SpecTable
@@ -187,10 +189,10 @@ export default function ElectricVsPropaneGuidePage() {
             "Larger or colder bay; bigger circuit",
           ],
           [
-            "Indoor-rated propane cabinet",
+            "Common indoor propane cabinet",
             "~4,000–9,000 BTU/h input",
             "~1.2–2.6 kW",
-            "Small zone. Still combustion in the room.",
+            "Usual portable nameplate. Still combustion in the room.",
           ],
           [
             "Propane torpedo / construction",
