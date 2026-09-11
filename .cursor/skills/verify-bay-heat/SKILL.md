@@ -130,7 +130,7 @@ Standards:
 - Exercise the real reader path (named link or header/footer). A raw `get` of the destination is a skip of the entry point, not a pass.
 - Capture the action and the resulting page, not only the final screenshot.
 - Confirm on-page side effects that exist: JSON-LD `@type` (`WebSite` on every page via the root layout; `Article` + `BreadcrumbList` on guides; `Organization` on About), footer strings `Affiliate disclosure.` and `Safety.`, canonical host `https://bayheatguide.com`.
-- Do not mock Next, and do not hit retailer/affiliate networks. Buy links are placeholders.
+- Do not mock Next, and do not hit retailer/affiliate networks. Some Amazon Associates text links are live; do not follow them during verification.
 - Do not call this a dry-run of production. Local HTML still embeds production canonicals and JSON-LD URLs from `lib/site.ts`; that is expected and is not proof that production was requested.
 
 Record the feature id and entry point on every artifact (`*.meta.json` already stores `url` and `capturedAt`; add a one-line `PROOF.txt` naming the feature id and the command used).

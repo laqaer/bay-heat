@@ -54,18 +54,20 @@ export default function PrivacyPage() {
             similar identifiers. We will update this policy before that happens.
           </li>
           <li>
-            <strong>Affiliate partners.</strong> When retailer links go live,
-            clicking them may set cookies on the retailer or affiliate-network
-            domain so a commission can be attributed. We do not see your
-            payment card. Those companies have their own policies.
+            <strong>Affiliate partners.</strong> Some retailer links are Amazon
+            Associates. Clicking them may set cookies on Amazon or another
+            affiliate-network domain so a commission can be attributed. We do
+            not see your payment card. Those companies have their own policies.
           </li>
         </ul>
 
         <h2>Cookies</h2>
         <p>
           This launch site is static editorial content. We do not set a first-party
-          account cookie. Third-party cookies may appear only after analytics,
-          ads, or affiliate programs are wired. You can block cookies in your
+          account cookie. Following an Amazon Associates link may set a cookie
+          on Amazon’s domain. Analytics are not present, and{" "}
+          <code className="font-mono text-[0.9em]">/ads.txt</code> remains a
+          placeholder until we serve ads. You can block cookies in your
           browser; the guides will still read.
         </p>
 

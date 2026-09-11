@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AmazonAffiliateLink } from "@/components/amazon-link";
 import { Callout } from "@/components/callouts";
 import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import {
+  AMAZON_COMFORT_ZONE_CZ220,
+  AMAZON_FAHRENHEAT_FUH54,
+} from "@/lib/affiliates";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/wall-mount-vs-ceiling-garage-heater")!;
@@ -27,7 +32,7 @@ const toc = [
   { id: "product-class", label: "Ceiling class vs wall utility" },
   { id: "when-wall", label: "When wall wins" },
   { id: "dust", label: "Dust, fumes, and ceiling fans" },
-  { id: "retailers", label: "Placeholders and next reads" },
+  { id: "retailers", label: "Retailer links and next reads" },
 ];
 
 export default function WallVsCeilingGuidePage() {
@@ -290,21 +295,31 @@ export default function WallVsCeilingGuidePage() {
         and treat that as a reminder the fan is stirring the room.
       </p>
 
-      <h2 id="retailers">Placeholders and what to read next</h2>
+      <h2 id="retailers">Retailer links and what to read next</h2>
       <p>
-        Affiliate programs are not wired. When they are, outbound buy links
-        will be labeled. Until then the rows below are a checklist, not a
-        button.
+        The 5 kW class has measured Amazon Associates listings (same CZ220-class
+        and FUH54-class ASINs as the ceiling-mount guide). Street prices move;
+        a listing may be a class sibling. Confirm the bracket is rated for the
+        wall or ceiling you will use. We do not have a measured ASIN for a
+        smaller wall-only utility heater, so that row stays a placeholder.
       </p>
 
       <SpecTable
-        caption="Placeholder retailer rows for mount-class heaters"
+        caption="Amazon Associates listings for the 5 kW mount class; smaller wall units stay a placeholder"
         columns={["Class", "What to verify on the listing", "Affiliate / retailer link"]}
         rows={[
           [
             "5 kW ceiling / wall utility (CZ220 / FUH54-class)",
             "Hardwired 240 V, 5 kW nameplate, 30 A / 10 AWG guidance, listed mark, bracket rated for ceiling or wall as you intend to hang it",
-            "Placeholder: retailer URL not live",
+            <span key="cz220-fuh54">
+              <AmazonAffiliateLink href={AMAZON_COMFORT_ZONE_CZ220}>
+                Amazon: Comfort Zone 5000W ceiling (CZ220-class)
+              </AmazonAffiliateLink>
+              {"; "}
+              <AmazonAffiliateLink href={AMAZON_FAHRENHEAT_FUH54}>
+                Amazon: Fahrenheat FUH5-4 5000W (FUH54-class)
+              </AmazonAffiliateLink>
+            </span>,
           ],
           [
             "Smaller wall utility heater",

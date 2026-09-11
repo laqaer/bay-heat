@@ -36,5 +36,5 @@ Preconditions:
 
 - Footer name is `About & editorial standards` (ampersand). Header name is `About`. Do not search for `About and editorial standards`.
 - Mailto `hello@bayheatguide.com` is a link. Do not send mail as part of verification.
-- About says outbound buy links may be placeholders. That is not a broken-page failure.
+- About discloses Amazon Associates (tag laqaer-20). That is not a broken-page failure. Do not open retailer URLs.
 - `Organization` JSON-LD is only added on this page (plus layout `WebSite`). Missing `Article` here is expected.

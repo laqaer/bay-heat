@@ -322,10 +322,10 @@ export default function OperatingCostGuidePage() {
           charger. Hire a licensed electrician for new 240 V work.
         </li>
         <li>
-          <strong>No affiliate buy buttons on this page.</strong> Retailer
-          links elsewhere on the site are still placeholders until programs
-          are live. We are not tagging a heater SKU to “prove” a kWh
-          number.
+          <strong>No affiliate buy buttons on this page.</strong> Some
+          Amazon Associates heater links are live on the ceiling-mount and
+          15 A portable guides. We are not tagging a heater SKU here to
+          “prove” a kWh number.
         </li>
       </ul>
       <p>
