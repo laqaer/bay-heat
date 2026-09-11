@@ -1,0 +1,65 @@
+URL: http://127.0.0.1:4317/120v-vs-240v-garage-heater
+TITLE: 120V vs 240V garage heaters: circuit and breaker reality · BayHeat Guide
+H1: 120V vs 240V garage heaters: what your circuit can actually run
+CANONICAL: https://bayheatguide.com/120v-vs-240v-garage-heater
+JSON_LD: WebSite, Article, BreadcrumbList
+
+HEADINGS
+H1: 120V vs 240V garage heaters: what your circuit can actually run
+H2: The 80% continuous-load rule
+H2: What 120 V can do
+H2: What 240 V actually means
+H2: Breakers and wire, in the language of the manuals
+H2: Hardwired vs plug-in
+H2: Panel capacity is the hidden constraint
+H2: Related guides
+
+NAVS
+NAV[Primary]: By size -> /best-electric-garage-heaters-by-size | 120V vs 240V -> /120v-vs-240v-garage-heater | Forced-air vs IR -> /forced-air-vs-infrared-garage-heater | Ceiling under $200 -> /best-ceiling-mount-garage-heaters-under-200 | 15 A portable -> /portable-garage-heaters-15a-circuit | Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater | Insulate first -> /insulate-garage-before-heater-upgrade | About -> /about
+NAV[Breadcrumb]: Home -> /
+NAV[On this page]: 1 . The 80% continuous-load rule -> #continuous | 2 . What 120 V can do -> #what-120-can-do | 3 . What 240 V actually means -> #what-240-means | 4 . Breakers and wire -> #breaker-wire | 5 . Hardwired vs plug-in -> #hardwired | 6 . Panel capacity -> #panel
+
+LINKS
+BayHeat Guide Electric garage heat -> /
+By size -> /best-electric-garage-heaters-by-size
+120V vs 240V -> /120v-vs-240v-garage-heater
+Forced-air vs IR -> /forced-air-vs-infrared-garage-heater
+Ceiling under $200 -> /best-ceiling-mount-garage-heaters-under-200
+15 A portable -> /portable-garage-heaters-15a-circuit
+Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater
+Insulate first -> /insulate-garage-before-heater-upgrade
+About -> /about
+By size -> /best-electric-garage-heaters-by-size
+120V vs 240V -> /120v-vs-240v-garage-heater
+Forced-air vs IR -> /forced-air-vs-infrared-garage-heater
+Ceiling under $200 -> /best-ceiling-mount-garage-heaters-under-200
+15 A portable -> /portable-garage-heaters-15a-circuit
+Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater
+Insulate first -> /insulate-garage-before-heater-upgrade
+About -> /about
+2 . What 120 V can do -> #what-120-can-do
+3 . What 240 V actually means -> #what-240-means
+4 . Breakers and wire -> #breaker-wire
+5 . Hardwired vs plug-in -> #hardwired
+6 . Panel capacity -> #panel
+portable heaters on a 15 A circuit -> /portable-garage-heaters-15a-circuit
+sizing by bay -> /best-electric-garage-heaters-by-size
+insulation -> /insulate-garage-before-heater-upgrade
+infrared at the bench -> /forced-air-vs-infrared-garage-heater
+By size Start with square footage and insulation. A 1,500 W plug-in unit is a workbench heater, not a two-car garage heater. -> /best-electric-garage-heaters-by-size
+Forced-air vs IR Forced-air heats the air. Infrared heats people and objects. Drafts punish the first; open-door work favors the second. -> /forced-air-vs-infrared-garage-heater
+Ceiling under $200 Most sub-$200 ceiling units are the same job: 5 kW, 240 V, hardwired, 30 A, 10 AWG copper. The differences are controls and jumpers, not magic BTUs. -> /best-ceiling-mount-garage-heaters-under-200
+15 A portable On a 15 A circuit, treat ~12 A as the continuous ceiling. A 1,500 W milkhouse heater is 12.5 A — it wants to be the only load. -> /portable-garage-heaters-15a-circuit
+Wall vs ceiling Ceiling units throw across the bay if the joists can take 25–30 lb. Wall mounts win on low ceilings and one work zone. The manual’s clearance is the rule, not a blog height. -> /wall-mount-vs-ceiling-garage-heater
+Insulate first More watts heat the air you are already leaking. Door, weatherstrip, and sill usually beat a larger breaker. Panel capacity is the hard stop. -> /insulate-garage-before-heater-upgrade
+hello@bayheatguide.com -> mailto:hello@bayheatguide.com
+By size -> /best-electric-garage-heaters-by-size
+120V vs 240V -> /120v-vs-240v-garage-heater
+Forced-air vs IR -> /forced-air-vs-infrared-garage-heater
+Ceiling under $200 -> /best-ceiling-mount-garage-heaters-under-200
+15 A portable -> /portable-garage-heaters-15a-circuit
+Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater
+Insulate first -> /insulate-garage-before-heater-upgrade
+About & editorial standards -> /about
+Privacy -> /privacy
+Decision hub -> /
