@@ -52,11 +52,7 @@ export default function CeilingGuidePage() {
           circuit, typically 30 A and 10 AWG copper for the 5 kW setting,
           joist-rated mounting, and the clearances in the manual (combustibles
           are often a 3 ft conversation). If that is not familiar work, hire a
-          licensed electrician. Cord versus a landed circuit is the{" "}
-          <Link href="/hardwired-vs-plugin-garage-heater">
-            hardwired vs plug-in
-          </Link>{" "}
-          fork — do not treat this aisle as a plug-in.
+          licensed electrician.
         </p>
       </Callout>
 
@@ -222,6 +218,11 @@ export default function CeilingGuidePage() {
       <p>
         Voltage and circuit recap:{" "}
         <Link href="/120v-vs-240v-garage-heater">120 V vs 240 V</Link>.
+        Cord versus a landed circuit is the{" "}
+        <Link href="/hardwired-vs-plugin-garage-heater">
+          hardwired vs plug-in
+        </Link>{" "}
+        fork — do not treat this aisle as a plug-in.
       </p>
     </GuideChrome>
   );
