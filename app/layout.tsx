@@ -46,6 +46,7 @@ export const metadata: Metadata = {
     "15 amp space heater",
     "electric garage heater operating cost",
     "electric vs propane garage heater",
+    "hardwired vs plug-in garage heater",
   ],
   openGraph: {
     type: "website",

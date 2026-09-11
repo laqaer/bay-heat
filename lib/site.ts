@@ -7,7 +7,7 @@ export const site = {
   publisher: "Laqaer Products",
   tagline: "Boring, specific advice for electric garage and workshop heaters.",
   description:
-    "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, whether to seal the building before buying more watts, what those watts cost to run, and when electric is enough versus a listed propane shop heater.",
+    "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, hardwired vs plug-in, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, whether to seal the building before buying more watts, what those watts cost to run, and when electric is enough versus a listed propane shop heater.",
   locale: "en-US",
   updated: "2026-09-11",
 } as const;
@@ -58,6 +58,19 @@ export const guides: Guide[] = [
       "Voltage is not a feature. It is the limit of the circuit you already have — or the one you are willing to install.",
     decision: "What circuit do you actually have?",
     updated: "2026-09-04",
+  },
+  {
+    href: "/hardwired-vs-plugin-garage-heater",
+    title: "Hardwired vs plug-in electric garage heaters",
+    h1: "Hardwired vs plug-in garage heaters: outlet heat vs a landed circuit",
+    description:
+      "When a 120 V plug-in is enough, when a corded 240 V receptacle is the listed path, and when a ceiling or wall unit must be hardwired. Circuit limits, NEMA 6-30 vs direct-wire, listing, and why hanging a portable is not a ceiling heater.",
+    navLabel: "Hardwired vs plug-in",
+    kind: "guide",
+    summary:
+      "A 15 A cord is Saturday heat at a bench. Whole-bay heat is almost always a dedicated 240 V hardwire. Corded 240 V is a third class — only if the manual lists the plug.",
+    decision: "Temporary plug-in, or a permanent install?",
+    updated: "2026-09-11",
   },
   {
     href: "/forced-air-vs-infrared-garage-heater",
