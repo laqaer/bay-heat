@@ -65,9 +65,10 @@ export default function AboutPage() {
               hardwired 5 kW ceiling units, not a live price.
             </li>
             <li>
-              Affiliate links, when they exist, are disclosed in the footer on
-              every page and again on product-class pages. Placeholders ship
-              until programs are live.
+              Some retailer links are Amazon Associates (tag laqaer-20). They
+              are disclosed in the footer on every page and again on
+              product-class pages. We may earn a commission if you buy after
+              clicking.
             </li>
             <li>
               Electrical and fire-safety warnings stay on the page. This is not

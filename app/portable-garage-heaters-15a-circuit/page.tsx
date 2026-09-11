@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AmazonAffiliateLink } from "@/components/amazon-link";
 import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import { AMAZON_MILKHOUSE_1500W } from "@/lib/affiliates";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/portable-garage-heaters-15a-circuit")!;
@@ -88,6 +90,26 @@ export default function PortableGuidePage() {
         </Link>
         , not a 120 V discount.
       </p>
+      <p>
+        One measured Amazon Associates listing for this class is below. Street
+        prices move; the page may show a class sibling. Confirm 1,500 W / 120 V
+        and the safety cutouts on the nameplate. Do not treat an Amazon title
+        that says “heats 1,000 sq ft” as data — that claim is not something we
+        will repeat.
+      </p>
+      <SpecTable
+        caption="Amazon Associates listing for a 1500 W milkhouse-class portable"
+        columns={["Class", "What to verify on the listing", "Affiliate / retailer link"]}
+        rows={[
+          [
+            "1500 W milkhouse portable",
+            "Comfort Zone CZ798-class, 1500 W / 120 V, listed mark, tip-over and overheat cutouts",
+            <AmazonAffiliateLink key="cz798" href={AMAZON_MILKHOUSE_1500W}>
+              Amazon: Comfort Zone CZ798 1500W milkhouse
+            </AmazonAffiliateLink>,
+          ],
+        ]}
+      />
 
       <h2 id="other-portables">Other 15 A portables, without the mythology</h2>
       <ul>
@@ -111,9 +133,9 @@ export default function PortableGuidePage() {
         </li>
       </ul>
       <p>
-        Affiliate retailer links are not live yet. When they are, they will be
-        labeled. Do not treat an Amazon title that says “heats 1,000 sq ft” as
-        data — that claim is not something we will repeat.
+        Ceramic, oil-filled, and quartz portables stay on the same 15 A wattage
+        ceiling. We do not have measured ASINs for those shapes, so there is no
+        invented buy link here.
       </p>
 
       <h2 id="garage-gfci">Garage GFCI and shared circuits</h2>

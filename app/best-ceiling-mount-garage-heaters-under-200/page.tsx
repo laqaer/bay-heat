@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AmazonAffiliateLink } from "@/components/amazon-link";
 import { Callout } from "@/components/callouts";
 import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import {
+  AMAZON_COMFORT_ZONE_CZ220,
+  AMAZON_FAHRENHEAT_FUH54,
+} from "@/lib/affiliates";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/best-ceiling-mount-garage-heaters-under-200")!;
@@ -24,7 +29,7 @@ const toc = [
   { id: "comfort-zone", label: "Comfort Zone CZ220-class" },
   { id: "fahrenheat", label: "Fahrenheat FUH54-class" },
   { id: "not-this", label: "What this aisle is not" },
-  { id: "retailers", label: "Retailer / affiliate placeholders" },
+  { id: "retailers", label: "Retailer / Amazon links" },
 ];
 
 export default function CeilingGuidePage() {
@@ -187,26 +192,33 @@ export default function CeilingGuidePage() {
         </li>
       </ul>
 
-      <h2 id="retailers">Retailer and affiliate placeholders</h2>
+      <h2 id="retailers">Retailer and Amazon Associates links</h2>
       <p>
-        Affiliate programs are not wired on this launch. When they are, outbound
-        links will be labeled and will use tracked retailer URLs. Until then,
-        treat the rows below as a shopping checklist, not a buy button.
+        The two 5 kW rows below are labeled Amazon Associates text links (tag{" "}
+        <code className="font-mono text-[0.9em]">laqaer-20</code>). Street prices
+        move, and a listing may be a
+        class sibling (same job, different suffix). Confirm the nameplate on
+        the page you open. We do not have a measured ASIN for the 7.5 kW
+        step-up, so that row stays an honest placeholder.
       </p>
 
       <SpecTable
-        caption="Placeholder retailer rows — no live affiliate URLs yet"
+        caption="Amazon Associates listings for the 5 kW ceiling class; 7.5 kW row is still a placeholder"
         columns={["Class", "What to verify on the listing", "Affiliate / retailer link"]}
         rows={[
           [
             "Comfort Zone CZ220-class",
             "Hardwired 240 V, 3000/4000/5000 W, 30 A guidance, ETL mark, included bracket",
-            "Placeholder — retailer URL not live",
+            <AmazonAffiliateLink key="cz220" href={AMAZON_COMFORT_ZONE_CZ220}>
+              Amazon: Comfort Zone 5000W ceiling (CZ220-class)
+            </AmazonAffiliateLink>,
           ],
           [
             "Fahrenheat FUH54C-class",
             "FUH54 / FUH54C, 5000 W @ 240 V, jumper derate table, copper-only warning, listing mark",
-            "Placeholder — retailer URL not live",
+            <AmazonAffiliateLink key="fuh54" href={AMAZON_FAHRENHEAT_FUH54}>
+              Amazon: Fahrenheat FUH5-4 5000W (FUH54-class)
+            </AmazonAffiliateLink>,
           ],
           [
             "7.5 kW step-up",

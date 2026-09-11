@@ -493,10 +493,10 @@ export default function ElectricVsPropaneGuidePage() {
           a “best of” propane aisle.
         </li>
         <li>
-          <strong>No affiliate buy buttons on this page.</strong> Retailer
-          links elsewhere on the site are still placeholders until
-          programs are live. We are not tagging a cylinder or a 5 kW
-          cabinet to “prove” a dollar figure.
+          <strong>No affiliate buy buttons on this page.</strong> Some
+          Amazon Associates heater links are live on the ceiling-mount and
+          15 A portable guides. We are not tagging a cylinder or a 5 kW
+          cabinet here to “prove” a dollar figure.
         </li>
       </ul>
       <p>

@@ -325,9 +325,10 @@ export default function InsulateFirstGuidePage() {
         in an open bay.
       </p>
       <p>
-        Affiliate buy links for doors, kits, and heaters are not live. When
-        they are, they will be labeled. Do not treat a listing that says a
-        weatherstrip “adds 10 degrees” as a measurement we will repeat.
+        Door and kit buy links are not live on this page. Some Amazon
+        Associates heater links are live on the ceiling-mount and 15 A
+        portable guides. Do not treat a listing that says a weatherstrip
+        “adds 10 degrees” as a measurement we will repeat.
       </p>
       <p>
         Next: if the envelope now matches the insulated column and you are

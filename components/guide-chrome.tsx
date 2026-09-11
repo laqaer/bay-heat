@@ -99,7 +99,7 @@ export function SpecTable({
 }: {
   caption: string;
   columns: string[];
-  rows: string[][];
+  rows: React.ReactNode[][];
 }) {
   return (
     <div className="not-prose my-8 overflow-x-auto rounded-lg border border-[var(--line)]">

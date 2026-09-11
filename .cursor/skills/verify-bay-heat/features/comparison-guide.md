@@ -46,5 +46,5 @@ Preconditions:
 - In-page TOC hrefs are hashes. A follow that only re-GETs the same HTML does not prove the browser scrolled. For scroll proof, use a headed browser or Chrome screenshot after clicking the TOC link; the HTTP helper proves the target `id` exists.
 - Guide `h1` text is `guides[].h1`, not `guides[].title`. Assert the `h1` string from the SKILL table.
 - Related cards use `navLabel` as the visible title (`15 A portable`), not the long `title`.
-- Comfort Zone / Fahrenheat names are product classes, not live prices. Do not open placeholder retailer hrefs.
+- Comfort Zone / Fahrenheat names are product classes, not live prices. Do not open retailer or Amazon Associates hrefs.
 - Proving only the voltage guide does not prove every sibling. Say `guide-family` was skipped, or follow one more `guides[]` path and check its `h1`.

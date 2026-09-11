@@ -9,11 +9,11 @@ export const site = {
   description:
     "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, whether to seal the building before buying more watts, what those watts cost to run, and when electric is enough versus a listed propane shop heater.",
   locale: "en-US",
-  updated: "2026-09-09",
+  updated: "2026-09-11",
 } as const;
 
 export const affiliateDisclosure =
-  "BayHeat Guide is a comparison site. When retailer or manufacturer links are live, some will be affiliate links: we may earn a commission if you buy after clicking, at no extra cost to you. Until those programs are wired, outbound buy links are placeholders. We do not invent review scores, heat-coverage claims, or wattage figures.";
+  "BayHeat Guide is a comparison site. Some retailer links are Amazon Associates (tag laqaer-20); we may earn a commission if you buy after clicking, at no extra cost to you. We do not invent review scores, heat-coverage claims, or wattage figures.";
 
 export const electricalDisclaimer =
   "This site is general information, not an electrical, fire-code, or building-code inspection. National Electrical Code (NEC) rules, local amendments, listing labels, and the heater’s installation manual control the job. Hire a licensed electrician for new 240V circuits, hardwired units, and any work you are not qualified to do. Space heaters start fires when they are overloaded, covered, or placed too close to combustibles.";
@@ -83,7 +83,7 @@ export const guides: Guide[] = [
     summary:
       "Most sub-$200 ceiling units are the same job: 5 kW, 240 V, hardwired, 30 A, 10 AWG copper. The differences are controls and jumpers, not magic BTUs.",
     decision: "Can you hardwire 240 V and hang a 25–30 lb unit from joists?",
-    updated: "2026-09-04",
+    updated: "2026-09-11",
   },
   {
     href: "/portable-garage-heaters-15a-circuit",
@@ -96,7 +96,7 @@ export const guides: Guide[] = [
     summary:
       "On a 15 A circuit, treat ~12 A as the continuous ceiling. A 1,500 W milkhouse heater is 12.5 A — it wants to be the only load.",
     decision: "Stuck with a regular 120 V outlet?",
-    updated: "2026-09-04",
+    updated: "2026-09-11",
   },
   {
     href: "/wall-mount-vs-ceiling-garage-heater",
@@ -109,7 +109,7 @@ export const guides: Guide[] = [
     summary:
       "Ceiling units throw across the bay if the joists can take 25–30 lb. Wall mounts win on low ceilings and one work zone. The manual’s clearance is the rule, not a blog height.",
     decision: "Can the ceiling take the unit, or is the heat needed on one wall?",
-    updated: "2026-09-04",
+    updated: "2026-09-11",
   },
   {
     href: "/insulate-garage-before-heater-upgrade",
