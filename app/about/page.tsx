@@ -34,12 +34,12 @@ export default function AboutPage() {
           <h2>What this site is</h2>
           <p>
             A small set of bookmarkable guides: circuit reality, bay sizing,
-            forced-air versus infrared, the 5 kW ceiling-mount aisle, 15 A
-            portables, wall versus ceiling mount, whether to seal the
-            garage before buying more watts, what those watts cost to
-            run, and when electric is enough versus propane. The hub at
-            the homepage is a decision tree, not a doorway page stuffed
-            with synonyms.
+            hardwired versus plug-in, forced-air versus infrared, the 5 kW
+            ceiling-mount aisle, 15 A portables, wall versus ceiling mount,
+            whether to seal the garage before buying more watts, what those
+            watts cost to run, and when electric is enough versus propane.
+            The hub at the homepage is a decision tree, not a doorway page
+            stuffed with synonyms.
           </p>
           <ul>
             {guides.map((guide) => (

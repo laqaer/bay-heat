@@ -145,7 +145,12 @@ export default function PortableGuidePage() {
         If you have already decided the 15 A circuit is the bottleneck, the next
         adult step is a dedicated{" "}
         <Link href="/120v-vs-240v-garage-heater">240 V circuit</Link> — not a
-        second milkhouse heater on the same run.
+        second milkhouse heater on the same run. That is an install-type
+        decision on{" "}
+        <Link href="/hardwired-vs-plugin-garage-heater">
+          hardwired vs plug-in
+        </Link>
+        , not a reason to hang the milkhouse from a joist.
       </p>
     </GuideChrome>
   );

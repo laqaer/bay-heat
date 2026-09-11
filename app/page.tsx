@@ -59,6 +59,13 @@ const steps = [
     href: "/electric-vs-propane-garage-heater",
     label: "Electric vs propane",
   },
+  {
+    n: "08",
+    title: "Plug-in versus hardwired is the install, not the aisle",
+    body: "A 15 A cord is Saturday bench heat. Whole-bay heat is almost always a dedicated 240 V hardwire. Corded 240 V (NEMA 6-30 and similar) is a third class — only if the manual lists the plug.",
+    href: "/hardwired-vs-plugin-garage-heater",
+    label: "Hardwired vs plug-in",
+  },
 ];
 
 export default function HomePage() {
@@ -75,10 +82,11 @@ export default function HomePage() {
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--ink-2)]">
               BayHeat Guide is a boring comparison site for electric garage and
-              workshop heat: 120 V vs 240 V, forced-air vs infrared, portable vs
-              ceiling-mount, wall vs ceiling, whether to seal the building
-              before buying more watts, what those watts cost to run, and when
-              electric is enough versus a listed propane shop heater. No
+              workshop heat: 120 V vs 240 V, hardwired vs plug-in, forced-air vs
+              infrared, portable vs ceiling-mount, wall vs ceiling, whether to
+              seal the building before buying more watts, what those watts cost
+              to run, and when electric is enough versus a listed propane shop
+              heater. No
               star ratings. No invented coverage claims. The breaker and the
               insulation decide more than the box art.
             </p>

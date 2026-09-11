@@ -163,6 +163,14 @@ export default function VoltageGuidePage() {
         That is not a legal disclaimer for its own sake; it is how those units
         are designed.
       </p>
+      <p>
+        The longer install-type fork — Saturday 120 V plug-in, corded 240 V on
+        a listed receptacle, versus true hardwire — is{" "}
+        <Link href="/hardwired-vs-plugin-garage-heater">
+          hardwired vs plug-in
+        </Link>
+        .
+      </p>
 
       <h2 id="panel">Panel capacity is the hidden constraint</h2>
       <p>
