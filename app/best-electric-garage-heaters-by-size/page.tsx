@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AmazonAffiliateLink } from "@/components/amazon-link";
 import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import {
+  AMAZON_COMFORT_ZONE_CZ220,
+  AMAZON_FAHRENHEAT_FUH54,
+  AMAZON_MILKHOUSE_1500W,
+} from "@/lib/affiliates";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/best-electric-garage-heaters-by-size")!;
@@ -23,6 +29,7 @@ const toc = [
   { id: "two-car", label: "2-car garages" },
   { id: "three-car", label: "3-car garages" },
   { id: "insulation", label: "Insulation caveats" },
+  { id: "examples", label: "Example products for these brackets" },
   { id: "what-to-read-next", label: "What to read next" },
 ];
 
@@ -201,6 +208,45 @@ export default function SizeGuidePage() {
           brackets above, then read the nameplate and the manual.
         </li>
       </ul>
+
+      <h2 id="examples">Example products for these brackets</h2>
+      <p>
+        The three rows below are Amazon Associates text links (tag{" "}
+        <code className="font-mono text-[0.9em]">laqaer-20</code>). Milkhouse
+        is the 1-car spot-heat class; Comfort Zone CZ220 and Fahrenheat FUH5-4
+        are the 2-car / 5 kW ceiling class already named in the brackets above.
+        Street prices move, and a listing may be a class sibling. Confirm the
+        nameplate on the page you open. We do not invent coverage claims or
+        scores.
+      </p>
+
+      <SpecTable
+        caption="Amazon Associates listings matched to the 1-car spot and 2-car 5 kW brackets"
+        columns={["Bay class", "What to verify on the listing", "Affiliate / retailer link"]}
+        rows={[
+          [
+            "1-car spot heat",
+            "Comfort Zone CZ798-class, 1500 W / 120 V, listed mark, tip-over and overheat cutouts",
+            <AmazonAffiliateLink key="cz798" href={AMAZON_MILKHOUSE_1500W}>
+              Amazon: Comfort Zone CZ798 1500W milkhouse
+            </AmazonAffiliateLink>,
+          ],
+          [
+            "2-car / 5 kW ceiling",
+            "Hardwired 240 V, 3000/4000/5000 W, 30 A guidance, ETL mark, included bracket",
+            <AmazonAffiliateLink key="cz220" href={AMAZON_COMFORT_ZONE_CZ220}>
+              Amazon: Comfort Zone 5000W ceiling (CZ220-class)
+            </AmazonAffiliateLink>,
+          ],
+          [
+            "2-car / 5 kW ceiling",
+            "FUH54 / FUH54C, 5000 W @ 240 V, jumper derate table, copper-only warning, listing mark",
+            <AmazonAffiliateLink key="fuh54" href={AMAZON_FAHRENHEAT_FUH54}>
+              Amazon: Fahrenheat FUH5-4 5000W (FUH54-class)
+            </AmazonAffiliateLink>,
+          ],
+        ]}
+      />
 
       <h2 id="what-to-read-next">What to read next</h2>
       <p>
