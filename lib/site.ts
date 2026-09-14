@@ -44,7 +44,7 @@ export const guides: Guide[] = [
     summary:
       "Start with square footage and insulation. A 1,500 W plug-in unit is a workbench heater, not a two-car garage heater.",
     decision: "How big is the space, and is it insulated?",
-    updated: "2026-09-04",
+    updated: "2026-09-14",
   },
   {
     href: "/120v-vs-240v-garage-heater",
