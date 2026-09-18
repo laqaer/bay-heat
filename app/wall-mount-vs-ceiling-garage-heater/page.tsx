@@ -317,7 +317,7 @@ export default function WallVsCeilingGuidePage() {
       </p>
 
       <SpecTable
-        caption="Amazon Associates listings for the 5 kW mount class; smaller wall units stay a placeholder"
+        caption="Amazon Associates listings for the 5 kW mount class; smaller wall units link to the wall-mount money page"
         columns={["Class", "What to verify on the listing", "Affiliate / retailer link"]}
         rows={[
           [
