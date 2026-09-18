@@ -216,8 +216,13 @@ export default function WallVsCeilingGuidePage() {
         <Link href="/best-ceiling-mount-garage-heaters-under-200">
           ceiling-mount heaters under $200
         </Link>
-        . Use that page for nameplate rows. Use this page to decide whether
-        that cabinet belongs overhead or on a wall.
+        . Wall-listed nameplates (the 5 kW FUH on a wall, a 7.5 kW shop
+        cabinet, and a 15 A wall infrared) live on{" "}
+        <Link href="/best-wall-mount-garage-heaters">
+          best wall-mount electric garage heaters
+        </Link>
+        . Use those pages for nameplate rows. Use this page to decide whether
+        the cabinet belongs overhead or on a wall.
       </p>
       <p>
         Separate from that aisle are smaller wall utility heaters: lower
@@ -230,9 +235,12 @@ export default function WallVsCeilingGuidePage() {
         floor and to stored junk.
       </p>
       <p>
-        We will not invent a ranked list of wall cans. Listing mark, nameplate
-        watts and amps, the breaker and copper the manual names, and whether
-        the location can keep combustibles away: that is the comparison.
+        We will not invent a ranked list of wall cans here. Listing mark,
+        nameplate watts and amps, the breaker and copper the manual names, and
+        whether the location can keep combustibles away: that is the
+        comparison. Measured wall-listed ASINs sit on the{" "}
+        <Link href="/best-wall-mount-garage-heaters">wall-mount money page</Link>
+        .
       </p>
 
       <h2 id="when-wall">When wall wins</h2>
@@ -300,8 +308,12 @@ export default function WallVsCeilingGuidePage() {
         The 5 kW class has measured Amazon Associates listings (same CZ220-class
         and FUH54-class ASINs as the ceiling-mount guide). Street prices move;
         a listing may be a class sibling. Confirm the bracket is rated for the
-        wall or ceiling you will use. We do not have a measured ASIN for a
-        smaller wall-only utility heater, so that row stays a placeholder.
+        wall or ceiling you will use. Smaller wall-listed units and the 7.5 kW
+        shop class live on{" "}
+        <Link href="/best-wall-mount-garage-heaters">
+          best wall-mount electric garage heaters
+        </Link>
+        .
       </p>
 
       <SpecTable
@@ -322,9 +334,11 @@ export default function WallVsCeilingGuidePage() {
             </span>,
           ],
           [
-            "Smaller wall utility heater",
+            "Smaller wall utility / 15 A wall infrared",
             "Nameplate watts and volts, required circuit, floor and side clearance, listed mark. Do not assume it is a 5 kW unit",
-            "Placeholder: retailer URL not live",
+            <Link key="wall-money" href="/best-wall-mount-garage-heaters">
+              Wall-mount money page
+            </Link>,
           ],
         ]}
       />

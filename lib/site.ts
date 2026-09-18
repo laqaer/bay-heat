@@ -9,7 +9,7 @@ export const site = {
   description:
     "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, hardwired vs plug-in, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, whether to seal the building before buying more watts, what those watts cost to run, and when electric is enough versus a listed propane shop heater.",
   locale: "en-US",
-  updated: "2026-09-11",
+  updated: "2026-09-18",
 } as const;
 
 export const affiliateDisclosure =
@@ -123,6 +123,19 @@ export const guides: Guide[] = [
       "Ceiling units throw across the bay if the joists can take 25–30 lb. Wall mounts win on low ceilings and one work zone. The manual’s clearance is the rule, not a blog height.",
     decision: "Can the ceiling take the unit, or is the heat needed on one wall?",
     updated: "2026-09-11",
+  },
+  {
+    href: "/best-wall-mount-garage-heaters",
+    title: "Best wall-mount electric garage heaters",
+    h1: "Wall-mount electric garage heaters: 5 kW utility, 7.5 kW shop, and 15 A wall units",
+    description:
+      "Wall-listed electric garage and workshop heaters: Fahrenheat FUH54-class, Dr. Infrared DR-975-class, and a 1500 W wall infrared. Nameplate and manual figures only. No invented scores.",
+    navLabel: "Best wall-mount",
+    kind: "guide",
+    summary:
+      "Wall-mount is a bracket and a throw, not a new wattage class. The 5 kW FUH can hang on a wall. A 7.5 kW shop unit needs a larger circuit. A 1500 W wall infrared is still a 15 A load.",
+    decision: "Need heat on one wall, not thrown across the bay?",
+    updated: "2026-09-18",
   },
   {
     href: "/insulate-garage-before-heater-upgrade",
