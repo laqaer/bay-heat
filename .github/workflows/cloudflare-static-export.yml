@@ -1,0 +1,55 @@
+name: Cloudflare static-export compatibility
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "components/**"
+      - "lib/**"
+      - "next.config.ts"
+      - "wrangler.jsonc"
+      - "vercel.json"
+      - ".github/workflows/cloudflare-static-export.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-static-export-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  static-export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+
+      - name: Verify static output
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f out/index.html
+          test -f out/404.html
+          test -f out/robots.txt
+          test -f out/sitemap.xml
+          test -f out/about.html
+          test -f out/electric-garage-heater-operating-cost.html
+          if find out -type f -name '*.server.*' -print -quit | grep -q .; then
+            echo "::error::Unexpected server artifact found in static export."
+            exit 1
+          fi
+
+      - name: Validate Cloudflare asset bundle without deploying
+        run: npx --yes wrangler@4.135.0 deploy --dry-run --outdir "$RUNNER_TEMP/cloudflare-dry-run"
