@@ -33,6 +33,12 @@ jobs:
 
       - run: npm ci --no-audit --no-fund
       - run: npm run lint
+
+      # LayoutProps/PageProps are generated helpers in Next.js 16. Generate
+      # route types before invoking tsc directly in a clean CI checkout.
+      - name: Generate Next.js route types
+        run: npx next typegen
+
       - run: npm run typecheck
       - run: npm run build
 
