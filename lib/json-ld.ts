@@ -52,6 +52,26 @@ export function articleJsonLd(guide: Guide) {
   };
 }
 
+export type FaqEntry = {
+  question: string;
+  answer: string;
+};
+
+export function faqPageJsonLd(faqs: readonly FaqEntry[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
 export function breadcrumbJsonLd(guide: Guide) {
   return {
     "@context": "https://schema.org",

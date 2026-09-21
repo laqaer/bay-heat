@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AffiliateCallout, SafetyCallout } from "@/components/callouts";
 import { JsonLd } from "@/components/json-ld";
-import { articleJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
+import { articleJsonLd, breadcrumbJsonLd, faqPageJsonLd, type FaqEntry } from "@/lib/json-ld";
 import { relatedGuides, type Guide } from "@/lib/site";
 
 type TocItem = { id: string; label: string };
@@ -89,6 +89,21 @@ export function GuideChrome({
         </section>
       </article>
     </>
+  );
+}
+
+export function GuideFaq({ faqs }: { faqs: readonly FaqEntry[] }) {
+  return (
+    <section aria-labelledby="faq">
+      <JsonLd data={faqPageJsonLd(faqs)} />
+      <h2 id="faq">FAQ</h2>
+      {faqs.map((faq) => (
+        <div key={faq.question}>
+          <h3>{faq.question}</h3>
+          <p>{faq.answer}</p>
+        </div>
+      ))}
+    </section>
   );
 }
 
