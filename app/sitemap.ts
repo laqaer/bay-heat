@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { allPages, site } from "@/lib/site";
 
+// Required for Next.js static export: metadata route is build-time only.
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date(site.updated);
 
