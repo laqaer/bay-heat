@@ -85,6 +85,7 @@ Routes a reader can open:
 | `/best-ceiling-mount-garage-heaters-under-200` | Ceiling-mount garage heaters under $200: Comfort Zone and Fahrenheat-class units |
 | `/portable-garage-heaters-15a-circuit` | Portable garage heaters on a 15 A circuit: milkhouse and utility units |
 | `/wall-mount-vs-ceiling-garage-heater` | Wall-mount vs ceiling-mount: joist load, throw, and headroom |
+| `/best-wall-mount-garage-heaters` | Wall-mount electric garage heaters: 5 kW utility, 7.5 kW shop, and 15 A wall units |
 | `/insulate-garage-before-heater-upgrade` | Seal and insulate first, or buy more watts? |
 | `/about` | About BayHeat Guide |
 | `/privacy` | Privacy policy |
