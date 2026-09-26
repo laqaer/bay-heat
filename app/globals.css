@@ -45,6 +45,24 @@
   --frost: #5cc8e6;
   --alarm: #ff4f3a;
   --link: #5cc8e6;
+  /* Redeclare every --color-* alias here too: @theme inline's `--color-bg: var(--bg)` etc. resolve once,
+     where they're declared (effectively at :root), and that RESOLVED value is what inherits down -- a
+     descendant redefining --bg alone doesn't retroactively change an alias already fixed higher up the
+     tree. Without this block, the entire camera/dark surface silently no-ops everywhere a component uses a
+     --color-* utility (bg-(--color-bg) etc.), which is nearly all of them. Found via the can-i-run-it and
+     home pages both rendering with light-surface colors despite [data-surface="camera"] matching correctly. */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-fg: var(--text);
+  --color-fg-2: var(--text-2);
+  --color-link: var(--link);
+  --color-ember: var(--ember);
+  --color-frost: var(--frost);
+  --color-heat: var(--glow);
+  --color-alarm: var(--alarm);
+  --color-glow: var(--glow);
 }
 
 /* Data ramps -- the only gradients in the system, always paired with a labeled °F scale. */
