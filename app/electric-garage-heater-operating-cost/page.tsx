@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Callout } from "@/components/callouts";
-import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import { GuideChrome, GuideFaq, SpecTable } from "@/components/guide-chrome";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/electric-garage-heater-operating-cost")!;
@@ -27,6 +27,25 @@ const toc = [
   { id: "bill", label: "Read the rate on your bill" },
   { id: "session", label: "A worked Saturday session" },
   { id: "caveats", label: "What this page will not claim" },
+  { id: "faq", label: "FAQ" },
+];
+
+const faqs = [
+  {
+    question: "How do you calculate kWh for an electric garage heater?",
+    answer:
+      "kWh = (watts ÷ 1,000) × hours the element is on. A 5,000 W heater running one full hour is 5 kWh. A 1,500 W portable running one full hour is 1.5 kWh. Cost is that kWh times the $/kWh on your bill. At an example $0.20/kWh, the hour is $1.00 on the 5 kW unit and $0.30 on the 1,500 W portable. Example rates are not a national average.",
+  },
+  {
+    question: "Does voltage change the cost per kWh?",
+    answer:
+      "No. Voltage does not change $/kWh. Resistance heat is essentially 100% efficient at the point of use on either voltage. 240 V only changes how many watts you can deliver before a 15 A receptacle is the wrong circuit.",
+  },
+  {
+    question: "Is a clock hour in the garage a full nameplate hour?",
+    answer:
+      "No. The nameplate hour is the element at full output. A thermostat’s duty cycle is hours-on divided by hours-occupied. If a 5 kW unit is on 40% of the time after warmup, you pay for 2 kWh per clock hour (5 × 0.4), not 5. Warmup is often near 100% on, and a leaky door can keep the hold there too. The 40% figure is an example, not a measurement of your garage.",
+  },
 ];
 
 export default function OperatingCostGuidePage() {
@@ -344,6 +363,7 @@ export default function OperatingCostGuidePage() {
         </Link>{" "}
         and stop paying to heat cubic feet you are not standing in.
       </p>
+      <GuideFaq faqs={faqs} />
     </GuideChrome>
   );
 }

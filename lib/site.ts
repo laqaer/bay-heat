@@ -38,26 +38,26 @@ export const guides: Guide[] = [
     title: "Best electric garage heaters by size (1-car, 2-car, 3-car)",
     h1: "Electric garage heater size: 1-car, 2-car, and 3-car wattage ranges",
     description:
-      "Wattage ranges for 1-car, 2-car, and 3-car garages, with insulation, ceiling height, and infiltration caveats. Not a substitute for a load calculation.",
+      "Insulated brackets: about 2–4 kW for a 1-car, 4–6 kW for a 2-car, and 6–10 kW for a 3-car. A 1,500 W heater is spot heat, not a whole bay. A drafty 2-car outruns 5 kW until the door and sill are sealed.",
     navLabel: "By size",
     kind: "guide",
     summary:
       "Start with square footage and insulation. A 1,500 W plug-in unit is a workbench heater, not a two-car garage heater.",
     decision: "How big is the space, and is it insulated?",
-    updated: "2026-09-14",
+    updated: "2026-09-26",
   },
   {
     href: "/120v-vs-240v-garage-heater",
     title: "120V vs 240V garage heaters: circuit and breaker reality",
     h1: "120V vs 240V garage heaters: what your circuit can actually run",
     description:
-      "Why a 15 A / 120 V receptacle tops out near 1,440 W continuous, when you need a dedicated 240 V circuit, and what breakers and wire typically mean for garage heaters.",
+      "A heater that runs for hours is a continuous load: 15 A × 120 V × 0.8 is about 1,440 W. A 5,000 W tap at 240 V is about 20.9 A. CZ220 recommends 30 A or larger and 10 AWG copper; FUH54C caps that tap at a 30 A fuse and 10 AWG copper minimum. The sheet and the run still control.",
     navLabel: "120V vs 240V",
     kind: "guide",
     summary:
       "Voltage is not a feature. It is the limit of the circuit you already have — or the one you are willing to install.",
     decision: "What circuit do you actually have?",
-    updated: "2026-09-04",
+    updated: "2026-09-26",
   },
   {
     href: "/hardwired-vs-plugin-garage-heater",
@@ -155,13 +155,13 @@ export const guides: Guide[] = [
     title: "How much an electric garage heater costs to run",
     h1: "How much an electric garage heater costs to run: watts × hours × your rate",
     description:
-      "kWh math from the nameplate: (watts ÷ 1,000) × hours × the $/kWh on your bill. Example rates only — not a national average. Voltage does not change the rate; duty cycle and the envelope change the hours.",
+      "An electric garage heater’s operating cost is (watts ÷ 1,000) × hours the element is on × the $/kWh on your bill. Voltage does not change that rate, and a thermostat’s duty cycle is not a full nameplate hour.",
     navLabel: "Cost to run",
     kind: "guide",
     summary:
       "Cost is nameplate watts, hours the element is actually on, and the rate on your bill. A 1,500 W portable is cheap per hour because it is spot heat, not because 120 V is efficient.",
     decision: "What will the watts actually cost to run?",
-    updated: "2026-09-07",
+    updated: "2026-09-21",
   },
   {
     href: "/electric-vs-propane-garage-heater",

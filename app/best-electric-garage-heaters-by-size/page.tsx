@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AmazonAffiliateLink } from "@/components/amazon-link";
-import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import { GuideChrome, GuideFaq, SpecTable } from "@/components/guide-chrome";
 import {
   AMAZON_COMFORT_ZONE_CZ220,
   AMAZON_FAHRENHEAT_FUH54,
@@ -25,12 +25,41 @@ export const metadata: Metadata = {
 
 const toc = [
   { id: "how-to-read-ranges", label: "How to read these ranges" },
-  { id: "one-car", label: "1-car garages" },
-  { id: "two-car", label: "2-car garages" },
+  { id: "one-car", label: "What kW fits a 1-car garage?" },
+  { id: "two-car", label: "Why does 5 kW fail a drafty 2-car?" },
   { id: "three-car", label: "3-car garages" },
   { id: "insulation", label: "Insulation caveats" },
   { id: "examples", label: "Example products for these brackets" },
   { id: "what-to-read-next", label: "What to read next" },
+  { id: "faq", label: "FAQ" },
+];
+
+const faqs = [
+  {
+    question: "What kW bracket fits a 1-car garage?",
+    answer:
+      "A typical one-car bay is 200–300 ft². Insulated walls, ceiling, and door, when you are taking the chill off rather than matching the house thermostat, land around 2–4 kW. That already exceeds a 15 A / 120 V receptacle on a continuous basis, so whole-bay heat is a hardwired 240 V unit in the 3–5 kW class. A thin door or bare studs belongs in the drafty column: about 4–6+ kW, or heat the bench instead.",
+  },
+  {
+    question: "Why does 5 kW fail in a drafty 2-car garage?",
+    answer:
+      "Most attached two-car garages are 400–600 ft². At 10 W/ft², 400 ft² is 4 kW; at 12 W/ft², 500 ft² is 6 kW. A 5 kW forced-air unit is a common match for that sealed bay when its sheet is the 30 A / 240 V class, as on the CZ220 and FUH54 5,000 W taps. Bare studs, a single-layer door, or a door cracked for a car leak that heat. The heater is working. The building is not holding it. The drafty column is 6–10+ kW, and insulation is usually the better first spend.",
+  },
+  {
+    question: "Does insulation beat buying more watts?",
+    answer:
+      "Often. The garage door is usually the largest hole. Weatherstrip and an insulated door often beat a jump from 5 kW to 7.5 kW. More watts still belong when the bay is already sealed and the bracket is simply too small, or when the space is 600–900+ ft². A second unit at that tap is a second dedicated circuit, not a spare slot you can assume.",
+  },
+  {
+    question: "Is 1,500 W enough to heat a whole garage bay?",
+    answer:
+      "No. A 1,500 W / 120 V heater is a workbench or 1-car spot heater. It is not sized for a two-car bay. The limit is the circuit, not the marketing copy: 15 A × 120 V × 0.8 is about 1,440 W continuous, and 1,500 W draws 12.5 A. Whole-bay heat starts with a dedicated 240 V circuit.",
+  },
+  {
+    question: "What wattage range fits a 3-car garage?",
+    answer:
+      "Three-car and “2-car plus shop” spaces are about 600–900+ ft². An insulated version is usually 6–10 kW, often two 5 kW units or a larger unit heater. A single 5 kW ceiling heater will not hold an uninsulated one. Around 10 kW is on the order of 40 A at 240 V before diversity and continuous-load derating, and many houses do not have a spare 40–60 A of 240 V sitting unused.",
+  },
 ];
 
 export default function SizeGuidePage() {
@@ -100,7 +129,7 @@ export default function SizeGuidePage() {
         ]}
       />
 
-      <h2 id="one-car">1-car garages</h2>
+      <h2 id="one-car">What kW fits a 1-car garage?</h2>
       <p>
         A typical one-car bay is 200–300 ft². If the walls and door are insulated
         and you are taking the chill off — not trying to match the house
@@ -139,7 +168,7 @@ export default function SizeGuidePage() {
         says “1-car.”
       </p>
 
-      <h2 id="two-car">2-car garages</h2>
+      <h2 id="two-car">Why does 5 kW fail a drafty 2-car?</h2>
       <p>
         Most attached two-car garages are about 400–600 ft². The internet’s
         favorite 5,000 W / 240 V ceiling heater is aimed at this box —{" "}
@@ -264,6 +293,7 @@ export default function SizeGuidePage() {
         </Link>
         .
       </p>
+      <GuideFaq faqs={faqs} />
     </GuideChrome>
   );
 }

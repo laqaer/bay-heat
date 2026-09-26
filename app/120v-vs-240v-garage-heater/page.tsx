@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import { GuideChrome, GuideFaq, SpecTable } from "@/components/guide-chrome";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/120v-vs-240v-garage-heater")!;
@@ -24,6 +24,25 @@ const toc = [
   { id: "breaker-wire", label: "Breakers and wire" },
   { id: "hardwired", label: "Hardwired vs plug-in" },
   { id: "panel", label: "Panel capacity" },
+  { id: "faq", label: "FAQ" },
+];
+
+const faqs = [
+  {
+    question: "What can a 15 A circuit run continuously?",
+    answer:
+      "About 1,440 W. A heater that runs three hours or more is a continuous load, and branch circuits for continuous loads are typically held to 80% of the breaker rating: 15 A × 120 V × 0.8 = 1,440 W. A 1,500 W heater draws 12.5 A, over that ceiling, and wants to be the only load on the circuit. These are planning numbers (NEC 210.19 / 210.20 and related language); the installation sheet and local code control the job.",
+  },
+  {
+    question: "Why does a 5 kW garage heater need 240 V?",
+    answer:
+      "A 5,000 W heater at 240 V is about 20.9 A. The same 5,000 W at 120 V would be about 41.7 A, which is not a garage outlet. 240 V delivers those watts without doubling the current on a 120 V conductor. It is not twice as efficient. Resistance heat is essentially 100% efficient at the point of use on either voltage, and dollars per kWh do not change with voltage.",
+  },
+  {
+    question: "What breaker and wire does a 5 kW unit call for?",
+    answer:
+      "Not one size for every 5 kW heater. Comfort Zone’s CZ220 sheet lists the 5,000 W tap at 20.9 A on 208–240 V, and recommends a 30 A or larger breaker with 10 AWG copper rated 75°C (167°F), or larger, following the NEC and local code. Fahrenheat’s FUH54C sheet lists 5,000 W at 240 V as 20.9 A with a 30 A maximum fuse, minimum 10 AWG copper rated at least 75°C, and no aluminum. Jumpers on that sheet lower the watts and the maximum fuse; the 7.5 kW model in the same family calls for 8 AWG. Conductor rating, run length, and the sheet on the unit you install still decide the circuit. A matching voltage is not permission to reuse a 20 A dryer circuit.",
+  },
 ];
 
 export default function VoltageGuidePage() {
@@ -190,6 +209,7 @@ export default function VoltageGuidePage() {
         , or a different heat source. Buying a 5 kW unit and feeding it from a
         lighting circuit is how garages burn.
       </p>
+      <GuideFaq faqs={faqs} />
     </GuideChrome>
   );
 }
