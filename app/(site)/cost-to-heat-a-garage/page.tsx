@@ -91,7 +91,7 @@ export default function Page() {
       </div>
 
       <h2>The Garage Heat Index</h2>
-      <div className="not-prose my-4 overflow-x-auto">
+      <div className="not-prose my-4 overflow-x-auto" tabIndex={0} role="region" aria-label="The Garage Heat Index, 51 states">
         <table className="w-full min-w-[760px] border-collapse text-sm">
           <thead>
             <tr className="border-b border-(--color-line) text-left text-(--color-fg-2)">

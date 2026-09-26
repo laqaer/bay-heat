@@ -19,8 +19,13 @@ const CHIP_STYLE: Record<Ev, string> = {
   E: "border border-dashed border-(--color-fg-2) text-(--color-fg-2)",
 };
 
-// A zero-JS evidence popover: a server component using a native <details> disclosure (feasibility red-team
-// finding #12 -- <Num> must stay a server component with no client island per number rendered).
+// A zero-JS evidence popover: every element here is phrasing content (span/button/a), never <details>,
+// <summary> or <div> -- <Num> is used inline inside running <p> prose everywhere on the site, and flow
+// content nested in a <p> isn't valid HTML. The browser's parser silently closes the <p> right there during
+// initial parsing (splitting the sentence into sibling elements), which then doesn't match what React
+// rendered server-side, and every page using it threw a real hydration error and re-rendered client-side on
+// every load. Found by a design-QA pass across 22 content pages, all hitting the same shared component.
+// The show/hide is CSS-only (:hover/:focus-within on a group), so this stays a server component either way.
 export function EvidencePopover({
   ev,
   source,
@@ -40,39 +45,42 @@ export function EvidencePopover({
 }) {
   if (!chip) return <span className="font-mono tabular-nums">{children}</span>;
   return (
-    <details className="not-prose tap-24 inline-block align-baseline [&_summary::-webkit-details-marker]:hidden">
-      <summary className="inline-flex cursor-pointer list-none items-baseline gap-1 font-mono tabular-nums marker:content-none">
+    <span className="not-prose group tap-24 relative inline-block align-baseline">
+      <button
+        type="button"
+        className="inline-flex cursor-pointer items-baseline gap-1 font-mono tabular-nums marker:content-none"
+      >
         <span>{children}</span>
         <span className={`inline-block rounded-[2px] px-[3px] py-px font-mono text-[10px] font-semibold leading-none ${CHIP_STYLE[ev]}`}>
           {CHIP_LABEL[ev]}
         </span>
-      </summary>
-      <div className="mt-1 max-w-xs border border-(--color-line) bg-(--color-surface) p-3 text-xs leading-5 text-(--color-fg-2) shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
-        <p className="font-medium text-(--color-fg)">{CHIP_MEANING[ev]}</p>
+      </button>
+      <span className="invisible absolute left-0 top-full z-10 mt-1 block w-max max-w-xs border border-(--color-line) bg-(--color-surface) p-3 text-xs leading-5 text-(--color-fg-2) opacity-0 shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+        <span className="block font-medium text-(--color-fg)">{CHIP_MEANING[ev]}</span>
         {source ? (
-          <p className="mt-1">
+          <span className="mt-1 block">
             <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-(--color-link) underline">
               {source.title}
             </a>
             {checked ? ` · checked ${checked}` : ""}
-          </p>
+          </span>
         ) : computedFrom ? (
-          <p className="mt-1 font-mono">{computedFrom}</p>
+          <span className="mt-1 block font-mono">{computedFrom}</span>
         ) : null}
         {CORRECTIONS_ENDPOINT ? (
-          <p className="mt-2">
+          <span className="mt-2 block">
             <a href={CORRECTIONS_ENDPOINT} className="text-(--color-link) underline">
               Report a problem
             </a>
-          </p>
+          </span>
         ) : (
-          <p className="mt-2">
+          <span className="mt-2 block">
             <a href={`mailto:hello@bayheatguide.com?subject=Correction:%20${factId ?? ""}`} className="text-(--color-link) underline">
               Report a problem
             </a>
-          </p>
+          </span>
         )}
-      </div>
-    </details>
+      </span>
+    </span>
   );
 }
