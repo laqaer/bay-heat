@@ -1,6 +1,5 @@
 import type { PageEntry } from "@/lib/pages/types";
-import { AI_LINE, MODEL_VERSION } from "@/lib/site";
-import { EDITOR_NAME } from "@/lib/env.public";
+import { aiLine, MODEL_VERSION } from "@/lib/site";
 
 const REVIEW_LABEL: Record<"electrical" | "gas", string> = {
   electrical: "electrician",
@@ -17,7 +16,7 @@ export function LabLabel({ entry }: { entry: PageEntry }) {
         {entry.id} · REV {entry.rev} · CHECKED {entry.updated} · MODEL v{MODEL_VERSION} &#9662;
       </summary>
       <div className="space-y-2 border-t border-(--color-line) px-3 py-3 font-sans text-xs leading-5">
-        <p>{AI_LINE.replace("a named editor checks each page", `${EDITOR_NAME ?? "the BayHeat editorial desk"} checks each page`)}</p>
+        <p>{aiLine(entry.reviewed, entry.layout === "verdict-first" || entry.kind === "safety" ? "full" : "sample")}</p>
         <p>
           {entry.reviewed
             ? `Technical review: checked by a licensed ${REVIEW_LABEL[entry.reviewed]}.`
