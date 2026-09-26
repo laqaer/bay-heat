@@ -18,3 +18,9 @@ export const AMAZON_DR_INFRARED_DR975 = amazonDp("B01M8KXXAB");
 
 /** Heat Storm Tradesman HS-1500-TT 1500W wall/tripod infrared. Measured ASIN B07JQPCFJ3. */
 export const AMAZON_HEAT_STORM_TRADESMAN = amazonDp("B07JQPCFJ3");
+
+/** M-D 3822 / 03822 vinyl garage-door top and sides seal, 30 ft, nail-on. Measured ASIN B0009F86SE. */
+export const AMAZON_MD_DOOR_TOP_SIDES = amazonDp("B0009F86SE");
+
+/** M-D nail-on garage-door bottom rubber, 16 ft (listing also titled 3749). Measured ASIN B016TQHG4G. */
+export const AMAZON_MD_DOOR_BOTTOM = amazonDp("B016TQHG4G");

@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AmazonAffiliateLink } from "@/components/amazon-link";
 import { Callout } from "@/components/callouts";
 import { GuideChrome, GuideFaq, SpecTable } from "@/components/guide-chrome";
+import {
+  AMAZON_COMFORT_ZONE_CZ220,
+  AMAZON_FAHRENHEAT_FUH54,
+  AMAZON_MILKHOUSE_1500W,
+} from "@/lib/affiliates";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/electric-garage-heater-operating-cost")!;
@@ -26,6 +32,7 @@ const toc = [
   { id: "forced-air-vs-ir", label: "Forced-air vs infrared" },
   { id: "bill", label: "Read the rate on your bill" },
   { id: "session", label: "A worked Saturday session" },
+  { id: "retailers", label: "Nameplates in the tables" },
   { id: "caveats", label: "What this page will not claim" },
   { id: "faq", label: "FAQ" },
 ];
@@ -319,6 +326,44 @@ export default function OperatingCostGuidePage() {
         those and call it “typical.” Multiply your hours by your rate.
       </p>
 
+      <h2 id="retailers">The nameplates in those rows</h2>
+      <p>
+        The 1,500 W portable row and the 5 kW ceiling row are these classes.
+        Amazon Associates text links (tag{" "}
+        <code className="font-mono text-[0.9em]">laqaer-20</code>), the same
+        measured listings as the portable and ceiling guides. A click does
+        not change the formula, and the listing is not a measured bill.
+        Confirm watts on the nameplate. Street prices move. We do not invent
+        a monthly savings figure.
+      </p>
+      <SpecTable
+        caption="Amazon Associates listings for the 1,500 W and 5 kW nameplates used in the cost tables"
+        columns={["Nameplate class", "What to verify on the listing", "Affiliate / retailer link"]}
+        rows={[
+          [
+            "1,500 W portable",
+            "Comfort Zone CZ798-class, 1500 W / 120 V, listed mark, tip-over and overheat cutouts. Spot heat. Cheaper per hour because it is fewer watts.",
+            <AmazonAffiliateLink key="cz798" href={AMAZON_MILKHOUSE_1500W}>
+              Amazon: Comfort Zone CZ798 1500W milkhouse
+            </AmazonAffiliateLink>,
+          ],
+          [
+            "5 kW ceiling",
+            "Hardwired 240 V, 3000/4000/5000 W taps, 30 A guidance, ETL mark, included bracket. The 3 / 4 / 5 kW rows are these taps.",
+            <AmazonAffiliateLink key="cz220" href={AMAZON_COMFORT_ZONE_CZ220}>
+              Amazon: Comfort Zone 5000W ceiling (CZ220-class)
+            </AmazonAffiliateLink>,
+          ],
+          [
+            "5 kW ceiling",
+            "FUH54 / FUH54C, 5000 W @ 240 V, jumper derate table, copper-only warning, listing mark",
+            <AmazonAffiliateLink key="fuh54" href={AMAZON_FAHRENHEAT_FUH54}>
+              Amazon: Fahrenheat FUH5-4 5000W (FUH54-class)
+            </AmazonAffiliateLink>,
+          ],
+        ]}
+      />
+
       <h2 id="caveats">What this page will not claim</h2>
       <ul>
         <li>
@@ -341,11 +386,9 @@ export default function OperatingCostGuidePage() {
           charger. Hire a licensed electrician for new 240 V work.
         </li>
         <li>
-          <strong>No affiliate buy buttons on this page.</strong> Some
-          Amazon Associates heater links are live on the ceiling-mount,
-          wall-mount, by-size, and 15 A portable guides. We are not tagging a
-          heater SKU here to
-          “prove” a kWh number.
+          <strong>The links do not prove a kWh number.</strong> The three
+          rows above are the 1,500 W and 5 kW nameplates already used in the
+          tables (tag laqaer-20). Cost is still watts × hours-on × your rate.
         </li>
       </ul>
       <p>
