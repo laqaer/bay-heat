@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AmazonAffiliateLink } from "@/components/amazon-link";
 import { Callout } from "@/components/callouts";
 import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import { AMAZON_MD_DOOR_BOTTOM, AMAZON_MD_DOOR_TOP_SIDES } from "@/lib/affiliates";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/insulate-garage-before-heater-upgrade")!;
@@ -27,6 +29,7 @@ const toc = [
   { id: "more-watts", label: "When more watts are still required" },
   { id: "wrong-path", label: "When resistance heat is the wrong path" },
   { id: "after-seal", label: "Forced-air once the door holds" },
+  { id: "seals", label: "Seal classes" },
 ];
 
 export default function InsulateFirstGuidePage() {
@@ -324,12 +327,40 @@ export default function InsulateFirstGuidePage() {
         helps the hours the door is down. It does not make fan-forced air stay
         in an open bay.
       </p>
+      <h2 id="seals">The seal classes the checklist already names</h2>
       <p>
-        Door and kit buy links are not live on this page. Some Amazon
-        Associates heater links are live on the ceiling-mount and 15 A
-        portable guides. Do not treat a listing that says a weatherstrip
-        “adds 10 degrees” as a measurement we will repeat.
+        Two Amazon Associates text links (tag{" "}
+        <code className="font-mono text-[0.9em]">laqaer-20</code>), for the
+        side-and-top weatherstrip and the bottom seal in the checklist.
+        They are not a heater, and they are not a payback claim. Confirm
+        the seal matches the door you have: nail-on jamb vinyl is not a
+        T-channel slide-in, and a 16 ft bottom rubber does not fit a
+        retainer track by itself. Street prices move. Do not treat a
+        listing that says a weatherstrip “adds 10 degrees” as a measurement
+        we will repeat. Reflective door kits that lead with an R-value or
+        a degrees claim are not linked here. The 5 kW cabinet, if you still
+        need it after the door holds, stays on the ceiling-mount guide.
       </p>
+      <SpecTable
+        caption="Amazon Associates listings for the overhead-door seals this page already recommends. Not a heater, and not an R-value claim."
+        columns={["Checklist step", "What to verify on the listing", "Affiliate / retailer link"]}
+        rows={[
+          [
+            "Side and top weatherstrip",
+            "M-D 3822 / 03822, 30 ft vinyl, nail-on stop for the overhead door. Confirm length and that the jamb will take fasteners. Not a 36-inch man-door kit.",
+            <AmazonAffiliateLink key="md-top" href={AMAZON_MD_DOOR_TOP_SIDES}>
+              Amazon: M-D 3822 30 ft garage door top and sides seal
+            </AmazonAffiliateLink>,
+          ],
+          [
+            "Bottom / threshold",
+            "M-D nail-on bottom rubber, 16 ft. Confirm the door accepts nails. A steel door with a retainer track needs a slide-in seal this listing is not.",
+            <AmazonAffiliateLink key="md-bottom" href={AMAZON_MD_DOOR_BOTTOM}>
+              Amazon: M-D 16 ft nail-on garage door bottom seal
+            </AmazonAffiliateLink>,
+          ],
+        ]}
+      />
       <p>
         Next: if the envelope now matches the insulated column and you are
         hanging a hardwired unit, pick the mount on{" "}

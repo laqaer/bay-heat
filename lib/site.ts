@@ -161,7 +161,7 @@ export const guides: Guide[] = [
     summary:
       "More watts heat the air you are already leaking. Door, weatherstrip, and sill usually beat a larger breaker. Panel capacity is the hard stop.",
     decision: "Is the building leaking the heat you already paid for?",
-    updated: "2026-09-04",
+    updated: "2026-09-26",
   },
   {
     href: "/electric-garage-heater-operating-cost",

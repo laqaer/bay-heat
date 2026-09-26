@@ -24,3 +24,9 @@ export const AMAZON_COMFORT_ZONE_CZQTV5M = amazonDp("B07YBH9XVG");
 
 /** Dr. Infrared DR-238 900/1200/1500W carbon infrared, wall or ceiling. Measured ASIN B077JM5PB9. */
 export const AMAZON_DR_INFRARED_DR238 = amazonDp("B077JM5PB9");
+
+/** M-D 3822 / 03822 vinyl garage-door top and sides seal, 30 ft, nail-on. Measured ASIN B0009F86SE. */
+export const AMAZON_MD_DOOR_TOP_SIDES = amazonDp("B0009F86SE");
+
+/** M-D nail-on garage-door bottom rubber, 16 ft (listing also titled 3749). Measured ASIN B016TQHG4G. */
+export const AMAZON_MD_DOOR_BOTTOM = amazonDp("B016TQHG4G");

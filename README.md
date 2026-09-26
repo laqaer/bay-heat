@@ -42,7 +42,7 @@ npm run build
 2. Framework preset: **Next.js**. Leave build/output commands at defaults (`next build`).
 3. No environment variables are required for the editorial site.
 4. Production domain `bayheatguide.com` is wired (apex 200, www → apex). The default Vercel hostname `bay-heat.vercel.app` remains available for previews.
-5. Replace `public/ads.txt` before serving ads. Amazon Associates links (tag `laqaer-20`) are live on the homepage, the 120 V vs 240 V guide, the forced-air vs infrared guide, and the ceiling-mount, 15 A portable, by-size, wall-mount, and infrared guides.
+5. Replace `public/ads.txt` before serving ads. Amazon Associates links (tag `laqaer-20`) are live on the homepage, the 120 V vs 240 V guide, the forced-air vs infrared guide, the ceiling-mount, 15 A portable, by-size, wall-mount, and infrared guides, and on the hardwired-vs-plug-in, insulate-first, operating-cost, and electric-vs-propane guides.
 
 ## IndexNow
 
