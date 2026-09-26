@@ -60,6 +60,8 @@ Do not move DNS, change the Associates payout destination, or attach this domain
 
 ## Handoff
 
-Next useful action after this change is deployed: run `npm run indexnow` once production HTML contains `Buy the class the circuit allows`, then run the `Operating watchdog` workflow once. Do not call that a profit. The 28-day read of experiment 001 waits on Search Console.
+Done on 2026-09-26: production serves the retailer module (health check passed 2026-09-26T05:01:39Z) and IndexNow returned HTTP 202. Do not submit IndexNow again until the next content change.
+
+`workflow_dispatch` returned HTTP 403 for this operator token. The watchdog workflow is active on `main`. A passing scheduled run is still required before calling it unattended. The 28-day read of experiment 001 waits on Search Console.
 
 Owner-only gaps are listed in the pull request that introduced this record.

@@ -31,6 +31,14 @@ $0 new discretionary spend. No ads, no new vendors, no OpenSEO credits, no Verce
 
 Immediate check on the deploy that contains this page. Search metric: 28 days after that deploy, ending on or after 2026-10-24. If Search Console is still disconnected on that date, metric 2 is a blocked result, not a success.
 
+## Result so far
+
+Immediate metric, observed 2026-09-26 after merge commit `adb2754`:
+
+- Production health check passed at 2026-09-26T05:01:39Z. `/`, `/120v-vs-240v-garage-heater`, `/forced-air-vs-infrared-garage-heater`, and the ceiling-mount guide returned 200 and contained `laqaer-20`. `www` returned 308 to the apex. The check did not request Amazon.
+- IndexNow returned HTTP 202 for the nine submitted URLs.
+- The 28-day Search Console metric is still blocked. This is not a commercial success.
+
 ## Stop or pivot
 
 - Remove a card if its recommendation contradicts the page it sits on.
