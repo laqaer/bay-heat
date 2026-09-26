@@ -153,6 +153,30 @@ export function fixFirst(
   ratedWattsAfter: number,
   maxPaybackYears = 3,
 ): FixFirst | null {
+  const bundle = bundleCheapMeasures(ctx, rows, maxPaybackYears);
+  if (!bundle) return null;
+  return {
+    measures: bundle.measures,
+    cost: bundle.cost,
+    qBefore: bundle.qBefore,
+    qAfter: bundle.qAfter,
+    gradeBefore: bundle.gradeBefore,
+    gradeAfter: bundle.gradeAfter,
+    classBefore,
+    classAfter,
+    circuitBefore: circuitFor(ratedWattsBefore, 240, 240),
+    circuitAfter: circuitFor(ratedWattsAfter, 240, 240),
+    equipmentSavings: equipmentSavingsFor(classBefore, classAfter),
+    runningSavingsPerYear: bundle.savingsPerYear,
+  };
+}
+
+export type CheapMeasureBundle = { measures: Measure[]; cost: number; qBefore: number; qAfter: number; gradeBefore: Grade; gradeAfter: Grade; savingsPerYear: number };
+
+// The envelope-only half of fixFirst(): what the cheap bundle buys in load and grade, before any equipment
+// framing (which class, which circuit) is known. plan.ts uses qAfter to re-rank recommendations against the
+// smaller load, then calls fixFirst() with the resulting before/after classes.
+export function bundleCheapMeasures(ctx: RoiContext, rows: RoiRow[], maxPaybackYears = 3): CheapMeasureBundle | null {
   const { input, baseEnvelope, tOut, elevationFt } = ctx;
   // The bundle is exactly planner-engineering.md §15's own worked "all three cheap measures": weatherstrip,
   // one door treatment (door_kit_eps, not door_kit_reflective -- they treat the same door, so only one
@@ -169,24 +193,14 @@ export function fixFirst(
   }
   const before = heatLossDesign(input, baseEnvelope, tOut, elevationFt);
   const after = heatLossDesign(input, envelope, tOut, elevationFt);
-  const cost = cheap.reduce((sum, r) => sum + r.cost, 0);
-  const savingsPerYear = cheap.reduce((sum, r) => sum + r.savingsPerYear.electric, 0);
-
-  const gradeBefore: Grade = before.grade;
-  const gradeAfter: Grade = after.grade;
 
   return {
     measures: cheap.map((r) => r.measure),
-    cost,
+    cost: cheap.reduce((sum, r) => sum + r.cost, 0),
     qBefore: Math.round(before.qSize),
     qAfter: Math.round(after.qSize),
-    gradeBefore,
-    gradeAfter,
-    classBefore,
-    classAfter,
-    circuitBefore: circuitFor(ratedWattsBefore, 240, 240),
-    circuitAfter: circuitFor(ratedWattsAfter, 240, 240),
-    equipmentSavings: equipmentSavingsFor(classBefore, classAfter),
-    runningSavingsPerYear: savingsPerYear,
+    gradeBefore: before.grade,
+    gradeAfter: after.grade,
+    savingsPerYear: cheap.reduce((sum, r) => sum + r.savingsPerYear.electric, 0),
   };
 }
