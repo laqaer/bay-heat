@@ -43,12 +43,12 @@ const faqs = [
   {
     question: "Why does 5 kW fail in a drafty 2-car garage?",
     answer:
-      "Most attached two-car garages are 400–600 ft². At 10 W/ft², 400 ft² is 4 kW; at 12 W/ft², 500 ft² is 6 kW. A 5 kW forced-air unit on a 30 A / 240 V circuit is a common match when the envelope is insulated and the door stays closed. Bare studs, a single-layer door, or a door cracked for a car leak that heat. The heater is working. The building is not holding it. The drafty column is 6–10+ kW, and insulation is usually the better first spend.",
+      "Most attached two-car garages are 400–600 ft². At 10 W/ft², 400 ft² is 4 kW; at 12 W/ft², 500 ft² is 6 kW. A 5 kW forced-air unit is a common match for that sealed bay when its sheet is the 30 A / 240 V class, as on the CZ220 and FUH54 5,000 W taps. Bare studs, a single-layer door, or a door cracked for a car leak that heat. The heater is working. The building is not holding it. The drafty column is 6–10+ kW, and insulation is usually the better first spend.",
   },
   {
     question: "Does insulation beat buying more watts?",
     answer:
-      "Often. The garage door is usually the largest hole. Weatherstrip and an insulated door often beat a jump from 5 kW to 7.5 kW. More watts still belong when the bay is already sealed and the bracket is simply too small, or when the space is 600–900+ ft². A second 5 kW unit is also a second 30 A two-pole breaker.",
+      "Often. The garage door is usually the largest hole. Weatherstrip and an insulated door often beat a jump from 5 kW to 7.5 kW. More watts still belong when the bay is already sealed and the bracket is simply too small, or when the space is 600–900+ ft². A second unit at that tap is a second dedicated circuit, not a spare slot you can assume.",
   },
   {
     question: "Is 1,500 W enough to heat a whole garage bay?",

@@ -41,7 +41,7 @@ const faqs = [
   {
     question: "What breaker and wire does a 5 kW unit call for?",
     answer:
-      "The common 5 kW ceiling class — Comfort Zone CZ220 and Fahrenheat FUH54 — is about 20.9 A at 240 V, a 30 A two-pole breaker (FUH54-class: 30 A maximum fuse), and 10 AWG copper. The Fahrenheat manual in that family prohibits aluminum wire. Wire insulation rating and run length are the electrician’s job. Do not land a 5 kW heater on a 20 A / 240 V dryer circuit because the voltage matches.",
+      "Not one size for every 5 kW heater. Comfort Zone’s CZ220 sheet lists the 5,000 W tap at 20.9 A on 208–240 V, and recommends a 30 A or larger breaker with 10 AWG copper rated 75°C (167°F), or larger, following the NEC and local code. Fahrenheat’s FUH54C sheet lists 5,000 W at 240 V as 20.9 A with a 30 A maximum fuse, minimum 10 AWG copper rated at least 75°C, and no aluminum. Jumpers on that sheet lower the watts and the maximum fuse; the 7.5 kW model in the same family calls for 8 AWG. Conductor rating, run length, and the sheet on the unit you install still decide the circuit. A matching voltage is not permission to reuse a 20 A dryer circuit.",
   },
 ];
 

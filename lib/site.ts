@@ -44,20 +44,20 @@ export const guides: Guide[] = [
     summary:
       "Start with square footage and insulation. A 1,500 W plug-in unit is a workbench heater, not a two-car garage heater.",
     decision: "How big is the space, and is it insulated?",
-    updated: "2026-09-21",
+    updated: "2026-09-26",
   },
   {
     href: "/120v-vs-240v-garage-heater",
     title: "120V vs 240V garage heaters: circuit and breaker reality",
     h1: "120V vs 240V garage heaters: what your circuit can actually run",
     description:
-      "A heater that runs for hours is a continuous load: 15 A × 120 V × 0.8 is about 1,440 W. A 5 kW unit is about 20.9 A at 240 V and is specified with a 30 A two-pole breaker and 10 AWG copper.",
+      "A heater that runs for hours is a continuous load: 15 A × 120 V × 0.8 is about 1,440 W. A 5,000 W tap at 240 V is about 20.9 A. CZ220 recommends 30 A or larger and 10 AWG copper; FUH54C caps that tap at a 30 A fuse and 10 AWG copper minimum. The sheet and the run still control.",
     navLabel: "120V vs 240V",
     kind: "guide",
     summary:
       "Voltage is not a feature. It is the limit of the circuit you already have — or the one you are willing to install.",
     decision: "What circuit do you actually have?",
-    updated: "2026-09-21",
+    updated: "2026-09-26",
   },
   {
     href: "/hardwired-vs-plugin-garage-heater",
