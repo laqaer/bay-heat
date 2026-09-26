@@ -64,7 +64,9 @@ export default function WallVsCeilingGuidePage() {
         <Link href="/forced-air-vs-infrared-garage-heater">
           forced-air vs infrared
         </Link>
-        , then come back here for where the fan-forced unit hangs.
+        , then come back here for where the fan-forced unit hangs. Quartz and
+        carbon shopping classes are on{" "}
+        <Link href="/best-infrared-garage-heaters">infrared garage heaters</Link>.
       </p>
 
       <h2 id="matrix">Mount-type comparison</h2>

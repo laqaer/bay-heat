@@ -178,7 +178,12 @@ export default function CeilingGuidePage() {
           <Link href="/forced-air-vs-infrared-garage-heater">
             forced-air vs infrared
           </Link>{" "}
-          before you hang one in a door-open shop.
+          before you hang one in a door-open shop. If the job is a person in
+          the beam, start with{" "}
+          <Link href="/best-infrared-garage-heaters">
+            infrared garage heaters
+          </Link>
+          .
         </li>
         <li>
           <strong>Not a 7.5 kW unit on a 30 A / 10 AWG circuit.</strong> The

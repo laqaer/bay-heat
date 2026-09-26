@@ -185,7 +185,9 @@ export default function WallMountGuidePage() {
         </Link>
         . The heater should be the only significant load. Plug into the wall,
         not a daisy-chained strip. It heats a person and the objects in the
-        beam. It will not heat a two-car bay.
+        beam. It will not heat a two-car bay. Ceiling quartz and the other
+        carbon classes are on{" "}
+        <Link href="/best-infrared-garage-heaters">infrared garage heaters</Link>.
       </p>
       <p>
         The US sheet wants the bottom of the heater at least 72 in. off the

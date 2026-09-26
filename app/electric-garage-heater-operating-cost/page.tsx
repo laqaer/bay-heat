@@ -251,7 +251,8 @@ export default function OperatingCostGuidePage() {
         </Link>
         . Do not buy IR because a listing implied it “uses less electricity”
         at the same nameplate. Buy it if you are heating a person instead of
-        a room.
+        a room. Measured quartz, carbon, and tripod classes are on{" "}
+        <Link href="/best-infrared-garage-heaters">infrared garage heaters</Link>.
       </p>
 
       <h2 id="bill">Read the rate on your bill</h2>

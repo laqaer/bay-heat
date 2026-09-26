@@ -129,6 +129,11 @@ export default function PortableGuidePage() {
           <Link href="/forced-air-vs-infrared-garage-heater">
             forced-air vs infrared
           </Link>
+          . Measured 1,500 W beams — ceiling quartz, carbon, and a tripod — are
+          on{" "}
+          <Link href="/best-infrared-garage-heaters">
+            infrared garage heaters
+          </Link>
           .
         </li>
       </ul>
