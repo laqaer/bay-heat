@@ -169,19 +169,22 @@ export default function HeatTypeGuidePage() {
         at 1,500 W. It is not a new physics package.
       </p>
       <p>
-        Ceiling-mount infrared exists in the commercial catalog (often far above
-        the $200 Comfort Zone / Fahrenheat aisle). We will not invent a
-        consumer SKU matrix for products we cannot specify from a current
-        nameplate. If you are hanging a 240 V radiant tube, treat it as a
-        listed commercial fixture: mounting height, clearances, and a dedicated
-        circuit.
+        Measured 120 V radiant classes — ceiling quartz, wall-or-ceiling carbon,
+        and a tripod — are on{" "}
+        <Link href="/best-infrared-garage-heaters">
+          infrared electric garage heaters
+        </Link>
+        . A 240 V commercial radiant tube is a different job: mounting height,
+        clearances, and a dedicated circuit. We still will not invent a
+        nameplate for a tube we have not measured.
       </p>
       <p>
         Next: if you have 240 V and a closed door, look at{" "}
         <Link href="/best-ceiling-mount-garage-heaters-under-200">
           ceiling-mount units under $200
         </Link>
-        . If you have a 15 A outlet and a bench, stay on{" "}
+        . If you have a 15 A outlet and want a beam, use the infrared page
+        above. A milkhouse portable stays on{" "}
         <Link href="/portable-garage-heaters-15a-circuit">portables</Link>.
       </p>
       <ClassRetailers />

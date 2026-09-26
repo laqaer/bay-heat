@@ -18,3 +18,9 @@ export const AMAZON_DR_INFRARED_DR975 = amazonDp("B01M8KXXAB");
 
 /** Heat Storm Tradesman HS-1500-TT 1500W wall/tripod infrared. Measured ASIN B07JQPCFJ3. */
 export const AMAZON_HEAT_STORM_TRADESMAN = amazonDp("B07JQPCFJ3");
+
+/** Comfort Zone CZQTV5M 750/1500W ceiling dual-quartz infrared. Ceiling only per the manual. Measured ASIN B07YBH9XVG. */
+export const AMAZON_COMFORT_ZONE_CZQTV5M = amazonDp("B07YBH9XVG");
+
+/** Dr. Infrared DR-238 900/1200/1500W carbon infrared, wall or ceiling. Measured ASIN B077JM5PB9. */
+export const AMAZON_DR_INFRARED_DR238 = amazonDp("B077JM5PB9");
