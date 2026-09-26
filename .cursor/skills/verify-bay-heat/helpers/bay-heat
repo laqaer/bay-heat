@@ -703,6 +703,7 @@ async function cmdSeo(args) {
     "https://bayheatguide.com/best-ceiling-mount-garage-heaters-under-200",
     "https://bayheatguide.com/portable-garage-heaters-15a-circuit",
     "https://bayheatguide.com/wall-mount-vs-ceiling-garage-heater",
+    "https://bayheatguide.com/best-wall-mount-garage-heaters",
     "https://bayheatguide.com/insulate-garage-before-heater-upgrade",
   ]) {
     const label = loc.replace("https://bayheatguide.com", "").replace("</loc>", "/") || "/";

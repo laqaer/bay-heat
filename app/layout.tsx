@@ -47,6 +47,9 @@ export const metadata: Metadata = {
     "electric garage heater operating cost",
     "electric vs propane garage heater",
     "hardwired vs plug-in garage heater",
+    "wall mount garage heater",
+    "best wall mount garage heater",
+    "wall mounted electric heater",
   ],
   openGraph: {
     type: "website",

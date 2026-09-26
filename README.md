@@ -42,7 +42,21 @@ npm run build
 2. Framework preset: **Next.js**. Leave build/output commands at defaults (`next build`).
 3. No environment variables are required for the editorial site.
 4. Production domain `bayheatguide.com` is wired (apex 200, www → apex). The default Vercel hostname `bay-heat.vercel.app` remains available for previews.
-5. Replace `public/ads.txt` before serving ads. First Amazon Associates links (tag `laqaer-20`) are live on the ceiling-mount and 15 A portable guides.
+5. Replace `public/ads.txt` before serving ads. Amazon Associates links (tag `laqaer-20`) are live on the ceiling-mount, 15 A portable, by-size, and wall-mount guides.
+
+## IndexNow
+
+The public key file is `public/96098d06c16790aabec2db1a232fee8f.txt`. Production serves it at [https://bayheatguide.com/96098d06c16790aabec2db1a232fee8f.txt](https://bayheatguide.com/96098d06c16790aabec2db1a232fee8f.txt). The file body is the key. IndexNow keys are public; search engines fetch that URL to verify the host.
+
+`npm run build` does not ping IndexNow. The key URL has to return the key on `bayheatguide.com` before a submit is accepted.
+
+After this file is on production:
+
+```bash
+npm run indexnow
+```
+
+That POSTs the affiliate guides (wall-mount, ceiling-mount, 15 A portable, by-size, and wall vs ceiling) to `https://api.indexnow.org/indexnow`. Participating engines share that submission. `npm run indexnow -- --dry-run` prints the JSON and does not send it. Add a path in `scripts/indexnow.mjs` when a new affiliate guide ships.
 
 ## Routes
 
@@ -56,6 +70,7 @@ npm run build
 | `/best-ceiling-mount-garage-heaters-under-200` | Comfort Zone / Fahrenheat-class matrix (no fake scores) |
 | `/portable-garage-heaters-15a-circuit` | Milkhouse / utility heaters on 15 A circuits |
 | `/wall-mount-vs-ceiling-garage-heater` | Joist load, throw, headroom, wall vs ceiling |
+| `/best-wall-mount-garage-heaters` | Wall-listed electric utility / shop / 15 A wall units |
 | `/insulate-garage-before-heater-upgrade` | Seal/insulate first vs buying more watts |
 | `/electric-garage-heater-operating-cost` | Nameplate watts × hours × your $/kWh (example rates only) |
 | `/electric-vs-propane-garage-heater` | Electric vs propane: attached air, shop BTU, CO/venting, cost method |
@@ -64,6 +79,7 @@ npm run build
 | `/robots.txt` | Generated |
 | `/sitemap.xml` | Generated |
 | `/ads.txt` | Placeholder seller file |
+| `/96098d06c16790aabec2db1a232fee8f.txt` | IndexNow key file (public) |
 
 Affiliate disclosure and electrical / fire-safety language appear in the footer on every page.
 
