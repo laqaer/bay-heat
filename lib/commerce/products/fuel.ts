@@ -1,4 +1,96 @@
 import type { Product } from "../types.ts";
 
-// Lane stub (W11: fuel and hubs). Diesel heaters, propane heaters, gas unit heaters, mini-splits.
-export const PRODUCTS: Product[] = [];
+// Lane: diesel, propane, vented gas, and the mini-split cross-sell (BLUEPRINT.md §2.5, §2.8). Buddy-type
+// propane NEVER carries a buy button on any surface -- route.ts / the planner UI enforce that, not this file,
+// but its safetyLine still quotes the manual's own scope since it appears as a "why not" / safe-alternative
+// reference and on the Can I Run It? verdict.
+
+export const PRODUCTS: Product[] = [
+  {
+    id: "diesel-heater-5kw",
+    name: "Diesel air heater, 5kW class (parking-heater style, clone)",
+    kind: "diesel_air",
+    searchQuery: "diesel air heater 5kW parking heater",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+    safetyLine: { text: "No UL/CSA listing for building heat. Exhaust and intake outdoors only; CO alarm required.", ev: "S", sourceId: "diesel-heater-clone-manual" },
+  },
+  {
+    id: "diesel-heater-8kw",
+    name: "Diesel air heater, 8kW class (parking-heater style, clone)",
+    kind: "diesel_air",
+    searchQuery: "diesel air heater 8kW parking heater",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+    safetyLine: { text: "No UL/CSA listing for building heat. Exhaust and intake outdoors only; CO alarm required.", ev: "S", sourceId: "diesel-heater-clone-manual" },
+  },
+  {
+    id: "diesel-exhaust-kit",
+    name: "Diesel heater exhaust thimble and muffler kit",
+    kind: "diesel_exhaust_kit",
+    searchQuery: "diesel air heater exhaust muffler wall thimble kit",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+  },
+  {
+    id: "propane-buddy-9k",
+    name: "Mr. Heater Buddy, 4,000-9,000 BTU/h portable propane heater",
+    kind: "g_unvented_buddy",
+    searchQuery: "Mr Heater Buddy portable propane heater indoor safe",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+    safetyLine: { text: "Manual: emergency indoor heating only, on 1-lb cylinders, never while sleeping. Never a refillable cylinder indoors.", ev: "S", sourceId: "mh-buddy-manual" },
+  },
+  {
+    id: "propane-big-buddy-18k",
+    name: "Mr. Heater Big Buddy, 4,000-18,000 BTU/h portable propane heater",
+    kind: "g_unvented_buddy",
+    searchQuery: "Mr Heater Big Buddy portable propane heater indoor safe",
+    partnerUrls: {},
+    priceClass: "$$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+    safetyLine: { text: "Manual: emergency indoor heating only, on 1-lb cylinders, never while sleeping. Never a refillable cylinder indoors.", ev: "S", sourceId: "mh-bigbuddy-manual" },
+  },
+  {
+    id: "gas-unit-heater-big-maxx-50",
+    name: "Mr. Heater Big Maxx MHU50/80, vented natural gas/LP unit heater",
+    kind: "g_vented_unit",
+    searchQuery: "Mr Heater Big Maxx vented natural gas garage unit heater",
+    partnerUrls: {},
+    priceClass: "$$$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+    safetyLine: { text: "Licensed gas fitter and permit required. Burner and ignition at least 18 in above the floor (IFGC 305.3).", ev: "S", sourceId: "big-maxx-manual" },
+  },
+  {
+    id: "gas-unit-heater-hot-dawg-45",
+    name: "Modine Hot Dawg HDS, separated-combustion vented gas unit heater",
+    kind: "g_vented_unit",
+    searchQuery: "Modine Hot Dawg HDS separated combustion garage unit heater",
+    partnerUrls: {},
+    priceClass: "$$$$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+    safetyLine: { text: "Licensed gas fitter and permit required. Separated combustion -- draws intake air from outside the room, the right pick for a shop with sawdust or solvent vapor (S10).", ev: "S", sourceId: "hot-dawg-hds-manual" },
+  },
+  {
+    id: "minisplit-12k-230v",
+    name: "12,000 BTU/h 230V mini-split heat pump (heat + cool)",
+    kind: "minisplit",
+    searchQuery: "12000 BTU mini split heat pump 230V garage",
+    partnerUrls: {},
+    priceClass: "$$$$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+    safetyLine: { text: "Refrigerant work (vacuum, charge, line-set brazing) needs EPA Section 608 certification -- have it installed by a licensed HVAC contractor.", ev: "R", sourceId: "epa-608" },
+  },
+];

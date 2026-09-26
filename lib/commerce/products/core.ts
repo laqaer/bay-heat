@@ -27,6 +27,7 @@ export const PRODUCTS: Product[] = [
     priceClass: "$$$",
     priceClassChecked: "2026-09-25",
     specFactIds: ["fuh54.watts.high", "fuh54.amps.high", "fuh54.btuh.high", "fuh54.fuse_max", "fuh54.wire"],
+    safetyLine: { text: "Manual: not where gasoline, paint or flammable liquids are used or stored.", ev: "S", sourceId: "fuh54-manual" },
   },
   {
     id: "cz798-1500w-milkhouse",
@@ -50,6 +51,7 @@ export const PRODUCTS: Product[] = [
     priceClass: "$$$",
     priceClassChecked: "2026-09-25",
     specFactIds: ["dr975.watts", "dr975.btuh", "dr975.breaker", "dr975.wire", "dr975.clearance_back_in"],
+    safetyLine: { text: "Manual: not where gasoline, paint or flammable liquids are used or stored.", ev: "S", sourceId: "dr975-manual" },
   },
   {
     id: "hs1500tt-wall-infrared",
@@ -61,5 +63,6 @@ export const PRODUCTS: Product[] = [
     priceClass: "$",
     priceClassChecked: "2026-09-25",
     specFactIds: ["hs1500tt.watts", "hs1500tt.mount_height_in_us", "hs1500tt.clearance_side_in"],
+    safetyLine: { text: "Manual: not where gasoline, paint or flammable liquids are used or stored.", ev: "S", sourceId: "hs1500tt-manual" },
   },
 ];
