@@ -18,11 +18,20 @@ export type GarageSummary = {
   breakerA: number;
 };
 
+// useSyncExternalStore requires getSnapshot() to return a referentially stable value when nothing changed --
+// JSON.parse(raw) allocates a new object every call, which reads as "changed" on every render and loops
+// (React warns "getSnapshot should be cached" and then blows the update-depth limit). Cache the last parse
+// keyed by the raw string so an unchanged localStorage value returns the same object reference.
+let cachedRaw: string | null = null;
+let cachedValue: GarageSummary | null = null;
+
 function safeGet(): GarageSummary | null {
   try {
     const raw = window.localStorage.getItem(KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as GarageSummary;
+    if (raw === cachedRaw) return cachedValue;
+    cachedRaw = raw;
+    cachedValue = raw ? (JSON.parse(raw) as GarageSummary) : null;
+    return cachedValue;
   } catch {
     return null;
   }
