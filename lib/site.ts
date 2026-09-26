@@ -138,6 +138,19 @@ export const guides: Guide[] = [
     updated: "2026-09-18",
   },
   {
+    href: "/best-infrared-garage-heaters",
+    title: "Best infrared electric garage heaters",
+    h1: "Infrared electric garage heaters: ceiling quartz, wall-or-ceiling carbon, and a 15 A tripod",
+    description:
+      "Radiant heat for a garage bench, not a whole bay: Comfort Zone CZQTV5M ceiling quartz, Dr. Infrared DR-238 carbon (wall or ceiling), and Heat Storm Tradesman on a tripod or wall. All three are about 1,500 W at 120 V. Nameplate and manual figures only. No invented scores.",
+    navLabel: "Best infrared",
+    kind: "guide",
+    summary:
+      "Infrared heats the person in the beam. These three are 120 V loads near 1,500 W. None of them replaces a 5 kW forced-air homerun.",
+    decision: "Heating a person in the beam, not the air in the bay?",
+    updated: "2026-09-26",
+  },
+  {
     href: "/insulate-garage-before-heater-upgrade",
     title: "Insulate the garage before a heater upgrade",
     h1: "Seal and insulate first, or buy more watts?",

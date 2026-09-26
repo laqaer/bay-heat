@@ -42,7 +42,7 @@ npm run build
 2. Framework preset: **Next.js**. Leave build/output commands at defaults (`next build`).
 3. No environment variables are required for the editorial site.
 4. Production domain `bayheatguide.com` is wired (apex 200, www → apex). The default Vercel hostname `bay-heat.vercel.app` remains available for previews.
-5. Replace `public/ads.txt` before serving ads. Amazon Associates links (tag `laqaer-20`) are live on the homepage, the 120 V vs 240 V guide, the forced-air vs infrared guide, the ceiling-mount, 15 A portable, by-size, and wall-mount guides, and on the hardwired-vs-plug-in, insulate-first, operating-cost, and electric-vs-propane guides.
+5. Replace `public/ads.txt` before serving ads. Amazon Associates links (tag `laqaer-20`) are live on the homepage, the 120 V vs 240 V guide, the forced-air vs infrared guide, the ceiling-mount, 15 A portable, by-size, wall-mount, and infrared guides, and on the hardwired-vs-plug-in, insulate-first, operating-cost, and electric-vs-propane guides.
 
 ## IndexNow
 
@@ -71,6 +71,7 @@ That POSTs the homepage, the circuit and heat-type guides that now link to retai
 | `/portable-garage-heaters-15a-circuit` | Milkhouse / utility heaters on 15 A circuits |
 | `/wall-mount-vs-ceiling-garage-heater` | Joist load, throw, headroom, wall vs ceiling |
 | `/best-wall-mount-garage-heaters` | Wall-listed electric utility / shop / 15 A wall units |
+| `/best-infrared-garage-heaters` | Ceiling quartz, wall-or-ceiling carbon, and 15 A tripod infrared |
 | `/insulate-garage-before-heater-upgrade` | Seal/insulate first vs buying more watts |
 | `/electric-garage-heater-operating-cost` | Nameplate watts × hours × your $/kWh (example rates only) |
 | `/electric-vs-propane-garage-heater` | Electric vs propane: attached air, shop BTU, CO/venting, cost method |

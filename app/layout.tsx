@@ -50,6 +50,8 @@ export const metadata: Metadata = {
     "wall mount garage heater",
     "best wall mount garage heater",
     "wall mounted electric heater",
+    "infrared garage heater",
+    "best infrared garage heater",
   ],
   openGraph: {
     type: "website",

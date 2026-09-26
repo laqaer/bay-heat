@@ -21,7 +21,7 @@ A comparison guide is a single bookmarkable article: circuit-honest headings, a 
 - Open `/120v-vs-240v-garage-heater` directly.
 - From another guide, choose the related-guide card whose label is `120V vs 240V`.
 
-Other comparison paths a reader can open the same way: `/best-electric-garage-heaters-by-size`, `/forced-air-vs-infrared-garage-heater`, `/best-ceiling-mount-garage-heaters-under-200`, `/portable-garage-heaters-15a-circuit`, `/wall-mount-vs-ceiling-garage-heater`, `/best-wall-mount-garage-heaters`, `/insulate-garage-before-heater-upgrade`.
+Other comparison paths a reader can open the same way: `/best-electric-garage-heaters-by-size`, `/forced-air-vs-infrared-garage-heater`, `/best-ceiling-mount-garage-heaters-under-200`, `/portable-garage-heaters-15a-circuit`, `/wall-mount-vs-ceiling-garage-heater`, `/best-wall-mount-garage-heaters`, `/best-infrared-garage-heaters`, `/insulate-garage-before-heater-upgrade`.
 
 ## Driving it with bay-heat
 
