@@ -1,102 +1,225 @@
 @import "tailwindcss";
 
+/*
+  BayHeat design system: "Inspection Grade".
+  Two surfaces: Report (light, default -- reading, tables, print, long-form) and Camera (dark, the
+  thermal-lab exhibit look -- home, the planner, and hub pages set data-surface="camera" on their outer
+  wrapper). See company/BLUEPRINT.md §4 and scratchpad/redteam/taste.md finding #1: the dark surface is the
+  flagship visual concept and must appear on the pages most visitors land on first, not only in a boxed-in
+  figure.
+
+  Palette deliberately differs from the old site's warm cream-and-rust ("BayHeat Guide") -- see taste.md
+  finding #2 -- with a cooler, less amber paper and a frost-ink link color instead of rust.
+*/
+
 :root {
-  --paper: #f3eee4;
-  --paper-2: #e8e0d2;
-  --card: #fbf7ef;
-  --ink: #1c1916;
-  --ink-2: #3f3832;
-  --muted: #6d645b;
-  --line: #d4c8b6;
-  --rust: #b4532a;
-  --rust-soft: #f3e2d6;
-  --moss: #3d5a4c;
-  --background: var(--paper);
-  --foreground: var(--ink);
+  --bg: #f5f6f4;
+  --surface: #ffffff;
+  --surface-2: #ececea;
+  --line: #d7d9d3;
+  --grid: #e6e8e3;
+  --text: #15171c;
+  --text-2: #565b66;
+  --link: #16607f;
+  --ember: #ff8a1f;
+  --ember-hover: #ff9d42;
+  --frost-ink: #16607f;
+  --heat-ink: #8e1b0e;
+  --alarm: #b3261e;
+  --go: #1f6b3a;
+  --shadow-result: 0 0 0 1px var(--line), 0 24px 48px -24px rgba(0, 0, 0, 0.12);
+}
+
+[data-surface="camera"] {
+  --bg: #08090c;
+  --surface: #12151b;
+  --surface-2: #1a1e26;
+  --line: #2a2f38;
+  --grid: #1e222a;
+  --text: #f3efe6;
+  --text-2: #a3a7b0;
+  --text-3: #80858f;
+  --ember: #ff8a1f;
+  --ember-hover: #ffb066;
+  --glow: #ffb547;
+  --frost: #5cc8e6;
+  --alarm: #ff4f3a;
+  --link: #5cc8e6;
+}
+
+/* Data ramps -- the only gradients in the system, always paired with a labeled °F scale. */
+:root {
+  --forge-0: #3a0d0b;
+  --forge-1: #8e1b0e;
+  --forge-2: #d9480f;
+  --forge-3: #f77f00;
+  --forge-4: #fcbf49;
+  --forge-5: #fff1c9;
+  --frost-0: #0e2a3d;
+  --frost-1: #16607f;
+  --frost-2: #3fa7c9;
+  --frost-3: #bce9f5;
+  /* Grade scale: the only non-temperature ramp, labeled "HEAT ESCAPES <- -> HOLDS HEAT". The C stop is a
+     distinct putty tone with real value contrast against both --bg and --surface (taste.md finding #6 --
+     the original near-white C stop nearly disappeared exactly at the "$675 of fixes" story's climax). */
+  --grade-f: #3fa7c9;
+  --grade-d: #bce9f5;
+  --grade-c: #c9bfa0;
+  --grade-b: #fcbf49;
+  --grade-a: #ffb547;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-body);
-  --font-mono: var(--font-ibm-plex-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-fg: var(--text);
+  --color-fg-2: var(--text-2);
+  --color-link: var(--link);
+  --color-ember: var(--ember);
+  --color-frost: var(--frost-ink);
+  --color-heat: var(--heat-ink);
+  --color-alarm: var(--alarm);
+  --color-go: var(--go);
+  --color-glow: var(--glow);
+  --font-sans: var(--ff-archivo);
+  --font-mono: var(--ff-martian);
+}
+
+/* Typography: two variable families only (BLUEPRINT.md §4.3). Width is set with font-variation-settings
+   through the wdth-* utilities below -- NOT named w-* (that collides with Tailwind v4's own width scale;
+   scratchpad/redteam/feasibility.md finding #9 measured .w-75 compiling to width:300px). */
+@utility wdth-62 {
+  font-variation-settings: "wdth" 62;
+}
+@utility wdth-75 {
+  font-variation-settings: "wdth" 75;
+}
+@utility wdth-100 {
+  font-variation-settings: "wdth" 100;
+}
+@utility wdth-112 {
+  font-variation-settings: "wdth" 112;
+}
+@utility wdth-118 {
+  font-variation-settings: "wdth" 118;
+}
+@utility wdth-125 {
+  font-variation-settings: "wdth" 125;
+}
+
+/* Evidence-chip and other small hit targets: a 24x24 minimum tap area independent of visual size
+   (WCAG 2.5.8; taste.md finding #11). */
+@utility tap-24 {
+  min-width: 24px;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 html {
   scroll-behavior: smooth;
 }
+/* Next.js 16 no longer forces scroll-behavior:auto during navigation; restore the old opt-out behavior
+   explicitly via the data attribute the router now checks (nextjs16-cheatsheet.md §2 B4). */
+html[data-scroll-behavior="smooth"] {
+  scroll-behavior: smooth;
+}
 
 body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
 }
 
 ::selection {
-  background: #e8c4b0;
-  color: var(--ink);
+  background: var(--ember);
+  color: #15171c;
 }
 
-.guide-prose h2 {
+/* Prose used inside the Report template's body columns. */
+.prose-report h2 {
   margin-top: 2.4rem;
   margin-bottom: 0.7rem;
-  font-family: var(--font-display), ui-serif, Georgia, serif;
-  font-size: 1.65rem;
-  line-height: 1.25;
+  font-family: var(--font-sans), ui-sans-serif, sans-serif;
+  font-variation-settings: "wdth" 100;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+  line-height: 1.1;
   letter-spacing: -0.02em;
-  color: var(--ink);
+  color: var(--text);
   scroll-margin-top: 6rem;
 }
 
-.guide-prose h3 {
+.prose-report h3 {
   margin-top: 1.6rem;
   margin-bottom: 0.45rem;
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   font-weight: 650;
-  color: var(--ink);
+  color: var(--text);
   scroll-margin-top: 6rem;
 }
 
-.guide-prose p,
-.guide-prose li {
-  color: var(--ink-2);
-  line-height: 1.7;
+.prose-report p,
+.prose-report li {
+  color: var(--text-2);
+  line-height: 1.6;
+  max-width: 66ch;
 }
 
-.guide-prose p + p {
+.prose-report p + p {
   margin-top: 1rem;
 }
 
-.guide-prose ul,
-.guide-prose ol {
+.prose-report ul,
+.prose-report ol {
   margin: 0.9rem 0 1.1rem;
   padding-left: 1.2rem;
 }
-
-.guide-prose ul {
+.prose-report ul {
   list-style: disc;
 }
-
-.guide-prose ol {
+.prose-report ol {
   list-style: decimal;
 }
-
-.guide-prose li + li {
+.prose-report li + li {
   margin-top: 0.35rem;
 }
 
-.guide-prose a {
-  color: var(--rust);
+.prose-report a {
+  color: var(--link);
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-color: color-mix(in srgb, var(--rust) 35%, transparent);
 }
-
-.guide-prose a:hover {
-  text-decoration-color: var(--rust);
+.prose-report a:hover {
+  text-decoration-thickness: 2px;
 }
-
-.guide-prose strong {
-  color: var(--ink);
+.prose-report strong {
+  color: var(--text);
   font-weight: 650;
+}
+
+@media print {
+  header,
+  footer,
+  [data-hide-print] {
+    display: none !important;
+  }
+  a[href*="amazon."] {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

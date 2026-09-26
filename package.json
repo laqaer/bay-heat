@@ -1,14 +1,23 @@
 {
-  "name": "bayheat-guide",
+  "name": "bayheat",
   "version": "1.0.0",
   "private": true,
-  "description": "BayHeat Guide — electric garage and workshop heater comparisons (Mogul factory Site #1).",
+  "type": "module",
+  "description": "BayHeat — the independent garage climate lab. Garage heat-load planner, safety verdicts, and cost data. (Mogul factory Site #1, Laqaer Products.)",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typegen": "next typegen",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test 'lib/**/*.test.ts'",
+    "check": "npm run typegen && npm run typecheck && npm run lint && npm test && npm run build",
+    "posters": "node scripts/bake-posters.ts",
+    "index:build": "node scripts/build-index.ts",
+    "zip3:build": "node scripts/build-zip3.ts",
+    "qa": "node scripts/smoke.mjs",
+    "lint:content": "node scripts/check-affiliates.ts && node scripts/anti-slop.ts && node scripts/evidence-lint.ts"
   },
   "dependencies": {
     "next": "16.3.4",
