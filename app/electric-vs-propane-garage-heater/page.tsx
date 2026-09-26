@@ -242,7 +242,8 @@ export default function ElectricVsPropaneGuidePage() {
           forced-air vs infrared
         </Link>
         . Propane forced-air and propane radiant make the same split, plus
-        exhaust.
+        exhaust. Electric quartz and carbon picks are on{" "}
+        <Link href="/best-infrared-garage-heaters">infrared garage heaters</Link>.
       </p>
 
       <h2 id="cost">Cost method: your kWh and your gallons</h2>

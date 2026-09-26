@@ -185,7 +185,9 @@ export default function SizeGuidePage() {
         <Link href="/forced-air-vs-infrared-garage-heater">
           infrared spot heat
         </Link>{" "}
-        at the bench. A second 5 kW unit is possible; it is also a second 30 A
+        at the bench. Measured radiant classes are on{" "}
+        <Link href="/best-infrared-garage-heaters">infrared garage heaters</Link>
+        . A second 5 kW unit is possible; it is also a second 30 A
         two-pole breaker and a panel conversation.
       </p>
 
