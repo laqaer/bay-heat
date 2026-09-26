@@ -62,6 +62,12 @@ Do not move DNS, change the Associates payout destination, or attach this domain
 
 Done on 2026-09-26: production serves the retailer module (health check passed 2026-09-26T05:01:39Z) and IndexNow returned HTTP 202. Do not submit IndexNow again until the next content change.
 
-`workflow_dispatch` returned HTTP 403 for this operator token. The watchdog workflow is active on `main`. A passing scheduled run is still required before calling it unattended. The 28-day read of experiment 001 waits on Search Console.
+Watchdog state, same day:
+
+- The workflow is active on `main`.
+- GitHub-hosted run [36219630569](https://github.com/laqaer/bay-heat/actions/runs/36219630569) passed in 8 seconds and printed `healthcheck pass`. That run was a `pull_request` event, so it is manually tested.
+- `workflow_dispatch` returned HTTP 403 for this operator token.
+- A 10-minute schedule was on `main` from 05:03 UTC to the follow-up that removed it. No `schedule` event appeared through 05:22 UTC. The daily cron is `17 13 * * *`. Do not call the business unattended or 24/7 until a `schedule` run succeeds.
+- The 28-day read of experiment 001 waits on Search Console.
 
 Owner-only gaps are listed in the pull request that introduced this record.

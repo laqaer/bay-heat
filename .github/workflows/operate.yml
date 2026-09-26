@@ -2,10 +2,8 @@ name: Operating watchdog
 
 on:
   schedule:
-    # 13:17 UTC daily. GitHub may delay scheduled runs.
+    # 13:17 UTC daily. GitHub may delay the first scheduled run.
     - cron: "17 13 * * *"
-    # Short interval so the first unattended run can be observed, then removed.
-    - cron: "*/10 * * * *"
   workflow_dispatch:
   pull_request:
     paths:
