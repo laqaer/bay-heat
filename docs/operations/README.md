@@ -16,7 +16,7 @@ Primary channel: organic search. Paid acquisition is not authorized.
 
 ## What exists
 
-- Public repo `laqaer/bay-heat`, production on Vercel (apex 200, `www` 308 to apex, trailing slash 308 to the canonical path). DNS is Vercel (`ns1.vercel-dns.com`). The domain is not a Cloudflare zone.
+- Public repo `laqaer/bay-heat`, production on Vercel (apex 200, `www` 308 to apex, trailing slash 308 to the canonical path). Public DNS is still Vercel (`ns1.vercel-dns.com`). A pending Cloudflare Free Website zone exists for `bayheatguide.com` and is not authoritative until Name.com nameservers change. See `docs/cloudflare-migration.md`.
 - Static Next.js export. No database, auth, or payment webhook.
 - Associates text links on the product guides. As of this change, the homepage, 120 V vs 240 V guide, and forced-air vs infrared guide also link the same listings.
 - IndexNow key file is live at `/96098d06c16790aabec2db1a232fee8f.txt`.
@@ -25,11 +25,11 @@ Primary channel: organic search. Paid acquisition is not authorized.
 
 ## Authority and budgets
 
-New discretionary spend: **$0**. Do not buy ads, credits, domains, or plan upgrades. Do not enable Vercel excess billing.
+New discretionary spend: **$0**. Do not buy ads, credits, domains, or plan upgrades. Do not enable Vercel excess billing. Do not subscribe the Cloudflare zone to a paid plan, transfer `bayheatguide.com` onto Cloudflare Registrar, or enable Email Sending.
 
 Ordinary work that stays inside that cap: edit this repo, open and merge pull requests that pass checks, let the existing Git integration deploy `main`, run IndexNow after a production change, and run the operating watchdog.
 
-Do not move DNS, change the Associates payout destination, or attach this domain to another account.
+Do not change the Associates payout destination. The pending Cloudflare zone may become authoritative only by the Name.com nameserver change recorded in `docs/cloudflare-migration.md`.
 
 ## Product decisions
 
@@ -44,7 +44,7 @@ Do not move DNS, change the Associates payout destination, or attach this domain
 | --- | --- | --- |
 | GitHub `laqaer/bay-heat` | Working. Public. Actions workflow list is readable. Branch-protection API returned 403. | Source, CI, watchdog |
 | Vercel project `bay-heat` (`prj_XXDzm2duli1HeXU3va0Eaba84DUD`) | List works. Project, domain, and deployment reads return 403 for team `laqaers-projects`. Production HTTP shows Vercel serving current `main`. | Hosting |
-| Cloudflare account Laqaer Products | API works. `bayheatguide.com` is not a zone. | Not the production host |
+| Cloudflare account Laqaer Products | API works. `bayheatguide.com` is a pending Free Website zone ($0). Production nameservers are still Vercel. | Prepared DNS and Google MX, not yet authoritative |
 | Amazon Associates `laqaer-20` | Tag is in the HTML. No earnings mail and no dashboard in this environment. | Revenue |
 | Gmail `add461977@gmail.com` | Connected. Search Console notices for this domain. No `hello@bayheatguide.com` mail. | Monitoring mail only |
 | OpenSEO BayHeat project | Account connected. Search Console, Analytics, and credits are not. | Not a measurement source yet |
@@ -53,7 +53,7 @@ Do not move DNS, change the Associates payout destination, or attach this domain
 
 ## Support and incidents
 
-- Published contact `hello@bayheatguide.com` has **no MX**. Mail to it cannot be delivered with the DNS observed on 2026-09-26. Do not promise a reply to that address until an MX exists.
+- Published contact `hello@bayheatguide.com` still has **no public MX**. The pending Cloudflare zone has `MX 1 smtp.google.com`, which is not being served yet. Do not promise a reply to that address until the nameservers are Cloudflare’s and the Workspace accepts the domain.
 - Electrical and fire guidance stays general information. Do not give a job-specific wiring instruction.
 - If the watchdog fails, it opens or comments on one GitHub issue titled `BayHeat production health check failed`. Disable the `Operating watchdog` workflow to stop it. Rollback is the previous Vercel production deployment; this repo has no database to restore.
 - Do not request `amazon.com` URLs from the health check. That would create affiliate clicks.
