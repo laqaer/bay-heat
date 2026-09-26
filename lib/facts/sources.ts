@@ -102,4 +102,40 @@ export const SOURCES: Record<string, Source> = {
     url: "https://images.thdstatic.com/catalog/pdfImages/53/53c06813-2588-49a2-ad28-8bf3eb3a9ae7.pdf",
     retrieved: "2026-09-25",
   },
+  // Lab Report BH-001 ("The 4x Problem") published sizing-rule sources -- see lib/facts/rules-of-thumb.ts.
+  // Car and Driver and AC Direct could not be verified (no reachable article with a sizing rule as of
+  // retrieval) and were left out rather than guessed; see that file's header comment.
+  "bob-vila-garage-heater-size": {
+    id: "bob-vila-garage-heater-size",
+    title: "The Best Garage Heaters for Workshop Comfort",
+    publisher: "Bob Vila",
+    url: "https://www.bobvila.com/articles/best-garage-heater/",
+    retrieved: "2026-09-26",
+    quote: "However, an electric garage heater with 3,000 watts is usually needed to heat a 2-car garage.",
+  },
+  "filterbuy-how-to-heat-a-garage": {
+    id: "filterbuy-how-to-heat-a-garage",
+    title: "How to Heat a Garage in 2026: Best Methods & Mini Split Options",
+    publisher: "Filterbuy",
+    url: "https://filterbuy.com/resources/mini-splits/guides/how-to-heat-a-garage/",
+    retrieved: "2026-09-26",
+    quote: "24,000 BTU: Covers up to 500–550 sq ft. Best for 2-car garages or larger spaces.",
+  },
+  "pickhvac-garage-heater-sizing": {
+    id: "pickhvac-garage-heater-sizing",
+    title: "Garage Heater Size Calculator: How Many BTU Do I Need?",
+    publisher: "PickHVAC",
+    url: "https://www.pickhvac.com/garage-heater/sizing/",
+    retrieved: "2026-09-26",
+    quote: "600 sq ft: 18,000 – 35,000 BTU",
+  },
+  "thegarage-guide-heater-guide": {
+    id: "thegarage-guide-heater-guide",
+    title: "Garage Heater Guide 2026: Types, BTU Sizing, Costs, and Installation",
+    publisher: "The Garage Guide",
+    url: "https://thegarage.guide/guides/garage-heater-guide",
+    retrieved: "2026-09-26",
+    quote:
+      "2-car, 400–500 sq ft: well insulated 12,000–20,000 BTU, moderately insulated 20,000–30,000 BTU, uninsulated 40,000–60,000 BTU",
+  },
 };

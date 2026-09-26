@@ -119,8 +119,17 @@ export function plan(input: GarageInput): PlannerResult {
     // Re-rank against the smaller post-insulation load to find the equipment class fixing first actually buys.
     const afterCtx: RecommendContext = { ...recommendCtx, qReq: bundle.qAfter };
     const afterTop = rankSystems(afterCtx).recommendations[0] ?? top;
-    const wattsFor = (classId: (typeof top)["classId"], capacityBtuh: number) => capacityBtuh / etaFor(classId) / 3.412;
-    fixFirstResult = fixFirst(roiCtx, insulateFirstRows, top.classId, afterTop.classId, wattsFor(top.classId, top.capacityBtuh), wattsFor(afterTop.classId, afterTop.capacityBtuh));
+    // capacityBtuh on a RankedSystem is the COMBINED output across `units` (recommend.ts's capacityBtuhFor());
+    // the circuit fixFirst() sizes is a single unit's, same as recommend.ts's own per-unit circuit sizing.
+    const wattsFor = (classId: (typeof top)["classId"], capacityBtuh: number, units: number) => capacityBtuh / units / etaFor(classId) / 3.412;
+    fixFirstResult = fixFirst(
+      roiCtx,
+      insulateFirstRows,
+      top.classId,
+      afterTop.classId,
+      wattsFor(top.classId, top.capacityBtuh, top.units),
+      wattsFor(afterTop.classId, afterTop.capacityBtuh, afterTop.units),
+    );
   }
 
   const sessions = input.usage.mode === "sessions" ? buildSessionRows(input, envelope, station, heatLoss.uaExt, uaHouse, cLight, aFloor, tGnd, warmupCapacityBtuh, prices) : undefined;

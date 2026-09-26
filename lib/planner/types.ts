@@ -143,7 +143,7 @@ export type PriceSet = {
 export type Band = { low: number; mid: number; high: number; unknowns: number; narrowBy?: "walls" | "ceiling" | "door" | "tightness"; narrowToPct?: number };
 export type Grade = "A" | "B" | "C" | "D" | "F";
 export type LoadKey = "walls" | "garage_doors" | "windows" | "service_door" | "ceiling_roof" | "slab_edge" | "infiltration" | "house_coupling";
-export type Wire = "14 AWG" | "12 AWG" | "10 AWG" | "8 AWG" | "6 AWG" | "4 AWG";
+export type Wire = "14 AWG" | "12 AWG" | "10 AWG" | "8 AWG" | "6 AWG" | "4 AWG" | "3 AWG";
 export type CircuitSpec = {
   watts: number;
   volts: 120 | 208 | 240;

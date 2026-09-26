@@ -8,7 +8,7 @@ import { PlannerWizard } from "./PlannerWizard";
 import { GarageHeatReport } from "@/components/result/GarageHeatReport";
 import { saveGarageSummary } from "@/lib/garage-store";
 
-export function PlannerApp({ initialResult }: { initialResult: PlannerResult | null }) {
+export function PlannerApp({ initialResult, initialZip3 }: { initialResult: PlannerResult | null; initialZip3?: string }) {
   const [result, setResult] = useState<PlannerResult | null>(initialResult);
   const router = useRouter();
 
@@ -38,5 +38,5 @@ export function PlannerApp({ initialResult }: { initialResult: PlannerResult | n
     );
   }
 
-  return <PlannerWizard onComplete={handleComplete} />;
+  return <PlannerWizard onComplete={handleComplete} initialZip3={initialZip3} />;
 }

@@ -1,6 +1,9 @@
 import type { CircuitSpec, Wire } from "./types.ts";
 
-// NEC 240.6(A) standard overcurrent device sizes we use up to 60 A (heater classes top out at 10 kW / 60 A).
+// NEC 240.6(A) standard overcurrent device sizes. Heater classes top out at 10 kW / 60 A, but the "forSize"
+// circuit (plan.ts) sizes straight off the raw design load for any envelope, including a bare/leaky one no
+// catalog class actually covers -- so this table (and the wire tables below) run one size past 60 A to 80 A
+// rather than throw on a heater-shaped input the catalog itself would flag as "why not" undersized.
 const STANDARD_BREAKERS = [15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80] as const;
 
 // NEC Table 310.16 copper ampacities, 60degC column (NM/Romex per NEC 334.80) and 75degC column (THHN in
@@ -12,6 +15,7 @@ const NM_60C: [Wire, number][] = [
   ["8 AWG", 40],
   ["6 AWG", 55],
   ["4 AWG", 70],
+  ["3 AWG", 85],
 ];
 const THHN_75C: [Wire, number][] = [
   ["14 AWG", 15], // capped by NEC 240.4(D) regardless of the 75degC table value
@@ -20,6 +24,7 @@ const THHN_75C: [Wire, number][] = [
   ["8 AWG", 50],
   ["6 AWG", 65],
   ["4 AWG", 85],
+  ["3 AWG", 100],
 ];
 
 function smallestBreakerAtLeast(minAmps: number): (typeof STANDARD_BREAKERS)[number] {

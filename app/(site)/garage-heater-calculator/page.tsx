@@ -16,6 +16,7 @@ export const metadata: Metadata = pageMetadata({
 export default async function Page({ searchParams }: PageProps<"/garage-heater-calculator">) {
   const params = await searchParams;
   const g = typeof params.g === "string" ? params.g : undefined;
+  const zip = typeof params.zip === "string" ? params.zip.slice(0, 3) : undefined;
   const input = g ? decode(g) : null;
   const initialResult = input ? plan(input) : null;
 
@@ -30,7 +31,7 @@ export default async function Page({ searchParams }: PageProps<"/garage-heater-c
           </>
         ) : null}
         <div className="mt-10">
-          <PlannerApp initialResult={initialResult} />
+          <PlannerApp initialResult={initialResult} initialZip3={zip} />
         </div>
       </article>
     </div>

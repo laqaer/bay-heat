@@ -37,10 +37,14 @@ function StepHeader({ step, title }: { step: Step; title: string }) {
   );
 }
 
-export function PlannerWizard({ onComplete }: { onComplete: (input: GarageInput) => void }) {
+export function PlannerWizard({ onComplete, initialZip3 }: { onComplete: (input: GarageInput) => void; initialZip3?: string }) {
   const [step, setStep] = useState<Step>(1);
-  const [input, setInput] = useState<GarageInput>(defaultGarageInput());
-  const [zipDigits, setZipDigits] = useState("");
+  const [input, setInput] = useState<GarageInput>(() => {
+    const base = defaultGarageInput();
+    const r = initialZip3 ? resolveZip3(initialZip3) : null;
+    return r ? { ...base, zip3: initialZip3, state: r.state, stationId: r.station.id } : base;
+  });
+  const [zipDigits, setZipDigits] = useState(() => (initialZip3 && resolveZip3(initialZip3) ? initialZip3 : ""));
   const [breakerA, setBreakerA] = useState<20 | 30 | 40 | 50>(30);
   const [outlet, setOutlet] = useState<"120" | "spare240" | "add" | "unsure">("add");
   const [draftAnswers, setDraftAnswers] = useState<[boolean | null, boolean | null, boolean | null]>([null, null, null]);
