@@ -1,6 +1,32 @@
 # Cloudflare migration: BayHeat Guide
 
-Status: **static-export compatibility only**. Production remains on Vercel.
+Status: **free zone prepared, not authoritative yet**. Production still resolves through Vercel nameservers.
+
+## Free-plan cutover prepared on 2026-09-26
+
+`bayheatguide.com` is a pending zone on the Laqaer Products Cloudflare account, plan **Free Website**, price **$0**. Zone id `29285cb122d256e6cde1c85a265b82e9`. Nothing was subscribed, transferred, or proxied.
+
+The zone is not live. Public nameservers are still `ns1.vercel-dns.com` and `ns2.vercel-dns.com`, and `https://bayheatguide.com` still answers from Vercel. The registrar is Name.com. This domain is not in the Cloudflare registrar, and a transfer would charge a registration term, so the registration stays at Name.com.
+
+Publishing the zone is a nameserver change at Name.com, which Name.com does not charge for:
+
+- `colin.ns.cloudflare.com`
+- `zainab.ns.cloudflare.com`
+
+Records already stored on the pending zone, all DNS-only:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| A | `@` | `76.76.21.21` |
+| CNAME | `www` | `cname.vercel-dns.com` |
+| MX | `@` | `smtp.google.com` priority 1 |
+| TXT | `@` | `v=spf1 include:_spf.google.com ~all` |
+| TXT | `@` | existing `google-site-verification` value |
+| TXT | `_dmarc` | `v=DMARC1; p=none;` |
+
+The address and `www` records match `chartingstars.com`: Cloudflare DNS, origin still Vercel, grey-cloud. After the nameserver change, the site and the `www` redirect stay on the Vercel Hobby plan. The MX matches the other company domains. Google will not accept `hello@bayheatguide.com` until `bayheatguide.com` is a domain alias of `chartingstars.com` in that Workspace. Cloudflare Email Routing was not enabled: the API requires an active zone, and turning it on would replace the Google MX.
+
+Do not upgrade this zone, subscribe to Workers Paid ($5/month minimum), enable Email Sending, or turn on Argo, Images, or SSL for SaaS. Static-asset requests on an assets-only Worker are free and unlimited, but this connection cannot mint a Workers deploy token, so the site files were not uploaded.
 
 ## Why this app does not need a Worker runtime
 
