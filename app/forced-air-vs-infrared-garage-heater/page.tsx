@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ClassRetailers } from "@/components/class-retailers";
 import { GuideChrome, SpecTable } from "@/components/guide-chrome";
 import { findGuide } from "@/lib/site";
 
@@ -23,6 +24,7 @@ const toc = [
   { id: "infrared", label: "When infrared wins" },
   { id: "drafty", label: "Drafty shops" },
   { id: "hybrids", label: "Hybrids and dead ends" },
+  { id: "buy-the-class", label: "Buy the matching class" },
 ];
 
 export default function HeatTypeGuidePage() {
@@ -182,6 +184,7 @@ export default function HeatTypeGuidePage() {
         . If you have a 15 A outlet and a bench, stay on{" "}
         <Link href="/portable-garage-heaters-15a-circuit">portables</Link>.
       </p>
+      <ClassRetailers />
     </GuideChrome>
   );
 }

@@ -42,7 +42,7 @@ npm run build
 2. Framework preset: **Next.js**. Leave build/output commands at defaults (`next build`).
 3. No environment variables are required for the editorial site.
 4. Production domain `bayheatguide.com` is wired (apex 200, www → apex). The default Vercel hostname `bay-heat.vercel.app` remains available for previews.
-5. Replace `public/ads.txt` before serving ads. Amazon Associates links (tag `laqaer-20`) are live on the ceiling-mount, 15 A portable, by-size, and wall-mount guides.
+5. Replace `public/ads.txt` before serving ads. Amazon Associates links (tag `laqaer-20`) are live on the homepage, the 120 V vs 240 V guide, the forced-air vs infrared guide, and the ceiling-mount, 15 A portable, by-size, and wall-mount guides.
 
 ## IndexNow
 
@@ -56,7 +56,7 @@ After this file is on production:
 npm run indexnow
 ```
 
-That POSTs the affiliate guides (wall-mount, ceiling-mount, 15 A portable, by-size, and wall vs ceiling) to `https://api.indexnow.org/indexnow`. Participating engines share that submission. `npm run indexnow -- --dry-run` prints the JSON and does not send it. Add a path in `scripts/indexnow.mjs` when a new affiliate guide ships.
+That POSTs the homepage, the circuit and heat-type guides that now link to retailer listings, and the affiliate guides (wall-mount, ceiling-mount, 15 A portable, by-size, and wall vs ceiling) to `https://api.indexnow.org/indexnow`. Participating engines share that submission. `npm run indexnow -- --dry-run` prints the JSON and does not send it. Add a path in `scripts/indexnow.mjs` when a new affiliate guide ships.
 
 ## Routes
 

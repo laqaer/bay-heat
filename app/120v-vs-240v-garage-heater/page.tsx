@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ClassRetailers } from "@/components/class-retailers";
 import { GuideChrome, GuideFaq, SpecTable } from "@/components/guide-chrome";
 import { findGuide } from "@/lib/site";
 
@@ -24,6 +25,7 @@ const toc = [
   { id: "breaker-wire", label: "Breakers and wire" },
   { id: "hardwired", label: "Hardwired vs plug-in" },
   { id: "panel", label: "Panel capacity" },
+  { id: "buy-the-class", label: "Buy the matching class" },
   { id: "faq", label: "FAQ" },
 ];
 
@@ -206,9 +208,10 @@ export default function VoltageGuidePage() {
         <Link href="/forced-air-vs-infrared-garage-heater">
           infrared at the bench
         </Link>
-        , or a different heat source. Buying a 5 kW unit and feeding it from a
+        , or a different heat source.         Buying a 5 kW unit and feeding it from a
         lighting circuit is how garages burn.
       </p>
+      <ClassRetailers />
       <GuideFaq faqs={faqs} />
     </GuideChrome>
   );

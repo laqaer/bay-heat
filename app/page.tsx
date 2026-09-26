@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AffiliateCallout, SafetyCallout } from "@/components/callouts";
+import { ClassRetailers } from "@/components/class-retailers";
 import { guides, site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -164,6 +165,10 @@ export default function HomePage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+        <ClassRetailers />
       </section>
 
       <section className="border-y border-[var(--line)] bg-[var(--paper-2)]">

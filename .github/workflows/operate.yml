@@ -1,0 +1,102 @@
+name: Operating watchdog
+
+on:
+  schedule:
+    # 13:17 UTC daily. GitHub may delay scheduled runs.
+    - cron: "17 13 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: bayheat-operate
+  cancel-in-progress: false
+
+jobs:
+  operate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Production health
+        id: health
+        run: node scripts/healthcheck.mjs | tee "$RUNNER_TEMP/health.txt"
+
+      - name: Operating summary
+        if: always()
+        run: |
+          {
+            echo "## BayHeat operating summary"
+            echo
+            echo "Run \`${{ github.run_id }}\` via \`${{ github.event_name }}\`."
+            echo "This job checks production HTML and prints the recorded ledger. It does not see Amazon Associates earnings, bank deposits, or Vercel invoices."
+            echo
+            echo "### Health"
+            echo
+            echo '```'
+            if [ -f "$RUNNER_TEMP/health.txt" ]; then
+              cat "$RUNNER_TEMP/health.txt"
+            else
+              echo "health output missing"
+            fi
+            echo '```'
+            echo
+            echo "### Recorded ledger"
+            echo
+            sed -n '1,160p' docs/operations/LEDGER.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Record a failure without duplicating the open issue
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const title = "BayHeat production health check failed";
+            let detail = "";
+            try {
+              detail = fs.readFileSync(process.env.RUNNER_TEMP + "/health.txt", "utf8");
+            } catch {
+              detail = "Health output was not written.";
+            }
+            detail = detail.slice(0, 3500);
+            const body = [
+              "The operating watchdog could not verify production.",
+              "",
+              "Run: https://github.com/" + context.repo.owner + "/" + context.repo.repo + "/actions/runs/" + context.runId,
+              "",
+              "```",
+              detail,
+              "```",
+              "",
+              "This does not change prices, billing, or DNS. Disable the `Operating watchdog` workflow to stop the checks.",
+            ].join("\n");
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              per_page: 30,
+            });
+            const match = existing.data.find((issue) => issue.title === title);
+            if (match) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: match.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+              });
+            }

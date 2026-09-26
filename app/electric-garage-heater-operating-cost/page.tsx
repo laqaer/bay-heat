@@ -342,8 +342,9 @@ export default function OperatingCostGuidePage() {
         </li>
         <li>
           <strong>No affiliate buy buttons on this page.</strong> Some
-          Amazon Associates heater links are live on the ceiling-mount and
-          15 A portable guides. We are not tagging a heater SKU here to
+          Amazon Associates heater links are live on the ceiling-mount,
+          wall-mount, by-size, and 15 A portable guides. We are not tagging a
+          heater SKU here to
           “prove” a kWh number.
         </li>
       </ul>

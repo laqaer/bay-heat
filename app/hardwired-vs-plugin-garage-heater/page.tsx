@@ -373,10 +373,11 @@ export default function HardwiredVsPluginGuidePage() {
           is a shopping class, not a quote.
         </li>
         <li>
-          <strong>No live affiliate buy buttons.</strong> Retailer links
-          elsewhere on the site are still placeholders until programs are
-          live. We are not tagging a milkhouse or a 5 kW cabinet to “prove”
-          an install path.
+          <strong>No affiliate buy buttons on this page.</strong> Amazon
+          Associates links for these classes are live on the ceiling-mount,
+          wall-mount, by-size, and 15 A portable guides (tag laqaer-20). This
+          page does not tag a listing to stand in for a circuit or an
+          electrician.
         </li>
       </ul>
       <p>
