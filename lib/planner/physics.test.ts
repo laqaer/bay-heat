@@ -3,8 +3,11 @@ import assert from "node:assert/strict";
 import { hddAtBase, altitudeFactor } from "./climate.ts";
 import { stationById } from "./stations.ts";
 import { circuitFor } from "./electrical.ts";
-import { heatLossDesign, gradeFor } from "./heatLoss.ts";
+import { heatLossDesign, gradeFor, freeFloatTemp, type ResolvedEnvelope } from "./heatLoss.ts";
+import { simulateSession, lightCapacitance } from "./warmup.ts";
+import { annualMeanTemp } from "./climate.ts";
 import { EXAMPLE_A_INPUT, EXAMPLE_A_STATION } from "./fixtures.ts";
+import { balancePoint, seasonalLoadContinuous, heatPumpSeasonal } from "./seasonal.ts";
 
 function near(actual: number, expected: number, tolPct = 1) {
   const tol = Math.abs(expected) * (tolPct / 100) || 1;
@@ -114,6 +117,61 @@ test("T5: heatLossDesign for a detached 1-car basic garage", () => {
   const r = heatLossDesign(oneCar, ENVELOPE_AS_IS, EXAMPLE_A_STATION.h99, EXAMPLE_A_STATION.elevFt);
   near(r.qSize, 17700, 2);
   near(r.kwSize, 5.2, 2);
+});
+
+const UA_HOUSE_A = 0.089 * 24 * 9 + 40; // R13 wall U x commonWallLen x height + house coupling constant
+
+function janDaytimeSession(envelope: ResolvedEnvelope, kw: number) {
+  const janTOut = EXAMPLE_A_STATION.tMean[0] + 4; // daytime session per §7.3
+  const tGnd = annualMeanTemp(EXAMPLE_A_STATION);
+  const r = heatLossDesign(EXAMPLE_A_INPUT, envelope, janTOut, EXAMPLE_A_STATION.elevFt);
+  const tStart = freeFloatTemp(EXAMPLE_A_INPUT, envelope, janTOut, EXAMPLE_A_STATION.elevFt, EXAMPLE_A_STATION, 0);
+  const cLight = lightCapacitance(EXAMPLE_A_INPUT, EXAMPLE_A_STATION.elevFt, 0);
+  return {
+    tStart,
+    sim: simulateSession({
+      uaOut: r.uaExt, uaHouse: UA_HOUSE_A, tOut: janTOut, tHouse: EXAMPLE_A_INPUT.tHouse,
+      tStart, tGnd, tTarget: 55, capacityBtuh: kw * 1000 * 3.412, hours: 4, cLight, aFloor: 576,
+    }),
+  };
+}
+
+// T8: simulateSession A, Jan, 7.5 kW, 4h, daytime -> start 33.4F; 116 min +/-3; 25.6 kWh
+test("T8: simulateSession for example A (as-is, 7.5 kW)", () => {
+  const { tStart, sim } = janDaytimeSession(ENVELOPE_AS_IS, 7.5);
+  near(tStart, 33.4, 1);
+  assert.ok(sim.minutesToTarget !== null && Math.abs(sim.minutesToTarget - 116) <= 6, `minutesToTarget ${sim.minutesToTarget} not near 116`);
+  near(sim.energyBtu / 3412, 25.6, 3);
+});
+
+// T9: simulateSession B (all fixes), Jan, 5 kW -> start 38.1F; 108 min +/-3; 14.6 kWh
+test("T9: simulateSession for example A (all fixes, 5 kW)", () => {
+  const { tStart, sim } = janDaytimeSession(ENVELOPE_FIXED, 5);
+  near(tStart, 38.1, 1);
+  assert.ok(sim.minutesToTarget !== null && Math.abs(sim.minutesToTarget - 108) <= 6, `minutesToTarget ${sim.minutesToTarget} not near 108`);
+  near(sim.energyBtu / 3412, 14.6, 3);
+});
+
+// T6: continuous heating, target 55F, Chicago -> T_bal 53.66F, 49.87 MMBtu, 14,617 kWh.
+test("T6: seasonal continuous-heating load for example A at 55F", () => {
+  const uaHouse = UA_HOUSE_A;
+  const synthetic = heatLossDesign({ ...EXAMPLE_A_INPUT, targetTemp: EXAMPLE_A_STATION.h99 + 1 }, ENVELOPE_AS_IS, EXAMPLE_A_STATION.h99, EXAMPLE_A_STATION.elevFt);
+  const uaOut = synthetic.uaExt;
+  const tBal = balancePoint(55, uaHouse, EXAMPLE_A_INPUT.tHouse, uaOut);
+  near(tBal, 53.66, 1);
+  const seasonalBtu = seasonalLoadContinuous(EXAMPLE_A_STATION, tBal, uaOut);
+  near(seasonalBtu / 1e6, 49.87, 3);
+  near(seasonalBtu / 3412, 14617, 3);
+});
+
+// T7: a 24k-BTU cold-climate heat pump at the same balance point -> seasonal COP 2.56 +/- 0.03, unmet ~1.8 MMBtu.
+test("T7: heatPumpSeasonal for a 24k cold-climate unit", () => {
+  const synthetic = heatLossDesign({ ...EXAMPLE_A_INPUT, targetTemp: EXAMPLE_A_STATION.h99 + 1 }, ENVELOPE_AS_IS, EXAMPLE_A_STATION.h99, EXAMPLE_A_STATION.elevFt);
+  const uaOut = synthetic.uaExt;
+  const tBal = balancePoint(55, UA_HOUSE_A, EXAMPLE_A_INPUT.tHouse, uaOut);
+  const hp = heatPumpSeasonal(EXAMPLE_A_STATION, tBal, uaOut, "cold_climate", 24000);
+  assert.ok(Math.abs(hp.seasonalCop - 2.56) <= 0.05, `seasonalCop ${hp.seasonalCop} not near 2.56`);
+  near(hp.unmetBtu / 1e6, 1.8, 5);
 });
 
 test("gradeFor thresholds", () => {
