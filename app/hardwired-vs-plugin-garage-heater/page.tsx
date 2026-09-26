@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AmazonAffiliateLink } from "@/components/amazon-link";
 import { Callout } from "@/components/callouts";
 import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import {
+  AMAZON_COMFORT_ZONE_CZ220,
+  AMAZON_FAHRENHEAT_FUH54,
+  AMAZON_MILKHOUSE_1500W,
+} from "@/lib/affiliates";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/hardwired-vs-plugin-garage-heater")!;
@@ -25,6 +31,7 @@ const toc = [
   { id: "listing", label: "Listing and hanging" },
   { id: "cost", label: "Cost and effort" },
   { id: "picks", label: "Pick rules" },
+  { id: "retailers", label: "Classes already named" },
   { id: "caveats", label: "What this page will not claim" },
 ];
 
@@ -354,6 +361,44 @@ export default function HardwiredVsPluginGuidePage() {
         a ceiling unit with the plug cut off.
       </p>
 
+      <h2 id="retailers">The classes those rules already name</h2>
+      <p>
+        Three Amazon Associates text links (tag{" "}
+        <code className="font-mono text-[0.9em]">laqaer-20</code>). They are
+        the 1,500 W plug-in and the 5 kW hardwired classes already named
+        above — the same measured listings as the portable and ceiling
+        guides. A tag does not stand in for a circuit, a listing, or an
+        electrician. Street prices move. Confirm the nameplate and whether
+        the sheet says cord or direct-wire. We do not invent scores.
+      </p>
+      <SpecTable
+        caption="Amazon Associates listings for the plug-in and hardwired classes this page already names"
+        columns={["Path", "What to verify on the listing", "Affiliate / retailer link"]}
+        rows={[
+          [
+            "120 V plug-in",
+            "Comfort Zone CZ798-class, 1500 W / 120 V, listed mark, tip-over and overheat cutouts. Bench heat, not a bay.",
+            <AmazonAffiliateLink key="cz798" href={AMAZON_MILKHOUSE_1500W}>
+              Amazon: Comfort Zone CZ798 1500W milkhouse
+            </AmazonAffiliateLink>,
+          ],
+          [
+            "Hardwired 240 V",
+            "Hardwired 240 V, 3000/4000/5000 W, 30 A guidance, ETL mark, included bracket. Direct-wire. Not a cord.",
+            <AmazonAffiliateLink key="cz220" href={AMAZON_COMFORT_ZONE_CZ220}>
+              Amazon: Comfort Zone 5000W ceiling (CZ220-class)
+            </AmazonAffiliateLink>,
+          ],
+          [
+            "Hardwired 240 V",
+            "FUH54 / FUH54C, 5000 W @ 240 V, jumper derate table, copper-only warning, wall or ceiling in the sheet, listing mark",
+            <AmazonAffiliateLink key="fuh54" href={AMAZON_FAHRENHEAT_FUH54}>
+              Amazon: Fahrenheat FUH5-4 5000W (FUH54-class)
+            </AmazonAffiliateLink>,
+          ],
+        ]}
+      />
+
       <h2 id="caveats">What this page will not claim</h2>
       <ul>
         <li>
@@ -373,11 +418,10 @@ export default function HardwiredVsPluginGuidePage() {
           is a shopping class, not a quote.
         </li>
         <li>
-          <strong>No affiliate buy buttons on this page.</strong> Amazon
-          Associates links for these classes are live on the ceiling-mount,
-          wall-mount, by-size, and 15 A portable guides (tag laqaer-20). This
-          page does not tag a listing to stand in for a circuit or an
-          electrician.
+          <strong>The links are classes, not a circuit.</strong> The three
+          rows above reuse the measured portable and ceiling ASINs (tag
+          laqaer-20). They do not turn a 15 A cord into a bay heater, and
+          they do not replace the electrician a direct-wire sheet requires.
         </li>
       </ul>
       <p>

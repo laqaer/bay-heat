@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AmazonAffiliateLink } from "@/components/amazon-link";
 import { Callout } from "@/components/callouts";
 import { GuideChrome, SpecTable } from "@/components/guide-chrome";
+import {
+  AMAZON_COMFORT_ZONE_CZ220,
+  AMAZON_FAHRENHEAT_FUH54,
+  AMAZON_MILKHOUSE_1500W,
+} from "@/lib/affiliates";
 import { findGuide } from "@/lib/site";
 
 const guide = findGuide("/electric-vs-propane-garage-heater")!;
@@ -26,6 +32,7 @@ const toc = [
   { id: "install", label: "Two install paths" },
   { id: "moisture", label: "Water vapor and tools" },
   { id: "picks", label: "Pick rules" },
+  { id: "retailers", label: "If you stay electric" },
   { id: "caveats", label: "What this page will not claim" },
 ];
 
@@ -86,8 +93,8 @@ export default function ElectricVsPropaneGuidePage() {
         <p>
           BayHeat is a comparison site for electric garage and workshop
           heaters. This page exists so the fuel fork is honest. It is not a
-          propane catalog. We will not rank SKUs, invent a “best propane
-          heater,” or send you to a buy button.
+          propane catalog. We will not rank propane SKUs, invent a “best
+          propane heater,” or send you to a propane buy button.
         </p>
       </Callout>
 
@@ -473,6 +480,43 @@ export default function ElectricVsPropaneGuidePage() {
         threshold is still a sealing problem on either fuel.
       </p>
 
+      <h2 id="retailers">If you stay electric</h2>
+      <p>
+        The electric path named above is the 5 kW hardwired ceiling class
+        and the 1,500 W portable already specified on the product guides.
+        Three Amazon Associates text links (tag{" "}
+        <code className="font-mono text-[0.9em]">laqaer-20</code>). No
+        propane listings. Confirm the nameplate. Street prices move. A link
+        does not prove a dollar-per-hour winner.
+      </p>
+      <SpecTable
+        caption="Amazon Associates listings for the electric classes this page already names. No propane."
+        columns={["Electric class", "What to verify on the listing", "Affiliate / retailer link"]}
+        rows={[
+          [
+            "1,500 W plug-in",
+            "Comfort Zone CZ798-class, 1500 W / 120 V, listed mark, tip-over and overheat cutouts. Bench heat when a beam is enough.",
+            <AmazonAffiliateLink key="cz798" href={AMAZON_MILKHOUSE_1500W}>
+              Amazon: Comfort Zone CZ798 1500W milkhouse
+            </AmazonAffiliateLink>,
+          ],
+          [
+            "5 kW hardwired",
+            "Hardwired 240 V, 3000/4000/5000 W, 30 A guidance, ETL mark, included bracket. The ~17,100 BTU/h row.",
+            <AmazonAffiliateLink key="cz220" href={AMAZON_COMFORT_ZONE_CZ220}>
+              Amazon: Comfort Zone 5000W ceiling (CZ220-class)
+            </AmazonAffiliateLink>,
+          ],
+          [
+            "5 kW hardwired",
+            "FUH54 / FUH54C, 5000 W @ 240 V, jumper derate table, copper-only warning, listing mark",
+            <AmazonAffiliateLink key="fuh54" href={AMAZON_FAHRENHEAT_FUH54}>
+              Amazon: Fahrenheat FUH5-4 5000W (FUH54-class)
+            </AmazonAffiliateLink>,
+          ],
+        ]}
+      />
+
       <h2 id="caveats">What this page will not claim</h2>
       <ul>
         <li>
@@ -493,11 +537,9 @@ export default function ElectricVsPropaneGuidePage() {
           a “best of” propane aisle.
         </li>
         <li>
-          <strong>No affiliate buy buttons on this page.</strong> Some
-          Amazon Associates heater links are live on the ceiling-mount,
-          wall-mount, by-size, and 15 A portable guides. We are not tagging a
-          cylinder or a 5 kW
-          cabinet here to “prove” a dollar figure.
+          <strong>No propane affiliate links.</strong> The three rows above
+          are the electric classes already named (tag laqaer-20). We are not
+          tagging a cylinder, and a link does not prove a dollar figure.
         </li>
       </ul>
       <p>
