@@ -9,7 +9,7 @@ export const site = {
   description:
     "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, hardwired vs plug-in, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, whether to seal the building before buying more watts, what those watts cost to run, and when electric is enough versus a listed propane shop heater.",
   locale: "en-US",
-  updated: "2026-09-18",
+  updated: "2026-09-26",
 } as const;
 
 export const affiliateDisclosure =
@@ -70,7 +70,7 @@ export const guides: Guide[] = [
     summary:
       "A 15 A cord is Saturday heat at a bench. Whole-bay heat is almost always a dedicated 240 V hardwire. Corded 240 V is a third class — only if the manual lists the plug.",
     decision: "Temporary plug-in, or a permanent install?",
-    updated: "2026-09-11",
+    updated: "2026-09-26",
   },
   {
     href: "/forced-air-vs-infrared-garage-heater",
@@ -83,7 +83,7 @@ export const guides: Guide[] = [
     summary:
       "Forced-air heats the air. Infrared heats people and objects. Drafts punish the first; open-door work favors the second.",
     decision: "Whole bay, or just the person at the bench?",
-    updated: "2026-09-04",
+    updated: "2026-09-26",
   },
   {
     href: "/best-ceiling-mount-garage-heaters-under-200",
@@ -161,7 +161,7 @@ export const guides: Guide[] = [
     summary:
       "Cost is nameplate watts, hours the element is actually on, and the rate on your bill. A 1,500 W portable is cheap per hour because it is spot heat, not because 120 V is efficient.",
     decision: "What will the watts actually cost to run?",
-    updated: "2026-09-21",
+    updated: "2026-09-26",
   },
   {
     href: "/electric-vs-propane-garage-heater",
@@ -174,7 +174,7 @@ export const guides: Guide[] = [
     summary:
       "Electric wins on enclosed, occupied-adjacent air. Propane can win BTU and $/BTU in a drafty detached shop if it is listed and vented for that job.",
     decision: "Is the bay sealed enough for electric, or is this a vented propane shop problem?",
-    updated: "2026-09-09",
+    updated: "2026-09-26",
   },
 ];
 

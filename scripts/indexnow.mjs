@@ -17,8 +17,12 @@ const HOST = "bayheatguide.com";
 const ORIGIN = `https://${HOST}`;
 const ENDPOINT = "https://api.indexnow.org/indexnow";
 
-/** Affiliate guides already on the live sitemap. Wall-mount is the new money page. */
+/** Pages with Associates links or a recent change worth recrawl. */
 const PATHS = [
+  "/",
+  "/120v-vs-240v-garage-heater",
+  "/forced-air-vs-infrared-garage-heater",
+  "/hardwired-vs-plugin-garage-heater",
   "/best-wall-mount-garage-heaters",
   "/best-ceiling-mount-garage-heaters-under-200",
   "/portable-garage-heaters-15a-circuit",
