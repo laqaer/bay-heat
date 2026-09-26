@@ -29,13 +29,16 @@ export function HeroFrame({ states, station }: { states: HeroState[]; station: {
       >
         <div className="absolute inset-3 border border-white/20" />
         <GarageSection className="absolute inset-8 h-[calc(100%-4rem)] w-[calc(100%-4rem)] text-white/70" />
-        <div className="absolute left-4 top-3 font-mono text-[10px] uppercase tracking-[0.1em] text-white/80">
-          BayHeat IR · Modeled · 160×120
+        {/* A dark scrim behind the HUD text: white-on-tint alone measured 2.3-2.5:1 against the lighter
+            grade tints (an axe color-contrast finding) -- the same bg-black treatment the spec plate
+            already used successfully, extended to the rest of the overlay text. */}
+        <div className="absolute left-3 top-3 max-w-[70%] bg-black/60 px-2 py-1.5 font-mono text-[10px] leading-[1.5] text-white">
+          <div className="uppercase tracking-[0.1em]">BayHeat IR · Modeled · 160×120</div>
+          <div className="text-white/90">
+            24×24×9 ft · attached · out {station.h99}°F · in 55°F
+          </div>
         </div>
-        <div className="absolute left-4 top-8 font-mono text-[10px] text-white/70">
-          24×24×9 ft · attached · out {station.h99}°F · in 55°F
-        </div>
-        <div className="absolute bottom-3 left-4 font-mono text-[10px] text-white/70">71°F / 0°F</div>
+        <div className="absolute bottom-3 left-3 bg-black/60 px-2 py-1 font-mono text-[10px] text-white">71°F / 0°F</div>
 
         <div className="absolute bottom-3 right-3 border border-white/30 bg-black/60 px-3 py-2 font-mono text-white">
           <div className="text-[9px] uppercase tracking-[0.1em] text-white/60">{current.label}</div>

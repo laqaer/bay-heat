@@ -5,7 +5,7 @@ import { clsx } from "@/lib/clsx";
 const STAMP_STYLE: Record<Verdict["verdict"], string> = {
   GO: "bg-(--color-ember) text-black",
   GO_IF: "border-2 border-(--color-fg) text-(--color-fg)",
-  NO_GO: "bg-(--color-alarm) text-white",
+  NO_GO: "bg-(--color-alarm) text-(--alarm-ink)",
 };
 
 const EV_LABEL: Record<"R" | "S" | "C", string> = { R: "R", S: "S", C: "C" };

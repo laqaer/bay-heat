@@ -176,7 +176,7 @@ export function CanIRunItForm() {
 
             {(kind === "e120" || kind === "e240") ? (
               <>
-                <div className="flex items-center justify-between gap-4 border-b border-(--color-fg)/10 py-3">
+                <label className="flex items-center justify-between gap-4 border-b border-(--color-fg)/10 py-3">
                   <span className="text-[15px] text-(--color-fg)">Circuit</span>
                   <select
                     value={situation.circuit ?? ""}
@@ -190,14 +190,14 @@ export function CanIRunItForm() {
                     <option value="240V20A">240V, 20A</option>
                     <option value="240V30A">240V, 30A</option>
                   </select>
-                </div>
+                </label>
                 {situation.circuit?.startsWith("240") ? (
                   <>
                     <YesNo label="A plug adapter in use (e.g. 14-50 to 6-30)?" value={situation.plugAdapterInUse ?? false} onChange={(v) => set("plugAdapterInUse", v)} />
                     <YesNo label="Is the outlet grounded?" value={situation.outletGrounded ?? true} onChange={(v) => set("outletGrounded", v)} />
                   </>
                 ) : null}
-                <div className="flex items-center justify-between gap-4 border-b border-(--color-fg)/10 py-3">
+                <label className="flex items-center justify-between gap-4 border-b border-(--color-fg)/10 py-3">
                   <span className="text-[15px] text-(--color-fg)">Heater size (kW)</span>
                   <input
                     type="number"
@@ -207,7 +207,7 @@ export function CanIRunItForm() {
                     onChange={(e) => set("heaterKw", e.target.value ? Number(e.target.value) : undefined)}
                     className="w-24 border border-(--color-fg)/25 bg-(--color-surface) px-3 py-2 text-sm text-(--color-fg)"
                   />
-                </div>
+                </label>
               </>
             ) : null}
 
@@ -231,7 +231,7 @@ export function CanIRunItForm() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-4 border-b border-(--color-fg)/10 py-3">
+            <label className="flex items-center justify-between gap-4 border-b border-(--color-fg)/10 py-3">
               <span className="text-[15px] text-(--color-fg)">ZIP code (optional)</span>
               <input
                 type="text"
@@ -245,7 +245,7 @@ export function CanIRunItForm() {
                 placeholder="60601"
                 className="w-28 border border-(--color-fg)/25 bg-(--color-surface) px-3 py-2 text-sm text-(--color-fg)"
               />
-            </div>
+            </label>
           </div>
         </div>
       ) : null}

@@ -15,7 +15,7 @@ import { altitudeFactor, annualMeanTemp } from "@/lib/planner/climate";
 import { lightCapacitance, simulateSession } from "@/lib/planner/warmup";
 import { circuitFor } from "@/lib/planner/electrical";
 import { heaterClass } from "@/lib/planner/catalog";
-import { WALL_U, HOUSE_COUPLING_UA, INFILTRATION_K, SIZING_MARGIN } from "@/lib/planner/constants";
+import { WALL_U, HOUSE_COUPLING_UA, INFILTRATION_K, SIZING_MARGIN, TIGHTNESS_ACH, ATTIC_VENT_ACH, SLAB_F } from "@/lib/planner/constants";
 import { EXAMPLE_A_INPUT, EXAMPLE_A_STATION } from "@/lib/planner/fixtures";
 import { getSource } from "@/lib/facts";
 
@@ -93,7 +93,10 @@ export default function Page() {
       <p>
         Air leaking through gaps around doors, windows and the building envelope follows{" "}
         <code>Q = {INFILTRATION_K} × V × ACH × ΔT</code>, where V is the garage&apos;s volume in ft³ and ACH is the
-        design-condition air changes per hour for its tightness class (0.75 tight to 4.0 very leaky). The constant
+        design-condition air changes per hour for its tightness class (
+        <Num v={TIGHTNESS_ACH.tight} ev="C" src="TIGHTNESS_ACH.tight — lib/planner/constants.ts" /> tight to{" "}
+        <Num v={TIGHTNESS_ACH.very_leaky} ev="C" src="TIGHTNESS_ACH.very_leaky — lib/planner/constants.ts" /> very
+        leaky). The constant
         also carries an altitude correction, since colder, denser air at sea level infiltrates at a different rate
         than the same volumetric flow at elevation — Chicago&apos;s{" "}
         <Num v={elevationFt} unit="ft" ev="C" src="EXAMPLE_A_STATION.elevFt" /> gives a factor of{" "}
@@ -112,10 +115,12 @@ export default function Page() {
 
       <h2>The ceiling: attic as a series resistance</h2>
       <p>
-        A vented attic doesn&apos;t sit at either the indoor or the outdoor temperature — it floats in between,
-        governed by the ceiling&apos;s insulation on one side and the roof deck plus attic ventilation on the other.
-        The model treats this as two resistances in series: the ceiling&apos;s own UA (insulation) and the attic-to-
-        outdoors UA (roof deck conduction plus 3 attic air changes per hour), combined as{" "}
+        A vented attic doesn&apos;t sit at either the indoor or the outdoor temperature. It floats in between,
+        set by the ceiling&apos;s insulation on one side and the roof deck plus attic ventilation on the other. The
+        model treats this as two resistances in series: the ceiling&apos;s own UA (insulation) and the attic-to-
+        outdoors UA (roof deck conduction plus{" "}
+        <Num v={ATTIC_VENT_ACH} unit="ACH" ev="C" src="ATTIC_VENT_ACH — lib/planner/constants.ts" /> of attic air
+        changes per hour), combined as{" "}
         <code>UA_ceiling_eff = 1 / (1/UA_ceiling + 1/UA_attic-out)</code>. That combined UA times ΔT gives the
         ceiling load — for this garage,{" "}
         <Num
@@ -139,19 +144,20 @@ export default function Page() {
 
       <h2>Slab-edge loss</h2>
       <p>
-        Heat leaving through an uninsulated slab doesn&apos;t scale with floor area — it scales with the exposed
+        Heat leaving through an uninsulated slab doesn&apos;t scale with floor area. It scales with the exposed
         perimeter, because the loss concentrates at the edge where the slab meets outdoor air. The model uses an
-        F-factor (BTU/h per linear ft of edge per °F), not a U-value times area: <code>Q = F × L_ext × ΔT</code>,
-        where L_ext is the exterior perimeter with any common (house) wall excluded. An uninsulated edge runs about
-        F = 0.73; adding edge insulation (R-10 to R-20, 24-48 in deep) roughly cuts that F-factor in half or better.
+        F-factor (BTU/h per linear ft of edge per °F), not a U-value times area: <code>Q = F × L_ext × ΔT</code>.
+        L_ext is the exterior perimeter, with any common (house) wall excluded. An uninsulated edge runs about F ={" "}
+        <Num v={SLAB_F.none} ev="C" src="SLAB_F.none — lib/planner/constants.ts" />; edge insulation (R-10 to R-20,
+        24-48 in deep) roughly cuts that F-factor in half or better.
       </p>
 
       <h2>Warm-up: thermal capacitance and a 1-minute simulation</h2>
       <p>
-        &quot;How long until it hits 55°F&quot; is a different question from the design load, and it needs a
-        different model: a lightweight thermal-capacitance simulation, not a steady-state formula. The garage&apos;s
-        light mass (framing, drywall, the air itself, plus whatever&apos;s stored inside) is lumped into one
-        capacitance figure —{" "}
+        &quot;How long until it hits 55°F&quot; is a different question from the design load. It needs a different
+        model: a lightweight thermal-capacitance simulation, not a steady-state formula. The garage&apos;s light
+        mass — framing, drywall, the air itself, plus whatever&apos;s stored inside — is lumped into one capacitance
+        figure —{" "}
         <Num v={cLight} unit="BTU/°F" round={100} ev="C" src="lightCapacitance(EXAMPLE_A_INPUT, elevationFt) — lib/planner/warmup.ts" />{" "}
         for this garage — and the slab is modeled separately as a semi-infinite solid that only slowly gives up or
         absorbs heat at its exposed surface. The simulation steps forward in 1-minute increments (an explicit Euler

@@ -18,6 +18,7 @@ import { costPerMMBtuDelivered, HEAT_CONTENT, ETA } from "@/lib/planner/fuels";
 import { PRICES, US_AVG_PRICES } from "@/lib/planner/prices";
 import { findProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
+import { heaterClass } from "@/lib/planner/catalog";
 import { SAFETY_SCOPE } from "@/lib/site";
 import type { PriceSet } from "@/lib/planner/types";
 
@@ -59,6 +60,7 @@ export default function Page() {
 
   const dr975 = findProduct("dr975-7k5-shop")!;
   const bigMaxx = findProduct("gas-unit-heater-big-maxx-50")!;
+  const torpedoClass = heaterClass("torpedo");
 
   const sources = SOURCE_IDS.map((id) => getSource(id)).filter((s): s is NonNullable<typeof s> => s !== null);
 
@@ -146,7 +148,7 @@ export default function Page() {
         rows={[
           {
             classId: "torpedo",
-            text: "A forced-air torpedo heater burns cylinder propane unvented at up to 200,000 BTU/h. It's a construction/outdoor tool — running one indoors, vented or not, isn't part of this comparison.",
+            text: `A forced-air torpedo heater burns cylinder propane unvented at up to ${torpedoClass.outputBtuh[1].toLocaleString()} BTU/h. It's a construction/outdoor tool — running one indoors, vented or not, isn't part of this comparison.`,
           },
           {
             classId: "diesel_air",

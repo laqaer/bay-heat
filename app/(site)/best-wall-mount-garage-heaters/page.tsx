@@ -34,8 +34,8 @@ export default function Page() {
       <AnswerBlock>
         Three wall-listed electric classes cover most garages: a <Num f="hs1500tt.watts" /> infrared panel mounted
         at <Num f="hs1500tt.mount_height_in_us" /> with <Num f="hs1500tt.clearance_side_in" /> side clearance, a{" "}
-        <Num f="fuh54.watts.high" /> wall/ceiling fan-forced unit on a 30 A circuit, and a{" "}
-        <Num f="dr975.watts" /> shop heater on a 40 A circuit. Pick by output and clearance the manual actually
+        <Num f="fuh54.watts.high" /> wall/ceiling fan-forced unit on a <Num f="circuit.5000w240v.breaker" />, and a{" "}
+        <Num f="dr975.watts" /> shop heater on a <Num f="circuit.7500w240v.breaker" />. Pick by output and clearance the manual actually
         publishes — not by which one looks biggest in a photo.
       </AnswerBlock>
 

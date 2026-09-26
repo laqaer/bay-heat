@@ -1,6 +1,6 @@
 import type { Circuit, ClimateStation, GarageInput, HeaterClass, HeaterClassId, PriceSet, RankedSystem, WhyNot } from "./types.ts";
 import { HEATER_CLASSES } from "./catalog.ts";
-import { circuitFor } from "./electrical.ts";
+import { circuitFor, circuitSpecForNameplate } from "./electrical.ts";
 import { balancePoint, seasonalLoadContinuous, heatPumpCapacity, heatPumpCop, heatPumpSeasonal, type HeatPumpClass } from "./seasonal.ts";
 import { simulateSession } from "./warmup.ts";
 import { HEAT_CONTENT } from "./fuels.ts";
@@ -175,11 +175,17 @@ export function rankSystems(ctx: RecommendContext): { recommendations: RankedSys
       let circuitCost = 0;
       let circuitSpec: RankedSystem["circuit"];
       if (cls.circuit) {
-        // Per-UNIT wattage: each unit is its own circuit, not `units` heaters sharing one bigger breaker.
-        const perUnitCapacityBtuh = capacityBtuhFor(cls, 1, ctx.tOut);
-        const requiredWatts = perUnitCapacityBtuh / (typeof cls.eta === "number" ? cls.eta : 1) / 3.412;
-        const volts = CIRCUIT_VOLTS[cls.circuit] as 120 | 240;
-        circuitSpec = circuitFor(requiredWatts, volts, volts);
+        if (cls.energy === "electric") {
+          // Per-UNIT wattage: each unit is its own circuit, not `units` heaters sharing one bigger breaker.
+          const perUnitCapacityBtuh = capacityBtuhFor(cls, 1, ctx.tOut);
+          const requiredWatts = perUnitCapacityBtuh / (typeof cls.eta === "number" ? cls.eta : 1) / 3.412;
+          const volts = CIRCUIT_VOLTS[cls.circuit] as 120 | 240;
+          circuitSpec = circuitFor(requiredWatts, volts, volts);
+        } else {
+          // A combustion class's circuit (e.g. g_vented_unit's 120V15A) is its blower/control nameplate
+          // rating, not something to derive from its BTU output the way an electric heater's circuit is.
+          circuitSpec = circuitSpecForNameplate(cls.circuit);
+        }
         const fits = circuitFits(ctx.circuit, cls.circuit);
         if (!fits) {
           if (!input.canAddCircuit) continue; // excluded for this unit count; a different class may still fit

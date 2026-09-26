@@ -140,13 +140,14 @@ export default function Page() {
 
       <h2>Two things not to do</h2>
       <p>
-        <strong>Don&apos;t run it on an extension cord.</strong> A 1,500W load pulls 12.5A continuously through a
-        cord rated for far less than a fixed receptacle, and the connection heats up at every plug and splice — the
-        failure mode is a melted cord or an arcing connection, not just a tripped breaker. Plug directly into a wall
-        receptacle every time.
+        <strong>Don&apos;t run it on an extension cord.</strong> A 1,500W load pulls <Num f="circuit.1500w120v.amps" />{" "}
+        continuously through a cord rated for far less than a fixed receptacle, and the connection heats up at every
+        plug and splice — the failure mode is a melted cord or an arcing connection, not just a tripped breaker.
+        Plug directly into a wall receptacle every time.
       </p>
       <p>
-        <strong>Don&apos;t run two heaters off one 15A circuit.</strong> Two 1,500W heaters together draw 25A —
+        <strong>Don&apos;t run two heaters off one 15A circuit.</strong> Two 1,500W heaters together draw{" "}
+        <Num v={25} unit="A" ev="C" src="2 x circuit.1500w120v.amps (two 1,500W/120V loads on one circuit)" /> —
         already over a 20A breaker&apos;s rating, let alone a 15A one. If you need more heat than one portable
         unit gives you, that&apos;s a sign to move up a class, not add a second cord to the same outlet. See{" "}
         <Link href="/240v-garage-heater">240V garage heaters →</Link> for the hardwired classes built for that.
@@ -156,8 +157,8 @@ export default function Page() {
       <SafetyCallout>
         <p>
           <Num f="code.nec.210_8_a" /> requires GFCI protection on the receptacle any of these heaters plugs into.
-          Keep the heater at least 3 ft from anything flammable and never leave it running unattended overnight.
-          Your electrician and your local code edition govern.
+          Keep the heater a safe distance from anything flammable, per its own manual, and never leave it running
+          unattended overnight. Your electrician and your local code edition govern.
         </p>
         <p className="mt-2">{SAFETY_SCOPE}</p>
       </SafetyCallout>

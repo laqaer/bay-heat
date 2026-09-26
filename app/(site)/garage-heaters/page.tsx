@@ -39,7 +39,7 @@ const SUBPAGES: { href: "/electric-garage-heater" | "/diesel-heater-for-garage" 
   { href: "/electric-garage-heater", label: "Electric garage heaters", blurb: "1.5 kW plug-in to 10 kW hardwired — circuit size for every class." },
   { href: "/diesel-heater-for-garage", label: "Diesel heaters", blurb: "Cost per hour against electric, and why the exhaust has to go outside." },
   { href: "/propane-heater-for-garage", label: "Propane heaters", blurb: "Vented unit heaters vs portable Buddy-type radiant, and when each is safe." },
-  { href: "/heat-pump-mini-split-for-garage", label: "Mini-split heat pumps", blurb: "Whether a $2,500-7,000 install beats a $170 electric heater over 5 years." },
+  { href: "/heat-pump-mini-split-for-garage", label: "Mini-split heat pumps", blurb: "Whether a pricier heat-pump install beats a cheap electric heater over 5 years." },
   { href: "/infrared-garage-heater", label: "Infrared garage heaters", blurb: "Radiant vs forced-air heat with the door open." },
   { href: "/electric-vs-propane-garage-heater", label: "Electric vs propane, head to head", blurb: "Delivered cost per million BTU, side by side." },
 ];

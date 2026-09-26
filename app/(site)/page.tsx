@@ -29,7 +29,7 @@ export const metadata: Metadata = pageMetadata({ path: "/", title: entry.title, 
 const STAMP_STYLE: Record<string, string> = {
   "GO · PER MANUAL": "bg-(--color-ember) text-black",
   "ONLY IF": "border-2 border-(--color-fg) text-(--color-fg)",
-  "NO-GO": "bg-(--color-alarm) text-white",
+  "NO-GO": "bg-(--color-alarm) text-(--alarm-ink)",
 };
 
 const PLEDGES = [

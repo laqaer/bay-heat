@@ -27,6 +27,10 @@
   --heat-ink: #8e1b0e;
   --alarm: #b3261e;
   --go: #1f6b3a;
+  /* The alarm fill's own darker hue passes AA (4.5:1) with white text here, but the camera surface's
+     brighter --alarm (#ff4f3a, kept vivid on purpose against the dark bg) only clears AA with dark text --
+     found by an axe pass on the NO-GO verdict stamp. Two surfaces need opposite ink colors on the same fill. */
+  --alarm-ink: #ffffff;
   --shadow-result: 0 0 0 1px var(--line), 0 24px 48px -24px rgba(0, 0, 0, 0.12);
 }
 
@@ -44,6 +48,7 @@
   --glow: #ffb547;
   --frost: #5cc8e6;
   --alarm: #ff4f3a;
+  --alarm-ink: #08090c;
   --link: #5cc8e6;
   /* Redeclare every --color-* alias here too: @theme inline's `--color-bg: var(--bg)` etc. resolve once,
      where they're declared (effectively at :root), and that RESOLVED value is what inherits down -- a
@@ -158,7 +163,12 @@ body {
   color: #15171c;
 }
 
-/* Prose used inside the Report template's body columns. */
+/* Prose used inside the Report template's body columns. Wrapped in Tailwind's own `base` layer (rather than
+   left unlayered) so a utility class on a descendant -- e.g. BuyButton's `text-black` on an <a> nested in
+   prose copy -- still wins on the cascade: an unlayered rule always beats a layered one regardless of
+   selector specificity or source order, which was silently recoloring buy-button text link-blue on V pages
+   (an axe color-contrast finding: frost-blue text on the ember fill measured well under 4.5:1). */
+@layer base {
 .prose-report h2 {
   margin-top: 2.4rem;
   margin-bottom: 0.7rem;
@@ -219,6 +229,7 @@ body {
   color: var(--text);
   font-weight: 650;
 }
+} /* @layer base: .prose-report */
 
 @media print {
   header,

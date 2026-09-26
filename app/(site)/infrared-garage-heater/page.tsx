@@ -50,8 +50,9 @@ export default function Page() {
       <h2>Why the door matters more than the wattage</h2>
       <p>
         A forced-air heater — a 240V fan-forced unit or a vented gas unit heater — raises the temperature of the
-        air in the room, then relies on that warm air staying put. Open a 16 ft garage door and the air it just
-        heated leaves in minutes; the heater keeps working against a load the planner&apos;s{" "}
+        air in the room, then relies on that warm air staying put. Open a{" "}
+        <Num v={16} unit="ft" ev="C" src="EXAMPLE_A_INPUT.garageDoors[0].w — lib/planner/fixtures.ts" /> garage door
+        and the air it just heated leaves in minutes; the heater keeps working against a load the planner&apos;s{" "}
         <Num v={result.heating.items.find((i) => i.key === "garage_doors")?.pct ?? 0} unit="%" round={1} ev="C" src="heatLossDesign() on EXAMPLE_A_INPUT — garage_doors share of design load" /> door-loss share
         already accounts for.
       </p>
@@ -89,7 +90,9 @@ export default function Page() {
           <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">120V WALL INFRARED · 1.5 KW</p>
           <p className="mt-1 text-lg font-bold text-(--color-fg)">Heat Storm HS-1500-TT</p>
           <p className="mt-2 text-sm text-(--color-fg-2)">
-            <Num f="hs1500tt.watts" /> ({irWallClass.outputBtuh[0].toLocaleString()}–{irWallClass.outputBtuh[1].toLocaleString()} BTU/h) on an existing
+            <Num f="hs1500tt.watts" /> (
+            <Num v={irWallClass.outputBtuh[0]} unit="BTU/h" round={100} ev="C" src="HEATER_CLASSES.e_ir_wall_1500.outputBtuh — lib/planner/catalog.ts" />–
+            <Num v={irWallClass.outputBtuh[1]} unit="BTU/h" round={100} ev="C" src="HEATER_CLASSES.e_ir_wall_1500.outputBtuh" />) on an existing
             120V outlet, mounted at <Num f="hs1500tt.mount_height_in_us" /> or higher. Sized for a workbench or one
             bay, not a whole garage.
           </p>
@@ -104,9 +107,11 @@ export default function Page() {
           <p className="mt-1 text-lg font-bold text-(--color-fg)">240V infrared ceiling heater</p>
           <p className="mt-2 text-sm text-(--color-fg-2)">
             <Num v={irTubeClass.outputBtuh[0]} unit="BTU/h" round={100} ev="C" src="HEATER_CLASSES.e_ir_240.outputBtuh — lib/planner/catalog.ts" />–
-            <Num v={irTubeClass.outputBtuh[1]} unit="BTU/h" round={100} ev="C" src="HEATER_CLASSES.e_ir_240.outputBtuh" /> on a 240V/20–30A circuit.
-            Aimed down from a high ceiling, it&apos;s built for a drafty shop or a bay that runs with the door up,
-            not a sealed, evenly heated room.
+            <Num v={irTubeClass.outputBtuh[1]} unit="BTU/h" round={100} ev="C" src="HEATER_CLASSES.e_ir_240.outputBtuh" /> on a{" "}
+            <Num v={240} unit="V" ev="C" src="HEATER_CLASSES.e_ir_240.circuit — lib/planner/catalog.ts" />,{" "}
+            <Num v={30} unit="A" ev="C" src="HEATER_CLASSES.e_ir_240.circuit" /> circuit. Aimed down from a high
+            ceiling, it&apos;s built for a drafty shop or a bay that runs with the door up, not a sealed, evenly
+            heated room.
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{irTube.safetyLine?.text}</p>
           <div className="mt-3">

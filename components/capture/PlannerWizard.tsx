@@ -138,6 +138,7 @@ export function PlannerWizard({ onComplete, initialZip3 }: { onComplete: (input:
           ) : null}
           {!zipResolution ? (
             <select
+              aria-label="State"
               value={input.state}
               onChange={(e) => set("state", e.target.value)}
               className="mt-3 h-11 border border-(--color-fg)/25 bg-(--color-surface) px-3 text-sm text-(--color-fg)"

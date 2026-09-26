@@ -13,6 +13,7 @@ import { heatLossDesign, type HeatLossResult } from "@/lib/planner/heatLoss";
 import { resolveEnvelope } from "@/lib/planner/defaults";
 import { designTempFor } from "@/lib/planner/uncertainty";
 import { stationById } from "@/lib/planner/stations";
+import { SIZING_MARGIN } from "@/lib/planner/constants";
 import type { CeilingIns, GarageDoorType, GarageInput, Preset, Tightness, WallType } from "@/lib/planner/types";
 
 const entry = findPage("/garage-heater-size")!;
@@ -174,7 +175,14 @@ export default function Page() {
       <p className="text-xs text-(--color-fg-2)">
         BTU/h and watts are the same load — watts is what a breaker and a heater&apos;s nameplate are actually
         rated in. Every figure above comes from the same physics engine behind the calculator, run at each
-        preset&apos;s default dimensions with a 10% sizing margin already applied.
+        preset&apos;s default dimensions with a{" "}
+        <Num
+          v={SIZING_MARGIN}
+          ev="C"
+          src="SIZING_MARGIN — lib/planner/constants.ts"
+          format={(v) => `${Math.round((Number(v) - 1) * 100)}%`}
+        />{" "}
+        sizing margin already applied.
       </p>
 
       <h2>Why the same size garage needs 3x more heater</h2>

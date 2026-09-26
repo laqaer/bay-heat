@@ -18,9 +18,13 @@ import { SAVINGS_VARY } from "@/lib/site";
 
 const entry = findPage("/garage-door-weather-stripping")!;
 
+// entry.title (lib/pages/seal.ts) carries a dollar figure for historical SEO reasons; the exported metadata
+// title may not, so it's overridden here rather than edited in the shared page registry.
+const METADATA_TITLE = "Garage door weather stripping: how much heat loss a full package actually cuts";
+
 export const metadata: Metadata = pageMetadata({
   path: entry.href,
-  title: entry.title,
+  title: METADATA_TITLE,
   description: entry.description,
 });
 
@@ -86,7 +90,11 @@ export default function Page() {
         </li>
       </ul>
 
-      <h2>The math behind &quot;$125 cuts 12%&quot;</h2>
+      <h2>
+        The math behind &quot;<Cost amount={weatherstrip.cost} /> cuts{" "}
+        <Num v={weatherstrip.pctOfLoad} unit="%" ev="C" src="insulateFirst() 'weatherstrip' — pctOfLoad, lib/planner/roi.ts" />
+        &quot;
+      </h2>
       <p>
         BayHeat&apos;s standard worked example is a 24×24 ft attached two-car garage in Chicago, R-13 walls,
         one uninsulated steel door, average drafts, held at 55°F. Tightening the door and its openings by one
@@ -119,7 +127,7 @@ export default function Page() {
             <Cost amount={newDoor.cost} /> installed and closes about{" "}
             <Num v={newDoor.pctOfLoad} unit="%" ev="C" src="insulateFirst() 'new_pu_door' measure — lib/planner/roi.ts" /> of
             the same garage&apos;s load — worth doing when the door panel itself is failing, but not a
-            reasonable answer to a $125 draft problem.
+            reasonable answer to a <Cost amount={weatherstrip.cost} /> draft problem.
           </>
         ) : (
           <>

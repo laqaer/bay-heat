@@ -23,9 +23,13 @@ import { SAFETY_SCOPE, SAVINGS_VARY } from "@/lib/site";
 
 const entry = findPage("/heat-pump-mini-split-for-garage")!;
 
+// entry.title (lib/pages/fuel.ts) carries dollar figures for historical SEO reasons; the exported metadata
+// title may not, so it's overridden here rather than edited in the shared page registry.
+const METADATA_TITLE = "Mini-split heat pump for a garage: does it beat a plain resistance heater over 5 years?";
+
 export const metadata: Metadata = pageMetadata({
   path: entry.href,
-  title: entry.title,
+  title: METADATA_TITLE,
   description: entry.description,
 });
 
@@ -195,7 +199,8 @@ export default function Page() {
         This whole comparison assumes the garage is sealed first. The <em>as-is</em> version of the same 24×24
         garage (R-13 walls, one uninsulated steel door, average drafts) needs about{" "}
         <Num v={asIs.heating.qSize} unit="BTU/h" round={100} ev="C" src="plan(EXAMPLE_A_INPUT).heating.qSize" /> —
-        a 24,000 BTU/h nameplate only covers about{" "}
+        a <Num v={ratedCapacity47} unit="BTU/h" round={100} ev="S" src="hp_12_24k_230 top of class, 47degF AHRI rating" />{" "}
+        nameplate only covers about{" "}
         <Num v={fitPctAsIsNameplate} unit="%" round={1} ev="C" src="24000 / plan(EXAMPLE_A_INPUT).heating.qSize" /> of
         that, before any cold-weather derate. <a href="/how-to-insulate-a-garage">Seal the envelope first</a>, then
         size the heat pump to what&apos;s left.
@@ -205,7 +210,7 @@ export default function Page() {
         rows={[
           {
             classId: "hp_diy_12k_115",
-            text: `A DIY pre-charged 115V mini-split tops out around ${diyClass.outputBtuh[1].toLocaleString()} BTU/h on a shared 120V/20A circuit — enough for a small, already-sealed 1-car bay, not this comparison's 2-car load, and it skips the licensed refrigerant charge check most manufacturers require for warranty.`,
+            text: `A DIY pre-charged 115V mini-split tops out around ${diyClass.outputBtuh[1].toLocaleString()} BTU/h on a shared ${diyClass.circuit!.replace(/^(\d+V)(\d+A)$/, "$1/$2")} circuit — enough for a small, already-sealed 1-car bay, not this comparison's 2-car load, and it skips the licensed refrigerant charge check most manufacturers require for warranty.`,
           },
         ]}
       />

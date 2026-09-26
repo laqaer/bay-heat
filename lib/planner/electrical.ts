@@ -1,4 +1,4 @@
-import type { CircuitSpec, Wire } from "./types.ts";
+import type { Circuit, CircuitSpec, Wire } from "./types.ts";
 
 // NEC 240.6(A) standard overcurrent device sizes. Heater classes top out at 10 kW / 60 A, but the "forSize"
 // circuit (plan.ts) sizes straight off the raw design load for any envelope, including a bare/leaky one no
@@ -63,6 +63,31 @@ export function circuitFor(watts: number, voltsSupply: 120 | 208 | 240, voltsRat
     gfciReceptacle: false, // set true by the caller for a plug-in/corded circuit (NEC 210.8(A)(2)); hardwired units are not receptacles
     deratedWatts: voltsSupply !== voltsRated ? Math.round(actualWatts) : undefined,
     notes,
+  };
+}
+
+// A combustion class's `circuit` field (catalog.ts, e.g. g_vented_unit's 120V15A) is the manufacturer's fixed
+// blower/ignition-control rating -- the electrical load that actually exists on a gas- or oil-fired unit --
+// not something to re-derive from the class's heat OUTPUT the way circuitFor() sizes an electric-resistance
+// heater's circuit from its wattage. Found via a real crash: rankSystems() was feeding g_vented_unit's
+// 125,000 BTU/h top-of-range output through circuitFor() as if it were electric wattage, demanding a 381 A
+// breaker no STANDARD_BREAKERS entry covers.
+export function circuitSpecForNameplate(circuit: Circuit): CircuitSpec {
+  const breakerA = Number(/V(\d+)A$/.exec(circuit)![1]);
+  const voltsRated = circuit.startsWith("120") ? 120 : 240;
+  const wireNM = smallestWireAtLeast(NM_60C, breakerA);
+  const wireTHHN = smallestWireAtLeast(THHN_75C, breakerA);
+  const amps = Math.round((breakerA / 1.25) * 10) / 10;
+  return {
+    watts: Math.round(amps * voltsRated),
+    volts: voltsRated,
+    amps,
+    minAmps: breakerA,
+    breakerA: breakerA as CircuitSpec["breakerA"],
+    wireNM,
+    wireTHHN,
+    gfciReceptacle: false,
+    notes: ["Manufacturer-specified control/blower circuit -- independent of the unit's BTU output."],
   };
 }
 

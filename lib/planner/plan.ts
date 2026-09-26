@@ -115,10 +115,14 @@ export function plan(input: GarageInput): PlannerResult {
   const insulateFirstRows = insulateFirst(roiCtx);
   const bundle = bundleCheapMeasures(roiCtx, insulateFirstRows);
   let fixFirstResult = null;
-  if (top && bundle) {
+  // fixFirst()'s whole framing ("$X of fixes buys a smaller breaker") is about an ELECTRIC circuit shrinking;
+  // for a combustion top pick (e.g. g_vented_unit) the "circuit" is a fixed blower/control nameplate rating
+  // that doesn't shrink with the load at all, so there's no equivalent before/after story to tell here.
+  if (top && bundle && HEATER_CLASSES[top.classId].energy === "electric") {
     // Re-rank against the smaller post-insulation load to find the equipment class fixing first actually buys.
     const afterCtx: RecommendContext = { ...recommendCtx, qReq: bundle.qAfter };
-    const afterTop = rankSystems(afterCtx).recommendations[0] ?? top;
+    const afterTopCandidate = rankSystems(afterCtx).recommendations[0] ?? top;
+    const afterTop = HEATER_CLASSES[afterTopCandidate.classId].energy === "electric" ? afterTopCandidate : top;
     // capacityBtuh on a RankedSystem is the COMBINED output across `units` (recommend.ts's capacityBtuhFor());
     // the circuit fixFirst() sizes is a single unit's, same as recommend.ts's own per-unit circuit sizing.
     const wattsFor = (classId: (typeof top)["classId"], capacityBtuh: number, units: number) => capacityBtuh / units / etaFor(classId) / 3.412;

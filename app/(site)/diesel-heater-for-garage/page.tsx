@@ -87,7 +87,8 @@ export default function Page() {
         <Num v={repOutputBtuh} unit="BTU/h" round={100} ev="S" src="HEATER_CLASSES.diesel_air.outputBtuh — lib/planner/catalog.ts" />{" "}
         diesel air heater costs about <Cost amount={dieselPerHour} per="hr" /> to run flat out, against{" "}
         <Cost amount={electricPerHour} per="hr" /> for an electric resistance heater putting out the same heat.
-        Diesel only overtakes electric once electricity costs more than about {crossoverCents.toFixed(1)}¢/kWh —
+        Diesel only overtakes electric once electricity costs more than about{" "}
+        <Num v={crossoverCents} unit="¢/kWh" ev="C" src="crossoverElecPerKwh x 100 — solved from costPerMMBtuDelivered() for elecPerKwh" round={0.1} /> —
         closer to California or Hawaii rates than the Midwest&apos;s.
       </AnswerBlock>
 
@@ -109,7 +110,9 @@ export default function Page() {
       </p>
       <p>
         At those prices, {dieselWinsNow ? "diesel is the cheaper fuel here" : "electric resistance is the cheaper fuel here"} —
-        the crossover sits at about {crossoverCents.toFixed(1)}¢/kWh for electricity, and Illinois runs{" "}
+        the crossover sits at about{" "}
+        <Num v={crossoverCents} unit="¢/kWh" ev="C" src="crossoverElecPerKwh x 100 — solved from costPerMMBtuDelivered() for elecPerKwh" round={0.1} />{" "}
+        for electricity, and Illinois runs{" "}
         <Num v={prices.elecPerKwh * 100} unit="¢/kWh" ev="R" src="PRICES.IL.elecPerKwh x 100 — EIA Electric Power Monthly" round={0.1} /> today. Diesel&apos;s
         case gets stronger in high electricity-price states and weaker wherever diesel itself runs expensive at the
         pump — it&apos;s never a fixed answer, only today&apos;s two prices run through the same formula.
