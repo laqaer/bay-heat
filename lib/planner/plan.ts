@@ -89,7 +89,10 @@ export function plan(input: GarageInput): PlannerResult {
   const hddAtBal = tBal !== undefined ? hddAtBase(station, tBal) : undefined;
 
   const recommendCtx: RecommendContext = { input, qReq: heatLoss.qSize, station, elevationFt, tOut, uaOut: heatLoss.uaExt, uaHouse, prices, circuit, cLight, aFloor, tStartJan };
-  const { recommendations, whyNot } = rankSystems(recommendCtx);
+  // No design heating load (design temperature at or above the target): nothing to size, price or rank, so
+  // skip the whole recommendation/ROI path rather than ranking heaters against a zero load.
+  const noHeatingLoad = heatLoss.qDesign <= 0;
+  const { recommendations, whyNot } = noHeatingLoad ? { recommendations: [], whyNot: [] } : rankSystems(recommendCtx);
   const top = recommendations[0];
 
   const warmupClassId = top?.classId ?? "e_240_5k";
@@ -112,8 +115,8 @@ export function plan(input: GarageInput): PlannerResult {
   const costs = costsForSeasonalLoad(seasonalMMBtu, heatLoss.qDesign, monthsInSeason, prices, heatPumpSeasonalCop);
 
   const roiCtx: RoiContext = { input, baseEnvelope: envelope, tOut, elevationFt, station, prices };
-  const insulateFirstRows = insulateFirst(roiCtx);
-  const bundle = bundleCheapMeasures(roiCtx, insulateFirstRows);
+  const insulateFirstRows = noHeatingLoad ? [] : insulateFirst(roiCtx);
+  const bundle = noHeatingLoad ? null : bundleCheapMeasures(roiCtx, insulateFirstRows);
   let fixFirstResult = null;
   // fixFirst()'s whole framing ("$X of fixes buys a smaller breaker") is about an ELECTRIC circuit shrinking;
   // for a combustion top pick (e.g. g_vented_unit) the "circuit" is a fixed blower/control nameplate rating

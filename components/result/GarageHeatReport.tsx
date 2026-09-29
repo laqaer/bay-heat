@@ -40,6 +40,7 @@ const SYSTEM_LABEL: Record<string, string> = {
 };
 
 export function GarageHeatReport({ result }: { result: PlannerResult }) {
+  const noHeatingLoad = result.heating.qDesign <= 0;
   return (
     <div className="not-prose">
       {/* 1. Readout card */}
@@ -118,6 +119,18 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
       {/* 3. What fits */}
       <section className="mt-10">
         <h2 className="text-2xl font-bold text-(--color-fg)">What fits</h2>
+        {noHeatingLoad ? (
+          <p className="mt-3 max-w-prose text-[15px] leading-7 text-(--color-fg-2)">
+            No design heating load: the coldest expected day at this station ({result.heating.tOutDesign}°F) is not below the{" "}
+            {result.heating.tIn}°F you want to hold, so there is nothing to size a heater against. If you plan to hold a higher
+            temperature, change the target and run it again.
+          </p>
+        ) : result.recommendations.length === 0 ? (
+          <p className="mt-3 max-w-prose text-[15px] leading-7 text-(--color-fg-2)">
+            Nothing on the circuit and fuel you listed covers this load. Adding a 240 V circuit, listing a fuel you have, or fixing
+            the envelope first (see above) each opens up options.
+          </p>
+        ) : null}
         <Disclosure />
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           {result.recommendations.map((r) => {
@@ -181,6 +194,7 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
       </section>
 
       {/* 6. Power it */}
+      {noHeatingLoad ? null : (
       <section className="mt-10">
         <h2 className="text-2xl font-bold text-(--color-fg)">Power it</h2>
         <div className="mt-4 border border-(--color-line) bg-(--color-surface) p-5">
@@ -198,6 +212,7 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
           ))}
         </div>
       </section>
+      )}
 
       {/* 7. Price it */}
       <section className="mt-10">

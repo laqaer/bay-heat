@@ -1,5 +1,6 @@
 import type { Condition, HeaterKind, Situation, Verdict } from "./types.ts";
 import { circuitFor } from "../planner/electrical.ts";
+import { zip3ToState } from "../planner/zip3.ts";
 
 // Can I Run It? verdict engine (BLUEPRINT.md §2.8, planner-engineering.md's safety appendix). Pure, no I/O.
 // Every branch returns >= 2 conditions -- a bare GO with no conditions reads as a professional, unconditional
@@ -66,8 +67,10 @@ function unventedAggregateNoGo(s: Situation): Verdict | null {
   );
 }
 
+// A ZIP entered without an explicit state (the public form only captures zip3) still resolves to its state, so
+// the statewide Massachusetts ban can't be sidestepped by leaving `state` unset.
 function isMassachusetts(s: Situation): boolean {
-  return s.state === "MA";
+  return s.state === "MA" || (s.state === undefined && s.zip3 !== undefined && zip3ToState(s.zip3) === "MA");
 }
 function isNycZip3(zip3?: string): boolean {
   if (!zip3 || zip3.length !== 3) return false;

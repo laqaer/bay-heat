@@ -141,10 +141,12 @@ export const HEATER_CLASSES: Record<HeaterClassId, HeaterClass> = {
     equip: [90, 220],
     install: [0, 0],
     safety: ["S1", "S2", "S3"],
-    // Tier 3, spot use only: rankSystems() never returns this with a buy button, attached or detached
-    // garage, regardless of fit -- see recommend.ts. Distinct from `neverRecommend` (which excludes a class
-    // from RankedSystem entirely); this one still appears, just never as a buyable plate.
+    // Never a buyable plate, in any garage, at any fit: the safety engine returns NO-GO for it in an attached
+    // garage and ONLY IF (with a manual-verbatim scope) in a detached one, and OPERATIONS.md's standing
+    // invariant is that Buddy-type propane never gets a buy button. rankSystems() therefore skips it and
+    // surfaces it only as a "why not" line; productIds stay for the /propane-heater-for-garage editorial copy.
     productIds: ["propane-buddy-9k", "propane-big-buddy-18k"],
+    neverRecommend: true,
   },
   g_vented_unit: {
     id: "g_vented_unit",

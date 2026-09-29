@@ -26,6 +26,12 @@ function circuitFits(userCircuit: Circuit, required: Circuit): boolean {
   return CIRCUIT_VOLTS[userCircuit] === CIRCUIT_VOLTS[required] && CIRCUIT_AMPS[userCircuit] >= CIRCUIT_AMPS[required];
 }
 
+const NEVER_RECOMMEND_REASON: Partial<Record<HeaterClassId, string>> = {
+  torpedo: "Open-flame forced-air heaters are never recommended for an enclosed garage.",
+  k_unvented: "Not recommended: an unvented kerosene heater has real CO and fire risk indoors.",
+  g_unvented_buddy: "Not recommended as a garage heater: Buddy-type propane is an attended, emergency-use tool, and it is a NO-GO in an attached garage.",
+};
+
 const NEW_CIRCUIT_COST: [number, number] = [300, 900];
 
 function capacityBtuhFor(cls: HeaterClass, units: number, tOut: number): number {
@@ -147,7 +153,7 @@ export function rankSystems(ctx: RecommendContext): { recommendations: RankedSys
 
   for (const cls of Object.values(HEATER_CLASSES)) {
     if (cls.neverRecommend) {
-      excludedReasons.set(cls.id, cls.id === "torpedo" ? "Open-flame forced-air heaters are never recommended for an enclosed garage." : "Not recommended: an unvented kerosene heater has real CO and fire risk indoors.");
+      excludedReasons.set(cls.id, NEVER_RECOMMEND_REASON[cls.id] ?? "Not recommended for an enclosed garage.");
       continue;
     }
     if (!fuelAvailable(cls, input)) {
@@ -202,7 +208,7 @@ export function rankSystems(ctx: RecommendContext): { recommendations: RankedSys
       const warmupPenaltyBase = input.usage.mode === "sessions" && minutesToTarget != null ? 2 * Math.max(0, minutesToTarget - input.warmupGoalMin) * (estimateSessionsPerSeason(input, ctx.station) / 10) : 0;
       const tco5 = equipInstall * w.upfront + 5 * annualCost * w.annual + warmupPenaltyBase * w.warmup;
 
-      const candidate: Candidate = { classId: cls.id, units: units as 1 | 2 | 3, capacityBtuh, fitPct: Math.round((qReq / capacityBtuh) * 100), circuitCost, circuitSpec, annualCost, minutesToTarget, tco5 };
+      const candidate: Candidate = { classId: cls.id, units: units as 1 | 2 | 3, capacityBtuh, fitPct: qReq > 0 ? Math.round((capacityBtuh / qReq) * 100) : 100, circuitCost, circuitSpec, annualCost, minutesToTarget, tco5 };
       if (!best || candidate.tco5 < best.tco5) best = candidate;
     }
     if (best) candidates.push(best);
@@ -239,7 +245,7 @@ export function rankSystems(ctx: RecommendContext): { recommendations: RankedSys
 
   const whyNot: WhyNot[] = [];
   for (const [classId, text] of excludedReasons) {
-    if (classId === "torpedo" || classId === "diesel_air" || (classId === "e_port_1500" && input.priority !== "upfront")) {
+    if (classId === "torpedo" || classId === "g_unvented_buddy" || classId === "diesel_air" || (classId === "e_port_1500" && input.priority !== "upfront")) {
       whyNot.push({ classId, text });
     }
   }

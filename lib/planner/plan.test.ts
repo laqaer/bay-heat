@@ -103,3 +103,37 @@ test("plan() runs well under the 20ms CI budget (p95 under 4ms is the target; ge
   const elapsed = performance.now() - start;
   assert.ok(elapsed / 20 < 20, `plan() averaged ${(elapsed / 20).toFixed(2)}ms over 20 runs, over the 20ms CI budget`);
 });
+
+test("plan() never recommends a Buddy-type propane heater, even in sessions mode on a 120 V-only circuit", () => {
+  const input: GarageInput = {
+    ...EXAMPLE_A_INPUT,
+    attached: true,
+    circuit: "120V15A",
+    canAddCircuit: false,
+    fuels: ["electric", "propane_cylinder"],
+    usage: { mode: "sessions", sessionsPerWeek: 2, hoursPerSession: 4, doorOpeningsPerSession: 2 },
+  };
+  const r = plan(input);
+  assert.ok(!r.recommendations.some((x) => x.classId === "g_unvented_buddy"));
+  assert.ok(r.whyNot.some((w) => w.classId === "g_unvented_buddy"));
+});
+
+test("plan() reports fitPct as capacity over required load: a full-load pick is at least 100%", () => {
+  const r = plan({ ...EXAMPLE_A_INPUT, circuit: "240V60A", canAddCircuit: true });
+  assert.ok(r.recommendations.length > 0);
+  const top = r.recommendations[0];
+  assert.equal(top.fitPct, Math.round((top.capacityBtuh / r.heating.qSize) * 100));
+  assert.ok(top.fitPct >= 100, `top pick covers ${top.fitPct}% of the load`);
+});
+
+test("plan() in a climate warmer than the target has no design heating load and recommends nothing", () => {
+  const r = plan({ ...EXAMPLE_A_INPUT, state: "HI", stationId: "HI-honolulu", zip3: undefined });
+  assert.equal(r.heating.qDesign, 0);
+  assert.equal(r.heating.qSize, 0);
+  assert.equal(r.heating.kwSize, 0);
+  assert.deepEqual(r.recommendations, []);
+  assert.deepEqual(r.insulateFirst, []);
+  assert.equal(r.fixFirst, null);
+  assert.ok(r.heating.items.every((i) => i.btuh === 0 && i.pct === 0));
+  assert.ok(r.heating.uaExt > 0, "the raw UA is still computed");
+});

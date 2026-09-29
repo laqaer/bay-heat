@@ -5,6 +5,7 @@ import type { GarageInput, GarageDoorType, WallType, Tightness, Circuit, Fuel, P
 import { defaultGarageInput } from "@/lib/planner/wizard-defaults";
 import { PRESET_DEFAULTS } from "@/lib/planner/presets";
 import { resolveZip3 } from "@/lib/planner/zip3";
+import { primaryStationForState } from "@/lib/planner/stations";
 import { clsx } from "@/lib/clsx";
 import { degF, cents } from "@/lib/format";
 
@@ -140,7 +141,13 @@ export function PlannerWizard({ onComplete, initialZip3 }: { onComplete: (input:
             <select
               aria-label="State"
               value={input.state}
-              onChange={(e) => set("state", e.target.value)}
+              onChange={(e) => {
+                // plan() prefers stationId over state, so the climate station must move with the state or an
+                // Alaska pick would be sized on Chicago weather with Alaska prices.
+                const st = e.target.value;
+                const station = primaryStationForState(st);
+                setInput((s) => ({ ...s, state: st, stationId: station?.id ?? s.stationId, zip3: undefined }));
+              }}
               className="mt-3 h-11 border border-(--color-fg)/25 bg-(--color-surface) px-3 text-sm text-(--color-fg)"
             >
               {US_STATES.map((st) => (
@@ -340,6 +347,7 @@ export function PlannerWizard({ onComplete, initialZip3 }: { onComplete: (input:
                 onClick={() => {
                   setOutlet("120");
                   set("circuit", "120V20A");
+                  set("canAddCircuit", false);
                 }}
               >
                 Only regular outlets (120V)
@@ -349,6 +357,7 @@ export function PlannerWizard({ onComplete, initialZip3 }: { onComplete: (input:
                 onClick={() => {
                   setOutlet("spare240");
                   set("circuit", `240V${breakerA}A` as Circuit);
+                  set("canAddCircuit", false);
                 }}
               >
                 Spare 240V circuit
@@ -368,6 +377,7 @@ export function PlannerWizard({ onComplete, initialZip3 }: { onComplete: (input:
                 onClick={() => {
                   setOutlet("unsure");
                   set("circuit", "unknown");
+                  set("canAddCircuit", false);
                 }}
               >
                 Not sure

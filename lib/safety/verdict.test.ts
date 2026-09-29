@@ -247,3 +247,13 @@ test("every verdict for every heater kind carries at least 2 conditions", () => 
     assert.ok(v.conditions.length >= 2, `${k} produced only ${v.conditions.length} conditions`);
   }
 });
+
+// 23b. The public form captures only a ZIP, never a state: an MA ZIP alone must still trip the statewide ban.
+test("23b: a Massachusetts ZIP3 with no state set -> NO-GO for kerosene", () => {
+  for (const zip3 of ["010", "021", "027"]) {
+    const v = verdictFor("kerosene", { ...BASE, state: undefined, zip3, attached: false, unattended: false, livingAbove: false });
+    assertShape(v, "NO_GO", "NO-GO", `T23b zip3=${zip3}`);
+  }
+  const outside = verdictFor("kerosene", { ...BASE, state: undefined, zip3: "606", attached: false, unattended: false, livingAbove: false });
+  assert.notEqual(outside.verdict, "NO_GO");
+});

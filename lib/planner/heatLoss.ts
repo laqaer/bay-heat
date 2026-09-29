@@ -98,7 +98,11 @@ export function heatLossDesign(input: GarageInput, envelope: ResolvedEnvelope, t
   const fAlt = altitudeFactor(elevationFt);
   const q_inf = INFILTRATION_K * fAlt * geo.volume * ach * deltaT;
 
-  const qDesign = q_wall + q_gdoor + q_window + q_svcdoor + q_ceiling + q_slab + q_inf + q_house;
+  // The raw sum goes negative when the design temperature is warmer than the target (Honolulu at 55 degF,
+  // or a garage the house heats past its own setpoint). That is "no design heating load", not a negative
+  // one to size, price and rank -- so qDesign/qSize floor at 0 while UA_ext below still comes from the raw sum.
+  const qDesignRaw = q_wall + q_gdoor + q_window + q_svcdoor + q_ceiling + q_slab + q_inf + q_house;
+  const qDesign = Math.max(0, qDesignRaw);
   const qSize = SIZING_MARGIN * qDesign;
 
   const items: { key: LoadKey; btuh: number }[] = [
@@ -114,11 +118,11 @@ export function heatLossDesign(input: GarageInput, envelope: ResolvedEnvelope, t
 
   // BayGrade: UA_ext / A_floor, house wall excluded, independent of climate (§2.5). UA_ext is every
   // exterior-coupled UA term (not house coupling), computed at deltaT=1 for a clean per-degree UA.
-  const uaExt = deltaT !== 0 ? (qDesign - q_house) / deltaT : 0;
+  const uaExt = deltaT !== 0 ? (qDesignRaw - q_house) / deltaT : 0;
   const uaExtPerFt2 = uaExt / geo.aFloor;
 
   return {
-    items: items.map((it) => ({ ...it, pct: qDesign !== 0 ? Math.round((it.btuh / qDesign) * 100) : 0 })),
+    items: items.map((it) => (qDesign > 0 ? { ...it, pct: Math.round((it.btuh / qDesign) * 100) } : { key: it.key, btuh: 0, pct: 0 })),
     qDesign,
     qSize,
     kwSize: qSize / 3412,
