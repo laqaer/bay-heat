@@ -14,4 +14,5 @@ export const REDIRECTS: RedirectRule[] = [
   { source: "/best-ceiling-mount-garage-heaters-under-200", destination: "/ceiling-mount-garage-heater" },
   { source: "/wall-mount-vs-ceiling-garage-heater", destination: "/ceiling-mount-garage-heater" },
   { source: "/insulate-garage-before-heater-upgrade", destination: "/how-to-insulate-a-garage" },
+  { source: "/best-infrared-garage-heaters", destination: "/infrared-garage-heater" },
 ];

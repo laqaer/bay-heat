@@ -11,6 +11,7 @@
     "lint": "eslint",
     "typegen": "next typegen",
     "typecheck": "tsc --noEmit",
+    "indexnow": "node scripts/indexnow.mjs",
     "test": "node --test 'lib/**/*.test.ts'",
     "check": "npm run typegen && npm run typecheck && npm run lint && npm test && npm run build",
     "posters": "node scripts/bake-posters.ts",

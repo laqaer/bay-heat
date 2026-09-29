@@ -1,0 +1,2 @@
+feature id: best-infrared-garage-heaters
+entry: follow --from / --name "Best infrared electric garage heaters"

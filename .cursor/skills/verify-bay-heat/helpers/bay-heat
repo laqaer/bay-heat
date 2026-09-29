@@ -411,7 +411,11 @@ function screenshot(pathname, outFile) {
       die(`screenshot failed: ${error.message}`);
     }
   } finally {
-    fs.rmSync(profile, { recursive: true, force: true });
+    try {
+      fs.rmSync(profile, { recursive: true, force: true });
+    } catch {
+      // Chrome can still hold the profile after the PNG is on disk.
+    }
   }
   if (!fs.existsSync(abs) || fs.statSync(abs).size < 100) {
     die(`screenshot failed: ${abs}`);

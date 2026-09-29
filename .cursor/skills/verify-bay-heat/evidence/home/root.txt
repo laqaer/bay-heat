@@ -7,6 +7,7 @@ JSON_LD: WebSite
 HEADINGS
 H1: Choose the electric garage heater that matches the circuit you have.
 H2: Decision tree
+H2: Buy the class the circuit allows
 H2: All guides
 H2: How these pages are written
 H3: Name the circuit, not the dream wattage
@@ -14,34 +15,49 @@ H3: Decide whether you are heating air or a person
 H3: Size from insulation, not the “cars” label
 H3: Seal the envelope before you buy more watts
 H3: Wall versus ceiling is joist load and throw
+H3: Price the hours, not the box
+H3: Electric until the building or the panel says otherwise
+H3: Plug-in versus hardwired is the install, not the aisle
 H3: Best electric garage heaters by size (1-car, 2-car, 3-car)
 H3: 120V vs 240V garage heaters: circuit and breaker reality
+H3: Hardwired vs plug-in electric garage heaters
 H3: Forced-air vs infrared garage heaters
 H3: Ceiling-mount garage heaters under $200
 H3: Portable garage heaters on a 15 A circuit
 H3: Wall-mount vs ceiling-mount garage heaters
+H3: Best wall-mount electric garage heaters
 H3: Insulate the garage before a heater upgrade
+H3: How much an electric garage heater costs to run
+H3: Electric vs propane garage heaters
 
 NAVS
-NAV[Primary]: By size -> /best-electric-garage-heaters-by-size | 120V vs 240V -> /120v-vs-240v-garage-heater | Forced-air vs IR -> /forced-air-vs-infrared-garage-heater | Ceiling under $200 -> /best-ceiling-mount-garage-heaters-under-200 | 15 A portable -> /portable-garage-heaters-15a-circuit | Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater | Insulate first -> /insulate-garage-before-heater-upgrade | About -> /about
+NAV[Primary]: By size -> /best-electric-garage-heaters-by-size | 120V vs 240V -> /120v-vs-240v-garage-heater | Hardwired vs plug-in -> /hardwired-vs-plugin-garage-heater | Forced-air vs IR -> /forced-air-vs-infrared-garage-heater | Ceiling under $200 -> /best-ceiling-mount-garage-heaters-under-200 | 15 A portable -> /portable-garage-heaters-15a-circuit | Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater | Best wall-mount -> /best-wall-mount-garage-heaters | Insulate first -> /insulate-garage-before-heater-upgrade | Cost to run -> /electric-garage-heater-operating-cost | Electric vs propane -> /electric-vs-propane-garage-heater | About -> /about
 
 LINKS
 BayHeat Guide Electric garage heat -> /
 By size -> /best-electric-garage-heaters-by-size
 120V vs 240V -> /120v-vs-240v-garage-heater
+Hardwired vs plug-in -> /hardwired-vs-plugin-garage-heater
 Forced-air vs IR -> /forced-air-vs-infrared-garage-heater
 Ceiling under $200 -> /best-ceiling-mount-garage-heaters-under-200
 15 A portable -> /portable-garage-heaters-15a-circuit
 Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater
+Best wall-mount -> /best-wall-mount-garage-heaters
 Insulate first -> /insulate-garage-before-heater-upgrade
+Cost to run -> /electric-garage-heater-operating-cost
+Electric vs propane -> /electric-vs-propane-garage-heater
 About -> /about
 By size -> /best-electric-garage-heaters-by-size
 120V vs 240V -> /120v-vs-240v-garage-heater
+Hardwired vs plug-in -> /hardwired-vs-plugin-garage-heater
 Forced-air vs IR -> /forced-air-vs-infrared-garage-heater
 Ceiling under $200 -> /best-ceiling-mount-garage-heaters-under-200
 15 A portable -> /portable-garage-heaters-15a-circuit
 Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater
+Best wall-mount -> /best-wall-mount-garage-heaters
 Insulate first -> /insulate-garage-before-heater-upgrade
+Cost to run -> /electric-garage-heater-operating-cost
+Electric vs propane -> /electric-vs-propane-garage-heater
 About -> /about
 Start with voltage -> /120v-vs-240v-garage-heater
 Size by garage -> /best-electric-garage-heaters-by-size
@@ -50,21 +66,38 @@ Forced-air vs infrared -> /forced-air-vs-infrared-garage-heater
 Size by garage -> /best-electric-garage-heaters-by-size
 Insulate first -> /insulate-garage-before-heater-upgrade
 Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater
+Cost to run -> /electric-garage-heater-operating-cost
+Electric vs propane -> /electric-vs-propane-garage-heater
+Hardwired vs plug-in -> /hardwired-vs-plugin-garage-heater
+15 A portable guide -> /portable-garage-heaters-15a-circuit
+Amazon: Comfort Zone CZ798 1500W milkhouse -> https://www.amazon.com/dp/B004VVJANC?tag=laqaer-20
+Ceiling-mount guide -> /best-ceiling-mount-garage-heaters-under-200
+Amazon: Comfort Zone 5000W ceiling (CZ220-class) -> https://www.amazon.com/dp/B009F1SWH8?tag=laqaer-20
+Amazon: Fahrenheat FUH5-4 5000W (FUH54-class) -> https://www.amazon.com/dp/B00PX0T37I?tag=laqaer-20
+Wall-mount guide -> /best-wall-mount-garage-heaters
 How big is the space, and is it insulated? Best electric garage heaters by size (1-car, 2-car, 3-car) Start with square footage and insulation. A 1,500 W plug-in unit is a workbench heater, not a two-car garage heater. -> /best-electric-garage-heaters-by-size
 What circuit do you actually have? 120V vs 240V garage heaters: circuit and breaker reality Voltage is not a feature. It is the limit of the circuit you already have — or the one you are willing to install. -> /120v-vs-240v-garage-heater
+Temporary plug-in, or a permanent install? Hardwired vs plug-in electric garage heaters A 15 A cord is Saturday heat at a bench. Whole-bay heat is almost always a dedicated 240 V hardwire. Corded 240 V is a third class — only if the manual lists the plug. -> /hardwired-vs-plugin-garage-heater
 Whole bay, or just the person at the bench? Forced-air vs infrared garage heaters Forced-air heats the air. Infrared heats people and objects. Drafts punish the first; open-door work favors the second. -> /forced-air-vs-infrared-garage-heater
 Can you hardwire 240 V and hang a 25–30 lb unit from joists? Ceiling-mount garage heaters under $200 Most sub-$200 ceiling units are the same job: 5 kW, 240 V, hardwired, 30 A, 10 AWG copper. The differences are controls and jumpers, not magic BTUs. -> /best-ceiling-mount-garage-heaters-under-200
 Stuck with a regular 120 V outlet? Portable garage heaters on a 15 A circuit On a 15 A circuit, treat ~12 A as the continuous ceiling. A 1,500 W milkhouse heater is 12.5 A — it wants to be the only load. -> /portable-garage-heaters-15a-circuit
 Can the ceiling take the unit, or is the heat needed on one wall? Wall-mount vs ceiling-mount garage heaters Ceiling units throw across the bay if the joists can take 25–30 lb. Wall mounts win on low ceilings and one work zone. The manual’s clearance is the rule, not a blog height. -> /wall-mount-vs-ceiling-garage-heater
+Need heat on one wall, not thrown across the bay? Best wall-mount electric garage heaters Wall-mount is a bracket and a throw, not a new wattage class. The 5 kW FUH can hang on a wall. A 7.5 kW shop unit needs a larger circuit. A 1500 W wall infrared is still a 15 A load. -> /best-wall-mount-garage-heaters
 Is the building leaking the heat you already paid for? Insulate the garage before a heater upgrade More watts heat the air you are already leaking. Door, weatherstrip, and sill usually beat a larger breaker. Panel capacity is the hard stop. -> /insulate-garage-before-heater-upgrade
+What will the watts actually cost to run? How much an electric garage heater costs to run Cost is nameplate watts, hours the element is actually on, and the rate on your bill. A 1,500 W portable is cheap per hour because it is spot heat, not because 120 V is efficient. -> /electric-garage-heater-operating-cost
+Is the bay sealed enough for electric, or is this a vented propane shop problem? Electric vs propane garage heaters Electric wins on enclosed, occupied-adjacent air. Propane can win BTU and $/BTU in a drafty detached shop if it is listed and vented for that job. -> /electric-vs-propane-garage-heater
 editorial standards -> /about
 By size -> /best-electric-garage-heaters-by-size
 120V vs 240V -> /120v-vs-240v-garage-heater
+Hardwired vs plug-in -> /hardwired-vs-plugin-garage-heater
 Forced-air vs IR -> /forced-air-vs-infrared-garage-heater
 Ceiling under $200 -> /best-ceiling-mount-garage-heaters-under-200
 15 A portable -> /portable-garage-heaters-15a-circuit
 Wall vs ceiling -> /wall-mount-vs-ceiling-garage-heater
+Best wall-mount -> /best-wall-mount-garage-heaters
 Insulate first -> /insulate-garage-before-heater-upgrade
+Cost to run -> /electric-garage-heater-operating-cost
+Electric vs propane -> /electric-vs-propane-garage-heater
 About & editorial standards -> /about
 Privacy -> /privacy
 Decision hub -> /
