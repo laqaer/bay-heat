@@ -1,0 +1,50 @@
+name: Cloudflare preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-preview
+  cancel-in-progress: false
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Generate Next.js route types
+        run: npx next typegen
+      - run: npm run build
+      - name: Require preview credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${CLOUDFLARE_API_TOKEN:-}" || { echo "::error::CLOUDFLARE_API_TOKEN is required."; exit 1; }
+          test -n "${CLOUDFLARE_ACCOUNT_ID:-}" || { echo "::error::CLOUDFLARE_ACCOUNT_ID is required."; exit 1; }
+      - name: Validate exact bundle
+        run: npx --yes wrangler@4.135.0 deploy --dry-run --outdir "$RUNNER_TEMP/cloudflare-dry-run"
+      - name: Deploy workers.dev preview
+        run: npx --yes wrangler@4.135.0 deploy
+      - name: Record boundary
+        shell: bash
+        run: |
+          {
+            echo "## Cloudflare preview"
+            echo
+            echo "Exact commit: \`${GITHUB_SHA}\`"
+            echo
+            echo "This workflow deploys the assets-only configuration in wrangler.jsonc."
+            echo "No production custom-domain route or DNS mutation is defined here."
+          } >> "$GITHUB_STEP_SUMMARY"
