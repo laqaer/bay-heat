@@ -1,6 +1,7 @@
 import { findProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { HEATER_CLASSES } from "@/lib/planner/catalog";
+import type { Surface } from "@/lib/commerce/types";
 import type { HeaterClassId } from "@/lib/planner/types";
 import { BuyButton } from "@/components/ui/BuyButton";
 import { DISCLOSURE_INLINE } from "@/lib/site";
@@ -24,6 +25,7 @@ export function QuickPick({
   compareHref,
   compareLabel = "Compare every option",
   eyebrow = "Model pick · spec-based",
+  surface = "site",
 }: {
   productId: string;
   page: string;
@@ -31,10 +33,11 @@ export function QuickPick({
   compareHref?: `#${string}`;
   compareLabel?: string;
   eyebrow?: string; // "Safety add-on" for a CO alarm; the default is the heater pick
+  surface?: Surface; // "safety" on the verdict tool, so Associates reports it under the safety tracking ID
 }) {
   const product = findProduct(productId);
   if (!product) throw new Error(`QuickPick: unknown product id "${productId}"`);
-  const links = route(product, "site", page);
+  const links = route(product, surface, page);
   const primary = links.find((l) => l.slot === "primary") ?? links[0];
 
   const cls = HEATER_CLASSES[product.kind as HeaterClassId];

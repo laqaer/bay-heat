@@ -51,7 +51,7 @@ export function FixCart({
       </ul>
       {cart ? (
         <BuyButton href={cart} className="mt-3 h-11 w-full sm:w-auto">
-          Add these {lines.length} items to your Amazon cart ↗
+          Add all {lines.length} to your Amazon cart ↗
         </BuyButton>
       ) : null}
       <PaidLabel />

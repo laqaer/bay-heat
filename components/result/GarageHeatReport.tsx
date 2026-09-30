@@ -44,7 +44,9 @@ const SYSTEM_LABEL: Record<string, string> = {
   diesel_78: "Diesel, 78%",
 };
 
-export function GarageHeatReport({ result }: { result: PlannerResult }) {
+// `page` is the path Associates tracking IDs are keyed by (lib/env.public.ts AMAZON_TAGS_BY_PAGE). The planner
+// renders this report at /garage-heater-calculator; the shared permalink passes "/r".
+export function GarageHeatReport({ result, page = "/garage-heater-calculator" }: { result: PlannerResult; page?: string }) {
   const noHeatingLoad = result.heating.qDesign <= 0;
   return (
     <div className="not-prose">
@@ -114,7 +116,7 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
           <p className="mt-1 text-sm text-(--color-fg-2)">
             Circuit: {result.circuits.forSize.breakerA}A / {result.circuits.forSize.wireNM} today.
           </p>
-          <FixCart measures={result.fixFirst.measures} doors={result.inputsEcho.garageDoors} page="/r" />
+          <FixCart measures={result.fixFirst.measures} doors={result.inputsEcho.garageDoors} page={page} />
         </section>
       ) : (
         <section className="mt-10">
@@ -141,7 +143,7 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           {result.recommendations.map((r) => {
             const product = primaryProduct(r.productIds);
-            const links = product ? route(product, "planner", "/r") : [];
+            const links = product ? route(product, "planner", page) : [];
             const primary = links.find((l) => l.slot === "primary") ?? links[0];
             const secondary = links.find((l) => l.slot === "secondary" || l.slot === "also");
             // The class-level line above already carries the generic flammables rule; a product's own manual
@@ -181,7 +183,7 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
           <div className="mt-6">
             <QuickPick
               productId="co-alarm-battery-10yr"
-              page="/r"
+              page={page}
               eyebrow="Safety add-on"
               headline="A fuel-fired heater is on your list. A UL 2034 carbon monoxide alarm inside the house is the cheapest safety layer."
             />
@@ -191,7 +193,7 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
           <div className="mt-6">
             <QuickPick
               productId="freeze-alarm-wifi"
-              page="/r"
+              page={page}
               eyebrow="Freeze watch"
               headline="Holding the garage just above freezing? A temperature sensor that texts you when the heat fails is cheaper than a burst pipe."
             />

@@ -6,6 +6,7 @@ import { Num } from "@/components/evidence/Num";
 import { Callout } from "@/components/ui/Callout";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { Disclosure } from "@/components/commerce/Disclosure";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { BuyButton } from "@/components/ui/ButtonLink";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
@@ -44,6 +45,14 @@ export default function Page() {
         <Num f="code.nec.210_23_a_1" />). As the only thing plugged into that circuit it&apos;s fine; on a dedicated
         20A garage circuit it&apos;s comfortable either way.
       </AnswerBlock>
+
+      <QuickPick
+        productId="cz798-1500w-milkhouse"
+        page={entry.href}
+        headline="For one bay or workbench on a 15 A circuit with nothing else on it: a fan-forced 1,500 W milkhouse heater."
+        compareHref="#compare"
+        compareLabel="See three 1,500 W portables"
+      />
 
       <Disclosure />
 
@@ -97,7 +106,7 @@ export default function Page() {
         it and you&apos;re back to the shared-circuit math, which doesn&apos;t fit.
       </Callout>
 
-      <h2>Three 1,500W portables, side by side</h2>
+      <h2 id="compare">Three 1,500W portables, side by side</h2>
       <div className="not-prose my-6 grid gap-4 sm:grid-cols-2">
         <div className="border border-(--color-line) p-4">
           <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">120V · MILKHOUSE · 1,500W</p>
@@ -119,7 +128,7 @@ export default function Page() {
             <Num f="hs1500tt.clearance_side_in" /> side clearance.
           </p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>Check HS-1500-TT price on Amazon ↗</BuyButton>
+            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label} ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>

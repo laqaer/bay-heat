@@ -12,7 +12,8 @@
  * 700 px" rule (BLUEPRINT.md §3.3), which the model's click-through assumptions rest on.
  *
  * Flags each page: no paid link at all, search-only links (lower intent than a /dp/ link), a link missing the
- * tag or rel="sponsored nofollow", and a first link past the 700 px budget.
+ * tag or rel="sponsored nofollow", a disclosure that is not above the first paid link, and a first link past
+ * the 700 px budget.
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
@@ -55,6 +56,16 @@ export function auditHtml(html) {
   return links;
 }
 
+// The disclosure must be on the page above the first paid link (BLUEPRINT.md §5.3). The inline disclosure starts
+// "Paid links: we earn a commission" (lib/site.ts DISCLOSURE_INLINE); the footer wording differs on purpose.
+export function disclosureBeforeFirstLink(html) {
+  const link = html.search(AMAZON_ANCHOR_ANY);
+  if (link === -1) return true;
+  const disclosure = html.indexOf("Paid links: we earn a commission");
+  return disclosure !== -1 && disclosure < link;
+}
+const AMAZON_ANCHOR_ANY = /<a\b[^>]*href="https:\/\/www\.amazon\.com/;
+
 async function loadPlaywright() {
   const candidates = [process.env.PLAYWRIGHT_MODULE, "playwright", "/opt/node22/lib/node_modules/playwright/index.js"].filter(Boolean);
   for (const c of candidates) {
@@ -94,8 +105,10 @@ async function main() {
   const pages = [];
   for (const f of files) {
     const route = "/" + relative(args.dir, f).replace(/\.html$/, "").replace(/^index$/, "");
-    const links = auditHtml(readFileSync(f, "utf8"));
+    const html = readFileSync(f, "utf8");
+    const links = auditHtml(html);
     const flags = [];
+    if (!disclosureBeforeFirstLink(html)) flags.push("disclosure-after-link");
     if (links.length === 0) flags.push("no-paid-link");
     if (links.length > 0 && links.every((l) => l.kind === "search")) flags.push("search-only");
     if (links.some((l) => !l.tag)) flags.push("untagged");

@@ -13,7 +13,8 @@ export const VERIFIED_ASINS = [
   "B01M8KXXAB",
   "B077JM5PB9",
   "B01M276DQJ",
-  // parked 2026-09-30, listing "Currently unavailable" (restore when verify-asins reports ok): B004VVJANC CZ798, B07JQPCFJ3 HS-1500-TT
+  "B08174Q7KY",
+  // parked 2026-09-30, listing "Currently unavailable" (restore when verify-asins reports ok): B004VVJANC old CZ798 listing, B07JQPCFJ3 HS-1500-TT
   // seal / insulate
   "B07P43LTYH",
   "B07P55PSW1",
@@ -56,8 +57,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "cz798-1500w-milkhouse",
-    name: "Comfort Zone CZ798 1,500W milkhouse heater",
+    name: "Comfort Zone CZ798 1,500W milkhouse heater (current CZ798GR3 listing)",
     kind: "e_port_1500",
+    asin: "B08174Q7KY",
     searchQuery: "Comfort Zone CZ798 1500W milkhouse heater",
     partnerUrls: {},
     priceClass: "$",
