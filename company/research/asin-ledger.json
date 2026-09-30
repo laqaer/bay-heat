@@ -36,6 +36,17 @@
    "note": ""
   },
   {
+   "asin": "B08174Q7KY",
+   "productId": "cz798-1500w-milkhouse",
+   "role": "wired",
+   "listing": "ok",
+   "title": "Comfort Zone Milkhouse Style Utility Space Heater with Adjustable Thermostat, Electric, Portable, 3-Prong Plug, Overheat Protection, & Tip-Over Switch, Ideal for Garage or Workshop, 1,500W, CZ798GR3",
+   "rating": 4.2,
+   "reviews": "1,259",
+   "checkedAt": "2026-09-30",
+   "note": "Comfort Zone CZ798GR3. The listing page prints the model, 1,500 W, 12.5 A, tip-over switch and overheat protection. Replaces the unavailable original CZ798 listing."
+  },
+  {
    "asin": "B0HG41WQG3",
    "productId": "door-kit-reflective-reach-barrier",
    "role": "wired",
@@ -223,6 +234,17 @@
    "note": "Comfort Zone CZQTV5M ceiling quartz heater, 120 V, 760/1500 W, ceiling mount only (manual). 4.0 stars / 2,169 reviews. Needs a new product id and a page slot."
   },
   {
+   "asin": "B09LKBFZBN",
+   "productId": "cz798-1500w-milkhouse",
+   "role": "candidate",
+   "listing": "ok",
+   "title": "COMFORT ZONE Deluxe Milkhouse Utility Space Heater with Thermostat - Black",
+   "rating": 4.3,
+   "reviews": "803",
+   "checkedAt": "2026-09-30",
+   "note": "Comfort Zone CZ799BK deluxe milkhouse heater (same family). Reserve if B08174Q7KY goes unavailable."
+  },
+  {
    "asin": "B016TQHG4G",
    "productId": null,
    "role": "not-wired",
@@ -344,6 +366,17 @@
    "note": "Lasko 755320 ceramic tower, 4.4 stars / 33k reviews, but a household heater and only a secondary manual transcription was readable."
   },
   {
+   "asin": "B002QZ11J6",
+   "productId": "e-port-1500-generic",
+   "role": "not-wired",
+   "listing": "ok",
+   "title": "Dr Infrared Heater DR-968 Portable Space Heater, 1500-Watt, Cherry",
+   "rating": 4.5,
+   "reviews": "28,313",
+   "checkedAt": "2026-09-30",
+   "note": "Dr. Infrared DR-968, 4.5 stars / 28k reviews. Manual says household or personal use only, no garage wording."
+  },
+  {
    "asin": "B00GWFCA7I",
    "productId": "e-port-1500-generic",
    "role": "not-wired",
@@ -353,6 +386,17 @@
    "reviews": "407",
    "checkedAt": "2026-09-30",
    "note": "King PSH1215T Yellow Jacket, 3.4 stars, no documented tip-over protection."
+  },
+  {
+   "asin": "B08M9SPRZS",
+   "productId": "e-port-1500-generic",
+   "role": "not-wired",
+   "listing": "ok",
+   "title": "Lasko Elite Collection 1500-Watt Electric Ceramic Utility Space Heater with Timer for Garages, Basements, Workshops and More, CU12510, Silver/Black, Medium",
+   "rating": 3.8,
+   "reviews": "26",
+   "checkedAt": "2026-09-30",
+   "note": "Lasko CU12510, 26 reviews at 3.8 stars. Manual: residential use only."
   },
   {
    "asin": "B000052036",
@@ -432,6 +476,17 @@
    "note": "Kidde KN-COP-DP-10YL plug-in with digital display. Listing shows no featured offer (no Buy Box) on 2026-09-30; wire it when verify-asins reports ok."
   },
   {
+   "asin": "B0FZX9K5M3",
+   "productId": "cz798-1500w-milkhouse",
+   "role": "unavailable",
+   "listing": "unavailable",
+   "title": "COMFORT ZONE Milkhouse Utility Space Heater with Thermostat - Red/Black",
+   "rating": 4.3,
+   "reviews": "3,408",
+   "checkedAt": "2026-09-30",
+   "note": "Comfort Zone red/black milkhouse heater, same listing pool as the unavailable original."
+  },
+  {
    "asin": "B00N096BLA",
    "productId": "door-kit-eps-cellofoam",
    "role": "unavailable",
@@ -454,6 +509,17 @@
    "note": "Matador SGDIK001 EPS kit. Unavailable on 2026-09-30."
   },
   {
+   "asin": "B005OL48YO",
+   "productId": "e-port-1500-generic",
+   "role": "unavailable",
+   "listing": "unavailable",
+   "title": "Lasko Pro-Ceramic Utility Heater with Pivot Power",
+   "rating": 4.2,
+   "reviews": "430",
+   "checkedAt": "2026-09-30",
+   "note": "Lasko 5919 Pro-Ceramic. Unavailable on 2026-09-30."
+  },
+  {
    "asin": "B005OTWU32",
    "productId": "e-port-1500-generic",
    "role": "unavailable",
@@ -463,6 +529,17 @@
    "reviews": "447",
    "checkedAt": "2026-09-30",
    "note": "Comfort Zone CZ35. Unavailable on 2026-09-30."
+  },
+  {
+   "asin": "B01DUZZLZ0",
+   "productId": "e-port-1500-generic",
+   "role": "unavailable",
+   "listing": "unavailable",
+   "title": "Mr. Heater F236120 MH165FAET 1.5 kW Forced Air Electric Heater",
+   "rating": 2.9,
+   "reviews": "75",
+   "checkedAt": "2026-09-30",
+   "note": "Mr. Heater F236120. Unavailable on 2026-09-30."
   },
   {
    "asin": "B000M2QR8U",
