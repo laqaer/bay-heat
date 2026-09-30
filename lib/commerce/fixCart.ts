@@ -9,6 +9,13 @@ import { amazonCartUrl, cartTagFor } from "./cart.ts";
 // Sizes follow the listings, not a guess: the 30 ft M-D top-and-side seal is one door's top plus both jambs
 // (16 + 7 + 7 = 30 ft); the Reach Barrier pack is two 8x8 single-door kits, which suits a double door.
 //
+// THE CART IS DARK TODAY, ON PURPOSE. The planner's fix-first bundle can only contain weatherstrip, door_kit_eps and
+// ceiling_r30 (roi.ts bundleCheapMeasures). With the bottom seal left out (below) and no in-stock EPS kit listing
+// verified, that bundle yields one cartable part (the top-and-side seal), and amazonCartUrl() needs two distinct
+// ASINs, so FixCart renders as a parts list with its notes and no "Add all" button. It lights up once a second
+// part is mapped below (an EPS kit listing with its size taken from the listing; a service-door kit). Until then
+// nothing advertises a cart.
+//
 // The bottom seal is deliberately NOT in the cart. Which one fits depends on the track already on the door (a T or
 // bulb seal slides into a flat retainer; a beaded track needs a beaded seal; a bent or missing retainer means a new
 // track first, see /garage-door-bottom-seal) and the planner never asks. Putting a T-seal in the cart for everyone
