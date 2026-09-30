@@ -96,6 +96,19 @@ export const PRODUCTS: Product[] = [
     safetyLine: { text: "Licensed gas fitter and permit required. Separated combustion -- draws intake air from outside the room, the right pick for a shop with sawdust or solvent vapor (S10).", ev: "S", sourceId: "hot-dawg-hds-manual" },
   },
   {
+    // The 115 V DIY class (hp_diy_12k_115) is a different product from the 230 V unit: a reader whose garage cannot take a
+    // 240 V circuit must never be sent to a 230 V model. No verified listing yet, so this stays a search link.
+    id: "minisplit-12k-115v",
+    name: "12,000 BTU/h 115V plug-in DIY mini-split heat pump (heat + cool)",
+    kind: "minisplit",
+    searchQuery: "12000 BTU mini split heat pump 115V DIY pre-charged",
+    partnerUrls: {},
+    priceClass: "$$$$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+    safetyLine: { text: "Refrigerant work (vacuum, charge, line-set brazing) needs EPA Section 608 certification -- have it installed by a licensed HVAC contractor.", ev: "R", sourceId: "epa-608" },
+  },
+  {
     id: "minisplit-12k-230v",
     name: "Della Optima 12,000 BTU 230V mini-split heat pump (heat + cool)",
     kind: "minisplit",

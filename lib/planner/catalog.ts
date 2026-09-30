@@ -114,7 +114,7 @@ export const HEATER_CLASSES: Record<HeaterClassId, HeaterClass> = {
     equip: [1200, 2000],
     install: [0, 400],
     safety: ["S7"],
-    productIds: ["minisplit-12k-230v"],
+    productIds: ["minisplit-12k-115v"],
   },
   hp_12_24k_230: {
     id: "hp_12_24k_230",

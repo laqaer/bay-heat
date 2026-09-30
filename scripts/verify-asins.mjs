@@ -51,7 +51,15 @@ function text(fragment) {
 
 const NO_INFO = { title: null, slug: null, rating: null, reviews: null };
 
-export function classify(status, html) {
+// The ASIN the page says it is: the canonical link (Amazon uses /dp/, /clp/ and slugged /dp/ forms), else the og:url.
+export function pageAsin(html) {
+  const m = /<link rel="canonical" href="[^"]*?\/(?:dp|clp|gp\/product)\/([A-Z0-9]{10})(?:[/?"])/.exec(html) ?? /<meta property="og:url" content="[^"]*?\/(?:dp|clp|gp\/product)\/([A-Z0-9]{10})(?:[/?"])/.exec(html);
+  return m ? m[1] : null;
+}
+
+// `asin` is the ASIN we asked for. Amazon sometimes redirects a retired ASIN to a different, buyable product; that
+// page reads "ok" but is not the product the site describes, so it is a mismatch, not a pass.
+export function classify(status, html, asin) {
   if (status === 404) return { status: "dead", note: "HTTP 404", ...NO_INFO };
   if (status === 503 || /Enter the characters you see below|automated access/i.test(html)) {
     return { status: "blocked", note: "robot check / 503 (inconclusive)", ...NO_INFO };
@@ -74,6 +82,8 @@ export function classify(status, html) {
     reviews: reviews ? text(reviews[1]).replace(/[()]/g, "") : null,
   };
   if (!info.title) return { status: "error", note: "no product title found (page layout changed?)", ...info };
+  const actual = pageAsin(html);
+  if (asin && actual && actual !== asin) return { status: "mismatch", note: `page is ASIN ${actual}, not ${asin} (redirected listing)`, ...info };
   if (unavailable) return { status: "unavailable", note: "Currently unavailable, no Add to Cart", ...info };
   if (offersOnly) return { status: "offers-only", note: "no featured offer (no Buy Box); only 'See All Buying Options'", ...info };
   if (!buyable) return { status: "error", note: "no Add to Cart button and no 'unavailable' text; check by hand", ...info };
@@ -89,7 +99,7 @@ async function check(asin) {
       signal: AbortSignal.timeout(25_000),
     });
     const html = await res.text();
-    return { asin, url, ...classify(res.status, html) };
+    return { asin, url, ...classify(res.status, html, asin) };
   } catch (err) {
     return { asin, url, status: "error", note: err instanceof Error ? err.message : String(err) };
   }

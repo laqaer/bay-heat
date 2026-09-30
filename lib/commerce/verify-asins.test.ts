@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { classify } from "../../scripts/verify-asins.mjs";
+import { classify, pageAsin } from "../../scripts/verify-asins.mjs";
 
 const page = (body: string) => `<html><head><link rel="canonical" href="https://www.amazon.com/Some-Heater-Name/dp/B000000000"></head><body>${body}</body></html>`;
 const title = '<span id="productTitle"> Some Heater 5000W </span>';
@@ -35,4 +35,15 @@ test("404s, robot checks and layout drift are told apart", () => {
   assert.equal(classify(503, "Enter the characters you see below").status, "blocked");
   assert.equal(classify(200, page("<p>no title here</p>")).status, "error");
   assert.equal(classify(200, page(`${title}<p>neither cart button nor unavailable text</p>`)).status, "error");
+});
+
+test("a page that is a different ASIN than the one requested is a mismatch, not ok", () => {
+  const body = `${title}${stars}<input id="add-to-cart-button">`;
+  const page2 = (asin: string) => `<html><head><link rel="canonical" href="https://www.amazon.com/Some-Heater-Name/dp/${asin}"></head><body>${body}</body></html>`;
+  assert.equal(classify(200, page2("B000000000"), "B000000000").status, "ok");
+  const r = classify(200, page2("B0OTHER123"), "B000000000");
+  assert.equal(r.status, "mismatch");
+  assert.match(r.note, /B0OTHER123/);
+  assert.equal(pageAsin('<link rel="canonical" href="https://www.amazon.com/clp/B0CLP00000">'), "B0CLP00000");
+  assert.equal(classify(200, `<html><body>${body}</body></html>`, "B000000000").status, "ok", "no canonical: nothing to compare");
 });
