@@ -5,6 +5,7 @@ import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { Cost } from "@/components/commerce/Cost";
 import { Disclosure } from "@/components/commerce/Disclosure";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { BuyButton, ButtonLink } from "@/components/ui/ButtonLink";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { pageMetadata } from "@/lib/seo";
@@ -66,6 +67,14 @@ export default function Page() {
         electric resistance and roughly <Num v={result.costs.find((c) => c.system === "diesel_78")!.perMonth} unit="/mo" ev="C" src="costsForSeasonalLoad() at IL prices" /> on
         diesel, in season. Your own garage and your own state&apos;s prices change both numbers — the calculator below runs them live.
       </AnswerBlock>
+
+      <QuickPick
+        productId="cz220-5kw-ceiling"
+        page={entry.href}
+        headline="Most 2-car garages: a 5 kW electric ceiling heater"
+        compareHref="#buy"
+        compareLabel="See one pick per fuel"
+      />
       <p>
         Every fuel heats a garage the same way — it just prices the BTUs differently, and each one carries its own
         install rule and its own carbon monoxide risk. This page compares all six systems side by side at one
@@ -137,7 +146,7 @@ export default function Page() {
         exchange pricing isn&apos;t published state by state.
       </p>
 
-      <h2>Buy: one representative heater per buyable fuel</h2>
+      <h2 id="buy">Buy: one representative heater per buyable fuel</h2>
       <p>
         A propane cylinder heater (the row above labeled portable radiant) is priced here for comparison only — it
         never gets a buy button on this site, attached garage or detached. See{" "}
@@ -148,7 +157,7 @@ export default function Page() {
       <div className="not-prose my-6 grid gap-4 sm:grid-cols-2">
         {BUYABLE.map(({ system, productId, note }) => {
           const product = findProduct(productId)!;
-          const links = route(product, "site");
+          const links = route(product, "site", entry.href);
           const primary = links.find((l) => l.slot === "primary") ?? links[0];
           return (
             <div key={productId} className="border border-(--color-line) p-4">

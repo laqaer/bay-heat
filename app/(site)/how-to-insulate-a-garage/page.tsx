@@ -28,7 +28,7 @@ function firstBuyLink(productIds: string[]) {
   for (const id of productIds) {
     const product = findProduct(id);
     if (!product) continue;
-    const links = route(product, "site");
+    const links = route(product, "site", entry.href);
     const primary = links.find((l) => l.slot === "primary") ?? links[0];
     if (primary) return { product, primary };
   }

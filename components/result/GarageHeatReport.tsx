@@ -9,7 +9,7 @@ import { WhyNot } from "@/components/commerce/WhyNot";
 import { Cost } from "@/components/commerce/Cost";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { Callout } from "@/components/ui/Callout";
-import { BuyButton } from "@/components/ui/ButtonLink";
+import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { SAFETY_SCOPE } from "@/lib/site";
 import { btuh, kw, amps, commas } from "@/lib/format";
 
@@ -157,9 +157,9 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
                   </BuyButton>
                 ) : null}
                 {secondary ? (
-                  <a href={secondary.href} target="_blank" rel="sponsored nofollow noopener" className="text-center text-xs text-(--color-link) underline">
+                  <BuyTextLink href={secondary.href} className="text-center text-xs">
                     {secondary.label}
-                  </a>
+                  </BuyTextLink>
                 ) : null}
               </div>
             );

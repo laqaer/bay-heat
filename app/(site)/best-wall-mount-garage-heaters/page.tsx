@@ -4,6 +4,7 @@ import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { Disclosure } from "@/components/commerce/Disclosure";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { BuyButton } from "@/components/ui/ButtonLink";
 import { WhyNot } from "@/components/commerce/WhyNot";
 import { pageMetadata } from "@/lib/seo";
@@ -39,6 +40,14 @@ export default function Page() {
         publishes — not by which one looks biggest in a photo.
       </AnswerBlock>
 
+      <QuickPick
+        productId="dr975-7k5-shop"
+        page={entry.href}
+        headline="Wall or ceiling, 7.5 kW hardwired: the DR-975"
+        compareHref="#clearances"
+        compareLabel="See clearances side by side"
+      />
+
       <h2>Spec-based picks, not a ranking</h2>
       <p>
         Nobody on this page has run these heaters side by side in the same garage over a winter, so nothing here is
@@ -59,7 +68,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site")[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>
@@ -74,7 +83,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{fuh54.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(fuh54, "site")[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(fuh54, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {fuh54.priceClass}</p>
         </div>
@@ -88,13 +97,13 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(dr975, "site")[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {dr975.priceClass}</p>
         </div>
       </div>
 
-      <h2>Clearances, side by side</h2>
+      <h2 id="clearances">Clearances, side by side</h2>
       <p>
         Every figure below is the manual&apos;s own number for that model, not a rule of thumb applied across
         brands — two heaters at nearly the same wattage can still call for different clearances.

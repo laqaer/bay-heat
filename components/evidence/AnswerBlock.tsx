@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 // stable anchor (#answer) so it can be cited or linked to directly, including by an AI answer engine.
 export function AnswerBlock({ children }: { children: ReactNode }) {
   return (
-    <p id="answer" className="my-6 border-l border-(--color-fg) py-1 pl-4 text-lg leading-8 text-(--color-fg-2)">
+    <p id="answer" className="my-4 border-l border-(--color-fg) py-1 pl-4 text-[17px] leading-7 text-(--color-fg-2) sm:my-6 sm:text-lg sm:leading-8">
       {children}
     </p>
   );

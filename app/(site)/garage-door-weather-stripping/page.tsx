@@ -47,7 +47,7 @@ export default function Page() {
 
   const products = BUY_IDS.map((id) => {
     const product = findProduct(id)!;
-    const links = route(product, "site");
+    const links = route(product, "site", entry.href);
     const primary = links.find((l) => l.slot === "primary") ?? links[0];
     return { product, primary };
   });

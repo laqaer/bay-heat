@@ -107,7 +107,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{cz798.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(cz798, "site")[0].href}>Check CZ798 price on Amazon ↗</BuyButton>
+            <BuyButton href={route(cz798, "site", entry.href)[0].href}>Check CZ798 price on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {cz798.priceClass}</p>
         </div>
@@ -119,7 +119,7 @@ export default function Page() {
             <Num f="hs1500tt.clearance_side_in" /> side clearance.
           </p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site")[0].href}>Check HS-1500-TT price on Amazon ↗</BuyButton>
+            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>Check HS-1500-TT price on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>
@@ -132,7 +132,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{generic.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(generic, "site")[0].href}>Search 1,500W portable heaters ↗</BuyButton>
+            <BuyButton href={route(generic, "site", entry.href)[0].href}>Search 1,500W portable heaters ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {generic.priceClass}</p>
         </div>

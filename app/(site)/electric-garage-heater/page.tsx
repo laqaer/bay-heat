@@ -6,6 +6,7 @@ import { findPage } from "@/lib/pages";
 import { Num } from "@/components/evidence/Num";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { Disclosure } from "@/components/commerce/Disclosure";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { BuyButton, ButtonLink } from "@/components/ui/ButtonLink";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
@@ -65,6 +66,13 @@ export default function Page() {
         unit heater bolted to the ceiling. Output and circuit size scale together — a bigger heater always needs a bigger breaker and
         thicker wire, not just a bigger price tag.
       </p>
+      <QuickPick
+        productId="cz220-5kw-ceiling"
+        page={entry.href}
+        headline="For most 2-car garages: a 5 kW ceiling heater on a 30 A circuit"
+        compareHref="#classes"
+        compareLabel="Compare every electric class"
+      />
       <p>
         The <Link href="/garage-heater-calculator">garage heater calculator</Link> sizes the exact class for your garage from its
         dimensions, insulation and local design temperature. This page lists every class side by side; the pages below cover one class
@@ -88,7 +96,7 @@ export default function Page() {
         ))}
       </div>
 
-      <h2>Every electric class, side by side</h2>
+      <h2 id="classes">Every electric class, side by side</h2>
       <p>
         Output ranges and circuits come from the same sizing engine behind the calculator, not a spec sheet we retyped by hand.
         Price is a range class, never a live number — check the actual price on the retailer&apos;s page before you buy.
@@ -109,7 +117,7 @@ export default function Page() {
             {CLASS_ORDER.map((id) => {
               const hc = heaterClass(id);
               const product = hc.productIds[0] ? findProduct(hc.productIds[0]) : undefined;
-              const links = product ? route(product, "site") : [];
+              const links = product ? route(product, "site", entry.href) : [];
               const primary = links.find((l) => l.slot === "primary") ?? links[0];
               const [lo, hi] = hc.outputBtuh;
               return (

@@ -98,7 +98,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site")[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>
@@ -115,7 +115,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{irTube.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(irTube, "site")[0].href}>Search on Amazon ↗</BuyButton>
+            <BuyButton href={route(irTube, "site", entry.href)[0].href}>Search on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {irTube.priceClass}</p>
         </div>

@@ -168,7 +168,7 @@ export default function Page() {
             size the circuit first.
           </p>
           <div className="mt-3">
-            <BuyButton href={route(dr975, "site")[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {dr975.priceClass}</p>
         </div>
@@ -181,7 +181,7 @@ export default function Page() {
             <a href="/propane-heater-for-garage">the propane page</a> for the safety conditions.
           </p>
           <div className="mt-3">
-            <BuyButton href={route(bigMaxx, "site")[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(bigMaxx, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {bigMaxx.priceClass}</p>
         </div>

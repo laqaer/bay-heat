@@ -1,5 +1,5 @@
 import type { BuyLink, PartnerId, Product, Surface } from "./types.ts";
-import { AMAZON_TAG_CART, AMAZON_TAG_MAIL, AMAZON_TAG_PLANNER, AMAZON_TAG_SAFETY, AMAZON_TAG } from "../env.public.ts";
+import { AMAZON_TAG_CART, AMAZON_TAG_MAIL, AMAZON_TAG_PLANNER, AMAZON_TAG_SAFETY, AMAZON_TAG, AMAZON_TAGS_BY_PAGE } from "../env.public.ts";
 import { amazonDp, amazonSearch, awinLink, cjNorthernToolLink, homeDepotLink, hvacdirectLink, lowesLink, sylvaneLink, walmartLink } from "./partners.ts";
 import { VERIFIED_ASINS } from "./products/core.ts";
 
@@ -18,8 +18,8 @@ function tagForSurface(surface: Surface): string {
   }
 }
 
-function amazonLinkFor(p: Product, surface: Surface): string {
-  const tag = tagForSurface(surface);
+function amazonLinkFor(p: Product, surface: Surface, page?: string): string {
+  const tag = (page && AMAZON_TAGS_BY_PAGE[page]) || tagForSurface(surface);
   if (p.asin && (VERIFIED_ASINS as readonly string[]).includes(p.asin)) return amazonDp(p.asin, tag);
   return amazonSearch(p.searchQuery, tag);
 }
@@ -40,7 +40,7 @@ const PARTNER_BUILDERS: Partial<Record<Exclude<PartnerId, "amazon">, (url: strin
 // route(): the highest-EPC partner that stocks the class is primary when its env is present; Amazon is
 // always present, either as primary (nothing else configured) or as the secondary button. A partner whose
 // link builder returns null (missing env) drops out silently -- Amazon backfills it (BLUEPRINT.md §6.2).
-export function route(p: Product, surface: Surface): BuyLink[] {
+export function route(p: Product, surface: Surface, page?: string): BuyLink[] {
   const links: BuyLink[] = [];
   const partnerEntries = Object.entries(p.partnerUrls) as [Exclude<PartnerId, "amazon">, string][];
   for (const [partner, targetUrl] of partnerEntries) {
@@ -48,7 +48,7 @@ export function route(p: Product, surface: Surface): BuyLink[] {
     const href = build?.(targetUrl);
     if (href) links.push({ partner, href, label: `Check price at ${partnerLabel(partner)}`, slot: links.length === 0 ? "primary" : "also", surface });
   }
-  const amazonHref = amazonLinkFor(p, surface);
+  const amazonHref = amazonLinkFor(p, surface, page);
   links.push({
     partner: "amazon",
     href: amazonHref,

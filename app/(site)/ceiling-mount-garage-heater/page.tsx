@@ -5,7 +5,8 @@ import { Num } from "@/components/evidence/Num";
 import { Callout } from "@/components/ui/Callout";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { Disclosure } from "@/components/commerce/Disclosure";
-import { BuyButton } from "@/components/ui/ButtonLink";
+import { QuickPick } from "@/components/commerce/QuickPick";
+import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { WhyNot } from "@/components/commerce/WhyNot";
 import { FitBar } from "@/components/commerce/FitBar";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
@@ -61,6 +62,14 @@ export default function Page() {
         nameplate, not a guess.
       </AnswerBlock>
 
+      <QuickPick
+        productId="cz220-5kw-ceiling"
+        page={entry.href}
+        headline="A 2-car garage ceiling unit: the CZ220, 5 kW"
+        compareHref="#clearances"
+        compareLabel="See mounting height and clearances"
+      />
+
       <Disclosure />
 
       <h2>What a ceiling heater in this spot actually has to cover</h2>
@@ -90,7 +99,7 @@ export default function Page() {
         <a href="/how-to-insulate-a-garage">how to insulate a garage in payback order →</a>
       </Callout>
 
-      <h2>Mounting height, throw, and clearances from the manuals</h2>
+      <h2 id="clearances">Mounting height, throw, and clearances from the manuals</h2>
       <p>
         A ceiling heater&apos;s numbers come from its own manual, not a rule of thumb. The two 5 kW units below use
         different clearance figures even though they put out nearly the same heat:
@@ -181,15 +190,8 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{cz220.safetyLine?.text}</p>
           <div className="mt-3 flex flex-wrap items-center gap-4">
-            <BuyButton href={route(cz220, "site")[0].href}>Check CZ220 price on Amazon ↗</BuyButton>
-            <a
-              href={route(fuh54, "site")[0].href}
-              target="_blank"
-              rel="sponsored nofollow noopener"
-              className="text-sm text-(--color-link) underline underline-offset-4"
-            >
-              or the FUH54 ↗
-            </a>
+            <BuyButton href={route(cz220, "site", entry.href)[0].href}>Check CZ220 price on Amazon ↗</BuyButton>
+            <BuyTextLink href={route(fuh54, "site", entry.href)[0].href}>or the FUH54 ↗</BuyTextLink>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {cz220.priceClass} / {fuh54.priceClass}</p>
         </div>
@@ -202,7 +204,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(dr975, "site")[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {dr975.priceClass}</p>
         </div>
