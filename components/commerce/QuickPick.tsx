@@ -41,8 +41,11 @@ export function QuickPick({
   const primary = links.find((l) => l.slot === "primary") ?? links[0];
 
   const cls = HEATER_CLASSES[product.kind as HeaterClassId];
-  // Electric classes read in kW on a circuit; fuel-fired ones in BTU/h (a gas heater rated in kW is not how anyone shops).
-  const specs = !cls
+  // A class spec is only honest for a product when the class is one figure. Ranged classes (a 125,000 BTU/h ceiling for
+  // "vented gas unit heater", 3-6 kW for 240 V infrared) say nothing about the model being linked, so those plates
+  // show no spec line and rely on the product name, which carries the model's own rating.
+  const point = cls && cls.outputBtuh[0] === cls.outputBtuh[1];
+  const specs = !cls || !point
     ? null
     : cls.energy === "electric"
       ? `${(cls.outputBtuh[1] / 3.412 / 1000).toFixed(1)} kW${cls.circuit ? ` · ${circuitLabel(cls.circuit)}` : ""}`

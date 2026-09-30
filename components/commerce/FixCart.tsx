@@ -1,5 +1,5 @@
 import type { Measure } from "@/lib/planner/types";
-import { fixCartCoveredMeasures, fixCartHref, fixCartLines } from "@/lib/commerce/fixCart";
+import { fixCartCoveredMeasures, fixCartHref, fixCartLines, fixCartMissingParts } from "@/lib/commerce/fixCart";
 import { MEASURE_LABEL } from "@/lib/planner/roi";
 import { findProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
@@ -29,7 +29,7 @@ export function FixCart({
   const cart = fixCartHref(lines, page);
   // Say so when a fix in the plan has no part in the cart, instead of implying the cart is the whole plan.
   const covered = new Set(fixCartCoveredMeasures(measures, doors));
-  const missing = measures.filter((m) => !covered.has(m)).map((m) => MEASURE_LABEL[m]);
+  const missing = [...measures.filter((m) => !covered.has(m)).map((m) => MEASURE_LABEL[m]), ...fixCartMissingParts(measures)];
   return (
     <div data-buy-group className="not-prose mt-5 border border-(--color-fg)/25 bg-(--color-surface) p-4">
       <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-(--color-fg-2)">{title}</p>

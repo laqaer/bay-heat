@@ -87,6 +87,9 @@ test("fixCartLines sizes parts to the doors and drops measures with no verified 
   assert.equal(fixCartLines(["ceiling_r30", "new_pu_door"], [{ w: 16 }]).length, 0);
   const { fixCartCoveredMeasures } = await import("./fixCart.ts");
   assert.deepEqual(fixCartCoveredMeasures(["door_kit_eps", "weatherstrip", "ceiling_r30"], [{ w: 16 }]), ["weatherstrip"]);
+  const { fixCartMissingParts } = await import("./fixCart.ts");
+  assert.deepEqual(fixCartMissingParts(["weatherstrip"]), ["service-door weatherstrip kit"], "the weatherstrip package includes a service-door kit with no listing");
+  assert.deepEqual(fixCartMissingParts(["attic_hatch"]), []);
   assert.equal(fixCartHref(fixCartLines(["attic_hatch"], [{ w: 16 }])), null, "one product is a link, not a cart");
   assert.match(fixCartHref(two)!, /cart\/add\.html\?AssociateTag=/);
 });

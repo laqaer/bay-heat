@@ -43,3 +43,12 @@ export function fixCartHref(lines: readonly FixCartLine[], page?: string): strin
 export function fixCartCoveredMeasures(measures: readonly Measure[], doors: readonly { w: number }[]): Measure[] {
   return measures.filter((m) => fixCartLines([m], doors).length > 0);
 }
+
+// Parts of a measure the cart does cover that are still missing: the planner's weatherstrip measure is a package
+// (bottom seal, top and side seal, service-door kit) and the service-door kit has no verified listing. Names only;
+// FixCart says so next to the button instead of letting "Add all" read as the whole package.
+export function fixCartMissingParts(measures: readonly Measure[]): string[] {
+  const out: string[] = [];
+  if (measures.includes("weatherstrip") && !findProduct("seal-service-door-kit")?.asin) out.push("service-door weatherstrip kit");
+  return out;
+}
