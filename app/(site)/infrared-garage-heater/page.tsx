@@ -45,7 +45,7 @@ export default function Page() {
       <QuickPick
         productId="dr238-1500w-infrared"
         page={entry.href}
-        headline="For one bay or a workbench on a 120 V outlet with nothing else on that circuit: 1.5 kW carbon infrared, wall or ceiling"
+        headline="For one bay or a workbench on a 120 V outlet with nothing else on that circuit: 1.5 kW carbon infrared. It mounts high, so check your ceiling height first."
         compareHref="#classes"
         compareLabel="Compare both radiant classes"
       />
