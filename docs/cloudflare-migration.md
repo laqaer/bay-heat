@@ -1,5 +1,13 @@
 # Cloudflare migration: BayHeat Guide
 
+> **Paused by the 2026-10 rebuild.** The site is no longer static-export compatible: it now has dynamic routes
+> (`/r/[code]` permalinks, the planner's `?g=` / `?zip=` state, a dynamic OG image), plus `redirects()` and
+> `headers()` in `next.config.ts`, none of which `output: "export"` supports. The PR gate that asserted an `out/`
+> directory was replaced by `.github/workflows/ci.yml` (lint, typecheck, unit tests, build). `wrangler.jsonc` and
+> the manual `cloudflare-preview.yml` are kept for reference but will not produce a working preview until the app
+> runs on a Workers adapter (for example `@opennextjs/cloudflare`) or the dynamic routes are removed. Production
+> stays on Vercel. The text below describes the original static-export plan.
+
 Status: **static-export compatibility only**. Production remains on Vercel.
 
 ## Why this app does not need a Worker runtime
