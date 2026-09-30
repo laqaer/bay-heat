@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { QuickPick } from "@/components/commerce/QuickPick";
-import { FixCart } from "@/components/commerce/FixCart";
 import { Num } from "@/components/evidence/Num";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { Cost } from "@/components/commerce/Cost";
@@ -128,7 +127,6 @@ export default function Page() {
           </div>
         ))}
       </div>
-      <FixCart measures={["weatherstrip"]} doors={EXAMPLE_A_INPUT.garageDoors} page={entry.href} />
 
       <h2>What not to buy</h2>
       <p>

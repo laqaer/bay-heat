@@ -6,9 +6,13 @@ import { amazonCartUrl, cartTagFor } from "./cart.ts";
 // appear; a measure with no part in the catalog (ceiling insulation, a new door) is simply absent, and the
 // caller says so instead of pretending.
 //
-// Sizes follow the listings, not a guess: the 8 ft T-seal listing is for an 8 ft wide door, so anything wider
-// gets the 16 ft one; the 30 ft M-D top-and-side seal is one door's top plus both jambs (16 + 7 + 7 = 30 ft);
-// the Reach Barrier pack is two 8x8 single-door kits, which suits a double door.
+// Sizes follow the listings, not a guess: the 30 ft M-D top-and-side seal is one door's top plus both jambs
+// (16 + 7 + 7 = 30 ft); the Reach Barrier pack is two 8x8 single-door kits, which suits a double door.
+//
+// The bottom seal is deliberately NOT in the cart. Which one fits depends on the track already on the door (a T or
+// bulb seal slides into a flat retainer; a beaded track needs a beaded seal; a bent or missing retainer means a new
+// track first, see /garage-door-bottom-seal) and the planner never asks. Putting a T-seal in the cart for everyone
+// would sell some readers a seal that cannot seat. The cart says so and points at the profile guide instead.
 export type FixCartLine = { productId: string; qty: number; name: string; asin: string };
 
 export function fixCartLines(measures: readonly Measure[], doors: readonly { w: number }[]): FixCartLine[] {
@@ -17,10 +21,7 @@ export function fixCartLines(measures: readonly Measure[], doors: readonly { w: 
   const list = doors.length > 0 ? doors : [{ w: 16 }];
   for (const m of measures) {
     if (m === "weatherstrip") {
-      for (const d of list) {
-        add(d.w <= 8 ? "seal-bottom-t-8ft" : "seal-bottom-t-16ft");
-        add("seal-perimeter-stop");
-      }
+      add("seal-perimeter-stop", list.length);
     } else if (m === "door_kit_reflective") {
       for (const d of list) if (d.w > 10) add("door-kit-reflective-reach-barrier");
     } else if (m === "attic_hatch") {
@@ -47,8 +48,14 @@ export function fixCartCoveredMeasures(measures: readonly Measure[], doors: read
 // Parts of a measure the cart does cover that are still missing: the planner's weatherstrip measure is a package
 // (bottom seal, top and side seal, service-door kit) and the service-door kit has no verified listing. Names only;
 // FixCart says so next to the button instead of letting "Add all" read as the whole package.
+// (The bottom seal is reported separately, see fixCartNeedsTrackChoice.)
 export function fixCartMissingParts(measures: readonly Measure[]): string[] {
   const out: string[] = [];
   if (measures.includes("weatherstrip") && !findProduct("seal-service-door-kit")?.asin) out.push("service-door weatherstrip kit");
   return out;
+}
+
+// True when the plan includes the weatherstrip package, whose bottom seal depends on the door's track profile.
+export function fixCartNeedsTrackChoice(measures: readonly Measure[]): boolean {
+  return measures.includes("weatherstrip");
 }

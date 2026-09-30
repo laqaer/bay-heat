@@ -7,7 +7,7 @@ Written 2026-09-30. Owner constraints that shaped every recommendation here: $0 
 1. **Revenue is one product of four numbers:** sessions × click-through × orders per click × commission per order. This round fixed the middle two. It cannot fix the first. On the blueprint's own realistic traffic ramp (49,500 sessions in 12 months), even a strong click-through and a good Amazon EPC earn about **$0.4k to $2k a year**. The owner's stated goal of about $300 a month needs roughly **8,000 to 20,000 sessions a month** (table in section 3). Nothing built here changes that; traffic does.
 2. **Nothing on this site has a measured click, sale or session.** Analytics is off, Search Console and GA4 are not connected, the Associates dashboard is not visible from here, and the ledger says earnings are unknown. Every conversion figure below is an assumption, and is labeled as one. The first deliverable of this work is therefore measurement.
 3. **The as-built site was leaking before it got to traffic.** Zero of the 15 pages with a buy link had one inside the first phone screen (closest: 1,250 px down; several 3,000+). 65% of the links were Amazon search pages, not product pages. Two of the five "verified" listings were "Currently unavailable" and were linked from four pages, including both direct links on the portable-heater page. A dead listing earns exactly nothing.
-4. **What changed in this branch:** links went from 52 to 75 across the same 15 pages, direct product links from 18 to 54 (35% to 72%), verified listings from 5 to 19, dead listings removed from the money path, every paid click now fires a tracked event, every page can have its own Amazon tracking ID, and the first paid link is inside the first phone screen on 12 of the 15 pages that have one (section 2).
+4. **What changed in this branch:** links went from 52 to 70 across the same 15 pages, direct product links from 18 to 50 (35% to 71%), verified listings from 5 to 19, dead listings removed from the money path, every paid click now fires a tracked event, every page can have its own Amazon tracking ID, and the first paid link is inside the first phone screen on 12 of the 15 pages that have one (section 2).
 5. **The five owner actions worth doing, in order:** (a) create per-page Amazon tracking IDs and paste one env var; (b) turn on GA4 and connect Search Console (both free); (c) check the Associates 180-day rule; (d) spend ten minutes spot-checking the 19 ASINs in SiteStripe; (e) sign up for Northern Tool (CJ) and HVACDirect and add their env vars. Full list with exact variable names is in section 6.
 
 ## 2. The funnel as found, and as it is now
@@ -17,10 +17,10 @@ Static audit of the built HTML (`node scripts/link-audit.mjs`) plus a Playwright
 | Measure | As found | After this branch |
 |---|---:|---:|
 | Pages with any paid link | 15 of 26 | 15 of 26 |
-| Paid links | 52 | 75 |
-| Direct `/dp/` product links | 18 (35%) | 54 (72%) |
-| Amazon search links | 34 (65%) | 19 (25%) |
-| Cart links | 0 | 2 |
+| Paid links | 52 | 70 |
+| Direct `/dp/` product links | 18 (35%) | 50 (71%) |
+| Amazon search links | 34 (65%) | 20 (29%) |
+| Cart links | 0 | 0 on the static pages; the report builds one when a plan has two or more cartable parts |
 | Pages with the first paid link in the first phone screen (≤ 844 px) | 0 of 15 | 12 of 15 (the other three: how-to-insulate at 894 px, the diesel page, and the fuel comparison page) |
 | Closest first link on a phone | 1,250 px | ~520 px |
 | Pages sending readers to an unavailable listing | 4 | 0 |
@@ -80,8 +80,8 @@ Implication: a click on a seal page earns a fifth of a click on a mini-split or 
 |---|---|---|---|---|
 | 1 | **Stop linking dead listings** | A dead listing has EPC 0. Four money pages were sending clicks to one. | Done: two ASINs parked, current CZ798GR3 listing wired, DR-238 added for infrared; `verify-asins.mjs` re-checks parked listings weekly and says when to restore | Measured (listing pages read 2026-09-30) |
 | 2 | **First-screen pick** | Raises CTR. This is the single largest modeled lever because the click term multiplies everything. | Done on 12 of 15 linked pages (QuickPick, FixCart); size of the effect is an assumption | Placement measured; uplift assumed |
-| 3 | **Direct product links instead of search links** | A named product page converts better than a search list for a reader who has already chosen a class. | 35% to 72% direct; the rest are classes with no verified in-stock listing that fits (diesel, 4 kW and 240 V infrared, EPS door kits, the Hot Dawg) | Placement measured; uplift assumed |
-| 4 | **Cart bundle** | One click credits every item bought in the 24-hour window. A $20 seal opens a session where the reader may also buy the $250 heater. | Built: fix-first cart on the report and two insulation pages, sized to door width | Mechanism from Amazon's cart-add rules; effect assumed |
+| 3 | **Direct product links instead of search links** | A named product page converts better than a search list for a reader who has already chosen a class. | 35% to 71% direct; the rest are classes with no verified in-stock listing that fits (diesel, 4 kW and 240 V infrared, EPS door kits, the Hot Dawg) | Placement measured; uplift assumed |
+| 4 | **Cart bundle** | One click credits every item bought in the 24-hour window. A small part opens a session where the reader may also buy the heater. | Built on the report and the how-to page, sized to the doors. The bottom seal is left out on purpose: which one fits depends on the track already on the door, which the planner never asks, so the cart points at the profile guide instead. A plan gets a cart button only when it has two or more distinct parts (for example the top-and-side seal plus a reflective kit or attic tape). | Mechanism from Amazon's cart-add rules; effect assumed |
 | 5 | **Per-page tracking IDs** | No direct revenue. It turns "earnings unknown" into per-page earnings, which decides everything else. | Built and dormant until the owner sets `NEXT_PUBLIC_AMAZON_TAGS` | Mechanism certain |
 | 6 | **Higher-EPC programs** | Northern Tool, HVACDirect and VEVOR pay 2 to 4× the per-click rate of Amazon on the classes where Amazon is weakest. | Routing code exists behind env vars; nothing signed up | Network figures from monetization.md; account-level terms unknown |
 | 7 | **Installer leads** | Highest revenue per session by the blueprint's own benchmarks ($10–30 a lead, $23–37 a call), on cost and install pages. | Not built: no `/garage-heater-installation-cost` page and no lead slot exist. `LEADS_PROVIDER` is only a constant. | Benchmarks only; no partner |

@@ -1,5 +1,6 @@
+import Link from "next/link";
 import type { Measure } from "@/lib/planner/types";
-import { fixCartCoveredMeasures, fixCartHref, fixCartLines, fixCartMissingParts } from "@/lib/commerce/fixCart";
+import { fixCartCoveredMeasures, fixCartHref, fixCartLines, fixCartMissingParts, fixCartNeedsTrackChoice } from "@/lib/commerce/fixCart";
 import { MEASURE_LABEL } from "@/lib/planner/roi";
 import { findProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
@@ -61,6 +62,15 @@ export function FixCart({
       <div className="mt-1">
         <PaidLabel />
       </div>
+      {fixCartNeedsTrackChoice(measures) ? (
+        <p className="mt-2 max-w-none text-xs leading-5 text-(--color-fg-2)">
+          Bottom seal: the right one depends on the track already on your door, so it is not in the cart.{" "}
+          <Link href="/garage-door-bottom-seal" className="text-(--color-link) underline underline-offset-4">
+            Pick yours
+          </Link>
+          .
+        </p>
+      ) : null}
       {missing.length > 0 ? (
         <p className="mt-2 max-w-none text-[11px] leading-4 text-(--color-fg-2)">
           Not in this cart (no single part with a verified listing): {missing.join(", ")}.

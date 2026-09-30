@@ -1,19 +1,19 @@
 {
-  "auditedAt": "2026-09-30T05:31:20.950Z",
+  "auditedAt": "2026-09-30T22:19:25.092Z",
   "totals": {
-    "links": 75,
-    "dp": 54,
-    "search": 19,
-    "cart": 2
+    "links": 70,
+    "dp": 50,
+    "search": 20,
+    "cart": 0
   },
   "pages": [
     {
       "route": "/electric-garage-heater",
       "links": 9,
-      "dp": 8,
-      "search": 1,
+      "dp": 7,
+      "search": 2,
       "cart": 0,
-      "distinct": 7,
+      "distinct": 8,
       "tags": [
         "laqaer-20"
       ],
@@ -21,42 +21,6 @@
       "firstLinkPx": {
         "mobile": 669,
         "desktop": 502
-      }
-    },
-    {
-      "route": "/garage-door-weather-stripping",
-      "links": 8,
-      "dp": 6,
-      "search": 1,
-      "cart": 1,
-      "distinct": 5,
-      "tags": [
-        "laqaer-20"
-      ],
-      "flags": [
-        "past-700px-mobile"
-      ],
-      "firstLinkPx": {
-        "mobile": 729,
-        "desktop": 569
-      }
-    },
-    {
-      "route": "/how-to-insulate-a-garage",
-      "links": 7,
-      "dp": 4,
-      "search": 2,
-      "cart": 1,
-      "distinct": 6,
-      "tags": [
-        "laqaer-20"
-      ],
-      "flags": [
-        "past-700px-mobile"
-      ],
-      "firstLinkPx": {
-        "mobile": 894,
-        "desktop": 686
       }
     },
     {
@@ -132,6 +96,24 @@
       }
     },
     {
+      "route": "/garage-door-weather-stripping",
+      "links": 5,
+      "dp": 4,
+      "search": 1,
+      "cart": 0,
+      "distinct": 4,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 729,
+        "desktop": 569
+      }
+    },
+    {
       "route": "/garage-heaters",
       "links": 5,
       "dp": 4,
@@ -147,6 +129,24 @@
       "firstLinkPx": {
         "mobile": 723,
         "desktop": 544
+      }
+    },
+    {
+      "route": "/how-to-insulate-a-garage",
+      "links": 5,
+      "dp": 3,
+      "search": 2,
+      "cart": 0,
+      "distinct": 5,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 894,
+        "desktop": 686
       }
     },
     {
@@ -197,8 +197,8 @@
       ],
       "flags": [],
       "firstLinkPx": {
-        "mobile": 519,
-        "desktop": 404
+        "mobile": 497,
+        "desktop": 382
       }
     },
     {
@@ -213,7 +213,7 @@
       ],
       "flags": [],
       "firstLinkPx": {
-        "mobile": 519,
+        "mobile": 497,
         "desktop": 382
       }
     },
@@ -231,8 +231,8 @@
         "past-700px-mobile"
       ],
       "firstLinkPx": {
-        "mobile": 799,
-        "desktop": 618
+        "mobile": 777,
+        "desktop": 596
       }
     },
     {

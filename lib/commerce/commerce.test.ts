@@ -76,20 +76,22 @@ test("a repeated ASIN raises quantity and does not count as a second product", (
   assert.match(url, /ASIN\.1=B009F1SWH8&Quantity\.1=2&ASIN\.2=B00PX0T37I&Quantity\.2=1/);
 });
 
-test("fixCartLines sizes parts to the doors and drops measures with no verified listing", async () => {
-  const { fixCartLines, fixCartHref } = await import("./fixCart.ts");
+test("fixCartLines sizes parts to the doors, leaves the bottom seal out, and drops measures with no verified listing", async () => {
+  const { fixCartLines, fixCartHref, fixCartNeedsTrackChoice } = await import("./fixCart.ts");
   const two = fixCartLines(["weatherstrip", "door_kit_reflective", "ceiling_r30", "new_pu_door"], [{ w: 16 }]);
-  assert.deepEqual(two.map((l) => l.productId), ["seal-bottom-t-16ft", "seal-perimeter-stop", "door-kit-reflective-reach-barrier"]);
+  assert.deepEqual(two.map((l) => l.productId), ["seal-perimeter-stop", "door-kit-reflective-reach-barrier"]);
+  assert.ok(!two.some((l) => l.productId.startsWith("seal-bottom")), "the bottom seal depends on the track profile, which the planner never asks");
+  assert.equal(fixCartNeedsTrackChoice(["weatherstrip"]), true);
+  assert.equal(fixCartNeedsTrackChoice(["attic_hatch"]), false);
   const singles = fixCartLines(["weatherstrip", "door_kit_reflective"], [{ w: 9 }, { w: 9 }]);
-  assert.deepEqual(singles.map((l) => [l.productId, l.qty]), [["seal-bottom-t-16ft", 2], ["seal-perimeter-stop", 2]]);
-  const eight = fixCartLines(["weatherstrip"], [{ w: 8 }]);
-  assert.equal(eight[0].productId, "seal-bottom-t-8ft", "the 8 ft listing is for an 8 ft door");
-  assert.equal(fixCartLines(["ceiling_r30", "new_pu_door"], [{ w: 16 }]).length, 0);
+  assert.deepEqual(singles.map((l) => [l.productId, l.qty]), [["seal-perimeter-stop", 2]]);
   const { fixCartCoveredMeasures } = await import("./fixCart.ts");
   assert.deepEqual(fixCartCoveredMeasures(["door_kit_eps", "weatherstrip", "ceiling_r30"], [{ w: 16 }]), ["weatherstrip"]);
   const { fixCartMissingParts } = await import("./fixCart.ts");
   assert.deepEqual(fixCartMissingParts(["weatherstrip"]), ["service-door weatherstrip kit"], "the weatherstrip package includes a service-door kit with no listing");
   assert.deepEqual(fixCartMissingParts(["attic_hatch"]), []);
+  assert.equal(fixCartLines(["ceiling_r30", "new_pu_door"], [{ w: 16 }]).length, 0);
   assert.equal(fixCartHref(fixCartLines(["attic_hatch"], [{ w: 16 }])), null, "one product is a link, not a cart");
+  assert.equal(fixCartHref(fixCartLines(["weatherstrip"], [{ w: 16 }])), null, "the top and side seal alone is a link, not a cart");
   assert.match(fixCartHref(two)!, /cart\/add\.html\?AssociateTag=/);
 });
