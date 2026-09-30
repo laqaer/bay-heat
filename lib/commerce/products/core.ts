@@ -23,6 +23,9 @@ export const VERIFIED_ASINS = [
   "B0009F86SE",
   "B00012FQCY",
   "B0HG41WQG3",
+  // fuel and mini-split
+  "B00LWW7V7K",
+  "B0CTJDVB8K",
   // safety
   "B00FHW7PBS",
   "B00F5CK9X6",

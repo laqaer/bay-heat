@@ -74,6 +74,20 @@ export const SOURCES: Record<string, Source> = {
     url: "https://www.shareddocs.com/hvac/docs/2001/Public/03/Data_Sheet_Kidde_C3010_ENG.pdf",
     retrieved: "2026-09-30",
   },
+  "big-maxx-manual": {
+    id: "big-maxx-manual",
+    title: "Mr. Heater MHU50 / MHU80 / MHU125 operating instructions and owner's manual",
+    publisher: "Enerco Group (Mr. Heater)",
+    url: "https://pdf.lowes.com/productdocuments/c1241ba0-97d8-4064-a2ef-a0988957c04e/62967718.pdf",
+    retrieved: "2026-09-30",
+  },
+  "vevor-diesel-manual": {
+    id: "vevor-diesel-manual",
+    title: "VEVOR diesel air heater user manual, 8 kW",
+    publisher: "VEVOR",
+    url: "https://www.vevor.com/diy-ideas/product/vevor-diesel-air-heater-all-in-one-8kw-diesel-heater-12v-manual/",
+    retrieved: "2026-09-30",
+  },
   "hs1500tt-manual": {
     id: "hs1500tt-manual",
     title: "Heat Storm Tradesman HS-1500-TT owner's manual",

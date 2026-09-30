@@ -15,7 +15,11 @@ export const PRODUCTS: Product[] = [
     priceClass: "$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: { text: "No UL/CSA listing for building heat. Exhaust and intake outdoors only; CO alarm required.", ev: "S", sourceId: "diesel-heater-clone-manual" },
+    safetyLine: {
+      text: "No UL/CSA listing for building heat. VEVOR\u2019s manual for its 8 kW diesel air heater lists \u201cLiving room, garage\u201d under places it can not be used for constant heating. Exhaust and intake outdoors only; CO alarm required.",
+      ev: "S",
+      sourceId: "vevor-diesel-manual",
+    },
   },
   {
     id: "diesel-heater-8kw",
@@ -26,7 +30,11 @@ export const PRODUCTS: Product[] = [
     priceClass: "$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: { text: "No UL/CSA listing for building heat. Exhaust and intake outdoors only; CO alarm required.", ev: "S", sourceId: "diesel-heater-clone-manual" },
+    safetyLine: {
+      text: "No UL/CSA listing for building heat. VEVOR\u2019s manual for its 8 kW diesel air heater lists \u201cLiving room, garage\u201d under places it can not be used for constant heating. Exhaust and intake outdoors only; CO alarm required.",
+      ev: "S",
+      sourceId: "vevor-diesel-manual",
+    },
   },
   {
     id: "diesel-exhaust-kit",
@@ -62,14 +70,19 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "gas-unit-heater-big-maxx-50",
-    name: "Mr. Heater Big Maxx MHU50/80, vented natural gas/LP unit heater",
+    name: "Mr. Heater Big Maxx 50,000 BTU forced-air unit heater (propane or natural gas)",
     kind: "g_vented_unit",
+    asin: "B00LWW7V7K",
     searchQuery: "Mr Heater Big Maxx vented natural gas garage unit heater",
     partnerUrls: {},
     priceClass: "$$$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: { text: "Licensed gas fitter and permit required. Burner and ignition at least 18 in above the floor (IFGC 305.3).", ev: "S", sourceId: "big-maxx-manual" },
+    safetyLine: {
+      text: "Licensed gas fitter and permit required. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor (code minimum for burner and ignition: 18 in, IFGC 305.3). Never where gasoline, solvents, paint thinner or dust are present.",
+      ev: "S",
+      sourceId: "big-maxx-manual",
+    },
   },
   {
     id: "gas-unit-heater-hot-dawg-45",
@@ -84,8 +97,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "minisplit-12k-230v",
-    name: "12,000 BTU/h 230V mini-split heat pump (heat + cool)",
+    name: "Della Optima 12,000 BTU 230V mini-split heat pump (heat + cool)",
     kind: "minisplit",
+    asin: "B0CTJDVB8K",
     searchQuery: "12000 BTU mini split heat pump 230V garage",
     partnerUrls: {},
     priceClass: "$$$$",

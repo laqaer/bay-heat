@@ -93,6 +93,14 @@ export default function Page() {
         buy button.
       </AnswerBlock>
 
+      <QuickPick
+        productId="gas-unit-heater-big-maxx-50"
+        page={entry.href}
+        headline="The class this page sells: a vented 50,000 BTU unit heater. A licensed gas fitter installs it, and the manual sets a minimum height in a residential garage."
+        compareHref="#vented"
+        compareLabel="See both vented unit heaters"
+      />
+
       <p>
         &quot;Propane heater for a garage&quot; covers two unrelated tools. A vented unit heater bolts to the wall or
         ceiling, burns off a natural gas line or a bulk propane tank, and exhausts outdoors through its own flue —
@@ -105,7 +113,7 @@ export default function Page() {
         <ButtonLink href="/can-i-run-it">Check my heater →</ButtonLink>
       </div>
 
-      <h2>Vented unit heaters: the class this page sells</h2>
+      <h2 id="vented">Vented unit heaters: the class this page sells</h2>
       <p>
         A vented natural gas or propane unit heater covers a whole garage from one wall-mounted unit. Code sets a
         floor for where its burner can sit: <Num f="code.ifgc.305_3" />. Both units below need a licensed gas

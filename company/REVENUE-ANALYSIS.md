@@ -7,8 +7,8 @@ Written 2026-09-30. Owner constraints that shaped every recommendation here: $0 
 1. **Revenue is one product of four numbers:** sessions × click-through × orders per click × commission per order. This round fixed the middle two. It cannot fix the first. On the blueprint's own realistic traffic ramp (49,500 sessions in 12 months), even a strong click-through and a good Amazon EPC earn about **$0.4k to $2k a year**. The owner's stated goal of about $300 a month needs roughly **8,000 to 20,000 sessions a month** (table in section 3). Nothing built here changes that; traffic does.
 2. **Nothing on this site has a measured click, sale or session.** Analytics is off, Search Console and GA4 are not connected, the Associates dashboard is not visible from here, and the ledger says earnings are unknown. Every conversion figure below is an assumption, and is labeled as one. The first deliverable of this work is therefore measurement.
 3. **The as-built site was leaking before it got to traffic.** Zero of the 15 pages with a buy link had one inside the first phone screen (closest: 1,250 px down; several 3,000+). 65% of the links were Amazon search pages, not product pages. Two of the five "verified" listings were "Currently unavailable" and were linked from four pages, including both direct links on the portable-heater page. A dead listing earns exactly nothing.
-4. **What changed in this branch:** links went from 52 to 74 across the same 15 pages, direct product links from 18 to 45 (35% to about 61%), verified listings from 5 to 17, dead listings removed from the money path, every paid click now fires a tracked event, every page can have its own Amazon tracking ID, and the first paid link is inside the first phone screen on most pages that have one (section 2).
-5. **The five owner actions worth doing, in order:** (a) create per-page Amazon tracking IDs and paste one env var; (b) turn on GA4 and connect Search Console (both free); (c) check the Associates 180-day rule; (d) spend ten minutes spot-checking the 17 ASINs in SiteStripe; (e) sign up for Northern Tool (CJ) and HVACDirect and add their env vars. Full list with exact variable names is in section 6.
+4. **What changed in this branch:** links went from 52 to 75 across the same 15 pages, direct product links from 18 to 54 (35% to 72%), verified listings from 5 to 19, dead listings removed from the money path, every paid click now fires a tracked event, every page can have its own Amazon tracking ID, and the first paid link is inside the first phone screen on 12 of the 15 pages that have one (section 2).
+5. **The five owner actions worth doing, in order:** (a) create per-page Amazon tracking IDs and paste one env var; (b) turn on GA4 and connect Search Console (both free); (c) check the Associates 180-day rule; (d) spend ten minutes spot-checking the 19 ASINs in SiteStripe; (e) sign up for Northern Tool (CJ) and HVACDirect and add their env vars. Full list with exact variable names is in section 6.
 
 ## 2. The funnel as found, and as it is now
 
@@ -17,14 +17,14 @@ Static audit of the built HTML (`node scripts/link-audit.mjs`) plus a Playwright
 | Measure | As found | After this branch |
 |---|---:|---:|
 | Pages with any paid link | 15 of 26 | 15 of 26 |
-| Paid links | 52 | see after-file |
-| Direct `/dp/` product links | 18 (35%) | see after-file |
-| Amazon search links | 34 (65%) | see after-file |
-| Cart links | 0 | see after-file |
-| Pages with the first paid link in the first phone screen (≤ 844 px) | 0 | see after-file |
-| Closest first link on a phone | 1,250 px | ~650 px |
+| Paid links | 52 | 75 |
+| Direct `/dp/` product links | 18 (35%) | 54 (72%) |
+| Amazon search links | 34 (65%) | 19 (25%) |
+| Cart links | 0 | 2 |
+| Pages with the first paid link in the first phone screen (≤ 844 px) | 0 of 15 | 12 of 15 (the other three: how-to-insulate at 894 px, the diesel page, and the fuel comparison page) |
+| Closest first link on a phone | 1,250 px | ~520 px |
 | Pages sending readers to an unavailable listing | 4 | 0 |
-| Verified ASINs | 5 | 17 |
+| Verified ASINs | 5 | 19 |
 | Amazon tracking IDs in use | 1 (`laqaer-20`) | 1 until the owner adds more (per-page support is built) |
 | Recorded click events | 0 | wired; fire once analytics env is set |
 
@@ -79,8 +79,8 @@ Implication: a click on a seal page earns a fifth of a click on a mini-split or 
 | # | Lever | How it moves revenue | State | Evidence quality |
 |---|---|---|---|---|
 | 1 | **Stop linking dead listings** | A dead listing has EPC 0. Four money pages were sending clicks to one. | Done: two ASINs parked, current CZ798GR3 listing wired, DR-238 added for infrared; `verify-asins.mjs` re-checks parked listings weekly and says when to restore | Measured (listing pages read 2026-09-30) |
-| 2 | **First-screen pick** | Raises CTR. This is the single largest modeled lever because the click term multiplies everything. | Done on 15 pages (QuickPick); size of the effect is an assumption | Placement measured; uplift assumed |
-| 3 | **Direct product links instead of search links** | A named product page converts better than a search list for a reader who has already chosen a class. | 35% to about 61% direct; the rest are classes with no verified in-stock listing (diesel, gas unit heater, mini-split, 4 kW and 240 V infrared) | Placement measured; uplift assumed |
+| 2 | **First-screen pick** | Raises CTR. This is the single largest modeled lever because the click term multiplies everything. | Done on 12 of 15 linked pages (QuickPick, FixCart); size of the effect is an assumption | Placement measured; uplift assumed |
+| 3 | **Direct product links instead of search links** | A named product page converts better than a search list for a reader who has already chosen a class. | 35% to 72% direct; the rest are classes with no verified in-stock listing that fits (diesel, 4 kW and 240 V infrared, EPS door kits, the Hot Dawg) | Placement measured; uplift assumed |
 | 4 | **Cart bundle** | One click credits every item bought in the 24-hour window. A $20 seal opens a session where the reader may also buy the $250 heater. | Built: fix-first cart on the report and two insulation pages, sized to door width | Mechanism from Amazon's cart-add rules; effect assumed |
 | 5 | **Per-page tracking IDs** | No direct revenue. It turns "earnings unknown" into per-page earnings, which decides everything else. | Built and dormant until the owner sets `NEXT_PUBLIC_AMAZON_TAGS` | Mechanism certain |
 | 6 | **Higher-EPC programs** | Northern Tool, HVACDirect and VEVOR pay 2 to 4× the per-click rate of Amazon on the classes where Amazon is weakest. | Routing code exists behind env vars; nothing signed up | Network figures from monetization.md; account-level terms unknown |
@@ -108,7 +108,7 @@ Ordered by value. Each is free.
    A page with no entry keeps using `laqaer-20`, so this can be done a few pages at a time. After a week the Associates report shows clicks, orders and earnings per page.
 2. **Analytics.** Set `NEXT_PUBLIC_GA4_ID` (free). `lib/track.ts` then records `affiliate_click` (with page, partner, target) and `cart_click`. Connect the Search Console property (the verification mail already goes to add461977@gmail.com) and, if wanted, GA4 to the OpenSEO project.
 3. **Associates 180-day rule.** Amazon closes an account that has not produced qualifying sales within its first 180 days (three sales is the figure in Amazon's program policies; confirm the current number in Associates Central). Check when this account was created and how many qualifying sales it has. Ledger status says earnings are unknown, so this could be the largest single risk to the whole business.
-4. **SiteStripe spot-check of the 17 ASINs** (BLUEPRINT.md §9 asks for owner verification). Ten minutes: open each `/dp/` link from `company/research/asin-ledger.json` "wired" rows while signed in, confirm the product is the one named, and read the account's own commission rate from SiteStripe (the ledger says the 3% rate was never read from the account).
+4. **SiteStripe spot-check of the 19 ASINs** (BLUEPRINT.md §9 asks for owner verification). Ten minutes: open each `/dp/` link from `company/research/asin-ledger.json` "wired" rows while signed in, confirm the product is the one named, and read the account's own commission rate from SiteStripe (the ledger says the 3% rate was never read from the account).
 5. **Higher-EPC programs** (monetization.md §11.2 has the sign-up steps): Northern Tool via CJ (`NEXT_PUBLIC_CJ_PID`, `NEXT_PUBLIC_CJ_AID_NORTHERNTOOL`), HVACDirect, VEVOR via Awin. The router already prefers them where the class is stocked.
 6. **Hosting plan.** Vercel Hobby forbids commercial and affiliate sites (monetization.md §0.8). Production is on Hobby today, which risks the deployment being suspended without notice. This needs the owner's decision; the $0 cap and the paused Cloudflare migration (`docs/cloudflare-migration.md`) both bear on it.
 7. **`hello@bayheatguide.com` has no MX record** (ledger). Any promise of email support or capture is currently unmet.
@@ -130,4 +130,5 @@ Then read the Associates report by tracking ID: the page with the most clicks an
 - Every CTR, order rate and uplift in sections 3 and 4 is an assumption.
 - Amazon prices, ratings and stock are read only from listing pages on 2026-09-30, by script, and recorded in `asin-ledger.json` for the maintainer. The site never shows them.
 - The DR-975 and DR-910F manuals say "WARNING – RISK OF FIRE, DO NOT USE AS A RESIDENTIAL OR HOUSEHOLD HEATER." That wording is now on their safety lines. Whether a home garage counts is the maker's call; the site says so and stops recommending the DR-975 in a first-screen pick.
-- Gas unit heater, diesel, mini-split and 240 V infrared classes still link to Amazon search pages because no in-stock, manual-backed listing was confirmed. They are the next research batch.
+- Diesel, 4 kW hardwired, 240 V infrared, the Hot Dawg and the EPS door kits still link to Amazon search pages, because no in-stock listing that fits was confirmed. The diesel case is deliberate: VEVOR's own manual lists "Living room, garage" under places its 8 kW heater can not be used for constant heating, and no UL, ETL or CSA mark was found. That warning is now on the diesel plates; whether a garage-heater site should sell the class at all is for the human editor.
+- The two mini-split and unit-heater ASINs (Della Optima 12k, Mr. Heater Big Maxx) are third-party or retailer-fulfilled listings (Align Inc., Northern Tool). Amazon may credit them differently from Amazon-sold items; the Associates report will show it.

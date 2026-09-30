@@ -135,6 +135,28 @@
    "note": ""
   },
   {
+   "asin": "B00LWW7V7K",
+   "productId": "gas-unit-heater-big-maxx-50",
+   "role": "wired",
+   "listing": "ok",
+   "title": "Mr. Heater 50,000 BTU Forced-Air Unit Heater (Propane or Natural Gas)",
+   "rating": 4.4,
+   "reviews": "1,490",
+   "checkedAt": "2026-09-30",
+   "note": "Mr. Heater Big Maxx MHU50NG (F260550), natural gas with an LP conversion kit; sold by Northern Tool. Manual: in a residential garage the bottom of the heater at least 8 ft above the floor; CSA design certified."
+  },
+  {
+   "asin": "B0CTJDVB8K",
+   "productId": "minisplit-12k-230v",
+   "role": "wired",
+   "listing": "ok",
+   "title": "DELLA Optima Series 12,000 BTU Mini Split AC with Soft Airflow, Hyper Heat Down to -13\u00b0F, Up to 550 Sq. Ft, 24 SEER2 230V, Energy Star, WiFi & Alexa,Inverter AC,1 Ton Pre-Charged Heat Pump,16.4ft Kit",
+   "rating": 4.3,
+   "reviews": "270",
+   "checkedAt": "2026-09-30",
+   "note": "Della Optima 12,000 BTU 230 V heat pump. Manual says to hire a licensed professional for wiring and HVAC work. Third-party seller (Align Inc.)."
+  },
+  {
    "asin": "B0C9952GSX",
    "productId": "seal-bottom-bulb-16ft",
    "role": "wired",
@@ -245,6 +267,17 @@
    "note": "Comfort Zone CZ799BK deluxe milkhouse heater (same family). Reserve if B08174Q7KY goes unavailable."
   },
   {
+   "asin": "B086BLR4R1",
+   "productId": "minisplit-12k-230v",
+   "role": "candidate",
+   "listing": "ok",
+   "title": "Cooper & Hunter MIA 12,000 BTU 230V Wall Mount Mini Split, 21.3 SEER2",
+   "rating": 4.2,
+   "reviews": "257",
+   "checkedAt": "2026-09-30",
+   "note": "Cooper & Hunter MIA 12,000 BTU 230 V. Listing says it is not a DIY system. Reserve."
+  },
+  {
    "asin": "B016TQHG4G",
    "productId": null,
    "role": "not-wired",
@@ -265,6 +298,39 @@
    "reviews": "1,383",
    "checkedAt": "2026-09-30",
    "note": "Kidde C3010D battery CO alarm with digital display, 4.7 stars / 1,383 reviews. Battery model, not plug-in."
+  },
+  {
+   "asin": "B09H2RY6BT",
+   "productId": "diesel-exhaust-kit",
+   "role": "not-wired",
+   "listing": "ok",
+   "title": "Stainless Steel 316 Straight Thru Hull Exhaust Skin, Fitting 24mm Tube Pipe Socket Hardware, for Diesel Parking heaters",
+   "rating": 4.8,
+   "reviews": "1,871",
+   "checkedAt": "2026-09-30",
+   "note": "24 mm thru-hull exhaust fitting. Pair with the exhaust kit; diesel class is not being promoted."
+  },
+  {
+   "asin": "B0DSPPGS39",
+   "productId": "diesel-exhaust-kit",
+   "role": "not-wired",
+   "listing": "ok",
+   "title": "78.7&#34; Diesel Heater Exhaust Pipe,ID 1 Inch Exhaust Pipe Kit with Noise Reduction Diesel Heater Muffler Upgraded,Stainless Steel Flexible Exhaust Tubing Car Accessories",
+   "rating": 4.5,
+   "reviews": "70",
+   "checkedAt": "2026-09-30",
+   "note": "Diesel exhaust pipe and muffler kit, no wall fitting included: partial match."
+  },
+  {
+   "asin": "B0DKTFRH98",
+   "productId": "diesel-heater-8kw",
+   "role": "not-wired",
+   "listing": "ok",
+   "title": "VEVOR 8KW Diesel Heater, DC 12V/24V, Bluetooth APP Control, CO Alarm",
+   "rating": 4.2,
+   "reviews": "402",
+   "checkedAt": "2026-09-30",
+   "note": "VEVOR 8 kW diesel heater (CY5004). VEVOR's manual for the family says it can not be used for constant heating in a \"Living room, garage\"; no UL/ETL/CSA mark found. Not given a direct link on a garage-heater site. The warning is now on the diesel plates."
   },
   {
    "asin": "B0058W5M08",
@@ -397,6 +463,17 @@
    "reviews": "26",
    "checkedAt": "2026-09-30",
    "note": "Lasko CU12510, 26 reviews at 3.8 stars. Manual: residential use only."
+  },
+  {
+   "asin": "B00O5BD2IW",
+   "productId": "gas-unit-heater-hot-dawg-45",
+   "role": "not-wired",
+   "listing": "ok",
+   "title": "Modine HDS45AS0111 Natural Gas Hot Dawg Garage Heater 45,000 BTU Separated Combustion",
+   "rating": 4,
+   "reviews": "3",
+   "checkedAt": "2026-09-30",
+   "note": "Modine Hot Dawg HDS45, 3 ratings, third-party seller, 2200622006 band. Not a page pick."
   },
   {
    "asin": "B000052036",

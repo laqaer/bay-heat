@@ -41,7 +41,12 @@ export function QuickPick({
   const primary = links.find((l) => l.slot === "primary") ?? links[0];
 
   const cls = HEATER_CLASSES[product.kind as HeaterClassId];
-  const specs = cls ? `${(cls.outputBtuh[1] / 3.412 / 1000).toFixed(1)} kW${cls.circuit ? ` · ${circuitLabel(cls.circuit)}` : ""}` : null;
+  // Electric classes read in kW on a circuit; fuel-fired ones in BTU/h (a gas heater rated in kW is not how anyone shops).
+  const specs = !cls
+    ? null
+    : cls.energy === "electric"
+      ? `${(cls.outputBtuh[1] / 3.412 / 1000).toFixed(1)} kW${cls.circuit ? ` · ${circuitLabel(cls.circuit)}` : ""}`
+      : `${Math.round(cls.outputBtuh[1]).toLocaleString("en-US")} BTU/h`;
 
   return (
     <div data-buy-group className="not-prose my-4 border border-(--color-fg)/25 bg-(--color-surface) p-4">
