@@ -83,7 +83,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "door-kit-eps-matador",
-    name: "Matador EPS garage door insulation kit (fits most 16x7 doors)",
+    name: "Matador EPS garage door insulation kit",
     kind: "door_kit_eps",
     searchQuery: "Matador garage door insulation kit EPS 16x7",
     partnerUrls: {},
@@ -93,7 +93,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "door-kit-eps-cellofoam",
-    name: "Cellofoam EPS garage door insulation kit (fits most 16x7 doors)",
+    name: "Cellofoam EPS garage door insulation kit",
     kind: "door_kit_eps",
     searchQuery: "Cellofoam garage door insulation kit EPS 16x7",
     partnerUrls: {},
@@ -113,7 +113,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "door-kit-reflective-reach-barrier",
-    name: "Reach Barrier reflective garage door insulation kit, 8x8 single-door size, pack of 2 (covers a 16 ft door)",
+    name: "Reach Barrier reflective garage door insulation kit, two 8x8 single-door kits",
     kind: "door_kit_reflective",
     asin: "B0HG41WQG3",
     searchQuery: "Reach Barrier reflective garage door insulation kit",

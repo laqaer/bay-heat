@@ -169,7 +169,7 @@ export default function Page() {
           <p className="mt-2 text-xs text-(--color-alarm)">{diesel5kw.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {diesel5kw.priceClass}</p>
           <div className="mt-3">
-            <BuyButton href={route(diesel5kw, "site", entry.href)[0].href}>{route(diesel5kw, "site", entry.href)[0].label} ↗</BuyButton>
+            <BuyButton href={route(diesel5kw, "site", entry.href)[0].href}>{route(diesel5kw, "site", entry.href)[0].label}</BuyButton>
           </div>
         </div>
         <div className="border border-(--color-line) p-4">
@@ -178,7 +178,7 @@ export default function Page() {
           <p className="mt-2 text-xs text-(--color-alarm)">{diesel8kw.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {diesel8kw.priceClass}</p>
           <div className="mt-3">
-            <BuyButton href={route(diesel8kw, "site", entry.href)[0].href}>{route(diesel8kw, "site", entry.href)[0].label} ↗</BuyButton>
+            <BuyButton href={route(diesel8kw, "site", entry.href)[0].href}>{route(diesel8kw, "site", entry.href)[0].label}</BuyButton>
           </div>
         </div>
         <div className="border border-(--color-line) p-4">
@@ -189,7 +189,7 @@ export default function Page() {
           </p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {exhaustKit.priceClass}</p>
           <div className="mt-3">
-            <BuyButton href={route(exhaustKit, "site", entry.href)[0].href}>{route(exhaustKit, "site", entry.href)[0].label} ↗</BuyButton>
+            <BuyButton href={route(exhaustKit, "site", entry.href)[0].href}>{route(exhaustKit, "site", entry.href)[0].label}</BuyButton>
           </div>
         </div>
       </div>
@@ -198,7 +198,7 @@ export default function Page() {
         productId="co-alarm-battery-10yr"
         page={entry.href}
         eyebrow="Safety add-on"
-        headline="If anything in or beside the house burns fuel, a UL 2034 carbon monoxide alarm inside the house is the cheapest safety layer."
+        headline="Put a UL 2034 CO alarm in the house, by the garage door and outside each sleeping area."
       />
 
       <h2>Next step</h2>

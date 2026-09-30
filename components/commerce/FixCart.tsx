@@ -1,5 +1,6 @@
 import type { Measure } from "@/lib/planner/types";
-import { fixCartHref, fixCartLines } from "@/lib/commerce/fixCart";
+import { fixCartCoveredMeasures, fixCartHref, fixCartLines } from "@/lib/commerce/fixCart";
+import { MEASURE_LABEL } from "@/lib/planner/roi";
 import { findProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { BuyButton, BuyTextLink } from "@/components/ui/BuyButton";
@@ -16,20 +17,23 @@ export function FixCart({
   measures,
   doors,
   page,
-  disclosure = true,
+  title = "Parts for these fixes",
 }: {
   measures: readonly Measure[];
   doors: readonly { w: number }[];
   page: string;
-  disclosure?: boolean; // false when a <Disclosure /> already sits directly above
+  title?: string;
 }) {
   const lines = fixCartLines(measures, doors);
   if (lines.length === 0) return null;
   const cart = fixCartHref(lines, page);
+  // Say so when a fix in the plan has no part in the cart, instead of implying the cart is the whole plan.
+  const covered = new Set(fixCartCoveredMeasures(measures, doors));
+  const missing = measures.filter((m) => !covered.has(m)).map((m) => MEASURE_LABEL[m]);
   return (
     <div data-buy-group className="not-prose mt-5 border border-(--color-fg)/25 bg-(--color-surface) p-4">
-      <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-(--color-fg-2)">The parts for these fixes</p>
-      {disclosure ? <p className="mt-2 text-[11px] leading-4 text-(--color-fg-2)">{DISCLOSURE_INLINE}</p> : null}
+      <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-(--color-fg-2)">{title}</p>
+      <p className="mt-2 text-[11px] leading-4 text-(--color-fg-2)">{DISCLOSURE_INLINE}</p>
       <ul className="mt-3 divide-y divide-(--color-line)">
         {lines.map((l) => {
           const p = findProduct(l.productId);
@@ -51,10 +55,15 @@ export function FixCart({
       </ul>
       {cart ? (
         <BuyButton href={cart} className="mt-3 h-11 w-full sm:w-auto">
-          Add all {lines.length} to your Amazon cart ↗
+          Add all {lines.length} to your Amazon cart
         </BuyButton>
       ) : null}
       <PaidLabel />
+      {missing.length > 0 ? (
+        <p className="mt-2 text-[11px] leading-4 text-(--color-fg-2)">
+          Not in this cart (no single part with a verified listing): {missing.join(", ")}.
+        </p>
+      ) : null}
     </div>
   );
 }

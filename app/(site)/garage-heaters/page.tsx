@@ -71,7 +71,7 @@ export default function Page() {
       <QuickPick
         productId="cz220-5kw-ceiling"
         page={entry.href}
-        headline="Most 2-car garages: a 5 kW electric ceiling heater"
+        headline="A 5 kW ceiling heater on a 30 A circuit: enough for our example 2-car garage once it is sealed and insulated."
         compareHref="#buy"
         compareLabel="See one pick per fuel"
       />
@@ -166,7 +166,7 @@ export default function Page() {
               <p className="mt-2 text-sm text-(--color-fg-2)">{note}</p>
               <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {product.priceClass}</p>
               <div className="mt-3">
-                <BuyButton href={primary.href}>{primary.label} ↗</BuyButton>
+                <BuyButton href={primary.href}>{primary.label}</BuyButton>
               </div>
             </div>
           );

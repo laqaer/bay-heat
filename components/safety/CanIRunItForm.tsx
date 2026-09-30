@@ -26,8 +26,7 @@ const UNCONDITIONAL: HeaterKind[] = ["torpedo", "minisplit"];
 // What to offer next to a verdict that says no. Never the heater that got the NO-GO: only a class the verdict
 // itself names as safer, and only where the catalog has a verified listing for it (BLUEPRINT.md §2.8).
 const SAFER_PICK: Partial<Record<HeaterKind, { productId: string; headline: string }>> = {
-  e240: { productId: "cz220-5kw-ceiling", headline: "A hardwired 240 V ceiling heater on its own circuit is the safer class here. This 5 kW model fits most 2-car garages." },
-  e120: { productId: "cz798-1500w-milkhouse", headline: "A 1,500 W plug-in heater on a circuit of its own is the safer class for one bay or a workbench." },
+  e240: { productId: "cz220-5kw-ceiling", headline: "A hardwired 240 V ceiling heater on its own 30 A circuit is the safer class here. It only makes sense if that circuit exists or is being added." },
 };
 const COMBUSTION: HeaterKind[] = ["buddy", "torpedo", "kerosene", "diesel", "vented_gas"];
 
@@ -109,7 +108,8 @@ export function CanIRunItForm() {
   const verdict = useMemo(() => (kind ? verdictFor(kind, situation) : null), [kind, situation]);
   const saferPick =
     verdict && verdict.verdict === "NO_GO"
-      ? verdict.saferAlternatives.map((k) => SAFER_PICK[k]).find((p): p is NonNullable<typeof p> => p !== undefined)
+      ? // never the class that got the NO-GO: a 240 V verdict for lack of a breaker must not answer with another 240 V heater
+        verdict.saferAlternatives.filter((k) => k !== kind).map((k) => SAFER_PICK[k]).find((p): p is NonNullable<typeof p> => p !== undefined)
       : undefined;
 
   function set<K extends keyof Situation>(key: K, value: Situation[K]) {
@@ -272,7 +272,7 @@ export function CanIRunItForm() {
               productId={saferPick.productId}
               page="/can-i-run-it"
               surface="safety"
-              eyebrow="Safer alternative"
+              eyebrow="Safer alternative · model pick, spec-based"
               headline={saferPick.headline}
             />
           ) : null}
@@ -282,7 +282,7 @@ export function CanIRunItForm() {
               page="/can-i-run-it"
               surface="safety"
               eyebrow="Safety add-on"
-              headline="If anything in or beside the house burns fuel, a UL 2034 carbon monoxide alarm inside the house is the cheapest safety layer."
+              headline="Put a UL 2034 CO alarm in the house, by the garage door and outside each sleeping area."
             />
           ) : null}
         </div>

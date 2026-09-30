@@ -65,7 +65,7 @@ export default function Page() {
       <QuickPick
         productId="cz220-5kw-ceiling"
         page={entry.href}
-        headline="A 2-car garage ceiling unit: the CZ220, 5 kW"
+        headline="A 5 kW ceiling unit on a 30 A circuit: the CZ220. Sealed and insulated, it covers our example 2-car garage."
         compareHref="#clearances"
         compareLabel="See mounting height and clearances"
       />
@@ -190,7 +190,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{cz220.safetyLine?.text}</p>
           <div className="mt-3 flex flex-wrap items-center gap-4">
-            <BuyButton href={route(cz220, "site", entry.href)[0].href}>Check CZ220 price on Amazon ↗</BuyButton>
+            <BuyButton href={route(cz220, "site", entry.href)[0].href}>Check CZ220 price on Amazon</BuyButton>
             <BuyTextLink href={route(fuh54, "site", entry.href)[0].href}>or the FUH54 ↗</BuyTextLink>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {cz220.priceClass} / {fuh54.priceClass}</p>
@@ -204,7 +204,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {dr975.priceClass}</p>
         </div>

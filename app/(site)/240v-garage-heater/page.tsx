@@ -156,7 +156,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{cz220.safetyLine?.text}</p>
           <div className="mt-3 flex flex-wrap items-center gap-4">
-            <BuyButton href={route(cz220, "site", entry.href)[0].href}>Check CZ220 price on Amazon ↗</BuyButton>
+            <BuyButton href={route(cz220, "site", entry.href)[0].href}>Check CZ220 price on Amazon</BuyButton>
             <BuyTextLink href={route(fuh54, "site", entry.href)[0].href}>or the FUH54 ↗</BuyTextLink>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">
@@ -171,7 +171,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {dr975.priceClass}</p>
         </div>
@@ -185,13 +185,13 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{e240_4k.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(e240_4k, "site", entry.href)[0].href}>Search 240V 4,000W heaters ↗</BuyButton>
+            <BuyButton href={route(e240_4k, "site", entry.href)[0].href}>{route(e240_4k, "site", entry.href)[0].label}</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {e240_4k.priceClass}</p>
         </div>
         <div className="border border-(--color-line) p-4">
           <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">240V · 10,000W · 60A</p>
-          <p className="mt-1 text-lg font-bold text-(--color-fg)">240V 10,000W hardwired unit heater</p>
+          <p className="mt-1 text-lg font-bold text-(--color-fg)">{e240_10k.name}</p>
           <p className="mt-2 text-sm text-(--color-fg-2)">
             The largest class on this page. <Num v={c10k.breakerA} unit="A" ev="C" src="circuitFor(10000, 240, 240)" />{" "}
             and 4 AWG NM is enough panel capacity to think through before you buy — see{" "}
@@ -199,7 +199,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{e240_10k.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(e240_10k, "site", entry.href)[0].href}>Search 240V 10,000W heaters ↗</BuyButton>
+            <BuyButton href={route(e240_10k, "site", entry.href)[0].href}>{route(e240_10k, "site", entry.href)[0].label}</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {e240_10k.priceClass}</p>
         </div>

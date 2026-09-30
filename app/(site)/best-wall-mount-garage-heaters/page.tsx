@@ -69,7 +69,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label} ↗</BuyButton>
+            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label}</BuyButton>
           </div>
           <p className="mt-3 text-sm text-(--color-fg-2)">
             Or the Dr. Infrared DR-238 (<Num f="dr238.watts" />, mounts at <Num f="dr238.mount_height_in" /> or higher):{" "}
@@ -88,7 +88,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{fuh54.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(fuh54, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(fuh54, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {fuh54.priceClass}</p>
         </div>
@@ -102,7 +102,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {dr975.priceClass}</p>
         </div>

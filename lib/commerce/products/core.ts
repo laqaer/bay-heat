@@ -57,7 +57,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "cz798-1500w-milkhouse",
-    name: "Comfort Zone CZ798 1,500W milkhouse heater (current CZ798GR3 listing)",
+    name: "Comfort Zone CZ798GR3 1,500W milkhouse heater",
     kind: "e_port_1500",
     asin: "B08174Q7KY",
     searchQuery: "Comfort Zone CZ798 1500W milkhouse heater",

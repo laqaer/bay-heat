@@ -78,9 +78,9 @@ export default function Page() {
       <p className="text-sm text-(--color-fg-2)">{SAVINGS_VARY}</p>
 
       <QuickPick
-        productId="door-kit-reflective-reach-barrier"
+        productId="door-kit-eps-matador"
         page={entry.href}
-        headline="A reflective kit sized for a 16 ft door (the pack holds two single-door kits). EPS kits are compared below."
+        headline="EPS foam cuts more heat than a reflective kit on our example door. Stock changes, so this opens an Amazon search."
         compareHref="#buy"
         compareLabel="See EPS and reflective kits"
       />

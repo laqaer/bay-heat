@@ -1,5 +1,5 @@
 import type { PlannerResult } from "@/lib/planner/types";
-import { primaryProduct } from "@/lib/commerce/products";
+import { primaryProduct, productWarning } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
@@ -15,8 +15,6 @@ import { Callout } from "@/components/ui/Callout";
 import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { SAFETY_SCOPE } from "@/lib/site";
 import { btuh, kw, amps, commas } from "@/lib/format";
-
-const FLAMMABLES_SENTENCE = "Manual: not where gasoline, paint or flammable liquids are used or stored.";
 
 const CLASS_LABEL: Record<string, string> = {
   e_port_1500: "120V portable heater",
@@ -148,7 +146,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
             const secondary = links.find((l) => l.slot === "secondary" || l.slot === "also");
             // The class-level line above already carries the generic flammables rule; a product's own manual
             // warning (e.g. the DR-975's "do not use as a residential heater") must still reach the reader.
-            const productExtra = product?.safetyLine?.text.replace(FLAMMABLES_SENTENCE, "").trim();
+            const productExtra = productWarning(product);
             return (
               <div key={r.classId} className="flex flex-col gap-3 border border-(--color-line) bg-(--color-surface) p-5">
                 <p className="font-bold text-(--color-fg)">{CLASS_LABEL[r.classId] ?? r.classId}</p>
@@ -185,7 +183,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
               productId="co-alarm-battery-10yr"
               page={page}
               eyebrow="Safety add-on"
-              headline="A fuel-fired heater is on your list. A UL 2034 carbon monoxide alarm inside the house is the cheapest safety layer."
+              headline="A fuel-fired heater is on your list. Put a UL 2034 CO alarm in the house, by the garage door and outside each sleeping area."
             />
           </div>
         ) : null}

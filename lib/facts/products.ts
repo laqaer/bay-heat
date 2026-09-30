@@ -53,7 +53,7 @@ export const FACTS: AnyFact[] = [
   { id: "dr238.mount_height_in", value: 94.5, unit: "in", ev: "S", sourceId: "dr238-manual", checked: "2026-09-30", status: "verified", note: "lowest part of the heater, wall or ceiling mount" },
   { id: "dr238.clearance_ceiling_in", value: 15.8, unit: "in", ev: "S", sourceId: "dr238-manual", checked: "2026-09-30", status: "verified", note: "wall mounting, heater to ceiling" },
   { id: "dr238.clearance_wall_in", value: 19.7, unit: "in", ev: "S", sourceId: "dr238-manual", checked: "2026-09-30", status: "verified", note: "to the adjacent wall" },
-  // Comfort Zone CZ798 (ASIN B004VVJANC)
+  // Comfort Zone CZ798 (parked ASIN B004VVJANC; current listing B08174Q7KY is the CZ798GR3 of the same family)
   { id: "cz798.watts", value: 1500, unit: "W", ev: "S", sourceId: "cz798-manual", checked: "2026-09-25", status: "verified" },
   { id: "cz798.amps", value: 12.5, unit: "A", ev: "C", sourceId: "cz798-manual", checked: "2026-09-25", status: "verified", note: "1500W / 120V" },
 ];

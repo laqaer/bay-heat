@@ -34,7 +34,7 @@ export const SAVINGS_VARY = "Savings vary. Find out why in the seller's fact she
 
 type Reviewer = { name: string; license: string; state: string; date: string; kind: "electrical" | "gas" };
 
-function reviewers(): Reviewer[] {
+export function reviewers(): Reviewer[] {
   if (!REVIEWERS_JSON) return [];
   try {
     const parsed = JSON.parse(REVIEWERS_JSON) as unknown;

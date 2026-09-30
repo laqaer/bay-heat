@@ -226,7 +226,7 @@ export default function Page() {
         </p>
         {minisplit.safetyLine ? <p className="mt-2 text-xs text-(--color-alarm)">{minisplit.safetyLine.text}</p> : null}
         <div className="mt-3">
-          <BuyButton href={route(minisplit, "site", entry.href)[0].href}>Search current listings ↗</BuyButton>
+          <BuyButton href={route(minisplit, "site", entry.href)[0].href}>Search current listings</BuyButton>
         </div>
         <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {minisplit.priceClass}</p>
       </div>

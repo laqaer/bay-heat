@@ -14,7 +14,7 @@ import { heaterClass } from "@/lib/planner/catalog";
 import type { HeaterClassId } from "@/lib/planner/types";
 import { plan } from "@/lib/planner/plan";
 import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
-import { primaryProduct } from "@/lib/commerce/products";
+import { primaryProduct, productWarning } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { getSource } from "@/lib/facts";
 import { SAFETY_SCOPE } from "@/lib/site";
@@ -69,7 +69,7 @@ export default function Page() {
       <QuickPick
         productId="cz220-5kw-ceiling"
         page={entry.href}
-        headline="For most 2-car garages: a 5 kW ceiling heater on a 30 A circuit"
+        headline="A 5 kW ceiling heater on a 30 A circuit: enough for our example 2-car garage once it is sealed and insulated."
         compareHref="#classes"
         compareLabel="Compare every electric class"
       />
@@ -122,7 +122,10 @@ export default function Page() {
               const [lo, hi] = hc.outputBtuh;
               return (
                 <tr key={id} className="border-b border-(--color-line)/50 align-top">
-                  <td className="py-3 pr-3 text-(--color-fg)">{hc.label}</td>
+                  <td className="py-3 pr-3 text-(--color-fg)">
+                    {hc.label}
+                    {product?.asin ? <span className="mt-0.5 block text-xs text-(--color-fg-2)">Linked: {product.name}</span> : null}
+                  </td>
                   <td className="py-3 pr-3 font-mono whitespace-nowrap">
                     <Num v={lo} unit="BTU/h" round={100} ev="C" src={`HEATER_CLASSES.${id}.outputBtuh — lib/planner/catalog.ts`} />
                     {lo !== hi ? (
@@ -140,6 +143,7 @@ export default function Page() {
                         {primary.label}
                       </BuyButton>
                     ) : null}
+                    {productWarning(product) ? <p className="mt-1 max-w-[18rem] text-[11px] leading-4 text-(--color-alarm)">{productWarning(product)}</p> : null}
                   </td>
                 </tr>
               );

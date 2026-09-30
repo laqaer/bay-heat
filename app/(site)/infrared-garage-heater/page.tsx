@@ -52,7 +52,7 @@ export default function Page() {
       <QuickPick
         productId="dr238-1500w-infrared"
         page={entry.href}
-        headline="For one bay or a workbench on an ordinary 120 V outlet: 1.5 kW carbon infrared, wall or ceiling"
+        headline="For one bay or a workbench on a 120 V outlet with nothing else on that circuit: 1.5 kW carbon infrared, wall or ceiling"
         compareHref="#classes"
         compareLabel="Compare both radiant classes"
       />
@@ -108,7 +108,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label} ↗</BuyButton>
+            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label}</BuyButton>
           </div>
           <p className="mt-3 text-sm text-(--color-fg-2)">
             Or the Dr. Infrared DR-238 (<Num f="dr238.watts" />, mounts at <Num f="dr238.mount_height_in" /> or higher):{" "}
@@ -129,7 +129,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{irTube.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(irTube, "site", entry.href)[0].href}>Search on Amazon ↗</BuyButton>
+            <BuyButton href={route(irTube, "site", entry.href)[0].href}>Search on Amazon</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {irTube.priceClass}</p>
         </div>

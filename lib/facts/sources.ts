@@ -50,8 +50,8 @@ export const SOURCES: Record<string, Source> = {
     id: "dr975-manual",
     title: "Dr. Infrared Heater DR-975 owner's manual",
     publisher: "Dr. Infrared Heater",
-    url: "https://manuals.plus/dr-infrared-heater/dr-975-shop-garage-heater-manual",
-    retrieved: "2026-09-25",
+    url: "https://cdn.shopify.com/s/files/1/0557/0356/8589/files/DR-975.pdf",
+    retrieved: "2026-09-30",
   },
   "dr238-manual": {
     id: "dr238-manual",

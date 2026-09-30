@@ -25,7 +25,7 @@ export const PRODUCTS: Product[] = [
     priceClassChecked: "2026-09-25",
     specFactIds: ["code.irc.r315"],
     safetyLine: {
-      text: "Data sheet: meets UL 2034 and is rated 40\u2013100 \u00b0F for living areas. It goes in the house outside sleeping areas (IRC R315), not in an unheated garage.",
+      text: "Data sheet: meets UL 2034 and is rated 40\u2013100 \u00b0F for living areas. It goes in the house outside sleeping areas (IRC 2021 R315), not in an unheated garage.",
       ev: "S",
       sourceId: "kidde-c3010-datasheet",
     },

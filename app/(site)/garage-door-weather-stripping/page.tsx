@@ -69,7 +69,7 @@ export default function Page() {
       <QuickPick
         productId="seal-perimeter-stop"
         page={entry.href}
-        headline="The seal most garages skip: top and sides. One 30 ft roll covers a 16 × 7 ft door."
+        headline="The top and sides leak too. One 30 ft roll is enough for the top and both sides of a 16 × 7 ft door (16 + 7 + 7)."
         compareHref="#buy"
         compareLabel="See the whole package"
       />
@@ -128,7 +128,7 @@ export default function Page() {
           </div>
         ))}
       </div>
-      <FixCart measures={["weatherstrip"]} doors={[{ w: 16 }]} page={entry.href} disclosure={false} />
+      <FixCart measures={["weatherstrip"]} doors={EXAMPLE_A_INPUT.garageDoors} page={entry.href} />
 
       <h2>What not to buy</h2>
       <p>

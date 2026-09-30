@@ -73,9 +73,9 @@ export default function Page() {
         . None of that is a guess — it&apos;s the same <code>insulateFirst()</code> / <code>bundleCheapMeasures()</code>{" "}
         model behind the <Link href="/garage-heater-calculator">calculator</Link>, run live on this page.
       </p>
-      <FixCart measures={["weatherstrip", "door_kit_reflective", "attic_hatch"]} doors={[{ w: 16 }]} page={entry.href} />
       <GradeScale current={bundle?.gradeAfter} />
       <p className="text-xs leading-5 text-(--color-fg-2)">{SAVINGS_VARY}</p>
+      <FixCart measures={bundle?.measures ?? []} doors={EXAMPLE_A_INPUT.garageDoors} page={entry.href} title="Parts for the fixes above" />
 
       <h2>The order, and why it&apos;s this order</h2>
       <p>
