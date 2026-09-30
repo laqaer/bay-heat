@@ -2,7 +2,7 @@
 /**
  * ASIN health check: is each Amazon listing we link to still a real, buyable product?
  *
- *   node scripts/verify-asins.mjs                    # every ASIN in VERIFIED_ASINS
+ *   node scripts/verify-asins.mjs                    # every ASIN in VERIFIED_ASINS, plus parked ones in the ledger
  *   node scripts/verify-asins.mjs --asin B0XXXXXXXX  # also check a candidate (repeatable)
  *   node scripts/verify-asins.mjs --only-candidates --asin B0XXXXXXXX
  *   node scripts/verify-asins.mjs --json out.json    # write the full report
@@ -19,9 +19,11 @@
  *    get around a robot check. A blocked result is reported as `blocked` (inconclusive), not as a failure.
  *  - It never reads or stores prices.
  *
- * Statuses: ok | unavailable | dead | mismatch | blocked | error
+ * Statuses: ok | offers-only | unavailable | dead | mismatch | blocked | error
+ *   offers-only = the page loads but Amazon shows "No featured offer" (no Buy Box), so a buyer has to open
+ *   "See All Buying Options". It can still convert, but never make it a page's primary pick.
  */
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const UA = "bayheat-link-check/1.0 (+https://bayheatguide.com)";
 
@@ -62,6 +64,7 @@ export function classify(status, html) {
   const canonical = /<link rel="canonical" href="([^"]+)"/.exec(html);
   const buyable = /id="add-to-cart-button"|id="buy-now-button"/.test(html);
   const unavailable = /Currently unavailable\./.test(html) && !buyable;
+  const offersOnly = /No featured offers available/i.test(html) && !buyable;
   const rating = /<span class="a-icon-alt">([\d.]+) out of 5 stars/.exec(html);
   const reviews = /id="acrCustomerReviewText"[^>]*>([\s\S]*?)<\/span>/.exec(html);
   const info = {
@@ -72,6 +75,7 @@ export function classify(status, html) {
   };
   if (!info.title) return { status: "error", note: "no product title found (page layout changed?)", ...info };
   if (unavailable) return { status: "unavailable", note: "Currently unavailable, no Add to Cart", ...info };
+  if (offersOnly) return { status: "offers-only", note: "no featured offer (no Buy Box); only 'See All Buying Options'", ...info };
   if (!buyable) return { status: "error", note: "no Add to Cart button and no 'unavailable' text; check by hand", ...info };
   return { status: "ok", note: "buyable", ...info };
 }
@@ -96,7 +100,16 @@ async function main() {
   let asins = [...args.asins];
   if (!args.onlyCandidates) {
     const { VERIFIED_ASINS } = await import("../lib/commerce/products/core.ts");
-    asins = [...new Set([...VERIFIED_ASINS, ...asins])];
+    // Parked listings (unavailable when last checked) are re-checked too, so a restock is noticed.
+    let parked = [];
+    try {
+      const ledger = JSON.parse(readFileSync(new URL("../company/research/asin-ledger.json", import.meta.url), "utf8"));
+      parked = ledger.entries.filter((e) => e.role === "parked");
+    } catch {
+      // no ledger yet: nothing parked
+    }
+    asins = [...new Set([...VERIFIED_ASINS, ...parked.map((e) => e.asin), ...asins])];
+    args.parked = parked;
   }
   if (asins.length === 0) {
     process.stderr.write("No ASINs to check.\n");
@@ -119,7 +132,12 @@ async function main() {
     await new Promise((resolve) => setTimeout(resolve, args.delay));
   }
   if (args.json) writeFileSync(args.json, JSON.stringify({ checkedAt: new Date().toISOString(), results }, null, 2));
-  const bad = results.filter((r) => ["unavailable", "dead", "mismatch"].includes(r.status));
+  for (const e of args.parked ?? []) {
+    const r = results.find((x) => x.asin === e.asin);
+    if (r?.status === "ok") process.stdout.write(`\nRESTORE: ${e.asin} (${e.productId}) reads ok again. Put its asin back in lib/commerce/products and VERIFIED_ASINS.\n`);
+  }
+  const parkedAsins = new Set((args.parked ?? []).map((e) => e.asin));
+  const bad = results.filter((r) => ["unavailable", "offers-only", "dead", "mismatch"].includes(r.status) && !(parkedAsins.has(r.asin) && r.status !== "dead"));
   if (bad.length) {
     process.stdout.write(`\n${bad.length} listing(s) need attention: ${bad.map((b) => `${b.asin} (${b.status})`).join(", ")}\n`);
     process.exitCode = 1;

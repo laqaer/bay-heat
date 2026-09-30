@@ -23,12 +23,14 @@ export function QuickPick({
   headline,
   compareHref,
   compareLabel = "Compare every option",
+  eyebrow = "Model pick · spec-based",
 }: {
   productId: string;
   page: string;
   headline: string;
   compareHref?: `#${string}`;
   compareLabel?: string;
+  eyebrow?: string; // "Safety add-on" for a CO alarm; the default is the heater pick
 }) {
   const product = findProduct(productId);
   if (!product) throw new Error(`QuickPick: unknown product id "${productId}"`);
@@ -40,7 +42,7 @@ export function QuickPick({
 
   return (
     <div data-buy-group className="not-prose my-4 border border-(--color-fg)/25 bg-(--color-surface) p-4">
-      <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-(--color-fg-2)">Model pick · spec-based</p>
+      <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-(--color-fg-2)">{eyebrow}</p>
       <p className="mt-1 text-base font-bold leading-snug text-(--color-fg)">
         {product.name}
         {specs ? <span className="ml-2 font-mono text-sm font-normal text-(--color-fg-2)">{specs}</span> : null}

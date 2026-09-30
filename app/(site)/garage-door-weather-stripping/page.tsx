@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
+import { QuickPick } from "@/components/commerce/QuickPick";
+import { FixCart } from "@/components/commerce/FixCart";
 import { Num } from "@/components/evidence/Num";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { Cost } from "@/components/commerce/Cost";
@@ -64,6 +66,14 @@ export default function Page() {
       </AnswerBlock>
       <p className="text-sm text-(--color-fg-2)">{SAVINGS_VARY}</p>
 
+      <QuickPick
+        productId="seal-perimeter-stop"
+        page={entry.href}
+        headline="The seal most garages skip: top and sides. One 30 ft roll covers a 16 × 7 ft door."
+        compareHref="#buy"
+        compareLabel="See the whole package"
+      />
+
       <h2>Three leaks, one afternoon</h2>
       <p>
         A garage door leaks air in three places, and a full weatherstrip package treats all three: the bottom
@@ -106,7 +116,7 @@ export default function Page() {
       </p>
 
       <Disclosure />
-      <h2>Buy the package</h2>
+      <h2 id="buy">Buy the package</h2>
       <div className="not-prose my-6 grid gap-3 sm:grid-cols-2">
         {products.map(({ product, primary }) => (
           <div key={product.id} className="border border-(--color-line) bg-(--color-surface) p-4">
@@ -118,6 +128,7 @@ export default function Page() {
           </div>
         ))}
       </div>
+      <FixCart measures={["weatherstrip"]} doors={[{ w: 16 }]} page={entry.href} disclosure={false} />
 
       <h2>What not to buy</h2>
       <p>

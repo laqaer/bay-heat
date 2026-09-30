@@ -1,0 +1,420 @@
+{
+  "auditedAt": "2026-09-30T04:27:21.958Z",
+  "totals": {
+    "links": 74,
+    "dp": 45,
+    "search": 27,
+    "cart": 2
+  },
+  "pages": [
+    {
+      "route": "/electric-garage-heater",
+      "links": 9,
+      "dp": 5,
+      "search": 4,
+      "cart": 0,
+      "distinct": 7,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [],
+      "firstLinkPx": {
+        "mobile": 649,
+        "desktop": 502
+      }
+    },
+    {
+      "route": "/how-to-insulate-a-garage",
+      "links": 9,
+      "dp": 6,
+      "search": 2,
+      "cart": 1,
+      "distinct": 7,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 811,
+        "desktop": 593
+      }
+    },
+    {
+      "route": "/garage-door-weather-stripping",
+      "links": 8,
+      "dp": 6,
+      "search": 1,
+      "cart": 1,
+      "distinct": 5,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 709,
+        "desktop": 569
+      }
+    },
+    {
+      "route": "/240v-garage-heater",
+      "links": 6,
+      "dp": 5,
+      "search": 1,
+      "cart": 0,
+      "distinct": 5,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 713,
+        "desktop": 545
+      }
+    },
+    {
+      "route": "/best-wall-mount-garage-heaters",
+      "links": 5,
+      "dp": 4,
+      "search": 1,
+      "cart": 0,
+      "distinct": 4,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 765,
+        "desktop": 578
+      }
+    },
+    {
+      "route": "/garage-door-bottom-seal",
+      "links": 5,
+      "dp": 5,
+      "search": 0,
+      "cart": 0,
+      "distinct": 4,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 721,
+        "desktop": 564
+      }
+    },
+    {
+      "route": "/garage-door-insulation-kit",
+      "links": 5,
+      "dp": 2,
+      "search": 3,
+      "cart": 0,
+      "distinct": 4,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 779,
+        "desktop": 642
+      }
+    },
+    {
+      "route": "/garage-heaters",
+      "links": 5,
+      "dp": 2,
+      "search": 3,
+      "cart": 0,
+      "distinct": 4,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [],
+      "firstLinkPx": {
+        "mobile": 683,
+        "desktop": 544
+      }
+    },
+    {
+      "route": "/ceiling-mount-garage-heater",
+      "links": 4,
+      "dp": 4,
+      "search": 0,
+      "cart": 0,
+      "distinct": 3,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [],
+      "firstLinkPx": {
+        "mobile": 685,
+        "desktop": 545
+      }
+    },
+    {
+      "route": "/diesel-heater-for-garage",
+      "links": 4,
+      "dp": 1,
+      "search": 3,
+      "cart": 0,
+      "distinct": 4,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 3733,
+        "desktop": 2794
+      }
+    },
+    {
+      "route": "/infrared-garage-heater",
+      "links": 4,
+      "dp": 2,
+      "search": 2,
+      "cart": 0,
+      "distinct": 3,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 803,
+        "desktop": 616
+      }
+    },
+    {
+      "route": "/electric-vs-propane-garage-heater",
+      "links": 3,
+      "dp": 2,
+      "search": 1,
+      "cart": 0,
+      "distinct": 3,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 2547,
+        "desktop": 2118
+      }
+    },
+    {
+      "route": "/portable-garage-heater",
+      "links": 3,
+      "dp": 0,
+      "search": 3,
+      "cart": 0,
+      "distinct": 3,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "search-only",
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 1754,
+        "desktop": 1371
+      }
+    },
+    {
+      "route": "/propane-heater-for-garage",
+      "links": 3,
+      "dp": 1,
+      "search": 2,
+      "cart": 0,
+      "distinct": 3,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 1519,
+        "desktop": 1217
+      }
+    },
+    {
+      "route": "/heat-pump-mini-split-for-garage",
+      "links": 1,
+      "dp": 0,
+      "search": 1,
+      "cart": 0,
+      "distinct": 1,
+      "tags": [
+        "laqaer-20"
+      ],
+      "flags": [
+        "search-only",
+        "past-700px-mobile"
+      ],
+      "firstLinkPx": {
+        "mobile": 3109,
+        "desktop": 2359
+      }
+    },
+    {
+      "route": "/",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/about",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/can-i-run-it",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/cost-to-heat-a-garage",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/garage-heater-calculator/methodology",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/garage-heater-size",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/how-we-work",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/lab",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/lab/notebook",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/lab/reports/bh-001-the-4x-problem",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    },
+    {
+      "route": "/privacy",
+      "links": 0,
+      "dp": 0,
+      "search": 0,
+      "cart": 0,
+      "distinct": 0,
+      "tags": [],
+      "flags": [
+        "no-paid-link"
+      ],
+      "firstLinkPx": null
+    }
+  ]
+}

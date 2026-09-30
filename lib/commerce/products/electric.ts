@@ -19,14 +19,19 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "e-240-10k-generic",
-    name: "240V 10,000W hardwired shop/garage unit heater",
+    name: "Dr. Infrared DR-910F 10,000W 240V hardwired shop heater",
     kind: "e_240_10k",
+    asin: "B01M276DQJ",
     searchQuery: "240V 10000W hardwired garage unit heater",
     partnerUrls: {},
     priceClass: "$$$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: FLAMMABLES_LINE,
+    safetyLine: {
+      text: "Manual: \u201cWARNING \u2013 RISK OF FIRE, DO NOT USE AS A RESIDENTIAL OR HOUSEHOLD HEATER.\u201d Also not where gasoline, paint or flammable liquids are used or stored. Ask Dr. Infrared whether your garage counts as residential before you buy.",
+      ev: "S",
+      sourceId: "dr910f-manual",
+    },
   },
   {
     id: "e-ir-240-generic",

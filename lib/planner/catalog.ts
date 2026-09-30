@@ -30,7 +30,7 @@ export const HEATER_CLASSES: Record<HeaterClassId, HeaterClass> = {
     equip: [90, 140],
     install: [0, 0],
     safety: ["S1", "S6"],
-    productIds: ["hs1500tt-wall-infrared"],
+    productIds: ["dr238-1500w-infrared", "hs1500tt-wall-infrared"],
   },
   e_240_4k: {
     id: "e_240_4k",

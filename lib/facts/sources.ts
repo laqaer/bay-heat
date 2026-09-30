@@ -53,6 +53,27 @@ export const SOURCES: Record<string, Source> = {
     url: "https://manuals.plus/dr-infrared-heater/dr-975-shop-garage-heater-manual",
     retrieved: "2026-09-25",
   },
+  "dr238-manual": {
+    id: "dr238-manual",
+    title: "Dr. Infrared Heater DR-238 carbon infrared heater owner's manual",
+    publisher: "Dr. Infrared Heater",
+    url: "https://cdn.shopify.com/s/files/1/0496/6601/files/DR-238_User_Manual_v250108.pdf",
+    retrieved: "2026-09-30",
+  },
+  "dr910f-manual": {
+    id: "dr910f-manual",
+    title: "Dr. Infrared Heater DR-910F 10,000W 240V wall/ceiling garage heater owner's manual",
+    publisher: "Dr. Infrared Heater",
+    url: "https://cdn.shopify.com/s/files/1/0557/0356/8589/files/DR-910F.pdf",
+    retrieved: "2026-09-30",
+  },
+  "kidde-c3010-datasheet": {
+    id: "kidde-c3010-datasheet",
+    title: "Kidde C3010 sealed battery carbon monoxide alarm data sheet",
+    publisher: "Kidde",
+    url: "https://www.shareddocs.com/hvac/docs/2001/Public/03/Data_Sheet_Kidde_C3010_ENG.pdf",
+    retrieved: "2026-09-30",
+  },
   "hs1500tt-manual": {
     id: "hs1500tt-manual",
     title: "Heat Storm Tradesman HS-1500-TT owner's manual",

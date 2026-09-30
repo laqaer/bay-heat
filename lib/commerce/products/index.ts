@@ -10,3 +10,10 @@ export const ALL_PRODUCTS: Product[] = [...CORE, ...SEAL, ...ELECTRIC, ...FUEL, 
 export function findProduct(id: string): Product | undefined {
   return ALL_PRODUCTS.find((p) => p.id === id);
 }
+
+// The product to put on a plate for a heater class: the first one with a verified Amazon listing (a direct
+// /dp/ link earns; a search link is the fallback), else the first listed.
+export function primaryProduct(ids: readonly string[]): Product | undefined {
+  const products = ids.map((id) => findProduct(id)).filter((p): p is Product => p !== undefined);
+  return products.find((p) => p.asin) ?? products[0];
+}

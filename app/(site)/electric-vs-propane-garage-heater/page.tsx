@@ -5,6 +5,7 @@ import { Num } from "@/components/evidence/Num";
 import { Cost } from "@/components/commerce/Cost";
 import { Callout } from "@/components/ui/Callout";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { BuyButton } from "@/components/ui/ButtonLink";
 import { WhyNot } from "@/components/commerce/WhyNot";
@@ -196,6 +197,13 @@ export default function Page() {
           changes based on which fuel is cheapest this month. {SAFETY_SCOPE}
         </p>
       </SafetyCallout>
+
+      <QuickPick
+        productId="co-alarm-battery-10yr"
+        page={entry.href}
+        eyebrow="Safety add-on"
+        headline="If anything in or beside the house burns fuel, a UL 2034 carbon monoxide alarm inside the house is the cheapest safety layer."
+      />
     </ReportPage>
   );
 }

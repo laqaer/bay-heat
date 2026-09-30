@@ -10,6 +10,7 @@ export const PRODUCT_IDS = [
   "cz798-1500w-milkhouse",
   "dr975-7k5-shop",
   "hs1500tt-wall-infrared",
+  "dr238-1500w-infrared",
   // electric, unverified (tagged search links)
   "e-240-4k-generic",
   "e-240-10k-generic",

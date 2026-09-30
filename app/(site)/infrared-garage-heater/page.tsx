@@ -5,7 +5,8 @@ import { Num } from "@/components/evidence/Num";
 import { Callout } from "@/components/ui/Callout";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { Disclosure } from "@/components/commerce/Disclosure";
-import { BuyButton } from "@/components/ui/ButtonLink";
+import { QuickPick } from "@/components/commerce/QuickPick";
+import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { WhyNot } from "@/components/commerce/WhyNot";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
@@ -24,7 +25,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["hs1500tt-manual", "nec-2023"];
+const SOURCE_IDS = ["hs1500tt-manual", "dr238-manual", "nec-2023"];
 
 export default function Page() {
   const result = plan(EXAMPLE_A_INPUT);
@@ -32,6 +33,7 @@ export default function Page() {
   const comfortEquivalent = target - 5;
 
   const hs1500tt = findProduct("hs1500tt-wall-infrared")!;
+  const dr238 = findProduct("dr238-1500w-infrared")!;
   const irTube = findProduct("e-ir-240-generic")!;
   const irWallClass = heaterClass("e_ir_wall_1500");
   const irTubeClass = heaterClass("e_ir_240");
@@ -46,6 +48,14 @@ export default function Page() {
         opening or a leaky envelope keeps flushing outside. A drafty shop or a bay with the door up often does
         better on radiant; a fully enclosed garage that needs even heat throughout does better on forced-air.
       </AnswerBlock>
+
+      <QuickPick
+        productId="dr238-1500w-infrared"
+        page={entry.href}
+        headline="For one bay or a workbench on an ordinary 120 V outlet: 1.5 kW carbon infrared, wall or ceiling"
+        compareHref="#classes"
+        compareLabel="Compare both radiant classes"
+      />
 
       <h2>Why the door matters more than the wattage</h2>
       <p>
@@ -79,7 +89,7 @@ export default function Page() {
         load itself, which still has to cover the same wall, door, and air-leak losses either way.
       </Callout>
 
-      <h2>The two radiant classes on the market</h2>
+      <h2 id="classes">The two radiant classes on the market</h2>
       <p>
         Both run on electric resistance, so neither needs venting — the tradeoff is coverage area, not combustion
         safety.
@@ -98,8 +108,12 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label} ↗</BuyButton>
           </div>
+          <p className="mt-3 text-sm text-(--color-fg-2)">
+            Or the Dr. Infrared DR-238 (<Num f="dr238.watts" />, mounts at <Num f="dr238.mount_height_in" /> or higher):{" "}
+            <BuyTextLink href={route(dr238, "site", entry.href)[0].href}>{route(dr238, "site", entry.href)[0].label} ↗</BuyTextLink>
+          </p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>
         <div className="border border-(--color-line) p-4">

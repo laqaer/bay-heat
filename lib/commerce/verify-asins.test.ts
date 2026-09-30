@@ -20,6 +20,11 @@ test("Currently unavailable with no Add to Cart is unavailable, not ok", () => {
   assert.equal(r.status, "unavailable");
 });
 
+test("a listing with no featured offer is offers-only: it loads but has no Buy Box", () => {
+  const r = classify(200, page(`${title}${stars}<div>Price No featured offers available</div><a>See All Buying Options</a><span data-should-render-add-to-cart-button="false"></span>`));
+  assert.equal(r.status, "offers-only");
+});
+
 test("boilerplate 'Currently unavailable' strings on a buyable page do not flag it", () => {
   const r = classify(200, page(`${title}<script>{"currentlyUnavailableMessage":"Currently unavailable."}</script><input id="add-to-cart-button">`));
   assert.equal(r.status, "ok");

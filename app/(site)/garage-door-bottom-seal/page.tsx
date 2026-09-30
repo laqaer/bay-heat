@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { Num } from "@/components/evidence/Num";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { Cost } from "@/components/commerce/Cost";
@@ -57,6 +58,14 @@ export default function Page() {
         brand — match the track you already have, or the seal won&apos;t hold.
       </AnswerBlock>
 
+      <QuickPick
+        productId="seal-bottom-t-16ft"
+        page={entry.href}
+        headline="For a standard 16 ft double door with a flat retainer channel: a 1/4 in T-style seal. Single door? The 8 ft length is in the list below."
+        compareHref="#buy"
+        compareLabel="See every seal type"
+      />
+
       <h2>Which seal fits your track</h2>
       <p>
         Most steel garage doors use a flat aluminum retainer channel screwed to the bottom edge. A T-style seal
@@ -100,7 +109,7 @@ export default function Page() {
       </p>
 
       <Disclosure />
-      <h2>Buy the right seal</h2>
+      <h2 id="buy">Buy the right seal</h2>
       <div className="not-prose my-6 grid gap-3 sm:grid-cols-2">
         {products.map(({ product, primary }) => (
           <div key={product.id} className="border border-(--color-line) bg-(--color-surface) p-4">

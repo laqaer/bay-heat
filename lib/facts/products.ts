@@ -48,6 +48,11 @@ export const FACTS: AnyFact[] = [
   { id: "hs1500tt.mount_height_in_us", value: 72, unit: "in", ev: "S", sourceId: "hs1500tt-manual", checked: "2026-09-25", status: "verified" },
   { id: "hs1500tt.clearance_side_in", value: 18, unit: "in", ev: "S", sourceId: "hs1500tt-manual", checked: "2026-09-25", status: "verified" },
   { id: "hs1500tt.clearance_top_in", value: 24, unit: "in", ev: "S", sourceId: "hs1500tt-manual", checked: "2026-09-25", status: "verified" },
+  // Dr. Infrared DR-238 (ASIN B077JM5PB9) -- 120 V plug-in carbon infrared, wall or ceiling bracket
+  { id: "dr238.watts", value: 1500, unit: "W", ev: "S", sourceId: "dr238-manual", checked: "2026-09-30", status: "verified" },
+  { id: "dr238.mount_height_in", value: 94.5, unit: "in", ev: "S", sourceId: "dr238-manual", checked: "2026-09-30", status: "verified", note: "lowest part of the heater, wall or ceiling mount" },
+  { id: "dr238.clearance_ceiling_in", value: 15.8, unit: "in", ev: "S", sourceId: "dr238-manual", checked: "2026-09-30", status: "verified", note: "wall mounting, heater to ceiling" },
+  { id: "dr238.clearance_wall_in", value: 19.7, unit: "in", ev: "S", sourceId: "dr238-manual", checked: "2026-09-30", status: "verified", note: "to the adjacent wall" },
   // Comfort Zone CZ798 (ASIN B004VVJANC)
   { id: "cz798.watts", value: 1500, unit: "W", ev: "S", sourceId: "cz798-manual", checked: "2026-09-25", status: "verified" },
   { id: "cz798.amps", value: 12.5, unit: "A", ev: "C", sourceId: "cz798-manual", checked: "2026-09-25", status: "verified", note: "1500W / 120V" },

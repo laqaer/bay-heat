@@ -5,7 +5,7 @@ import { Num } from "@/components/evidence/Num";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { QuickPick } from "@/components/commerce/QuickPick";
-import { BuyButton } from "@/components/ui/ButtonLink";
+import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { WhyNot } from "@/components/commerce/WhyNot";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
@@ -21,10 +21,11 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["hs1500tt-manual", "fuh54-manual", "dr975-manual", "nec-2023"];
+const SOURCE_IDS = ["hs1500tt-manual", "dr238-manual", "fuh54-manual", "dr975-manual", "nec-2023"];
 
 export default function Page() {
   const hs1500tt = findProduct("hs1500tt-wall-infrared")!;
+  const dr238 = findProduct("dr238-1500w-infrared")!;
   const fuh54 = findProduct("fuh54-5kw")!;
   const dr975 = findProduct("dr975-7k5-shop")!;
 
@@ -41,9 +42,9 @@ export default function Page() {
       </AnswerBlock>
 
       <QuickPick
-        productId="dr975-7k5-shop"
+        productId="fuh54-5kw"
         page={entry.href}
-        headline="Wall or ceiling, 7.5 kW hardwired: the DR-975"
+        headline="Wall or ceiling, 5 kW hardwired on a 30 A circuit: the FUH54"
         compareHref="#clearances"
         compareLabel="See clearances side by side"
       />
@@ -68,8 +69,12 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label} ↗</BuyButton>
           </div>
+          <p className="mt-3 text-sm text-(--color-fg-2)">
+            Or the Dr. Infrared DR-238 (<Num f="dr238.watts" />, mounts at <Num f="dr238.mount_height_in" /> or higher):{" "}
+            <BuyTextLink href={route(dr238, "site", entry.href)[0].href}>{route(dr238, "site", entry.href)[0].label} ↗</BuyTextLink>
+          </p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>
         <div className="border border-(--color-line) p-4">

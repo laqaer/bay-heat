@@ -14,7 +14,7 @@ import { heaterClass } from "@/lib/planner/catalog";
 import type { HeaterClassId } from "@/lib/planner/types";
 import { plan } from "@/lib/planner/plan";
 import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
-import { findProduct } from "@/lib/commerce/products";
+import { primaryProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { getSource } from "@/lib/facts";
 import { SAFETY_SCOPE } from "@/lib/site";
@@ -116,7 +116,7 @@ export default function Page() {
           <tbody>
             {CLASS_ORDER.map((id) => {
               const hc = heaterClass(id);
-              const product = hc.productIds[0] ? findProduct(hc.productIds[0]) : undefined;
+              const product = primaryProduct(hc.productIds);
               const links = product ? route(product, "site", entry.href) : [];
               const primary = links.find((l) => l.slot === "primary") ?? links[0];
               const [lo, hi] = hc.outputBtuh;

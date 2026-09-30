@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { Num } from "@/components/evidence/Num";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { Cost } from "@/components/commerce/Cost";
@@ -76,6 +77,14 @@ export default function Page() {
       </AnswerBlock>
       <p className="text-sm text-(--color-fg-2)">{SAVINGS_VARY}</p>
 
+      <QuickPick
+        productId="door-kit-reflective-reach-barrier"
+        page={entry.href}
+        headline="A reflective kit sized for a 16 ft door (the pack holds two single-door kits). EPS kits are compared below."
+        compareHref="#buy"
+        compareLabel="See EPS and reflective kits"
+      />
+
       <h2>EPS versus reflective, on the same door</h2>
       <p>
         Both kit types glue or clip into the back of a standard steel door&apos;s panels. An EPS (rigid foam)
@@ -146,7 +155,7 @@ export default function Page() {
       </p>
 
       <Disclosure />
-      <h2>Buy a kit</h2>
+      <h2 id="buy">Buy a kit</h2>
       <div className="not-prose my-6 grid gap-3 sm:grid-cols-2">
         {products.map(({ product, primary }) => (
           <div key={product.id} className="border border-(--color-line) bg-(--color-surface) p-4">

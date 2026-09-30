@@ -7,8 +7,9 @@ import type { Product } from "../types.ts";
 export const PRODUCTS: Product[] = [
   {
     id: "seal-bottom-t-8ft",
-    name: "Garage door bottom seal, T-style rubber, 8 ft (1-car door)",
+    name: "Garage door bottom seal, 1/4 in T-style, for an 8 ft (1-car) door",
     kind: "seal_bottom",
+    asin: "B07P43LTYH",
     searchQuery: "garage door bottom seal T style rubber 8 ft",
     partnerUrls: {},
     priceClass: "$",
@@ -17,8 +18,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "seal-bottom-t-16ft",
-    name: "Garage door bottom seal, T-style rubber, 16 ft (2-car door)",
+    name: "Garage door bottom seal, 1/4 in T-style, for a 16 ft (2-car) door",
     kind: "seal_bottom",
+    asin: "B07P55PSW1",
     searchQuery: "garage door bottom seal T style rubber 16 ft",
     partnerUrls: {},
     priceClass: "$",
@@ -27,8 +29,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "seal-bottom-bulb-16ft",
-    name: "Garage door bottom seal, bulb-style, 16 ft",
+    name: "Garage door bottom seal, small P-bulb style, 16.5 ft",
     kind: "seal_bottom",
+    asin: "B0C9952GSX",
     searchQuery: "garage door bottom seal bulb style 16 ft",
     partnerUrls: {},
     priceClass: "$",
@@ -37,8 +40,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "seal-retainer-kit",
-    name: "Garage door bottom seal aluminum retainer track kit",
+    name: "Garage door bottom seal with aluminum retainer track, 16 ft",
     kind: "seal_retainer",
+    asin: "B0D9Y1NWCT",
     searchQuery: "garage door bottom seal retainer track kit",
     partnerUrls: {},
     priceClass: "$",
@@ -47,8 +51,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "seal-perimeter-stop",
-    name: "Garage door perimeter weatherstrip / stop seal kit",
+    name: "M-D garage door top and side seal, 30 ft",
     kind: "seal_perimeter",
+    asin: "B0009F86SE",
     searchQuery: "garage door perimeter weatherstrip stop seal kit",
     partnerUrls: {},
     priceClass: "$",
@@ -67,8 +72,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "attic-hatch-gasket",
-    name: "Attic access hatch weatherstrip gasket kit",
+    name: "Attic access hatch weatherstrip (EPDM self-stick tape, 10 ft)",
     kind: "attic_hatch",
+    asin: "B00012FQCY",
     searchQuery: "attic access hatch weatherstrip gasket kit",
     partnerUrls: {},
     priceClass: "$",
@@ -107,8 +113,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "door-kit-reflective-reach-barrier",
-    name: "Reach Barrier reflective garage door insulation kit",
+    name: "Reach Barrier reflective garage door insulation kit, 8x8 single-door size, pack of 2 (covers a 16 ft door)",
     kind: "door_kit_reflective",
+    asin: "B0HG41WQG3",
     searchQuery: "Reach Barrier reflective garage door insulation kit",
     partnerUrls: {},
     priceClass: "$",
