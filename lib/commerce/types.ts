@@ -41,6 +41,7 @@ export type Product = {
   priceClass: PriceClass;
   priceClassChecked: string; // YYYY-MM-DD
   specFactIds: string[]; // ids into lib/facts
+  outputBtuh?: number; // nameplate heat output of ONE unit, from the maker's manual; a plate may link this model directly only for a recommendation it can actually supply (productForRecommendation)
   safetyLine?: { text: string; ev: "S" | "R"; sourceId: string };
 };
 export type BuyLink = { partner: PartnerId; href: string; label: string; slot: "primary" | "secondary" | "also"; surface: Surface };

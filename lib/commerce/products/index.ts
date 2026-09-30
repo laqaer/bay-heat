@@ -28,3 +28,16 @@ export function productWarning(p: Product | undefined): string | undefined {
   const text = p?.safetyLine?.text.replace(STANDARD_FLAMMABLES, "").trim();
   return text ? text : undefined;
 }
+
+// A plate for a planner recommendation may link one model directly only if that model can supply what was
+// recommended: a single unit whose own nameplate output covers the modeled capacity. A multi-unit result ("two 12k
+// mini-splits") or a ranged class ("vented gas unit heater, up to 125,000 BTU/h") must not turn one smaller model
+// into a direct purchase link; those fall back to a search for the class's first product.
+export function productForRecommendation(
+  ids: readonly string[],
+  need: { capacityBtuh: number; units: number },
+): { product: Product | undefined; direct: boolean } {
+  const products = ids.map((id) => findProduct(id)).filter((p): p is Product => p !== undefined);
+  const fits = products.find((p) => p.asin && p.outputBtuh !== undefined && need.units === 1 && need.capacityBtuh <= p.outputBtuh * 1.01);
+  return fits ? { product: fits, direct: true } : { product: products[0], direct: false };
+}

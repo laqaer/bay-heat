@@ -22,6 +22,7 @@ export const PRODUCTS: Product[] = [
     name: "Dr. Infrared DR-910F 10,000W 240V hardwired shop heater",
     kind: "e_240_10k",
     asin: "B01M276DQJ",
+    outputBtuh: 34120,
     searchQuery: "240V 10000W hardwired garage unit heater",
     partnerUrls: {},
     priceClass: "$$$",

@@ -95,3 +95,18 @@ test("fixCartLines sizes parts to the doors, leaves the bottom seal out, and dro
   assert.equal(fixCartHref(fixCartLines(["weatherstrip"], [{ w: 16 }])), null, "the top and side seal alone is a link, not a cart");
   assert.match(fixCartHref(two)!, /cart\/add\.html\?AssociateTag=/);
 });
+
+test("productForRecommendation links a model directly only when one unit covers the modeled capacity", async () => {
+  const { productForRecommendation } = await import("./products/index.ts");
+  const fit = productForRecommendation(["cz220-5kw-ceiling", "fuh54-5kw"], { capacityBtuh: 17060, units: 1 });
+  assert.equal(fit.direct, true);
+  assert.equal(fit.product?.id, "cz220-5kw-ceiling");
+  const two = productForRecommendation(["minisplit-12k-230v"], { capacityBtuh: 37493, units: 2 });
+  assert.equal(two.direct, false, "two 12k units are not one 12k mini-split");
+  const big = productForRecommendation(["gas-unit-heater-big-maxx-50", "gas-unit-heater-hot-dawg-45"], { capacityBtuh: 100000, units: 1 });
+  assert.equal(big.direct, false, "a 100,000 BTU/h result is not a 50,000 BTU Big Maxx");
+  const unknown = productForRecommendation(["minisplit-12k-230v"], { capacityBtuh: 10000, units: 1 });
+  assert.equal(unknown.direct, false, "no nameplate output on file: never a direct link");
+  const noAsin = productForRecommendation(["hs1500tt-wall-infrared"], { capacityBtuh: 5000, units: 1 });
+  assert.equal(noAsin.direct, false, "a parked listing is never direct");
+});

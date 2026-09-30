@@ -12,7 +12,8 @@
  * 700 px" rule (BLUEPRINT.md §3.3), which the model's click-through assumptions rest on.
  *
  * Flags each page: no paid link at all, search-only links (lower intent than a /dp/ link), a link missing the
- * tag or rel="sponsored nofollow", a disclosure that is not above the first paid link, and a first link past
+ * tag or rel="sponsored nofollow", a disclosure that is not above the first paid link, a directly linked
+ * product whose own manual warning is not on the page, and a first link past
  * the 700 px budget.
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -66,6 +67,28 @@ export function disclosureBeforeFirstLink(html) {
 }
 const AMAZON_ANCHOR_ANY = /<a\b[^>]*href="https:\/\/www\.amazon\.com/;
 
+function visibleText(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<!--[\s\S]*?-->/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&#x27;|&#39;|&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// A plate that links a product directly must show that product's own manual warning where the reader can see it:
+// the DR-975's "do not use as a residential heater", the Big Maxx's minimum mounting height, the diesel heaters'
+// "not for constant garage heating". Returns the ids of products linked on the page whose safety line is missing
+// from the visible text. `products` is ALL_PRODUCTS.
+export function missingProductWarnings(html, products) {
+  const text = visibleText(html);
+  return products
+    .filter((p) => p.asin && p.safetyLine && html.includes(`/dp/${p.asin}`) && !text.includes(visibleText(p.safetyLine.text)))
+    .map((p) => p.id);
+}
+
 async function loadPlaywright() {
   const candidates = [process.env.PLAYWRIGHT_MODULE, "playwright", "/opt/node22/lib/node_modules/playwright/index.js"].filter(Boolean);
   for (const c of candidates) {
@@ -101,6 +124,7 @@ async function measureRail(base, routes) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  const { ALL_PRODUCTS } = await import("../lib/commerce/products/index.ts");
   const files = walk(args.dir).filter((f) => f.endsWith(".html") && !/_not-found|_global-error/.test(f));
   const pages = [];
   for (const f of files) {
@@ -109,6 +133,7 @@ async function main() {
     const links = auditHtml(html);
     const flags = [];
     if (!disclosureBeforeFirstLink(html)) flags.push("disclosure-after-link");
+    for (const id of missingProductWarnings(html, ALL_PRODUCTS)) flags.push(`missing-product-warning:${id}`);
     if (links.length === 0) flags.push("no-paid-link");
     if (links.length > 0 && links.every((l) => l.kind === "search")) flags.push("search-only");
     if (links.some((l) => !l.tag)) flags.push("untagged");

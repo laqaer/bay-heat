@@ -127,6 +127,7 @@ export default function Page() {
             <Num f="hs1500tt.watts" />, wall-mounted at <Num f="hs1500tt.mount_height_in_us" /> minimum, with{" "}
             <Num f="hs1500tt.clearance_side_in" /> side clearance.
           </p>
+          <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label}</BuyButton>
           </div>

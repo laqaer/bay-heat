@@ -114,6 +114,7 @@ export default function Page() {
             Or the Dr. Infrared DR-238 (<Num f="dr238.watts" />, mounts at <Num f="dr238.mount_height_in" /> or higher):{" "}
             <BuyTextLink href={route(dr238, "site", entry.href)[0].href}>{route(dr238, "site", entry.href)[0].label} ↗</BuyTextLink>
           </p>
+          <p className="mt-2 text-xs text-(--color-alarm)">{dr238.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>
         <div className="border border-(--color-line) p-4">

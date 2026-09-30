@@ -1,5 +1,5 @@
 import type { PlannerResult } from "@/lib/planner/types";
-import { primaryProduct, productWarning } from "@/lib/commerce/products";
+import { productForRecommendation, productWarning } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
@@ -140,8 +140,9 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
         <Disclosure />
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           {result.recommendations.map((r) => {
-            const product = primaryProduct(r.productIds);
-            const links = product ? route(product, "planner", page) : [];
+            const { product, direct } = productForRecommendation(r.productIds, { capacityBtuh: r.capacityBtuh, units: r.units });
+            // Not a model that supplies this capacity: link a search for it, never a direct purchase page.
+            const links = product ? route(direct ? product : { ...product, asin: undefined }, "planner", page) : [];
             const primary = links.find((l) => l.slot === "primary") ?? links[0];
             const secondary = links.find((l) => l.slot === "secondary" || l.slot === "also");
             // The class-level line above already carries the generic flammables rule; a product's own manual
@@ -150,7 +151,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
             return (
               <div key={r.classId} className="flex flex-col gap-3 border border-(--color-line) bg-(--color-surface) p-5">
                 <p className="font-bold text-(--color-fg)">{CLASS_LABEL[r.classId] ?? r.classId}</p>
-                {product?.asin ? <p className="-mt-2 text-xs text-(--color-fg-2)">Linked: {product.name}</p> : null}
+                {direct && product ? <p className="-mt-2 text-xs text-(--color-fg-2)">Linked: {product.name}</p> : null}
                 <p className="font-mono text-sm text-(--color-fg-2)">
                   {btuh(r.capacityBtuh)} BTU/h · {r.circuit ? `${r.circuit.volts}V/${r.circuit.breakerA}A, ${r.circuit.wireNM}` : "no new circuit"}
                 </p>

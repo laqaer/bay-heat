@@ -164,6 +164,7 @@ export default function Page() {
               <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">{SYSTEM_LABEL[system]}</p>
               <p className="mt-1 text-lg font-bold text-(--color-fg)">{product.name}</p>
               <p className="mt-2 text-sm text-(--color-fg-2)">{note}</p>
+              {product.safetyLine ? <p className="mt-2 text-xs text-(--color-alarm)">{product.safetyLine.text}</p> : null}
               <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {product.priceClass}</p>
               <div className="mt-3">
                 <BuyButton href={primary.href}>{primary.label}</BuyButton>

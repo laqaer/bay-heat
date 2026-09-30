@@ -121,7 +121,7 @@ export default function Page() {
               const links = product ? route(product, "site", entry.href) : [];
               const primary = links.find((l) => l.slot === "primary") ?? links[0];
               const [lo, hi] = hc.outputBtuh;
-              const warning = productWarning(product);
+              const warning = productWarning(product) ? product?.safetyLine?.text : undefined; // the whole line, not only the part beyond the standard one
               return (
                 <Fragment key={id}>
                 <tr className={warning ? "align-top" : "border-b border-(--color-line)/50 align-top"}>

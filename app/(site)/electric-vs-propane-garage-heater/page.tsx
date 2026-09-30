@@ -168,6 +168,7 @@ export default function Page() {
             No fuel line, no venting — plug into the numbers on the <a href="/electric-garage-heater">electric page</a> and
             size the circuit first.
           </p>
+          <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
@@ -181,6 +182,7 @@ export default function Page() {
             comparing it to a plug-and-go electric unit. See{" "}
             <a href="/propane-heater-for-garage">the propane page</a> for the safety conditions.
           </p>
+          <p className="mt-2 text-xs text-(--color-alarm)">{bigMaxx.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(bigMaxx, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
