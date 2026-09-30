@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { pageMetadata } from "@/lib/seo";
@@ -120,8 +121,10 @@ export default function Page() {
               const links = product ? route(product, "site", entry.href) : [];
               const primary = links.find((l) => l.slot === "primary") ?? links[0];
               const [lo, hi] = hc.outputBtuh;
+              const warning = productWarning(product);
               return (
-                <tr key={id} className="border-b border-(--color-line)/50 align-top">
+                <Fragment key={id}>
+                <tr className={warning ? "align-top" : "border-b border-(--color-line)/50 align-top"}>
                   <td className="py-3 pr-3 text-(--color-fg)">
                     {hc.label}
                     {product?.asin ? <span className="mt-0.5 block text-xs text-(--color-fg-2)">Linked: {product.name}</span> : null}
@@ -143,9 +146,16 @@ export default function Page() {
                         {primary.label}
                       </BuyButton>
                     ) : null}
-                    {productWarning(product) ? <p className="mt-1 max-w-[18rem] text-[11px] leading-4 text-(--color-alarm)">{productWarning(product)}</p> : null}
                   </td>
                 </tr>
+                {warning ? (
+                  <tr className="border-b border-(--color-line)/50">
+                    <td colSpan={5} className="pb-3 text-xs leading-5 text-(--color-alarm)">
+                      {warning}
+                    </td>
+                  </tr>
+                ) : null}
+                </Fragment>
               );
             })}
           </tbody>

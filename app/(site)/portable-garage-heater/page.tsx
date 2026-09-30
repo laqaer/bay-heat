@@ -39,13 +39,6 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={sources}>
-      <AnswerBlock>
-        A 1,500W portable heater draws <Num f="circuit.1500w120v.amps" /> — above the{" "}
-        <Num f="circuit.120v15a.continuous_a" /> cord-and-plug limit on a 15A circuit shared with other outlets (
-        <Num f="code.nec.210_23_a_1" />). As the only thing plugged into that circuit it&apos;s fine; on a dedicated
-        20A garage circuit it&apos;s comfortable either way.
-      </AnswerBlock>
-
       <QuickPick
         productId="cz798-1500w-milkhouse"
         page={entry.href}
@@ -53,6 +46,13 @@ export default function Page() {
         compareHref="#compare"
         compareLabel="See three 1,500 W portables"
       />
+
+      <AnswerBlock>
+        A 1,500W portable heater draws <Num f="circuit.1500w120v.amps" /> — above the{" "}
+        <Num f="circuit.120v15a.continuous_a" /> cord-and-plug limit on a 15A circuit shared with other outlets (
+        <Num f="code.nec.210_23_a_1" />). As the only thing plugged into that circuit it&apos;s fine; on a dedicated
+        20A garage circuit it&apos;s comfortable either way.
+      </AnswerBlock>
 
       <Disclosure />
 

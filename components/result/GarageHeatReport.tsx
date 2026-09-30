@@ -99,7 +99,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
               .map((row) => (
                 <li key={row.measure} className="flex items-center justify-between gap-4 border-b border-(--color-line) py-2 text-[15px]">
                   <span className="flex items-center gap-2 text-(--color-fg)">
-                    <input type="checkbox" defaultChecked readOnly className="tap-24" />
+                    <input type="checkbox" defaultChecked readOnly aria-label={row.measure.replace(/_/g, " ")} className="tap-24" />
                     {row.measure.replace(/_/g, " ")}
                   </span>
                   <span className="font-mono text-xs text-(--color-fg-2)">
@@ -150,6 +150,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
             return (
               <div key={r.classId} className="flex flex-col gap-3 border border-(--color-line) bg-(--color-surface) p-5">
                 <p className="font-bold text-(--color-fg)">{CLASS_LABEL[r.classId] ?? r.classId}</p>
+                {product?.asin ? <p className="-mt-2 text-xs text-(--color-fg-2)">Linked: {product.name}</p> : null}
                 <p className="font-mono text-sm text-(--color-fg-2)">
                   {btuh(r.capacityBtuh)} BTU/h · {r.circuit ? `${r.circuit.volts}V/${r.circuit.breakerA}A, ${r.circuit.wireNM}` : "no new circuit"}
                 </p>

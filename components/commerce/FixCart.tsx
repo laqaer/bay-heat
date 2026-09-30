@@ -33,19 +33,19 @@ export function FixCart({
   return (
     <div data-buy-group className="not-prose mt-5 border border-(--color-fg)/25 bg-(--color-surface) p-4">
       <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-(--color-fg-2)">{title}</p>
-      <p className="mt-2 text-[11px] leading-4 text-(--color-fg-2)">{DISCLOSURE_INLINE}</p>
-      <ul className="mt-3 divide-y divide-(--color-line)">
+      <p className="mt-2 max-w-none text-[11px] leading-4 text-(--color-fg-2)">{DISCLOSURE_INLINE}</p>
+      <ul className="mt-3 mb-0 list-none divide-y divide-(--color-line) pl-0">
         {lines.map((l) => {
           const p = findProduct(l.productId);
           const link = p ? route(p, "planner", page)[0] : null;
           return (
-            <li key={l.productId} className="flex items-center justify-between gap-3 py-2 text-sm">
+            <li key={l.productId} className="flex max-w-none items-center justify-between gap-3 text-sm">
               <span className="text-(--color-fg)">
                 {l.qty > 1 ? `${l.qty} × ` : ""}
                 {l.name}
               </span>
               {link ? (
-                <BuyTextLink href={link.href} className="shrink-0 text-xs">
+                <BuyTextLink href={link.href} className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-end text-xs">
                   View ↗
                 </BuyTextLink>
               ) : null}
@@ -58,9 +58,11 @@ export function FixCart({
           Add all {lines.length} to your Amazon cart
         </BuyButton>
       ) : null}
-      <PaidLabel />
+      <div className="mt-1">
+        <PaidLabel />
+      </div>
       {missing.length > 0 ? (
-        <p className="mt-2 text-[11px] leading-4 text-(--color-fg-2)">
+        <p className="mt-2 max-w-none text-[11px] leading-4 text-(--color-fg-2)">
           Not in this cart (no single part with a verified listing): {missing.join(", ")}.
         </p>
       ) : null}

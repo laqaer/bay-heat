@@ -42,13 +42,6 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={sources}>
-      <AnswerBlock>
-        Radiant (infrared/quartz) heat warms people and surfaces directly, so it still feels warm right where the
-        door is open or a draft cuts across the floor. Forced-air heats the room&apos;s air, which a big door
-        opening or a leaky envelope keeps flushing outside. A drafty shop or a bay with the door up often does
-        better on radiant; a fully enclosed garage that needs even heat throughout does better on forced-air.
-      </AnswerBlock>
-
       <QuickPick
         productId="dr238-1500w-infrared"
         page={entry.href}
@@ -56,6 +49,13 @@ export default function Page() {
         compareHref="#classes"
         compareLabel="Compare both radiant classes"
       />
+
+      <AnswerBlock>
+        Radiant (infrared/quartz) heat warms people and surfaces directly, so it still feels warm right where the
+        door is open or a draft cuts across the floor. Forced-air heats the room&apos;s air, which a big door
+        opening or a leaky envelope keeps flushing outside. A drafty shop or a bay with the door up often does
+        better on radiant; a fully enclosed garage that needs even heat throughout does better on forced-air.
+      </AnswerBlock>
 
       <h2>Why the door matters more than the wattage</h2>
       <p>

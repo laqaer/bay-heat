@@ -48,23 +48,23 @@ export function QuickPick({
       <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-(--color-fg-2)">{eyebrow}</p>
       <p className="mt-1 text-base font-bold leading-snug text-(--color-fg)">
         {product.name}
-        {specs ? <span className="ml-2 font-mono text-sm font-normal text-(--color-fg-2)">{specs}</span> : null}
+        {specs ? <span className="ml-2 inline-block whitespace-nowrap font-mono text-sm font-normal text-(--color-fg-2)">{specs}</span> : null}
       </p>
-      <p className="mt-1 text-sm leading-5 text-(--color-fg-2)">{headline}</p>
-      <p className="mt-2 text-[11px] leading-4 text-(--color-fg-2)">{DISCLOSURE_INLINE}</p>
+      <p className="mt-1 max-w-none text-sm leading-5 text-(--color-fg-2)">{headline}</p>
+      <p className="mt-2 max-w-none text-[11px] leading-4 text-(--color-fg-2)">{DISCLOSURE_INLINE}</p>
       <BuyButton href={primary.href} className="mt-2 h-11 w-full sm:w-auto">
         {primary.label}
       </BuyButton>
       <div className="mt-1 flex flex-wrap items-baseline gap-x-4">
         <PaidLabel />
         {compareHref ? (
-          <a href={compareHref} className="text-sm text-(--color-link) underline underline-offset-4">
+          <a href={compareHref} className="inline-flex min-h-11 items-center text-sm text-(--color-link) underline underline-offset-4">
             {compareLabel} ↓
           </a>
         ) : null}
       </div>
       {product.safetyLine ? (
-        <p className="mt-2 border-l-2 border-(--color-alarm) pl-2 text-[11px] leading-4 text-(--color-fg-2)">{product.safetyLine.text}</p>
+        <p className="mt-2 max-w-none border-l-2 border-(--color-alarm) pl-2 text-[11px] leading-4 text-(--color-fg-2)">{product.safetyLine.text}</p>
       ) : null}
     </div>
   );

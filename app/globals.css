@@ -144,6 +144,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* the mobile sticky bar is 56 px: keep focused controls and #anchor jumps clear of it (WCAG 2.4.11) */
+  scroll-padding-bottom: 4rem;
 }
 /* Next.js 16 no longer forces scroll-behavior:auto during navigation; restore the old opt-out behavior
    explicitly via the data attribute the router now checks (nextjs16-cheatsheet.md §2 B4). */
