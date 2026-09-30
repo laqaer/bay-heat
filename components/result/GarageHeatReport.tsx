@@ -1,5 +1,5 @@
 import type { PlannerResult } from "@/lib/planner/types";
-import { productForRecommendation, productWarning } from "@/lib/commerce/products";
+import { productForRecommendation, warningToShow } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
@@ -147,7 +147,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
             const secondary = links.find((l) => l.slot === "secondary" || l.slot === "also");
             // The class-level line above already carries the generic flammables rule; a product's own manual
             // warning (e.g. the DR-975's "do not use as a residential heater") must still reach the reader.
-            const productExtra = productWarning(product);
+            const productExtra = warningToShow(product, r.safetyLine);
             return (
               <div key={r.classId} className="flex flex-col gap-3 border border-(--color-line) bg-(--color-surface) p-5">
                 <p className="font-bold text-(--color-fg)">{CLASS_LABEL[r.classId] ?? r.classId}</p>
@@ -160,7 +160,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
                   <Cost amount={r.costPerHour} per="hr" /> · <Cost amount={r.perSeason} per="season" />
                 </p>
                 {r.safetyLine ? <p className="border-l-2 border-(--color-alarm) pl-2 text-xs text-(--color-alarm)">{r.safetyLine}</p> : null}
-                {productExtra && !r.safetyLine?.includes(productExtra) ? (
+                {productExtra ? (
                   <p className="border-l-2 border-(--color-alarm) pl-2 text-xs text-(--color-alarm)">{productExtra}</p>
                 ) : null}
                 <p className="text-xs text-(--color-fg-2)">{r.why}</p>

@@ -41,3 +41,13 @@ export function productForRecommendation(
   const fits = products.find((p) => p.asin && p.outputBtuh !== undefined && need.units === 1 && need.capacityBtuh <= p.outputBtuh * 1.01);
   return fits ? { product: fits, direct: true } : { product: products[0], direct: false };
 }
+
+// What a planner card must show for the product it links, given the class-level line it already renders. The class
+// line carries the standard flammables sentence only when the reader did not say they store none (recommend.ts), so
+// the sentence is dropped from the product's line only when the class line really has it; otherwise the product's
+// whole line is shown, flammables included, because a direct purchase card never goes without the maker's rule.
+export function warningToShow(product: Product | undefined, classLine: string | undefined): string | undefined {
+  if (!product?.safetyLine) return undefined;
+  const extra = classLine?.includes(STANDARD_FLAMMABLES) ? productWarning(product) : product.safetyLine.text;
+  return extra && !classLine?.includes(extra) ? extra : undefined;
+}
