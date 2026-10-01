@@ -5,6 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { Num } from "@/components/evidence/Num";
 import { Disclosure } from "@/components/commerce/Disclosure";
+import { FixCart } from "@/components/commerce/FixCart";
 import { Cost } from "@/components/commerce/Cost";
 import { BuyButton } from "@/components/ui/ButtonLink";
 import { GradeScale } from "@/components/figures/GradeScale";
@@ -28,7 +29,7 @@ function firstBuyLink(productIds: string[]) {
   for (const id of productIds) {
     const product = findProduct(id);
     if (!product) continue;
-    const links = route(product, "site");
+    const links = route(product, "site", entry.href);
     const primary = links.find((l) => l.slot === "primary") ?? links[0];
     if (primary) return { product, primary };
   }
@@ -74,6 +75,7 @@ export default function Page() {
       </p>
       <GradeScale current={bundle?.gradeAfter} />
       <p className="text-xs leading-5 text-(--color-fg-2)">{SAVINGS_VARY}</p>
+      <FixCart measures={bundle?.measures ?? []} doors={EXAMPLE_A_INPUT.garageDoors} page={entry.href} title="Parts for the fixes above" />
 
       <h2>The order, and why it&apos;s this order</h2>
       <p>

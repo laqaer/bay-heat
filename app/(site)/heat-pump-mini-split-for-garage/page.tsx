@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ReportPage } from "@/components/page/ReportPage";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { Cost } from "@/components/commerce/Cost";
@@ -99,6 +100,12 @@ export default function Page() {
         resistance heater sized to the same garage. In a sealed 2-car garage in Chicago, the heat pump&apos;s lower
         running cost usually closes that gap inside 5 years — and unlike the resistance heater, it also cools.
       </AnswerBlock>
+
+      <QuickPick
+        productId="minisplit-12k-230v"
+        page={entry.href}
+        headline="One 12,000 BTU/h 230 V heat pump that heats and cools. The refrigerant work needs a licensed HVAC contractor."
+      />
 
       <h2>The real seasonal COP, not the nameplate number</h2>
       <p>
@@ -226,7 +233,7 @@ export default function Page() {
         </p>
         {minisplit.safetyLine ? <p className="mt-2 text-xs text-(--color-alarm)">{minisplit.safetyLine.text}</p> : null}
         <div className="mt-3">
-          <BuyButton href={route(minisplit, "site")[0].href}>Search current listings ↗</BuyButton>
+          <BuyButton href={route(minisplit, "site", entry.href)[0].href}>Search current listings</BuyButton>
         </div>
         <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {minisplit.priceClass}</p>
       </div>

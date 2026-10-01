@@ -1,5 +1,5 @@
 import type { PlannerResult } from "@/lib/planner/types";
-import { findProduct } from "@/lib/commerce/products";
+import { productForRecommendation, warningToShow } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
@@ -8,8 +8,11 @@ import { FitBar } from "@/components/commerce/FitBar";
 import { WhyNot } from "@/components/commerce/WhyNot";
 import { Cost } from "@/components/commerce/Cost";
 import { Disclosure } from "@/components/commerce/Disclosure";
+import { FixCart } from "@/components/commerce/FixCart";
+import { QuickPick } from "@/components/commerce/QuickPick";
+import { HEATER_CLASSES } from "@/lib/planner/catalog";
 import { Callout } from "@/components/ui/Callout";
-import { BuyButton } from "@/components/ui/ButtonLink";
+import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { SAFETY_SCOPE } from "@/lib/site";
 import { btuh, kw, amps, commas } from "@/lib/format";
 
@@ -39,7 +42,9 @@ const SYSTEM_LABEL: Record<string, string> = {
   diesel_78: "Diesel, 78%",
 };
 
-export function GarageHeatReport({ result }: { result: PlannerResult }) {
+// `page` is the path Associates tracking IDs are keyed by (lib/env.public.ts AMAZON_TAGS_BY_PAGE). The planner
+// renders this report at /garage-heater-calculator; the shared permalink passes "/r".
+export function GarageHeatReport({ result, page = "/garage-heater-calculator" }: { result: PlannerResult; page?: string }) {
   const noHeatingLoad = result.heating.qDesign <= 0;
   return (
     <div className="not-prose">
@@ -94,7 +99,7 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
               .map((row) => (
                 <li key={row.measure} className="flex items-center justify-between gap-4 border-b border-(--color-line) py-2 text-[15px]">
                   <span className="flex items-center gap-2 text-(--color-fg)">
-                    <input type="checkbox" defaultChecked readOnly className="tap-24" />
+                    <input type="checkbox" defaultChecked readOnly aria-label={row.measure.replace(/_/g, " ")} className="tap-24" />
                     {row.measure.replace(/_/g, " ")}
                   </span>
                   <span className="font-mono text-xs text-(--color-fg-2)">
@@ -109,6 +114,7 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
           <p className="mt-1 text-sm text-(--color-fg-2)">
             Circuit: {result.circuits.forSize.breakerA}A / {result.circuits.forSize.wireNM} today.
           </p>
+          <FixCart measures={result.fixFirst.measures} doors={result.inputsEcho.garageDoors} page={page} />
         </section>
       ) : (
         <section className="mt-10">
@@ -134,14 +140,18 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
         <Disclosure />
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           {result.recommendations.map((r) => {
-            const productId = r.productIds[0];
-            const product = productId ? findProduct(productId) : undefined;
-            const links = product ? route(product, "planner") : [];
+            const { product, direct } = productForRecommendation(r.productIds, { capacityBtuh: r.capacityBtuh, units: r.units });
+            // Not a model that supplies this capacity: link a search for it, never a direct purchase page.
+            const links = product ? route(direct ? product : { ...product, asin: undefined }, "planner", page) : [];
             const primary = links.find((l) => l.slot === "primary") ?? links[0];
             const secondary = links.find((l) => l.slot === "secondary" || l.slot === "also");
+            // The class-level line above already carries the generic flammables rule; a product's own manual
+            // warning (e.g. the DR-975's "do not use as a residential heater") must still reach the reader.
+            const productExtra = warningToShow(product, r.safetyLine);
             return (
               <div key={r.classId} className="flex flex-col gap-3 border border-(--color-line) bg-(--color-surface) p-5">
                 <p className="font-bold text-(--color-fg)">{CLASS_LABEL[r.classId] ?? r.classId}</p>
+                {direct && product ? <p className="-mt-2 text-xs text-(--color-fg-2)">Linked: {product.name}</p> : null}
                 <p className="font-mono text-sm text-(--color-fg-2)">
                   {btuh(r.capacityBtuh)} BTU/h · {r.circuit ? `${r.circuit.volts}V/${r.circuit.breakerA}A, ${r.circuit.wireNM}` : "no new circuit"}
                 </p>
@@ -150,6 +160,9 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
                   <Cost amount={r.costPerHour} per="hr" /> · <Cost amount={r.perSeason} per="season" />
                 </p>
                 {r.safetyLine ? <p className="border-l-2 border-(--color-alarm) pl-2 text-xs text-(--color-alarm)">{r.safetyLine}</p> : null}
+                {productExtra ? (
+                  <p className="border-l-2 border-(--color-alarm) pl-2 text-xs text-(--color-alarm)">{productExtra}</p>
+                ) : null}
                 <p className="text-xs text-(--color-fg-2)">{r.why}</p>
                 {primary ? (
                   <BuyButton href={primary.href} className="mt-1 h-10 text-sm">
@@ -157,15 +170,35 @@ export function GarageHeatReport({ result }: { result: PlannerResult }) {
                   </BuyButton>
                 ) : null}
                 {secondary ? (
-                  <a href={secondary.href} target="_blank" rel="sponsored nofollow noopener" className="text-center text-xs text-(--color-link) underline">
+                  <BuyTextLink href={secondary.href} className="text-center text-xs">
                     {secondary.label}
-                  </a>
+                  </BuyTextLink>
                 ) : null}
               </div>
             );
           })}
         </div>
         <WhyNot rows={result.whyNot} />
+        {result.recommendations.some((r) => HEATER_CLASSES[r.classId]?.energy !== "electric") ? (
+          <div className="mt-6">
+            <QuickPick
+              productId="co-alarm-battery-10yr"
+              page={page}
+              eyebrow="Safety add-on"
+              headline="A fuel-fired heater is on your list. Put a UL 2034 CO alarm in the house, by the garage door and outside each sleeping area."
+            />
+          </div>
+        ) : null}
+        {result.heating.tIn <= 45 ? (
+          <div className="mt-6">
+            <QuickPick
+              productId="freeze-alarm-wifi"
+              page={page}
+              eyebrow="Freeze watch"
+              headline="Holding the garage just above freezing? A temperature sensor that texts you when the heat fails is cheaper than a burst pipe."
+            />
+          </div>
+        ) : null}
       </section>
 
       {/* 4. Safety */}

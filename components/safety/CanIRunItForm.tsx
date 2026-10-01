@@ -5,6 +5,7 @@ import type { HeaterKind, Situation } from "@/lib/safety/types";
 import { verdictFor } from "@/lib/safety/verdict";
 import { VerdictStamp, HEATER_LABEL } from "./VerdictStamp";
 import { clsx } from "@/lib/clsx";
+import { QuickPick } from "@/components/commerce/QuickPick";
 
 const KIND_ORDER: HeaterKind[] = ["e120", "e240", "buddy", "torpedo", "kerosene", "diesel", "vented_gas", "minisplit"];
 const KIND_SUBTITLE: Record<HeaterKind, string> = {
@@ -21,6 +22,13 @@ const KIND_SUBTITLE: Record<HeaterKind, string> = {
 // Kinds whose verdict doesn't depend on the situation at all -- verdictFor() ignores Situation entirely for
 // these (torpedo is always NO-GO, mini-split is always GO), so there's nothing to ask.
 const UNCONDITIONAL: HeaterKind[] = ["torpedo", "minisplit"];
+
+// What to offer next to a verdict that says no. Never the heater that got the NO-GO: only a class the verdict
+// itself names as safer, and only where the catalog has a verified listing for it (BLUEPRINT.md §2.8).
+const SAFER_PICK: Partial<Record<HeaterKind, { productId: string; headline: string }>> = {
+  e240: { productId: "cz220-5kw-ceiling", headline: "A hardwired 240 V ceiling heater on its own 30 A circuit is the safer class here. It only makes sense if that circuit exists or is being added." },
+};
+const COMBUSTION: HeaterKind[] = ["buddy", "torpedo", "kerosene", "diesel", "vented_gas"];
 
 const DEFAULT_SITUATION: Situation = {
   attached: true,
@@ -98,6 +106,11 @@ export function CanIRunItForm() {
   const [situation, setSituation] = useState<Situation>(DEFAULT_SITUATION);
 
   const verdict = useMemo(() => (kind ? verdictFor(kind, situation) : null), [kind, situation]);
+  const saferPick =
+    verdict && verdict.verdict === "NO_GO"
+      ? // never the class that got the NO-GO: a 240 V verdict for lack of a breaker must not answer with another 240 V heater
+        verdict.saferAlternatives.filter((k) => k !== kind).map((k) => SAFER_PICK[k]).find((p): p is NonNullable<typeof p> => p !== undefined)
+      : undefined;
 
   function set<K extends keyof Situation>(key: K, value: Situation[K]) {
     setSituation((s) => ({ ...s, [key]: value }));
@@ -254,6 +267,24 @@ export function CanIRunItForm() {
         <div className="mt-10 border-t border-(--color-fg)/10 pt-8">
           <p className="wdth-100 font-mono text-xs uppercase tracking-[0.12em] text-(--color-fg-2)">Your verdict</p>
           <VerdictStamp verdict={verdict} />
+          {saferPick ? (
+            <QuickPick
+              productId={saferPick.productId}
+              page="/can-i-run-it"
+              surface="safety"
+              eyebrow="Safer alternative · model pick, spec-based"
+              headline={saferPick.headline}
+            />
+          ) : null}
+          {kind && COMBUSTION.includes(kind) && verdict.verdict !== "GO" ? (
+            <QuickPick
+              productId="co-alarm-battery-10yr"
+              page="/can-i-run-it"
+              surface="safety"
+              eyebrow="Safety add-on"
+              headline="Put a UL 2034 CO alarm in the house, by the garage door and outside each sleeping area."
+            />
+          ) : null}
         </div>
       ) : null}
     </div>

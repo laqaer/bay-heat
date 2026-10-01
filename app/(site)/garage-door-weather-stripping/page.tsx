@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { Num } from "@/components/evidence/Num";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { Cost } from "@/components/commerce/Cost";
@@ -47,7 +48,7 @@ export default function Page() {
 
   const products = BUY_IDS.map((id) => {
     const product = findProduct(id)!;
-    const links = route(product, "site");
+    const links = route(product, "site", entry.href);
     const primary = links.find((l) => l.slot === "primary") ?? links[0];
     return { product, primary };
   });
@@ -63,6 +64,14 @@ export default function Page() {
         on electric heat.
       </AnswerBlock>
       <p className="text-sm text-(--color-fg-2)">{SAVINGS_VARY}</p>
+
+      <QuickPick
+        productId="seal-perimeter-stop"
+        page={entry.href}
+        headline="The top and sides leak too. One 30 ft roll is enough for the top and both sides of a 16 × 7 ft door (16 + 7 + 7)."
+        compareHref="#buy"
+        compareLabel="See the whole package"
+      />
 
       <h2>Three leaks, one afternoon</h2>
       <p>
@@ -106,7 +115,7 @@ export default function Page() {
       </p>
 
       <Disclosure />
-      <h2>Buy the package</h2>
+      <h2 id="buy">Buy the package</h2>
       <div className="not-prose my-6 grid gap-3 sm:grid-cols-2">
         {products.map(({ product, primary }) => (
           <div key={product.id} className="border border-(--color-line) bg-(--color-surface) p-4">

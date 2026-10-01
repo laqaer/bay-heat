@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { pageMetadata } from "@/lib/seo";
@@ -6,6 +7,7 @@ import { findPage } from "@/lib/pages";
 import { Num } from "@/components/evidence/Num";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { Disclosure } from "@/components/commerce/Disclosure";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { BuyButton, ButtonLink } from "@/components/ui/ButtonLink";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
@@ -13,7 +15,7 @@ import { heaterClass } from "@/lib/planner/catalog";
 import type { HeaterClassId } from "@/lib/planner/types";
 import { plan } from "@/lib/planner/plan";
 import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
-import { findProduct } from "@/lib/commerce/products";
+import { primaryProduct, productWarning } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { getSource } from "@/lib/facts";
 import { SAFETY_SCOPE } from "@/lib/site";
@@ -65,6 +67,13 @@ export default function Page() {
         unit heater bolted to the ceiling. Output and circuit size scale together — a bigger heater always needs a bigger breaker and
         thicker wire, not just a bigger price tag.
       </p>
+      <QuickPick
+        productId="cz220-5kw-ceiling"
+        page={entry.href}
+        headline="A 5 kW ceiling heater on a 30 A circuit: enough for our example 2-car garage once it is sealed and insulated."
+        compareHref="#classes"
+        compareLabel="Compare every electric class"
+      />
       <p>
         The <Link href="/garage-heater-calculator">garage heater calculator</Link> sizes the exact class for your garage from its
         dimensions, insulation and local design temperature. This page lists every class side by side; the pages below cover one class
@@ -88,7 +97,7 @@ export default function Page() {
         ))}
       </div>
 
-      <h2>Every electric class, side by side</h2>
+      <h2 id="classes">Every electric class, side by side</h2>
       <p>
         Output ranges and circuits come from the same sizing engine behind the calculator, not a spec sheet we retyped by hand.
         Price is a range class, never a live number — check the actual price on the retailer&apos;s page before you buy.
@@ -108,13 +117,18 @@ export default function Page() {
           <tbody>
             {CLASS_ORDER.map((id) => {
               const hc = heaterClass(id);
-              const product = hc.productIds[0] ? findProduct(hc.productIds[0]) : undefined;
-              const links = product ? route(product, "site") : [];
+              const product = primaryProduct(hc.productIds);
+              const links = product ? route(product, "site", entry.href) : [];
               const primary = links.find((l) => l.slot === "primary") ?? links[0];
               const [lo, hi] = hc.outputBtuh;
+              const warning = productWarning(product) ? product?.safetyLine?.text : undefined; // the whole line, not only the part beyond the standard one
               return (
-                <tr key={id} className="border-b border-(--color-line)/50 align-top">
-                  <td className="py-3 pr-3 text-(--color-fg)">{hc.label}</td>
+                <Fragment key={id}>
+                <tr className={warning ? "align-top" : "border-b border-(--color-line)/50 align-top"}>
+                  <td className="py-3 pr-3 text-(--color-fg)">
+                    {hc.label}
+                    {product?.asin ? <span className="mt-0.5 block text-xs text-(--color-fg-2)">Linked: {product.name}</span> : null}
+                  </td>
                   <td className="py-3 pr-3 font-mono whitespace-nowrap">
                     <Num v={lo} unit="BTU/h" round={100} ev="C" src={`HEATER_CLASSES.${id}.outputBtuh — lib/planner/catalog.ts`} />
                     {lo !== hi ? (
@@ -134,6 +148,14 @@ export default function Page() {
                     ) : null}
                   </td>
                 </tr>
+                {warning ? (
+                  <tr className="border-b border-(--color-line)/50">
+                    <td colSpan={5} className="pb-3 text-xs leading-5 text-(--color-alarm)">
+                      {warning}
+                    </td>
+                  </tr>
+                ) : null}
+                </Fragment>
               );
             })}
           </tbody>

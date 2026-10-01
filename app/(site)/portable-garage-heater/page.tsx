@@ -6,6 +6,7 @@ import { Num } from "@/components/evidence/Num";
 import { Callout } from "@/components/ui/Callout";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { Disclosure } from "@/components/commerce/Disclosure";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { BuyButton } from "@/components/ui/ButtonLink";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
@@ -38,6 +39,14 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={sources}>
+      <QuickPick
+        productId="cz798-1500w-milkhouse"
+        page={entry.href}
+        headline="For one bay or workbench on a 15 A circuit with nothing else on it: a fan-forced 1,500 W milkhouse heater."
+        compareHref="#compare"
+        compareLabel="See three 1,500 W portables"
+      />
+
       <AnswerBlock>
         A 1,500W portable heater draws <Num f="circuit.1500w120v.amps" /> — above the{" "}
         <Num f="circuit.120v15a.continuous_a" /> cord-and-plug limit on a 15A circuit shared with other outlets (
@@ -97,7 +106,7 @@ export default function Page() {
         it and you&apos;re back to the shared-circuit math, which doesn&apos;t fit.
       </Callout>
 
-      <h2>Three 1,500W portables, side by side</h2>
+      <h2 id="compare">Three 1,500W portables, side by side</h2>
       <div className="not-prose my-6 grid gap-4 sm:grid-cols-2">
         <div className="border border-(--color-line) p-4">
           <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">120V · MILKHOUSE · 1,500W</p>
@@ -107,7 +116,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{cz798.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(cz798, "site")[0].href}>Check CZ798 price on Amazon ↗</BuyButton>
+            <BuyButton href={route(cz798, "site", entry.href)[0].href}>Check CZ798 price on Amazon</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {cz798.priceClass}</p>
         </div>
@@ -118,8 +127,9 @@ export default function Page() {
             <Num f="hs1500tt.watts" />, wall-mounted at <Num f="hs1500tt.mount_height_in_us" /> minimum, with{" "}
             <Num f="hs1500tt.clearance_side_in" /> side clearance.
           </p>
+          <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site")[0].href}>Check HS-1500-TT price on Amazon ↗</BuyButton>
+            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label}</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>
@@ -132,7 +142,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{generic.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(generic, "site")[0].href}>Search 1,500W portable heaters ↗</BuyButton>
+            <BuyButton href={route(generic, "site", entry.href)[0].href}>Search 1,500W portable heaters</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {generic.priceClass}</p>
         </div>

@@ -5,6 +5,7 @@ import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { Cost } from "@/components/commerce/Cost";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { BuyButton, ButtonLink } from "@/components/ui/ButtonLink";
 import { pageMetadata } from "@/lib/seo";
@@ -92,6 +93,14 @@ export default function Page() {
         buy button.
       </AnswerBlock>
 
+      <QuickPick
+        productId="gas-unit-heater-big-maxx-50"
+        page={entry.href}
+        headline="The class this page sells: a vented 50,000 BTU unit heater. A licensed gas fitter installs it, and the manual sets a minimum height in a residential garage."
+        compareHref="#vented"
+        compareLabel="See both vented unit heaters"
+      />
+
       <p>
         &quot;Propane heater for a garage&quot; covers two unrelated tools. A vented unit heater bolts to the wall or
         ceiling, burns off a natural gas line or a bulk propane tank, and exhausts outdoors through its own flue —
@@ -104,7 +113,7 @@ export default function Page() {
         <ButtonLink href="/can-i-run-it">Check my heater →</ButtonLink>
       </div>
 
-      <h2>Vented unit heaters: the class this page sells</h2>
+      <h2 id="vented">Vented unit heaters: the class this page sells</h2>
       <p>
         A vented natural gas or propane unit heater covers a whole garage from one wall-mounted unit. Code sets a
         floor for where its burner can sit: <Num f="code.ifgc.305_3" />. Both units below need a licensed gas
@@ -121,7 +130,7 @@ export default function Page() {
           <p className="mt-2 text-xs text-(--color-alarm)">{bigMaxx.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {bigMaxx.priceClass}</p>
           <div className="mt-3">
-            <BuyButton href={route(bigMaxx, "site")[0].href}>{route(bigMaxx, "site")[0].label} ↗</BuyButton>
+            <BuyButton href={route(bigMaxx, "site", entry.href)[0].href}>{route(bigMaxx, "site", entry.href)[0].label}</BuyButton>
           </div>
         </div>
         <div className="border border-(--color-line) p-4">
@@ -134,7 +143,7 @@ export default function Page() {
           <p className="mt-2 text-xs text-(--color-alarm)">{hotDawg.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hotDawg.priceClass}</p>
           <div className="mt-3">
-            <BuyButton href={route(hotDawg, "site")[0].href}>{route(hotDawg, "site")[0].label} ↗</BuyButton>
+            <BuyButton href={route(hotDawg, "site", entry.href)[0].href}>{route(hotDawg, "site", entry.href)[0].label}</BuyButton>
           </div>
         </div>
       </div>
@@ -183,6 +192,13 @@ export default function Page() {
       <SafetyCallout>
         <p>{SAFETY_SCOPE}</p>
       </SafetyCallout>
+
+      <QuickPick
+        productId="co-alarm-battery-10yr"
+        page={entry.href}
+        eyebrow="Safety add-on"
+        headline="Put a UL 2034 CO alarm in the house, by the garage door and outside each sleeping area."
+      />
 
       <h2>Next step</h2>
       <p>

@@ -10,6 +10,7 @@ export const PRODUCT_IDS = [
   "cz798-1500w-milkhouse",
   "dr975-7k5-shop",
   "hs1500tt-wall-infrared",
+  "dr238-1500w-infrared",
   // electric, unverified (tagged search links)
   "e-240-4k-generic",
   "e-240-10k-generic",
@@ -44,6 +45,7 @@ export const PRODUCT_IDS = [
   "gas-unit-heater-hot-dawg-45",
   // cooling (cross-sell only; see GarageInput.wantsCooling)
   "minisplit-12k-230v",
+  "minisplit-12k-115v",
 ] as const;
 
 export type ProductId = (typeof PRODUCT_IDS)[number];

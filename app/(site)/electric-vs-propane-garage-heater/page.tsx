@@ -5,6 +5,7 @@ import { Num } from "@/components/evidence/Num";
 import { Cost } from "@/components/commerce/Cost";
 import { Callout } from "@/components/ui/Callout";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { BuyButton } from "@/components/ui/ButtonLink";
 import { WhyNot } from "@/components/commerce/WhyNot";
@@ -167,8 +168,9 @@ export default function Page() {
             No fuel line, no venting — plug into the numbers on the <a href="/electric-garage-heater">electric page</a> and
             size the circuit first.
           </p>
+          <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(dr975, "site")[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {dr975.priceClass}</p>
         </div>
@@ -180,8 +182,9 @@ export default function Page() {
             comparing it to a plug-and-go electric unit. See{" "}
             <a href="/propane-heater-for-garage">the propane page</a> for the safety conditions.
           </p>
+          <p className="mt-2 text-xs text-(--color-alarm)">{bigMaxx.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(bigMaxx, "site")[0].href}>Check price on Amazon ↗</BuyButton>
+            <BuyButton href={route(bigMaxx, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {bigMaxx.priceClass}</p>
         </div>
@@ -196,6 +199,13 @@ export default function Page() {
           changes based on which fuel is cheapest this month. {SAFETY_SCOPE}
         </p>
       </SafetyCallout>
+
+      <QuickPick
+        productId="co-alarm-battery-10yr"
+        page={entry.href}
+        eyebrow="Safety add-on"
+        headline="Put a UL 2034 CO alarm in the house, by the garage door and outside each sleeping area."
+      />
     </ReportPage>
   );
 }

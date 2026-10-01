@@ -30,6 +30,25 @@ export const AMAZON_TAG_CART = process.env.NEXT_PUBLIC_AMAZON_TAG_CART ?? AMAZON
 export const AMAZON_TAG_MAIL = process.env.NEXT_PUBLIC_AMAZON_TAG_MAIL ?? AMAZON_TAG;
 export const AMAZON_TAG_SAFETY = process.env.NEXT_PUBLIC_AMAZON_TAG_SAFETY ?? AMAZON_TAG;
 
+// Per-page Associates tracking IDs: NEXT_PUBLIC_AMAZON_TAGS='{"/240v-garage-heater":"bh240-20", ...}'. Associates
+// Central reports clicks, orders and earnings per tracking ID (up to 100 per account, free), so one ID per page
+// or page group is measurement with no analytics code at all. A page with no entry uses its surface tag above.
+function parsePageTags(raw: string | undefined): Record<string, string> {
+  if (!raw) return {};
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) return {};
+    return Object.fromEntries(
+      Object.entries(parsed as Record<string, unknown>).filter(
+        (e): e is [string, string] => typeof e[1] === "string" && /^[A-Za-z0-9-]{3,40}$/.test(e[1]) && e[0].startsWith("/"),
+      ),
+    );
+  } catch {
+    return {};
+  }
+}
+export const AMAZON_TAGS_BY_PAGE: Record<string, string> = parsePageTags(process.env.NEXT_PUBLIC_AMAZON_TAGS);
+
 // Retailer deep-link bases (Impact). A missing base hides that partner's button; Amazon remains.
 export const HOMEDEPOT_LINK_BASE = process.env.NEXT_PUBLIC_HOMEDEPOT_LINK_BASE ?? null;
 export const WALMART_LINK_BASE = process.env.NEXT_PUBLIC_WALMART_LINK_BASE ?? null;

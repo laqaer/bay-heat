@@ -1,0 +1,33 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { auditHtml, disclosureBeforeFirstLink, missingProductWarnings } from "../../scripts/link-audit.mjs";
+
+const link = (href: string) => `<a href="${href}" rel="sponsored nofollow noopener">x</a>`;
+const DISC = "<p>Paid links: we earn a commission if you buy.</p>";
+
+test("auditHtml tells /dp/, search and cart links apart and reads the tag", () => {
+  const html = [
+    link("https://www.amazon.com/dp/B009F1SWH8?tag=laqaer-20"),
+    link("https://www.amazon.com/s?k=seal+kit&amp;tag=laqaer-20"),
+    link("https://www.amazon.com/gp/aws/cart/add.html?AssociateTag=laqaer-20&amp;ASIN.1=B009F1SWH8&amp;ASIN.2=B00PX0T37I"),
+  ].join("");
+  const out = auditHtml(html);
+  assert.deepEqual(out.map((l: { kind: string }) => l.kind), ["dp", "search", "cart"]);
+  assert.ok(out.every((l: { tag: string | null }) => l.tag === "laqaer-20"));
+});
+
+test("the disclosure must come before the first paid link", () => {
+  assert.equal(disclosureBeforeFirstLink(`${DISC}${link("https://www.amazon.com/dp/B009F1SWH8")}`), true);
+  assert.equal(disclosureBeforeFirstLink(`${link("https://www.amazon.com/dp/B009F1SWH8")}${DISC}`), false);
+  assert.equal(disclosureBeforeFirstLink(link("https://www.amazon.com/dp/B009F1SWH8")), false);
+  assert.equal(disclosureBeforeFirstLink("<p>no links</p>"), true);
+});
+
+test("a directly linked product whose manual warning is not on the page is reported", () => {
+  const p = { id: "x-heater", asin: "B0TESTTEST", safetyLine: { text: "Manual: \u201cDO NOT USE AS A RESIDENTIAL HEATER.\u201d Ask the maker." } };
+  const linked = `<a href="https://www.amazon.com/dp/B0TESTTEST?tag=t" rel="sponsored">x</a>`;
+  assert.deepEqual(missingProductWarnings(`<p>nothing</p>${linked}`, [p]), ["x-heater"]);
+  assert.deepEqual(missingProductWarnings(`<p class="a">Manual: \u201cDO NOT USE AS A RESIDENTIAL HEATER.\u201d <!-- -->Ask the maker.</p>${linked}`, [p]), []);
+  assert.deepEqual(missingProductWarnings(`<script>"Manual: \u201cDO NOT USE AS A RESIDENTIAL HEATER.\u201d Ask the maker."</script>${linked}`, [p]), ["x-heater"], "text that only exists in a script payload is not visible to the reader");
+  assert.deepEqual(missingProductWarnings("<p>no link</p>", [p]), []);
+});

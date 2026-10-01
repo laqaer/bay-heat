@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
+import { QuickPick } from "@/components/commerce/QuickPick";
 import { Num } from "@/components/evidence/Num";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { Cost } from "@/components/commerce/Cost";
@@ -58,7 +59,7 @@ export default function Page() {
 
   const products = BUY_IDS.map((id) => {
     const product = findProduct(id)!;
-    const links = route(product, "site");
+    const links = route(product, "site", entry.href);
     const primary = links.find((l) => l.slot === "primary") ?? links[0];
     return { product, primary };
   });
@@ -75,6 +76,14 @@ export default function Page() {
         where most of the load is.
       </AnswerBlock>
       <p className="text-sm text-(--color-fg-2)">{SAVINGS_VARY}</p>
+
+      <QuickPick
+        productId="door-kit-eps-matador"
+        page={entry.href}
+        headline="EPS foam cuts more heat than a reflective kit on our example door. Stock changes, so this opens an Amazon search."
+        compareHref="#buy"
+        compareLabel="See EPS and reflective kits"
+      />
 
       <h2>EPS versus reflective, on the same door</h2>
       <p>
@@ -146,7 +155,7 @@ export default function Page() {
       </p>
 
       <Disclosure />
-      <h2>Buy a kit</h2>
+      <h2 id="buy">Buy a kit</h2>
       <div className="not-prose my-6 grid gap-3 sm:grid-cols-2">
         {products.map(({ product, primary }) => (
           <div key={product.id} className="border border-(--color-line) bg-(--color-surface) p-4">

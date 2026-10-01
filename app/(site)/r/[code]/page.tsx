@@ -7,8 +7,17 @@ import { GarageHeatReport } from "@/components/result/GarageHeatReport";
 // The one deliberate `ƒ` content route (BLUEPRINT.md §9.1): a shared Garage Heat Report permalink.
 // noindex + no canonical (the canonical page is the planner itself) -- deliberately NOT disallowed in
 // robots.txt, so link-preview crawlers can still fetch its OG image (feasibility red-team finding #8).
+// The path segment can arrive percent-encoded ("+" in a code becomes %2B), which decode() would reject.
+function codeFrom(raw: string): string {
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
 export async function generateMetadata({ params }: PageProps<"/r/[code]">): Promise<Metadata> {
-  const { code } = await params;
+  const code = codeFrom((await params).code);
   const input = decode(code);
   const serial = input ? plan(input).serial : code;
   return {
@@ -18,7 +27,7 @@ export async function generateMetadata({ params }: PageProps<"/r/[code]">): Prom
 }
 
 export default async function ReportPermalink({ params }: PageProps<"/r/[code]">) {
-  const { code } = await params;
+  const code = codeFrom((await params).code);
   const input = decode(code);
 
   if (!input) {
@@ -44,7 +53,7 @@ export default async function ReportPermalink({ params }: PageProps<"/r/[code]">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-(--color-fg-2)">Shared report</p>
         <h1 className="wdth-112 mt-2 text-3xl font-bold text-(--color-fg) sm:text-4xl">Garage Heat Report</h1>
         <div className="mt-8">
-          <GarageHeatReport result={result} />
+          <GarageHeatReport result={result} page="/r" />
         </div>
         <div className="mt-10 border-t border-(--color-line) pt-6 text-center">
           <Link href="/garage-heater-calculator" className="inline-flex h-12 items-center bg-(--color-ember) px-5 text-[15px] font-medium text-black">
