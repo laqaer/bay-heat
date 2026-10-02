@@ -1,6 +1,14 @@
 # Cloudflare migration: BayHeat Guide
 
-Status: **free zone prepared, not authoritative yet**. Production still resolves through Vercel nameservers.
+> **Paused by the 2026-10 rebuild.** The site is no longer static-export compatible: it now has dynamic routes
+> (`/r/[code]` permalinks, the planner's `?g=` / `?zip=` state, a dynamic OG image), plus `redirects()` and
+> `headers()` in `next.config.ts`, none of which `output: "export"` supports. The PR gate that asserted an `out/`
+> directory was replaced by `.github/workflows/ci.yml` (lint, typecheck, unit tests, build). `wrangler.jsonc` and
+> the manual `cloudflare-preview.yml` are kept for reference but will not produce a working preview until the app
+> runs on a Workers adapter (for example `@opennextjs/cloudflare`) or the dynamic routes are removed. Production
+> stays on Vercel. The text below describes the original static-export plan.
+
+Status: **free zone prepared, not authoritative yet**. Production still resolves through Vercel nameservers. The zone preparation below is DNS-only and is independent of the paused static-export/Workers work described in the note above.
 
 ## Free-plan cutover prepared on 2026-09-26
 
@@ -27,6 +35,8 @@ Records already stored on the pending zone, all DNS-only:
 The address and `www` records match `chartingstars.com`: Cloudflare DNS, origin still Vercel, grey-cloud. After the nameserver change, the site and the `www` redirect stay on the Vercel Hobby plan. The MX matches the other company domains. Google will not accept `hello@bayheatguide.com` until `bayheatguide.com` is a domain alias of `chartingstars.com` in that Workspace. Cloudflare Email Routing was not enabled: the API requires an active zone, and turning it on would replace the Google MX.
 
 Do not upgrade this zone, subscribe to Workers Paid ($5/month minimum), enable Email Sending, or turn on Argo, Images, or SSL for SaaS. Static-asset requests on an assets-only Worker are free and unlimited, but this connection cannot mint a Workers deploy token, so the site files were not uploaded.
+
+The static-export plan below is paused (see the note at the top). Production remains on Vercel.
 
 ## Why this app does not need a Worker runtime
 

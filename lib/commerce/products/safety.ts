@@ -1,0 +1,77 @@
+import type { Product } from "../types.ts";
+
+// CO alarms, extinguishers, freeze protection -- the only products ever linked next to a NO-GO verdict, as
+// "safer alternatives," never the NO-GO product itself (BLUEPRINT.md §2.8).
+
+export const PRODUCTS: Product[] = [
+  {
+    id: "co-alarm-plugin-display",
+    name: "Plug-in CO alarm with digital display and battery backup (UL 2034)",
+    kind: "co_alarm",
+    searchQuery: "plug in carbon monoxide alarm digital display UL 2034",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: ["code.irc.r315"],
+  },
+  {
+    id: "co-alarm-battery-10yr",
+    name: "Kidde C3010 10-year sealed-battery CO alarm (UL 2034)",
+    kind: "co_alarm",
+    asin: "B00FHW7PBS",
+    searchQuery: "10 year battery carbon monoxide alarm UL 2034",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: ["code.irc.r315"],
+    safetyLine: {
+      text: "Data sheet: meets UL 2034 and is rated 40\u2013100 \u00b0F for living areas. It goes in the house outside sleeping areas (IRC 2021 R315), not in an unheated garage.",
+      ev: "S",
+      sourceId: "kidde-c3010-datasheet",
+    },
+  },
+  {
+    id: "extinguisher-abc",
+    name: "Amerex B402 5 lb ABC dry-chemical fire extinguisher with wall bracket",
+    kind: "extinguisher",
+    asin: "B00F5CK9X6",
+    searchQuery: "5 lb ABC fire extinguisher garage shop",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+  },
+  {
+    id: "thermostat-line-voltage-dp",
+    name: "Line-voltage double-pole thermostat for a hardwired heater",
+    kind: "thermostat_line_voltage",
+    searchQuery: "line voltage double pole thermostat 240V heater",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+    safetyLine: { text: "Rated amperage must meet or exceed the heater's nameplate draw. Your electrician wires it per the heater manual, not a generic diagram.", ev: "S", sourceId: "generic-thermostat-manual" },
+  },
+  {
+    id: "fridge-heater-kit",
+    name: "Frigidaire 5303918301 garage heater kit for refrigerators (select 2001+ models)",
+    kind: "fridge_heater_kit",
+    asin: "B00M0YNECU",
+    searchQuery: "appliance freeze protection heater kit garage",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+  },
+  {
+    id: "freeze-alarm-wifi",
+    name: "Temp Stick Wi-Fi temperature sensor with low-temperature alerts",
+    kind: "freeze_alarm",
+    asin: "B01M1OPOZB",
+    searchQuery: "wifi low temperature freeze alarm sensor garage",
+    partnerUrls: {},
+    priceClass: "$",
+    priceClassChecked: "2026-09-25",
+    specFactIds: [],
+  },
+];

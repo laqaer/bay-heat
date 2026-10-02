@@ -7,41 +7,17 @@
  */
 const ORIGIN = "https://bayheatguide.com";
 
+// The old BayHeat Guide URLs below now 308 to their rebuilt equivalents (lib/redirects.ts), so each check
+// follows redirects and asserts only markers that hold on both sides of the cutover: the Associates tag on the
+// money pages, the brand name on the home page, and the sitemap listing a page that exists in both. Tighten these
+// to new-site-only strings (e.g. the home H1) once the rebuild is live.
 const pages = [
-  {
-    path: "/",
-    expect: [
-      "BayHeat Guide",
-      "Buy the class the circuit allows",
-      "laqaer-20",
-      "15 A portable guide",
-      "Ceiling-mount guide",
-      "Wall-mount guide",
-    ],
-  },
-  {
-    path: "/120v-vs-240v-garage-heater",
-    expect: ["what your circuit can actually run", "laqaer-20", "Buy the class the circuit allows"],
-  },
-  {
-    path: "/forced-air-vs-infrared-garage-heater",
-    expect: ["drafty shops vs spot heat", "laqaer-20"],
-  },
-  {
-    path: "/best-ceiling-mount-garage-heaters-under-200",
-    expect: ["laqaer-20", "Comfort Zone"],
-  },
-  {
-    path: "/sitemap.xml",
-    expect: [
-      "https://bayheatguide.com/best-ceiling-mount-garage-heaters-under-200",
-      "https://bayheatguide.com/120v-vs-240v-garage-heater",
-    ],
-  },
-  {
-    path: "/96098d06c16790aabec2db1a232fee8f.txt",
-    expect: ["96098d06c16790aabec2db1a232fee8f"],
-  },
+  { path: "/", expect: ["BayHeat"] },
+  { path: "/120v-vs-240v-garage-heater", expect: ["laqaer-20"] },
+  { path: "/forced-air-vs-infrared-garage-heater", expect: ["laqaer-20"] },
+  { path: "/best-ceiling-mount-garage-heaters-under-200", expect: ["laqaer-20", "Comfort Zone"] },
+  { path: "/sitemap.xml", expect: ["https://bayheatguide.com/best-wall-mount-garage-heaters"] },
+  { path: "/96098d06c16790aabec2db1a232fee8f.txt", expect: ["96098d06c16790aabec2db1a232fee8f"] },
 ];
 
 function die(message) {
@@ -68,7 +44,7 @@ async function main() {
     const url = `${ORIGIN}${page.path}`;
     let result;
     try {
-      result = await get(url);
+      result = await get(url, { redirect: "follow" });
     } catch (error) {
       failures.push(`${url} request failed: ${error instanceof Error ? error.message : String(error)}`);
       continue;

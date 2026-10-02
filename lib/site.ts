@@ -1,229 +1,63 @@
-export const site = {
-  name: "BayHeat Guide",
-  shortName: "BayHeat",
-  domain: "bayheatguide.com",
-  url: "https://bayheatguide.com",
-  email: "hello@bayheatguide.com",
-  publisher: "Laqaer Products",
-  tagline: "Boring, specific advice for electric garage and workshop heaters.",
-  description:
-    "BayHeat Guide helps you choose an electric garage or workshop heater by circuit, heat type, and size: 120V vs 240V, hardwired vs plug-in, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, whether to seal the building before buying more watts, what those watts cost to run, and when electric is enough versus a listed propane shop heater.",
-  locale: "en-US",
-  updated: "2026-09-26",
-} as const;
+// Brand constants and the exact compliance/disclosure strings (BLUEPRINT.md §5.3). These strings live here
+// and nowhere else -- every disclosure, safety-scope and AI-assistance line on the site renders one of these
+// exports, verbatim, so there is exactly one place to fix the wording.
+import { SITE_URL, CONTACT_EMAIL, EDITOR_NAME, REVIEWERS_JSON } from "@/lib/env.public";
 
-export const affiliateDisclosure =
-  "BayHeat Guide is a comparison site. Some retailer links are Amazon Associates (tag laqaer-20); we may earn a commission if you buy after clicking, at no extra cost to you. We do not invent review scores, heat-coverage claims, or wattage figures.";
+export { SITE_URL, CONTACT_EMAIL };
 
-export const electricalDisclaimer =
-  "This site is general information, not an electrical, fire-code, or building-code inspection. National Electrical Code (NEC) rules, local amendments, listing labels, and the heater’s installation manual control the job. Hire a licensed electrician for new 240V circuits, hardwired units, and any work you are not qualified to do. Space heaters start fires when they are overloaded, covered, or placed too close to combustibles.";
+export const BRAND = "BayHeat";
+export const DESCRIPTOR = "Garage Climate Lab";
+export const TAGLINE = "Every number shows its work.";
+export const PUBLISHER = "Laqaer Products";
+export const LOCALE = "en-US";
+export const MODEL_VERSION = "1.0.0";
+export const PRICES_AS_OF = "2026-09";
 
-export type GuideKind = "guide" | "legal" | "about";
+export const DESCRIPTION =
+  "BayHeat is the independent garage climate lab. Our open model sizes the heater for your garage, grades every number by where it came from, and tells you plainly when a heater will trip your breaker or fill your garage with carbon monoxide.";
 
-export type Guide = {
-  href: string;
-  title: string;
-  h1: string;
-  description: string;
-  navLabel: string;
-  kind: GuideKind;
-  summary: string;
-  decision: string;
-  updated: string;
-};
+export const DISCLOSURE_INLINE =
+  "Paid links: we earn a commission if you buy through links on this page, at no cost to you. As an Amazon Associate, BayHeat earns from qualifying purchases.";
 
-export const guides: Guide[] = [
-  {
-    href: "/best-electric-garage-heaters-by-size",
-    title: "Best electric garage heaters by size (1-car, 2-car, 3-car)",
-    h1: "Electric garage heater size: 1-car, 2-car, and 3-car wattage ranges",
-    description:
-      "Insulated brackets: about 2–4 kW for a 1-car, 4–6 kW for a 2-car, and 6–10 kW for a 3-car. A 1,500 W heater is spot heat, not a whole bay. A drafty 2-car outruns 5 kW until the door and sill are sealed.",
-    navLabel: "By size",
-    kind: "guide",
-    summary:
-      "Start with square footage and insulation. A 1,500 W plug-in unit is a workbench heater, not a two-car garage heater.",
-    decision: "How big is the space, and is it insulated?",
-    updated: "2026-09-26",
-  },
-  {
-    href: "/120v-vs-240v-garage-heater",
-    title: "120V vs 240V garage heaters: circuit and breaker reality",
-    h1: "120V vs 240V garage heaters: what your circuit can actually run",
-    description:
-      "A heater that runs for hours is a continuous load: 15 A × 120 V × 0.8 is about 1,440 W. A 5,000 W tap at 240 V is about 20.9 A. CZ220 recommends 30 A or larger and 10 AWG copper; FUH54C caps that tap at a 30 A fuse and 10 AWG copper minimum. The sheet and the run still control.",
-    navLabel: "120V vs 240V",
-    kind: "guide",
-    summary:
-      "Voltage is not a feature. It is the limit of the circuit you already have — or the one you are willing to install.",
-    decision: "What circuit do you actually have?",
-    updated: "2026-09-26",
-  },
-  {
-    href: "/hardwired-vs-plugin-garage-heater",
-    title: "Hardwired vs plug-in electric garage heaters",
-    h1: "Hardwired vs plug-in garage heaters: outlet heat vs a landed circuit",
-    description:
-      "When a 120 V plug-in is enough, when a corded 240 V receptacle is the listed path, and when a ceiling or wall unit must be hardwired. Circuit limits, NEMA 6-30 vs direct-wire, listing, and why hanging a portable is not a ceiling heater.",
-    navLabel: "Hardwired vs plug-in",
-    kind: "guide",
-    summary:
-      "A 15 A cord is Saturday heat at a bench. Whole-bay heat is almost always a dedicated 240 V hardwire. Corded 240 V is a third class — only if the manual lists the plug.",
-    decision: "Temporary plug-in, or a permanent install?",
-    updated: "2026-09-26",
-  },
-  {
-    href: "/forced-air-vs-infrared-garage-heater",
-    title: "Forced-air vs infrared garage heaters",
-    h1: "Forced-air vs infrared garage heaters: drafty shops vs spot heat",
-    description:
-      "When a fan-forced unit makes sense in a reasonably sealed garage, and when radiant / infrared heat is the better match for open doors, high ceilings, and a single workbench.",
-    navLabel: "Forced-air vs IR",
-    kind: "guide",
-    summary:
-      "Forced-air heats the air. Infrared heats people and objects. Drafts punish the first; open-door work favors the second.",
-    decision: "Whole bay, or just the person at the bench?",
-    updated: "2026-09-26",
-  },
-  {
-    href: "/best-ceiling-mount-garage-heaters-under-200",
-    title: "Ceiling-mount garage heaters under $200",
-    h1: "Ceiling-mount garage heaters under $200: Comfort Zone and Fahrenheat-class units",
-    description:
-      "A spec matrix of realistic hardwired 240 V ceiling utility heaters in the Comfort Zone CZ220 and Fahrenheat FUH54 class. No invented scores. Street prices move.",
-    navLabel: "Ceiling under $200",
-    kind: "guide",
-    summary:
-      "Most sub-$200 ceiling units are the same job: 5 kW, 240 V, hardwired, 30 A, 10 AWG copper. The differences are controls and jumpers, not magic BTUs.",
-    decision: "Can you hardwire 240 V and hang a 25–30 lb unit from joists?",
-    updated: "2026-09-11",
-  },
-  {
-    href: "/portable-garage-heaters-15a-circuit",
-    title: "Portable garage heaters on a 15 A circuit",
-    h1: "Portable garage heaters on a 15 A circuit: milkhouse and utility units",
-    description:
-      "What a 15 A / 120 V garage receptacle can run continuously, why 1,500 W milkhouse heaters sit on the edge of the 80% rule, and how to pick a utility heater that will not trip the breaker.",
-    navLabel: "15 A portable",
-    kind: "guide",
-    summary:
-      "On a 15 A circuit, treat ~12 A as the continuous ceiling. A 1,500 W milkhouse heater is 12.5 A — it wants to be the only load.",
-    decision: "Stuck with a regular 120 V outlet?",
-    updated: "2026-09-11",
-  },
-  {
-    href: "/wall-mount-vs-ceiling-garage-heater",
-    title: "Wall-mount vs ceiling-mount garage heaters",
-    h1: "Wall-mount vs ceiling-mount: joist load, throw, and headroom",
-    description:
-      "When a hardwired electric garage heater belongs on the ceiling versus a wall: joist load, throw direction, headroom, and the clearance the manual actually requires.",
-    navLabel: "Wall vs ceiling",
-    kind: "guide",
-    summary:
-      "Ceiling units throw across the bay if the joists can take 25–30 lb. Wall mounts win on low ceilings and one work zone. The manual’s clearance is the rule, not a blog height.",
-    decision: "Can the ceiling take the unit, or is the heat needed on one wall?",
-    updated: "2026-09-11",
-  },
-  {
-    href: "/best-wall-mount-garage-heaters",
-    title: "Best wall-mount electric garage heaters",
-    h1: "Wall-mount electric garage heaters: 5 kW utility, 7.5 kW shop, and 15 A wall units",
-    description:
-      "Wall-listed electric garage and workshop heaters: Fahrenheat FUH54-class, Dr. Infrared DR-975-class, and a 1500 W wall infrared. Nameplate and manual figures only. No invented scores.",
-    navLabel: "Best wall-mount",
-    kind: "guide",
-    summary:
-      "Wall-mount is a bracket and a throw, not a new wattage class. The 5 kW FUH can hang on a wall. A 7.5 kW shop unit needs a larger circuit. A 1500 W wall infrared is still a 15 A load.",
-    decision: "Need heat on one wall, not thrown across the bay?",
-    updated: "2026-09-18",
-  },
-  {
-    href: "/best-infrared-garage-heaters",
-    title: "Best infrared electric garage heaters",
-    h1: "Infrared electric garage heaters: ceiling quartz, wall-or-ceiling carbon, and a 15 A tripod",
-    description:
-      "Radiant heat for a garage bench, not a whole bay: Comfort Zone CZQTV5M ceiling quartz, Dr. Infrared DR-238 carbon (wall or ceiling), and Heat Storm Tradesman on a tripod or wall. All three are about 1,500 W at 120 V. Nameplate and manual figures only. No invented scores.",
-    navLabel: "Best infrared",
-    kind: "guide",
-    summary:
-      "Infrared heats the person in the beam. These three are 120 V loads near 1,500 W. None of them replaces a 5 kW forced-air homerun.",
-    decision: "Heating a person in the beam, not the air in the bay?",
-    updated: "2026-09-26",
-  },
-  {
-    href: "/insulate-garage-before-heater-upgrade",
-    title: "Insulate the garage before a heater upgrade",
-    h1: "Seal and insulate first, or buy more watts?",
-    description:
-      "Why an insulated door and weatherstrip often beat a jump from 5 kW to 7.5 kW, when infiltration and slab mass fake an undersized heater, and when more watts are still required.",
-    navLabel: "Insulate first",
-    kind: "guide",
-    summary:
-      "More watts heat the air you are already leaking. Door, weatherstrip, and sill usually beat a larger breaker. Panel capacity is the hard stop.",
-    decision: "Is the building leaking the heat you already paid for?",
-    updated: "2026-09-26",
-  },
-  {
-    href: "/electric-garage-heater-operating-cost",
-    title: "How much an electric garage heater costs to run",
-    h1: "How much an electric garage heater costs to run: watts × hours × your rate",
-    description:
-      "An electric garage heater’s operating cost is (watts ÷ 1,000) × hours the element is on × the $/kWh on your bill. Voltage does not change that rate, and a thermostat’s duty cycle is not a full nameplate hour.",
-    navLabel: "Cost to run",
-    kind: "guide",
-    summary:
-      "Cost is nameplate watts, hours the element is actually on, and the rate on your bill. A 1,500 W portable is cheap per hour because it is spot heat, not because 120 V is efficient.",
-    decision: "What will the watts actually cost to run?",
-    updated: "2026-09-26",
-  },
-  {
-    href: "/electric-vs-propane-garage-heater",
-    title: "Electric vs propane garage heaters",
-    h1: "Electric vs propane garage heaters: attached air vs shop BTU",
-    description:
-      "When electric is enough for an attached or sealed garage, and when a listed propane heater is the honest BTU answer in a drafty detached shop. Circuit, CO, venting, moisture, and a cost method — no invented monthly savings.",
-    navLabel: "Electric vs propane",
-    kind: "guide",
-    summary:
-      "Electric wins on enclosed, occupied-adjacent air. Propane can win BTU and $/BTU in a drafty detached shop if it is listed and vented for that job.",
-    decision: "Is the bay sealed enough for electric, or is this a vented propane shop problem?",
-    updated: "2026-09-26",
-  },
-];
+export const DISCLOSURE_FOOTER =
+  "BayHeat is published by Laqaer Products. As an Amazon Associate, BayHeat earns from qualifying purchases. Links to other retailers may also pay us. Money never changes our math, our picks or a verdict. How we make money →";
 
-export const legalPages: Guide[] = [
-  {
-    href: "/about",
-    title: "About BayHeat Guide",
-    h1: "About BayHeat Guide",
-    description:
-      "Who publishes BayHeat Guide, how we write comparisons, and how to reach Laqaer Products at hello@bayheatguide.com.",
-    navLabel: "About",
-    kind: "about",
-    summary: "A Laqaer Products comparison site. Editorial standards, not star ratings.",
-    decision: "",
-    updated: "2026-09-05",
-  },
-  {
-    href: "/privacy",
-    title: "Privacy policy",
-    h1: "Privacy policy",
-    description:
-      "Privacy policy for BayHeat Guide, a content and affiliate comparison site operated by Laqaer Products.",
-    navLabel: "Privacy",
-    kind: "legal",
-    summary: "What we collect on a content and affiliate site.",
-    decision: "",
-    updated: "2026-09-05",
-  },
-];
+export const SAFETY_SCOPE =
+  "General information. Your electrician, gas fitter, local code and the heater's manual govern.";
 
-export const allPages = [...guides, ...legalPages];
+export const PAID_LINK_LABEL = "Paid link";
+export const SPONSORED_LABEL = "Sponsored: quotes from a partner network";
 
-export function findGuide(href: string): Guide | undefined {
-  return allPages.find((page) => page.href === href);
+// FTC R-value Rule line (16 CFR 460.3/460.19), BLUEPRINT.md §5.2: renders under every savings, payback or
+// percentage-cut claim -- a kit's R-value comes only from the manufacturer fact sheet, never our own estimate.
+export const SAVINGS_VARY = "Savings vary. Find out why in the seller's fact sheet on R-values. Higher R-values mean greater insulating power.";
+
+type Reviewer = { name: string; license: string; state: string; date: string; kind: "electrical" | "gas" };
+
+export function reviewers(): Reviewer[] {
+  if (!REVIEWERS_JSON) return [];
+  try {
+    const parsed = JSON.parse(REVIEWERS_JSON) as unknown;
+    return Array.isArray(parsed) ? (parsed as Reviewer[]) : [];
+  } catch {
+    return [];
+  }
 }
 
-export function relatedGuides(href: string): Guide[] {
-  return guides.filter((page) => page.href !== href);
+// AI_LINE is built per page, not a single fixed sentence (BLUEPRINT.md §5.2 -- a compliance finding: the
+// fixed sentence claimed a named editor and licensed reviewers before either existed). `reviewedKind` is a
+// PageEntry's own `reviewed` field ("electrical" | "gas" | null); `humanReview` defaults to "sample" (the
+// baseline before 100%-review pages are marked otherwise) -- pass "full" for verdict-first/safety pages per
+// the §5.2 100%-review-gate rule.
+export function aiLine(reviewedKind: "electrical" | "gas" | null, humanReview: "full" | "sample" = "sample"): string {
+  const editor = EDITOR_NAME ?? "BayHeat editorial desk";
+  const reviewClause = `Human review: ${humanReview} by ${editor}.`;
+  if (!reviewedKind) {
+    return `Drafted with AI assistance. Numbers computed by model v${MODEL_VERSION} or sourced. ${reviewClause} Licensed review: not applicable.`;
+  }
+  const match = reviewers().find((r) => r.kind === reviewedKind);
+  const licensedClause = match
+    ? `Licensed review: ${match.name}, license ${match.license}, ${match.state}, verified ${match.date}.`
+    : "Licensed review: not yet reviewed.";
+  return `Drafted with AI assistance. Numbers computed by model v${MODEL_VERSION} or sourced. ${reviewClause} ${licensedClause}`;
 }
