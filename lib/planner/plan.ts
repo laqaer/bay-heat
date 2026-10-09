@@ -155,10 +155,18 @@ export function plan(input: GarageInput): PlannerResult {
   if (input.ceilingIns === "unknown") assumptions.push(`Ceiling insulation unknown -- assumed ${envelope.ceilingIns} [A]`);
   if (input.tightness === "unknown") assumptions.push(`Tightness unknown -- assumed ${envelope.tightness} (${heatBand.unknowns} field(s) still uncertain) [A]`);
 
-  // The "Power it" circuit is the one an electric-resistance heater sized to the whole load needs. It used to
-  // divide by the warm-up class's efficiency, which for a gas or diesel top pick turned fuel INPUT into electric
-  // watts (and threw past an 80 A breaker); combustion units' own blower circuits come from their nameplates.
-  const forSize = circuitsForLoad(heatLoss.qSize / 3.412);
+  // "Power it" is the wiring for the electric-resistance heaters this report recommends: the top resistance pick's
+  // own per-unit circuit, one per unit, so it can never disagree with that recommendation card. With no resistance
+  // pick (gas, diesel or heat-pump only, or nothing fits), it falls back to the modeled heaters that cover the whole
+  // load (circuitsForLoad). It used to divide the load by the warm-up class's efficiency, which for a gas or diesel
+  // top pick turned fuel INPUT into electric watts and threw past an 80 A breaker.
+  const resistancePick = recommendations.find((r) => {
+    const cls = HEATER_CLASSES[r.classId];
+    return cls.energy === "electric" && typeof cls.eta === "number" && r.circuit !== undefined;
+  });
+  const forSize = resistancePick?.circuit
+    ? { spec: resistancePick.circuit, count: resistancePick.units as number }
+    : circuitsForLoad(heatLoss.qSize / 3.412);
 
   return {
     modelVersion: MODEL_VERSION,

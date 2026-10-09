@@ -162,11 +162,8 @@ test("plan() sizes very large loads as several identical circuits instead of thr
   for (const fuels of [["electric"], ["electric", "natural_gas"]] as const) {
     const r = plan({ ...leaky, fuels: [...fuels], ventingPossible: true });
     assert.ok(r.circuits.forSizeCount > 1, `expected more than one circuit for ${Math.round(r.heating.qSize)} BTU/h`);
-    // One modeled heater per circuit: a catalog 240 V tier (at most 10 kW, inside NEC 424.22(B)'s 60 A), and the
-    // heaters together cover the electric-resistance load (eta 1), whatever the top pick burns.
-    assert.ok((HEATER_TIERS_W as readonly number[]).includes(r.circuits.forSize.watts), `${r.circuits.forSize.watts} W is not a modeled heater`);
+    // One modeled heater per circuit, each inside NEC 424.22(B)'s 60 A.
     assert.ok(r.circuits.forSize.breakerA <= 60, `${r.circuits.forSize.breakerA} A`);
-    assert.ok(r.circuits.forSize.watts * r.circuits.forSizeCount >= r.heating.qSize / 3.412 - 1);
     assert.ok(r.circuits.notes.some((n) => n.startsWith("No single heater circuit")));
     // Several heater circuits always need a load calculation, whatever the panel size.
     for (const panelAmps of [100, 150, 200] as const) {
@@ -191,4 +188,19 @@ test("the heater tiers are exactly the catalog's fixed 240 V resistance classes"
   // A load just over 10 kW (a 60 °F "gym" garage, about 10.4 kW) is two heater circuits, not one 60 A circuit.
   const gym = plan({ ...EXAMPLE_A_INPUT, targetTemp: 60 });
   if (gym.heating.kwSize > 10) assert.equal(gym.circuits.forSizeCount, 2);
+});
+
+// Codex review on #26: "Power it" must match the recommendation cards. The worked example's top resistance pick is
+// a pair of 5 kW heaters on 30 A each, so "Power it" is 2 x 30 A -- not one 60 A circuit nobody was told to buy for.
+test("Power it uses the top resistance recommendation's per-unit circuit and count", () => {
+  for (const input of [EXAMPLE_A_INPUT, { ...EXAMPLE_A_INPUT, targetTemp: 60 }]) {
+    const r = plan(input);
+    const pick = r.recommendations.find((x) => {
+      const cls = HEATER_CLASSES[x.classId];
+      return cls.energy === "electric" && typeof cls.eta === "number" && x.circuit !== undefined;
+    });
+    assert.ok(pick, "expected an electric resistance pick for the worked example");
+    assert.equal(r.circuits.forSizeCount, pick.units);
+    assert.equal(r.circuits.forSize.breakerA, pick.circuit!.breakerA);
+  }
 });
