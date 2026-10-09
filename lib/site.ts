@@ -1,7 +1,7 @@
 // Brand constants and the exact compliance/disclosure strings (BLUEPRINT.md §5.3). These strings live here
 // and nowhere else -- every disclosure, safety-scope and AI-assistance line on the site renders one of these
 // exports, verbatim, so there is exactly one place to fix the wording.
-import { SITE_URL, CONTACT_EMAIL, EDITOR_NAME, REVIEWERS_JSON } from "@/lib/env.public";
+import { SITE_URL, CONTACT_EMAIL, EDITOR_NAME, REVIEWERS_JSON } from "./env.public.ts";
 
 export { SITE_URL, CONTACT_EMAIL };
 
