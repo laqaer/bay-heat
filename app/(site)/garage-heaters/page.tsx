@@ -185,7 +185,7 @@ export default function Page() {
         pulls ahead once electricity costs more than roughly 21¢/kWh, closer to California or New England rates than
         Illinois&apos;. A mini-split beats resistance heat any month it stays above freezing, then loses that edge on
         the coldest nights. None of that changes the install rule: combustion heat needs a place for exhaust to go
-        and a CO alarm; electric heat needs a circuit sized for its nameplate, not just its price tag. For the natural gas
+        and a CO alarm. Electric heat needs a circuit sized for its nameplate, not just its price tag. For the natural gas
         row, the <Link href="/natural-gas-garage-heater">natural gas page</Link> covers sizing, venting and the gas fitter.
       </p>
 

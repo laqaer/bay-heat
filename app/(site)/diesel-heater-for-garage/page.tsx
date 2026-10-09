@@ -154,7 +154,7 @@ export default function Page() {
 
       <h2>Don&apos;t buy this class expecting a permanent, unattended fix</h2>
       <p>
-        Don&apos;t buy a diesel air heater to heat an attached garage full time — buy a listed electric or{" "}
+        Don&apos;t buy a diesel air heater to heat an attached garage full time. Buy a listed electric or{" "}
         <Link href="/natural-gas-garage-heater">vented natural-gas unit heater</Link> for that job instead (see the{" "}
         <Link href="/garage-heaters">fuel hub</Link>). A diesel
         heater&apos;s manual scope is a detached space, attended or thermostatically monitored, with its exhaust kit

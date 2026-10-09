@@ -5,8 +5,11 @@ import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { Cost } from "@/components/commerce/Cost";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
+import { VerdictStamp } from "@/components/safety/VerdictStamp";
+import { Callout } from "@/components/ui/Callout";
 import { QuickPick } from "@/components/commerce/QuickPick";
 import { Disclosure } from "@/components/commerce/Disclosure";
+import { PaidLabel } from "@/components/commerce/PaidLabel";
 import { BuyButton, ButtonLink } from "@/components/ui/ButtonLink";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
@@ -14,7 +17,6 @@ import { getFact, getSource } from "@/lib/facts";
 import { kw, usd } from "@/lib/format";
 import { findProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
-import { plan } from "@/lib/planner/plan";
 import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
 import { PRESET_DEFAULTS } from "@/lib/planner/presets";
 import { heatLossDesign } from "@/lib/planner/heatLoss";
@@ -26,7 +28,7 @@ import { SIZING_MARGIN } from "@/lib/planner/constants";
 import { PRICES, US_AVG_PRICES } from "@/lib/planner/prices";
 import { costPerMMBtuDelivered, HEAT_CONTENT, ETA } from "@/lib/planner/fuels";
 import { verdictFor } from "@/lib/safety/verdict";
-import type { Situation, Condition } from "@/lib/safety/types";
+import type { Situation } from "@/lib/safety/types";
 import type { CeilingIns, GarageDoorType, GarageInput, Preset, PriceSet, Tightness, WallType } from "@/lib/planner/types";
 import { SAFETY_SCOPE } from "@/lib/site";
 
@@ -55,7 +57,7 @@ function factText(id: string): string {
   return f.unit ? `${v} ${f.unit}` : String(v);
 }
 
-const asPercent = (v: number | string) => `${Math.round(Number(v) * 100)}%`;
+const asPercentUnit = (v: number | string) => `${v}%`;
 
 // A computed heat rate with its kW pair ("31,900 BTU/h (9.3 kW)"), one chip on each.
 const asKw = (v: number | string) => `${kw(Number(v))} kW`;
@@ -79,20 +81,8 @@ function FactBtuhKw({ id }: { id: string }) {
   );
 }
 
-function ConditionList({ conditions }: { conditions: Condition[] }) {
-  return (
-    <ul className="my-2 space-y-1">
-      {conditions.map((c, i) => (
-        <li key={i}>
-          {c.text} <span className="text-xs text-(--color-fg-2)">({c.cite}{c.edition ? `, ${c.edition}` : ""})</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-// The attached-garage question every verdict below asks: nothing flammable stored, house alarm in place, a
-// permitted install -- so the only thing that varies between the calls is the heater class.
+// The attached-garage question every verdict below asks: nothing flammable stored, a listed heater, house alarm in
+// place -- so the only thing that varies between the calls is the heater class.
 const ATTACHED: Situation = {
   attached: true,
   flammablesStored: "no",
@@ -199,27 +189,52 @@ const COST_STATES: { code: string; name: string }[] = [
 const EXTRA_STATE_NAMES: Record<string, string> = { FL: "Florida", AK: "Alaska", HI: "Hawaii", AR: "Arkansas", GA: "Georgia", LA: "Louisiana" };
 
 export default function Page() {
-  const result = plan(EXAMPLE_A_INPUT);
-  const qSize = result.heating.qSize;
-  const gasInput = qSize / ETA.ventedGas80;
-
   const mhu50In = factNumber("bigmaxx.mhu50.input_btuh");
   const mhu50Out = factNumber("bigmaxx.mhu50.output_btuh");
+  const mhu80Out = factNumber("bigmaxx.mhu80.output_btuh");
+
+  // The manual's 80% (p.2) is what the page shows; the planner's ETA.ventedGas80 is what the math uses. They must agree.
+  if (Math.abs(factNumber("bigmaxx.efficiency") / 100 - ETA.ventedGas80) > 1e-9) {
+    throw new Error("natural-gas-garage-heater: bigmaxx.efficiency and ETA.ventedGas80 disagree");
+  }
+
+  // Ceiling stack-up (manual p.4, Table 1, p.3): bottom of the heater 8 ft up, the body, then 1 in of clearance above
+  // it. The manual's text doesn't say which printed dimension is the height, so the smallest one (12 in) is used as a
+  // floor and the result is rounded up to a whole foot, which also leaves room for the brackets.
+  const bottomIn = factNumber("bigmaxx.min_height_ft") * 12;
+  const bodyIn = factNumber("bigmaxx.body_dimension_in");
+  const topClearIn = factNumber("bigmaxx.clearance_top_sides_in");
+  const stackIn = bottomIn + bodyIn + topClearIn;
+  const requiredCeilingFt = Math.ceil(stackIn / 12);
 
   const ventedVerdict = verdictFor("vented_gas", ATTACHED);
-  const noLineVerdict = verdictFor("vented_gas", { ...ATTACHED, cylinder: "1lb" });
   const unventedPropane = verdictFor("buddy", { ...ATTACHED, cylinder: "1lb", cylinderStoredWhere: "outdoors" });
-  const unventedKerosene = verdictFor("kerosene", ATTACHED);
-  const torpedoVerdict = verdictFor("torpedo", ATTACHED);
-  const coCondition = ventedVerdict.conditions.find((c) => c.cite === "IRC R315")!;
 
   const sizeRows = SIZE_ROWS.flatMap((row) =>
     (["tight", "leaky"] as const).map((tier) => {
       const load = loadFor(row.key, tier);
       const bigger = LADDER.find((l) => factNumber(l.outId) >= load);
-      return { row, tier, load, input: load / ETA.ventedGas80, fitsMhu50: load <= mhu50Out, overshoot: mhu50Out / load, bigger };
+      const ceilingFt = PRESET_DEFAULTS[row.key].height;
+      return {
+        row,
+        tier,
+        load,
+        input: load / ETA.ventedGas80,
+        fitsHeat: load <= mhu50Out,
+        overshoot: mhu50Out / load,
+        bigger,
+        ceilingFt,
+        ceilingOk: ceilingFt >= requiredCeilingFt,
+      };
     }),
   );
+  const passing = sizeRows.filter((r) => r.fitsHeat && r.ceilingOk);
+  // The worked example in the answer box must itself pass both filters, or the page's own claim would be false.
+  const example = sizeRows.find((r) => r.row.key === "3car" && r.tier === "tight")!;
+  if (!(example.fitsHeat && example.ceilingOk)) throw new Error("natural-gas-garage-heater: the worked example no longer fits an MHU50");
+  const lowCeilingPresets = SIZE_ROWS.filter((r) => PRESET_DEFAULTS[r.key].height < requiredCeilingFt);
+  const leaky3 = sizeRows.find((r) => r.row.key === "3car" && r.tier === "leaky")!;
+  const marginPushesPastMhu80 = leaky3.load > mhu80Out && leaky3.load / SIZING_MARGIN <= mhu80Out;
 
   // Cost per hour: the table states, then the all-state summary computed over every row of the price table.
   const tableRows = [
@@ -246,26 +261,27 @@ export default function Page() {
   return (
     <ReportPage entry={entry} sources={sources}>
       <AnswerBlock>
-        Our example 2-car garage in Chicago needs about{" "}
-        <BtuhKw btuh={qSize} src="plan(EXAMPLE_A_INPUT).heating.qSize" /> of heat on its design day. A natural gas unit
-        heater at <Num f="fuel.vented_unit.eta" format={asPercent} /> efficiency must burn about{" "}
-        <Num v={gasInput} unit="BTU/h" round={100} ev="C" src="plan(EXAMPLE_A_INPUT).heating.qSize / ETA.ventedGas80" /> of
-        gas to deliver it. One <Num f="bigmaxx.mhu50.input_btuh" /> input unit covers that, hung at least{" "}
-        <Num f="bigmaxx.min_height_ft" /> up and vented outdoors by a licensed gas fitter.
+        Our insulated 3-car example in Chicago needs about{" "}
+        <BtuhKw btuh={example.load} src="heatLossDesign().qSize, 3-car, tight, IL-chicago" /> of heat on its design day. A
+        natural gas unit heater at <Num f="bigmaxx.efficiency" format={asPercentUnit} /> efficiency must burn about{" "}
+        <Num v={example.input} unit="BTU/h" round={100} ev="C" src="heatLossDesign().qSize / ETA.ventedGas80, 3-car, tight" /> of
+        gas to supply it. One <Num f="bigmaxx.mhu50.input_btuh" /> input unit covers that. Its bottom must hang at least{" "}
+        <Num f="bigmaxx.min_height_ft" /> up, so the ceiling needs to be at least{" "}
+        <Num v={requiredCeilingFt} unit="ft" ev="C" src="ceil((8 ft + body dimension + top clearance) / 12), bigmaxx facts" />.
       </AnswerBlock>
 
       <QuickPick
         productId="gas-unit-heater-big-maxx-50"
         page={entry.href}
-        headline={`Vented unit heater for natural gas: ${factText("bigmaxx.mhu50.input_btuh")} in, ${factText("bigmaxx.mhu50.output_btuh")} out. A licensed gas fitter installs it, bottom at least ${factText("bigmaxx.min_height_ft")} up.`}
+        headline={`Vented gas unit heater: ${factText("bigmaxx.mhu50.input_btuh")} in, ${factText("bigmaxx.mhu50.output_btuh")} out. Bottom must hang at least ${factText("bigmaxx.min_height_ft")} up. BayHeat says hire a licensed gas fitter.`}
         compareHref="#not-to-buy"
         compareLabel="What to buy and what to skip"
       />
 
       <h2 id="which">Three kinds of heater share the name</h2>
       <p>
-        Search for a natural gas garage heater and you find three different kinds of heater. Only the vented kinds belong
-        in a garage. The difference is where the exhaust goes.
+        Search for a natural gas garage heater and you find three different kinds of heater. In an attached garage, only
+        the vented kinds belong. The difference is where the exhaust goes.
       </p>
       <div className="not-prose my-4 overflow-x-auto">
         <table className="w-full min-w-[560px] border-collapse text-sm">
@@ -273,7 +289,7 @@ export default function Page() {
             <tr className="border-b border-(--color-line) text-left text-(--color-fg-2)">
               <th className="py-2 pr-3 font-normal">Type</th>
               <th className="py-2 pr-3 font-normal">Where the exhaust goes</th>
-              <th className="py-2 font-normal">Verdict in a garage</th>
+              <th className="py-2 font-normal">Tool verdict or BayHeat rule</th>
             </tr>
           </thead>
           <tbody>
@@ -281,33 +297,33 @@ export default function Page() {
               <td className="py-2 pr-3 text-(--color-fg)">Vented unit heater (Mr. Heater Big Maxx class)</td>
               <td className="py-2 pr-3">Outdoors, through a flue pipe</td>
               <td className="py-2">
-                <strong>{ventedVerdict.stamp}</strong>: a licensed gas fitter installs it, hung high
+                Tool verdict: <strong>{ventedVerdict.stamp}</strong>. BayHeat says hire a licensed gas fitter.
               </td>
             </tr>
             <tr className="border-b border-(--color-line)/50 align-top">
               <td className="py-2 pr-3 text-(--color-fg)">Separated-combustion unit heater (Modine Hot Dawg HDS class)</td>
               <td className="py-2 pr-3">Outdoors, and it draws its air from outdoors too</td>
               <td className="py-2">
-                <strong>{ventedVerdict.stamp}</strong>: same install rules, built for a dusty or fume-heavy shop
+                Tool verdict: <strong>{ventedVerdict.stamp}</strong>, plus whatever its own manual adds
               </td>
             </tr>
             <tr className="border-b border-(--color-line)/50 align-top">
               <td className="py-2 pr-3 text-(--color-fg)">Vent-free (unvented) wall heater</td>
               <td className="py-2 pr-3">Into the garage</td>
-              <td className="py-2">
-                Don&apos;t buy. Every unvented class our verdict tool checks returns <strong>{unventedPropane.stamp}</strong> in an
-                attached garage
+              <td className="py-2 italic text-(--color-fg-2)">
+                BayHeat rule, not a tool verdict: don&apos;t buy one for an attached garage
               </td>
             </tr>
           </tbody>
         </table>
       </div>
+      <p className="text-xs text-(--color-fg-2)">{SAFETY_SCOPE}</p>
 
       <div className="not-prose my-6">
         <ButtonLink href="/can-i-run-it">Check my heater and garage →</ButtonLink>
       </div>
 
-      <h2 id="sizing">Size it by BTU/h out, then buy by BTU/h in</h2>
+      <h2 id="sizing">Size it by BTU/h out, then check the ceiling</h2>
       <p>
         A gas heater has two ratings. Input is the gas it burns. Output is the heat that reaches the room. Output is
         input times efficiency.
@@ -315,7 +331,7 @@ export default function Page() {
       <p>
         The Big Maxx manual lists <FactBtuhKw id="bigmaxx.mhu50.input_btuh" /> in and{" "}
         <FactBtuhKw id="bigmaxx.mhu50.output_btuh" /> out for its smallest size, the MHU50. That is{" "}
-        <Num f="fuel.vented_unit.eta" format={asPercent} /> efficiency, and BayHeat&apos;s planner uses the same figure
+        <Num f="bigmaxx.efficiency" format={asPercentUnit} /> efficiency, and BayHeat&apos;s planner uses the same figure
         for every vented unit heater.
       </p>
       <p>
@@ -327,24 +343,48 @@ export default function Page() {
           src="SIZING_MARGIN — lib/planner/constants.ts"
           format={(v) => `${Math.round((Number(v) - 1) * 100)}%`}
         />{" "}
-        margin, then divides by efficiency to get the gas input you need. This table runs that for six detached garages in
-        Chicago.
+        margin, then divides by efficiency to get the gas input you need.
+      </p>
+      <h3>Heat is the first filter. Ceiling height is the second.</h3>
+      <p>
+        The manual puts the bottom of the heater at least <Num f="bigmaxx.min_height_ft" /> above a residential garage
+        floor. Table 1 adds <Num f="bigmaxx.clearance_top_sides_in" /> of clearance above the top. The body, the brackets
+        and the joist all have to fit between those two lines.
+      </p>
+      <p>
+        The manual&apos;s drawing (page 3) gives the MHU50 a <Num f="bigmaxx.body_dimension_in" /> dimension. Its text
+        doesn&apos;t say which dimension is the height. Even if <Num f="bigmaxx.body_dimension_in" /> were the height, the
+        stack comes to{" "}
+        <Num v={stackIn} unit="in" ev="C" src="bigmaxx.min_height_ft × 12 + bigmaxx.body_dimension_in + bigmaxx.clearance_top_sides_in" />.
+        That is taller than the 2-car preset&apos;s{" "}
+        <Num v={PRESET_DEFAULTS["2car"].height} unit="ft" ev="E" src="PRESET_DEFAULTS['2car'].height — lib/planner/presets.ts" /> ceiling (
+        <Num v={PRESET_DEFAULTS["2car"].height * 12} unit="in" ev="C" src="PRESET_DEFAULTS['2car'].height × 12 — lib/planner/presets.ts" />
+        ). So BayHeat asks for a ceiling of at least{" "}
+        <Num v={requiredCeilingFt} unit="ft" ev="C" src="ceil(stack / 12), rounded up to leave room for brackets" /> for this
+        unit. Your fitter checks the exact height on the drawing.
+      </p>
+      <p>
+        That rules out the standard 2-car example garage used across BayHeat. Its ceiling is{" "}
+        <Num v={EXAMPLE_A_INPUT.height} unit="ft" ev="E" src="EXAMPLE_A_INPUT.height — lib/planner/fixtures.ts" />.
       </p>
       <div className="not-prose my-4 overflow-x-auto">
-        <table className="w-full min-w-[680px] border-collapse text-sm">
+        <table className="w-full min-w-[720px] border-collapse text-sm">
           <thead>
             <tr className="border-b border-(--color-line) text-left text-(--color-fg-2)">
               <th className="py-2 pr-3 font-normal">Garage</th>
               <th className="py-2 pr-3 font-normal">Envelope</th>
               <th className="py-2 pr-3 text-right font-normal">Heat needed</th>
               <th className="py-2 pr-3 text-right font-normal">Gas input needed</th>
-              <th className="py-2 font-normal">Does the MHU50 cover it?</th>
+              <th className="py-2 font-normal">Does the MHU50 fit?</th>
             </tr>
           </thead>
           <tbody>
             {sizeRows.map((r) => (
               <tr key={`${r.row.key}-${r.tier}`} className="border-b border-(--color-line)/50 align-top">
-                <td className="py-2 pr-3 text-(--color-fg)">{r.row.label}</td>
+                <td className="py-2 pr-3 text-(--color-fg)">
+                  {r.row.label},{" "}
+                  <Num v={r.ceilingFt} unit="ft" ev="E" src={`PRESET_DEFAULTS['${r.row.key}'].height — lib/planner/presets.ts`} /> ceiling
+                </td>
                 <td className="py-2 pr-3 text-(--color-fg-2)">{TIERS[r.tier].label}</td>
                 <td className="py-2 pr-3 text-right font-mono whitespace-nowrap">
                   <BtuhKw btuh={r.load} src={`heatLossDesign().qSize, ${r.row.label}, ${r.tier}, ${SIZE_STATION}`} />
@@ -353,13 +393,17 @@ export default function Page() {
                   <Num v={r.input} unit="BTU/h" round={100} ev="C" src={`heatLossDesign().qSize / ETA.ventedGas80, ${r.row.label}, ${r.tier}`} />
                 </td>
                 <td className="py-2">
-                  {r.fitsMhu50 ? (
+                  {r.fitsHeat && r.ceilingOk ? (
                     <>
                       Yes, with <Num v={r.overshoot} unit="times the load" round={0.1} ev="C" src="MHU50 output / heatLossDesign().qSize" />
                     </>
+                  ) : r.fitsHeat ? (
+                    <>Enough heat, but the ceiling rules it out</>
+                  ) : !r.ceilingOk ? (
+                    <>No. Too small for the load, and the ceiling is already too low for the MHU50</>
                   ) : r.bigger ? (
                     <>
-                      No. Step up to the <Num f={r.bigger.inId} /> size ({r.bigger.model})
+                      No. Step up to the <Num f={r.bigger.inId} /> size ({r.bigger.model}), and check its height on the drawing
                     </>
                   ) : (
                     <>No. It needs more than one unit</>
@@ -376,12 +420,28 @@ export default function Page() {
         <Link href="/garage-heater-size">the size chart</Link> for other climates.
       </p>
       <p>
-        Read the last column from the top. A tight garage gets far more heat from the smallest unit than it needs.
-        Insulate first, or look at an electric heater. A leaky 2-car garage already outruns the MHU50, and a leaky
-        3-car garage needs the largest size in the manual.
+        Read the last column from the top. Only{" "}
+        <Num v={passing.length} ev="C" src="rows where the MHU50 covers the load and the ceiling clears the stack" /> of the{" "}
+        <Num v={sizeRows.length} ev="C" src="sizing rows" /> garages {passing.length === 1 ? "passes" : "pass"} both filters, and
+        the ceiling margin there is thin.
       </p>
       <p>
-        That manual lists two bigger sizes. The MHU80 burns <FactBtuhKw id="bigmaxx.mhu80.input_btuh" /> and puts out{" "}
+        A tight garage gets far more heat from the smallest unit than it needs. Look at a smaller heater or an electric
+        one. A leaky garage should be insulated first, because that cuts the load (see{" "}
+        <Link href="/how-to-insulate-a-garage">how to insulate a garage</Link>).
+        {marginPushesPastMhu80 ? (
+          <>
+            {" "}
+            The{" "}
+            <Num v={SIZING_MARGIN} ev="C" src="SIZING_MARGIN — lib/planner/constants.ts" format={(v) => `${Math.round((Number(v) - 1) * 100)}%`} />{" "}
+            margin is what pushes the leaky 3-car garage past the MHU80. Without it the load is{" "}
+            <Num v={leaky3.load / SIZING_MARGIN} unit="BTU/h" round={100} ev="C" src="heatLossDesign().qSize / SIZING_MARGIN, 3-car, leaky" />, under
+            the MHU80&apos;s <Num f="bigmaxx.mhu80.output_btuh" />.
+          </>
+        ) : null}
+      </p>
+      <p>
+        The manual lists two bigger sizes. The MHU80 burns <FactBtuhKw id="bigmaxx.mhu80.input_btuh" /> and puts out{" "}
         <FactBtuhKw id="bigmaxx.mhu80.output_btuh" />. The MHU125 burns <FactBtuhKw id="bigmaxx.mhu125.input_btuh" /> and
         puts out <FactBtuhKw id="bigmaxx.mhu125.output_btuh" />. BayHeat has no verified listing for either, so this page
         links only the MHU50.
@@ -390,19 +450,26 @@ export default function Page() {
       <h2 id="venting">Venting and clearances</h2>
       <p>
         A vented unit heater sends its exhaust outdoors through a pipe. The Big Maxx owner&apos;s manual (2019 edition)
-        allows two routes, and both use a <Num f="bigmaxx.vent_diameter_in" /> vent connector. Do not mix vent parts from different makers.
+        allows two routes, and both use a <Num f="bigmaxx.vent_diameter_in" /> vent connector. Do not mix vent parts from
+        different makers.
       </p>
       <ul>
         <li>
-          <strong>Up through the roof.</strong> The manual lists the unit as a Category I appliance on this route. Use
-          a Type B-1 gas vent or single-wall metal pipe, with a listed cap. Single-wall pipe needs{" "}
-          <Num f="bigmaxx.vent_single_wall_clearance_in" /> of clearance to anything that burns, unless a listed thimble
-          is used.
+          <strong>Up through the roof.</strong> The manual lists the unit as a Category I appliance on this route. Use a
+          Type B-1 gas vent or single-wall metal pipe, with a listed cap. Single-wall pipe needs{" "}
+          <Num f="bigmaxx.vent_single_wall_clearance_in" /> of clearance to anything that burns, unless a listed thimble is
+          used. Insulate single-wall vent along its whole length if it runs longer than{" "}
+          <Num f="bigmaxx.vent_single_wall_insulate_ft" />, elbows included, or through an unheated space. Use at least{" "}
+          <Num f="bigmaxx.vent_insulation_in" /> of foil-faced fiberglass. Without it, flue gas condenses (manual page 6).
         </li>
         <li>
           <strong>Out a side wall.</strong> The unit is a Category III appliance on this route, and the pipe passes
-          through a listed thimble. A residential run is <Num f="bigmaxx.vent_horizontal_min_ft" /> to{" "}
-          <Num f="bigmaxx.vent_horizontal_max_ft" /> long, plus one 90-degree elbow, sloping up toward the cap.
+          through a listed thimble. It slopes up toward the cap. For residential runs, section E.3 gives{" "}
+          <Num f="bigmaxx.vent_horizontal_min_ft" /> minimum and <Num f="bigmaxx.vent_horizontal_max_ft" /> maximum, plus
+          one 90-degree elbow. Section C and the notes under Figures 3 and 5 say{" "}
+          <Num f="bigmaxx.vent_horizontal_min_general_ft" /> minimum, so a <Num f="bigmaxx.vent_horizontal_min_ft" /> run
+          meets both. Table 2, which those notes point to, allows up to <Num f="bigmaxx.vent_table2_max_elbows" /> at
+          shorter runs.
         </li>
       </ul>
       <p>
@@ -421,30 +488,37 @@ export default function Page() {
       <p>
         The manual sets the height for a residential garage. The bottom of the heater goes at least{" "}
         <Num f="bigmaxx.min_height_ft" /> above the floor. The heater must also sit where a vehicle can&apos;t hit it, or be
-        shielded. Code sets a lower floor. <Num f="code.ifgc.305_3" /> (IFGC 2021 §305.3; IRC 2021 §G2408.2). The verdict
-        list further down shows the code minimums. The manual is stricter, so for this unit the manual wins.
+        shielded.
       </p>
-      <p>
-        Check your ceiling before you order. The <Num f="bigmaxx.min_height_ft" /> is to the bottom of the heater. The
-        body, the brackets and the joist all have to fit above that line. A low ceiling rules this class out.
-      </p>
+      <p>Code sets two lower floors, in short:</p>
+      <ul>
+        <li>
+          Ignition source (IFGC 2021 §305.3; IRC 2021 §G2408.2): &quot;<Num f="code.ifgc.305_3" />.&quot;
+        </li>
+        <li>
+          Whole appliance (IFGC 2021 §305.5; IRC 2021 §G2408.3): &quot;<Num f="code.ifgc.305_5.private_garage_height" />.&quot;
+        </li>
+      </ul>
+      <p>The manual&apos;s number is stricter than both, so for this unit the manual wins.</p>
 
       <h3>Air and fumes</h3>
       <p>
         This unit burns room air. That air must be free of chlorine, solvents, glues, paint remover and similar fumes.
-        Otherwise the heat exchanger wears out early (manual page 5). The manual sends you to section 5.3 of the National Fuel Gas
-        Code (ANSI Z223.1) for combustion air. Your fitter applies the edition your area has adopted.
+        Otherwise the heat exchanger wears out early (manual page 5). For combustion-air sizing, the manual points to the
+        National Fuel Gas Code (ANSI Z223.1 / NFPA 54). Your fitter applies the edition your area has adopted.
       </p>
       <p>
         The manual also bans the unit anywhere gasoline, solvents, paint thinner, dust or unknown chemicals are, or may be,
-        present (page 2). A garage with a gas can and a mower is that place today. Move them to a shed first.
+        present (page 2). Move gasoline and solvents out of the garage, whatever heater you choose. A gas can and a mower in
+        the corner is that place today.
       </p>
 
-      <h2 id="gas-line">The gas line and the licensed installer</h2>
+      <h2 id="gas-line">The gas line, the permit and the installer</h2>
       <p>
         This is not a plug-in heater. It needs a gas pipe, a vent and a hardwired <Num f="bigmaxx.mhu50.volts" /> feed. The
         manual says a qualified installer, service agency or the gas supplier must install and service it (page 1).
-        BayHeat&apos;s catalog entry for this unit also calls for a permit. Treat the gas connection as a licensed-trade job.
+        BayHeat says hire a licensed gas fitter and get the permit your town requires. Some places let owners do gas work
+        in their own home, but the manual&apos;s wording still stands.
       </p>
       <p>Here is what your gas fitter handles:</p>
       <ul>
@@ -486,14 +560,13 @@ export default function Page() {
 
       <h3>What the verdict tool says about a vented gas unit heater</h3>
       <p>
-        <Link href="/can-i-run-it">Can I run it?</Link> returns <strong>{ventedVerdict.stamp}</strong> for a vented gas unit
-        heater in an attached garage. Every one of these has to hold:
+        Here is the <Link href="/can-i-run-it">Can I run it?</Link> answer for a vented gas unit heater in an attached
+        garage. Every condition has to hold.
       </p>
-      <ConditionList conditions={ventedVerdict.conditions} />
+      <VerdictStamp verdict={ventedVerdict} />
       <p>
-        No gas line? On small propane cylinders alone, the tool returns <strong>{noLineVerdict.stamp}</strong>. A vented unit
-        heater needs piped gas or a bulk propane tank. The <Link href="/propane-heater-for-garage">propane page</Link> covers
-        that route.
+        No gas line? A vented unit heater needs piped gas or a bulk propane tank. Small propane cylinders alone can&apos;t
+        feed it. The <Link href="/propane-heater-for-garage">propane page</Link> covers that route.
       </p>
 
       <h2 id="thermostat">Garage heater with a thermostat</h2>
@@ -505,32 +578,28 @@ export default function Page() {
       <p>
         The spark makes radio noise. For a microprocessor thermostat, the manual suggests an isolation relay (page 9). Our
         example garage holds{" "}
-        <Num v={EXAMPLE_A_INPUT.targetTemp} unit="°F" ev="S" src="EXAMPLE_A_INPUT.targetTemp — lib/planner/fixtures.ts" />;
+        <Num v={EXAMPLE_A_INPUT.targetTemp} unit="°F" ev="E" src="EXAMPLE_A_INPUT.targetTemp — lib/planner/fixtures.ts" />;
         set yours to what you actually need.
       </p>
 
       <h2 id="vent-free">Why a vent-free gas heater is a no in an attached garage</h2>
       <p>
         A vent-free heater releases its exhaust into the room. An attached garage shares walls, a door and sometimes duct
-        paths with the house, so carbon monoxide can follow the air indoors. Ventilating the garage does not change that
-        rule.
+        paths with the house, so carbon monoxide can follow the air indoors. Ventilating the garage does not change that.
       </p>
-      <SafetyCallout>
-        <p className="font-medium text-(--color-fg)">
-          Unvented portable propane heater, attached garage: {unventedPropane.stamp}
-        </p>
-        <p>{unventedPropane.reasons[0]}</p>
-        <p className="mt-3 font-medium text-(--color-fg)">
-          Unvented kerosene heater, attached garage: {unventedKerosene.stamp}
-        </p>
-        <p>{unventedKerosene.reasons[0]}</p>
-      </SafetyCallout>
       <p>
-        The tool has no menu entry for a vent-free natural gas heater, because BayHeat lists none. It treats the idea the
-        same way. If the exhaust stays in an attached garage, the answer is no. A house with an attached garage also needs{" "}
-        <Num f="code.irc.r315" format={() => "a CO alarm"} /> by code (IRC 2021 §R315). An alarm warns you. It does not make
-        an unvented heater safe.
+        The verdict tool has no vent-free natural gas class. Its closest class, a portable unvented propane heater, gets
+        this answer in an attached garage:
       </p>
+      <VerdictStamp verdict={unventedPropane} />
+      <Callout variant="note">
+        <p>
+          <strong>BayHeat&apos;s rule:</strong> the same answer applies to a vent-free natural gas heater in an attached garage.
+          That is a BayHeat rule, not a result from the tool. A CO alarm warns you. It does not make an unvented heater
+          safe.
+        </p>
+        <p className="mt-2 text-sm">{SAFETY_SCOPE}</p>
+      </Callout>
 
       <h2 id="cost">Cost per hour against electric, at state prices</h2>
       <p>
@@ -580,8 +649,8 @@ export default function Page() {
         </table>
       </div>
       <p className="text-xs text-(--color-fg-2)">
-        Per hour at full fire, for the same delivered heat. Computed live from EIA residential prices: natural gas as of{" "}
-        {asOf.ng}, electricity as of {asOf.elec}. The gas figure leaves out the utility&apos;s fixed monthly charge.
+        Per hour at full fire, for the same delivered heat. Computed live from EIA residential prices (natural gas: {asOf.ng};
+        electricity: {asOf.elec}). The gas figure leaves out the utility&apos;s fixed monthly charge.
       </p>
       <p>
         Gas costs less per hour than electric resistance heat in{" "}
@@ -596,9 +665,9 @@ export default function Page() {
       </p>
 
       <h2 id="not-to-buy">Buy this, not that</h2>
-      <h3>Buy: the vented unit heater, if the sizing table says it fits</h3>
+      <h3>Buy: the vented unit heater, if your load and your ceiling both pass</h3>
       <Disclosure />
-      <div className="not-prose my-6 border border-(--color-line) p-4">
+      <div data-buy-group className="not-prose my-6 border border-(--color-line) p-4">
         <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">VENTED UNIT HEATER · NATURAL GAS</p>
         <p className="mt-1 text-lg font-bold text-(--color-fg)">{bigMaxx.name}</p>
         <p className="mt-2 text-sm text-(--color-fg-2)">
@@ -620,22 +689,24 @@ export default function Page() {
         <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {bigMaxx.priceClass}</p>
         <div className="mt-3">
           <BuyButton href={buyLink.href}>{buyLink.label}</BuyButton>
+          <PaidLabel />
         </div>
       </div>
 
-      <h3>A dusty or fume-heavy shop</h3>
+      <h3>Dust in the shop</h3>
       <p>
-        The Big Maxx burns room air, and its manual bans use where dust, solvent or paint-thinner vapor may be present. If
-        you can&apos;t clear that air, ask a heating supplier about a separated-combustion unit. It draws its combustion air
-        from outdoors. BayHeat&apos;s catalog lists the Modine Hot Dawg HDS in that class. We have no verified listing for it, so
-        this page has no buy link for it. Its own manual governs the install.
+        The Big Maxx burns room air. Its manual bans use where dust, solvents, paint thinner or gasoline vapor may be
+        present. Move gasoline and solvents out of the garage, whatever heater you choose. For sawdust, a
+        separated-combustion unit draws its combustion air from outdoors instead of from the shop. BayHeat&apos;s catalog
+        lists the Modine Hot Dawg HDS in that class. We have no verified listing for it, so this page has no buy link for
+        it. Its own manual governs the install, including where it may be used.
       </p>
 
       <h3>Don&apos;t buy</h3>
       <ul>
         <li>
-          <strong>A vent-free gas heater for an attached garage.</strong> The answer is {unventedPropane.stamp}, as above.
-          BayHeat lists none.
+          <strong>A vent-free gas heater for an attached garage.</strong> That is BayHeat&apos;s rule, as above. BayHeat lists
+          none.
         </li>
         <li>
           <strong>A unit chosen by its name.</strong> Use the sizing table. The MHU50 is too small for a leaky 2-car garage
@@ -643,24 +714,43 @@ export default function Page() {
         </li>
         <li>
           <strong>Any heater before you check the ceiling.</strong> The bottom of this unit has to sit at least{" "}
-          <Num f="bigmaxx.min_height_ft" /> above the floor.
+          <Num f="bigmaxx.min_height_ft" /> above the floor. In practice that means a ceiling of at least{" "}
+          <Num v={requiredCeilingFt} unit="ft" ev="C" src="ceil(stack / 12), bigmaxx facts" />.{" "}
+          {lowCeilingPresets.map((r, i) => (
+            <span key={r.key}>
+              {i > 0 ? " and the " : "The "}
+              {r.label} preset (<Num v={PRESET_DEFAULTS[r.key].height} unit="ft" ev="E" src={`PRESET_DEFAULTS['${r.key}'].height — lib/planner/presets.ts`} />)
+            </span>
+          ))}{" "}
+          fall short.
         </li>
         <li>
           <strong>The wrong fuel.</strong> Confirm the listing says natural gas. Swapping fuels takes the maker&apos;s kit and a
           qualified service agency (manual page 15).
         </li>
         <li>
-          <strong>A torpedo heater.</strong> {torpedoVerdict.reasons[0]}
+          <strong>A torpedo heater.</strong> BayHeat excludes open-flame forced-air heaters from every enclosed garage.
         </li>
       </ul>
 
       <h2>Safety scope</h2>
       <SafetyCallout>
         <p>
-          {coCondition.text} Have the heater and its vent inspected once a year by a qualified service agency, as the
-          manual says. {SAFETY_SCOPE}
+          Put a UL 2034 CO alarm in the house outside each sleeping area. BayHeat also says to run a low-level CO monitor in
+          the garage, rated for its temperature range, while this heater runs. Have the heater and its vent inspected once a
+          year by a qualified service agency, as the manual says. {SAFETY_SCOPE}
         </p>
       </SafetyCallout>
+      <p>Alarm rules depend on your place and on when the house was built. In short:</p>
+      <ul>
+        <li>
+          IRC 2021 §R315.2.1: &quot;<Num f="code.irc.r315.new_construction" />.&quot;
+        </li>
+        <li>
+          IRC 2021 §R315.2.2: &quot;<Num f="code.irc.r315.permitted_work" />.&quot; Adding a gas heater can count.
+        </li>
+      </ul>
+      <p>Your local code edition governs.</p>
 
       <QuickPick
         productId="co-alarm-battery-10yr"

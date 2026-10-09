@@ -133,8 +133,8 @@ export default function Page() {
       <FuelCostBars rows={result.costs} />
       <p>
         <Link href="/natural-gas-garage-heater">Natural gas</Link> is cheapest per MMBtu almost everywhere it&apos;s
-        piped to the garage — but that&apos;s the catch: most detached garages don&apos;t have a gas line, and running one plus a B-vent through the roof is
-        its own project. Propane trades a cylinder or bulk tank for that piping. Electric needs neither, at the
+        piped to the garage. The catch: most detached garages don&apos;t have a gas line. Running one plus a B-vent
+        through the roof is its own project. Propane trades a cylinder or bulk tank for that piping. Electric needs neither, at the
         cost of the highest rate per MMBtu in most states.
       </p>
 
