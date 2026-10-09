@@ -273,7 +273,7 @@ function dieselVerdict(s: Situation): Verdict {
   // Rule 8: detached + exhaust and intake outdoors -> ONLY IF, 5 conditions.
   return onlyIf(
     [
-      { text: "Tell your insurer and code office before a permanent install.", cite: "IRC M1302.1", edition: "IRC 2021", ev: "R", severity: "must" },
+      { text: "A permanent install of a heater with no listing needs your code official's approval, and tell your insurer.", cite: "IRC M1302.1", edition: "IRC 2021", ev: "R", severity: "must" },
       { text: "Exhaust passes through the maker's metal wall thimble, at the maker's clearance to combustibles.", cite: "Manufacturer manual", ev: "S", severity: "must" },
       { text: "The exhaust ends at least 4 ft from, and at least 1 ft above, any door, operable window or air inlet, and stays above the snow line.", cite: "IFGC 503.8", edition: "IFGC 2021 (borrowed -- written for a different appliance class)", ev: "C", severity: "must" },
       CO_CONDITION,
@@ -296,14 +296,24 @@ function ventedGasVerdict(s: Situation): Verdict {
       ["No natural gas line or bulk propane tank -- cylinders alone don't qualify."],
     );
   }
-  // Rules 16 & 17: attached (with qualifying fuel) or a solvent/sawdust shop -- both are ONLY IF, separated
-  // combustion, licensed install.
+  // Rules 16 & 17: attached (with qualifying fuel) or a dusty shop -- both are ONLY IF, licensed install. Both gas
+  // unit heater manuals we cite rule out a flammable atmosphere (Modine 6-584.12 DANGER; Mr. Heater MHU: never where
+  // gasoline, solvents, paint thinner or dust are present), so stored flammables add a condition, as for electric.
+  const conditions: Condition[] = [
+    { text: "Installed and permitted by a licensed gas fitter -- this isn't a DIY connection.", cite: "BayHeat", ev: "C", severity: "must" },
+    { text: "Burner at least 18 in above the garage floor, and at least 6 ft up or guarded against vehicle impact.", cite: "IFGC 305.3 / 305.5", edition: "IFGC 2021", ev: "R", severity: "must" },
+    CO_CONDITION,
+  ];
+  if (isYes(s.flammablesStored)) {
+    conditions.push({
+      text: "Move gasoline, solvents and paint thinner out of the garage first -- the gas unit heater manuals rule out installing where the air may be flammable.",
+      cite: "Manufacturer manual",
+      ev: "S",
+      severity: "must",
+    });
+  }
   return onlyIf(
-    [
-      { text: "Installed and permitted by a licensed gas fitter -- this isn't a DIY connection.", cite: "BayHeat", ev: "C", severity: "must" },
-      { text: "Burner at least 18 in above the garage floor, and at least 6 ft up or guarded against vehicle impact.", cite: "IFGC 305.3 / 305.5", edition: "IFGC 2021", ev: "R", severity: "must" },
-      CO_CONDITION,
-    ],
+    conditions,
     [],
     ["Licensed install, correct clearances, and CO protection -- safe within code."],
   );

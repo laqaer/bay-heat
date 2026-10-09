@@ -74,6 +74,13 @@ export const SOURCES: Record<string, Source> = {
     url: "https://www.shareddocs.com/hvac/docs/2001/Public/03/Data_Sheet_Kidde_C3010_ENG.pdf",
     retrieved: "2026-09-30",
   },
+  "hot-dawg-hds-manual": {
+    id: "hot-dawg-hds-manual",
+    title: "Modine HDS/HDC separated combustion gas-fired unit heaters, installation and service manual 6-584.12 (April 2018)",
+    publisher: "Modine Manufacturing",
+    url: "https://www.modinehvac.com/wp-content/uploads/2020/01/Hot-Dog-Separated-Combustion.pdf",
+    retrieved: "2026-10-09",
+  },
   "big-maxx-manual": {
     id: "big-maxx-manual",
     title: "Mr. Heater MHU50 / MHU80 / MHU125 operating instructions and owner's manual",

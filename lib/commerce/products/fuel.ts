@@ -79,7 +79,7 @@ export const PRODUCTS: Product[] = [
     priceClassChecked: "2026-09-25",
     specFactIds: [],
     safetyLine: {
-      text: "Licensed gas fitter and permit required. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor (code minimum for burner and ignition: 18 in, IFGC 305.3). Never where gasoline, solvents, paint thinner or dust are present.",
+      text: "Licensed gas fitter and permit required. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor (code minimum for burner and ignition: 18 in, IFGC 2021 §305.3). Never where gasoline, solvents, paint thinner or dust are present.",
       ev: "S",
       sourceId: "big-maxx-manual",
     },
@@ -93,7 +93,13 @@ export const PRODUCTS: Product[] = [
     priceClass: "$$$$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: { text: "Licensed gas fitter and permit required. Separated combustion -- draws intake air from outside the room, the right pick for a shop with sawdust or solvent vapor (S10).", ev: "S", sourceId: "hot-dawg-hds-manual" },
+    // Manual 6-584.12 pp. 2 and 4 (DANGER). Separated combustion keeps dusty room air out of the burner; it is not a
+    // licence for a solvent or gasoline atmosphere, which an earlier version of this line implied.
+    safetyLine: {
+      text: "Licensed gas fitter and permit required. Manual: \u201cAppliances must not be installed where they may be exposed to a potentially explosive or flammable atmosphere.\u201d Separated combustion takes burner air from outdoors; it does not make a room with solvent or gasoline vapor safe.",
+      ev: "S",
+      sourceId: "hot-dawg-hds-manual",
+    },
   },
   {
     // The 115 V DIY class (hp_diy_12k_115) is a different product from the 230 V unit: a reader whose garage cannot take a

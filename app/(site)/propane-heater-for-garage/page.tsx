@@ -137,8 +137,8 @@ export default function Page() {
           <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">SEPARATED COMBUSTION</p>
           <p className="mt-1 text-lg font-bold text-(--color-fg)">{hotDawg.name}</p>
           <p className="mt-2 text-sm text-(--color-fg-2)">
-            Draws its combustion air from outside the room — the pick for a shop with sawdust or solvent vapor
-            in the air.
+            Draws its combustion air from outdoors, so dusty shop air doesn&apos;t feed the burner. It is not for a
+            room with solvent or gasoline vapor: the manual rules out any flammable atmosphere.
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)">{hotDawg.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hotDawg.priceClass}</p>

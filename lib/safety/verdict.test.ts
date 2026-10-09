@@ -257,3 +257,14 @@ test("23b: a Massachusetts ZIP3 with no state set -> NO-GO for kerosene", () => 
   const outside = verdictFor("kerosene", { ...BASE, state: undefined, zip3: "606", attached: false, unattended: false, livingAbove: false });
   assert.notEqual(outside.verdict, "NO_GO");
 });
+
+// Both gas unit heater manuals we cite rule out a flammable atmosphere (Modine 6-584.12 DANGER, pp. 2 and 4; Mr.
+// Heater MHU: never where gasoline, solvents, paint thinner or dust are present). Before 2026-10-09 the vented-gas
+// verdict ignored stored flammables entirely, while the electric verdicts already carried the manual's rule.
+test("vented gas with flammables stored carries the manuals' move-them-out condition", () => {
+  const stored = verdictFor("vented_gas", { ...BASE, attached: false, cylinder: undefined, flammablesStored: "yes" });
+  assert.equal(stored.verdict, "GO_IF");
+  assert.ok(stored.conditions.some((c) => c.cite === "Manufacturer manual" && /flammable/.test(c.text)));
+  const clear = verdictFor("vented_gas", { ...BASE, attached: false, cylinder: undefined, flammablesStored: "no" });
+  assert.ok(!clear.conditions.some((c) => /rule out installing where the air may be flammable/.test(c.text)));
+});
