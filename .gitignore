@@ -43,3 +43,6 @@ next-env.d.ts
 
 # smoke-test / screenshot artifacts
 .artifacts/
+
+# agent worktrees
+/.claude/worktrees/

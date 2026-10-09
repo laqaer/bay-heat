@@ -4,7 +4,7 @@ import { ReportPage } from "@/components/page/ReportPage";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { CONTACT_EMAIL } from "@/lib/site";
-import { PLAUSIBLE_DOMAIN, GA4_ID } from "@/lib/env.public";
+import { PLAUSIBLE_DOMAIN, GA4_ID, CF_WEB_ANALYTICS_TOKEN } from "@/lib/env.public";
 
 const entry = findPage("/privacy")!;
 
@@ -34,6 +34,14 @@ export default function Page() {
           private browser just skips it — nothing breaks. This never leaves your browser and never reaches a
           BayHeat server.
         </li>
+        {CF_WEB_ANALYTICS_TOKEN ? (
+          <li>
+            <strong>Page-view counts, without cookies.</strong> Cloudflare Web Analytics counts visits to each
+            page: the page path, the site that sent you, your country, and your browser and device type. It sets
+            no cookies, doesn&apos;t fingerprint you, and doesn&apos;t record the part of a link after the
+            &ldquo;?&rdquo;, so the garage code in a calculator link isn&apos;t collected.
+          </li>
+        ) : null}
         <li>
           <strong>Anonymous usage events, only where analytics is turned on.</strong>{" "}
           {analyticsConfigured

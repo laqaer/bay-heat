@@ -86,3 +86,7 @@ export const CALL_NUMBER_HVAC = process.env.NEXT_PUBLIC_CALL_NUMBER_HVAC ?? null
 // Analytics. track() (lib/track.ts) is a no-op unless one of these is set.
 export const PLAUSIBLE_DOMAIN = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ?? null;
 export const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID ?? null;
+// Cloudflare Web Analytics site token (public; it ships in the page). Page views only: no cookies, no custom
+// events, and Cloudflare does not log query strings, so the planner's ?g= garage code never reaches it.
+// Free. Create the site in the Cloudflare dashboard (Analytics & Logs > Web Analytics > Add a site).
+export const CF_WEB_ANALYTICS_TOKEN = process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN || null;
