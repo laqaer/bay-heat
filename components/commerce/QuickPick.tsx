@@ -24,6 +24,7 @@ export function QuickPick({
   compareLabel = "Compare every option",
   eyebrow = "Model pick · spec-based",
   surface = "site",
+  direct = true,
 }: {
   productId: string;
   page: string;
@@ -32,10 +33,11 @@ export function QuickPick({
   compareLabel?: string;
   eyebrow?: string; // "Safety add-on" for a CO alarm; the default is the heater pick
   surface?: Surface; // "safety" on the verdict tool, so Associates reports it under the safety tracking ID
+  direct?: boolean; // false: link a search for the product, never its /dp/ page (the planner's rule when one model can't be shown to supply the load)
 }) {
   const product = findProduct(productId);
   if (!product) throw new Error(`QuickPick: unknown product id "${productId}"`);
-  const links = route(product, surface, page);
+  const links = route(direct ? product : { ...product, asin: undefined }, surface, page);
   const primary = links.find((l) => l.slot === "primary") ?? links[0];
 
   const cls = HEATER_CLASSES[product.kind as HeaterClassId];

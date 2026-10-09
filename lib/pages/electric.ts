@@ -14,6 +14,8 @@ export const PAGES: PageEntry[] = [
     primaryKeyword: "best garage heater",
     volume: 5400,
     reviewed: "electrical",
+    // TODO(humanReview): add `humanReview: "pending"` here once PageEntry has that field (it lands with the corrections branch;
+    // tsc rejects the property on this branch's PageEntry type). The page is awaiting the human editor's sign-off.
     indexable: true,
     published: "2026-10-09",
     updated: "2026-10-09",
