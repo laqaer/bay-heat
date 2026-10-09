@@ -4,6 +4,8 @@ import { plan } from "./plan.ts";
 import { EXAMPLE_A_INPUT } from "./fixtures.ts";
 import { decode } from "./codec.ts";
 import type { GarageInput } from "./types.ts";
+import { MAX_HEATER_CIRCUIT_WATTS } from "./electrical.ts";
+import { HEATER_CLASSES } from "./catalog.ts";
 
 function near(actual: number, expected: number, tolPct = 3) {
   const tol = Math.abs(expected) * (tolPct / 100) || 1;
@@ -160,8 +162,8 @@ test("plan() sizes very large loads as several identical circuits instead of thr
   for (const fuels of [["electric"], ["electric", "natural_gas"]] as const) {
     const r = plan({ ...leaky, fuels: [...fuels], ventingPossible: true });
     assert.ok(r.circuits.forSizeCount > 1, `expected more than one circuit for ${Math.round(r.heating.qSize)} BTU/h`);
-    // NEC 424.22(B): at most 48 A of element load per heater circuit, protected at 60 A or less.
-    assert.ok(r.circuits.forSize.minAmps <= 60 && r.circuits.forSize.breakerA <= 60, `${r.circuits.forSize.breakerA} A`);
+    // One modeled heater per circuit: at most the catalog's 10 kW class, which keeps it inside NEC 424.22(B)'s 60 A.
+    assert.ok(r.circuits.forSize.watts <= MAX_HEATER_CIRCUIT_WATTS + 1 && r.circuits.forSize.breakerA <= 60, `${r.circuits.forSize.watts} W`);
     // Each circuit carries an equal share of the electric-resistance load (eta 1), whatever the top pick burns.
     const totalWatts = r.circuits.forSize.watts * r.circuits.forSizeCount;
     assert.ok(Math.abs(totalWatts - r.heating.qSize / 3.412) <= r.circuits.forSizeCount, `${totalWatts} W vs ${r.heating.qSize / 3.412} W`);
@@ -171,4 +173,16 @@ test("plan() sizes very large loads as several identical circuits instead of thr
       assert.equal(plan({ ...leaky, fuels: [...fuels], ventingPossible: true, panelAmps }).circuits.panelCheck, "load_calc");
     }
   }
+});
+
+test("the per-circuit cap is the largest resistance heater the catalog models", () => {
+  const largest = Math.max(
+    ...Object.values(HEATER_CLASSES)
+      .filter((c) => c.energy === "electric" && typeof c.eta === "number")
+      .map((c) => c.outputBtuh[1] / 3.412),
+  );
+  assert.ok(Math.abs(largest - MAX_HEATER_CIRCUIT_WATTS) < 1, `catalog max ${largest} W vs cap ${MAX_HEATER_CIRCUIT_WATTS} W`);
+  // A load just over 10 kW (a 60 °F "gym" garage, about 10.4 kW) is two heater circuits, not one 60 A circuit.
+  const gym = plan({ ...EXAMPLE_A_INPUT, targetTemp: 60 });
+  if (gym.heating.kwSize > 10) assert.equal(gym.circuits.forSizeCount, 2);
 });

@@ -65,16 +65,15 @@ export function circuitFor(watts: number, voltsSupply: 120 | 208 | 240, voltsRat
   };
 }
 
-// The circuit (or circuits) electric-resistance heaters sized to a whole load need. NEC 424.22(B) caps a
-// resistance heater's element load at 48 A, protected at no more than 60 A, and the catalog's largest heater is
-// 10 kW on a 60 A circuit -- so one heater circuit carries at most 48 A continuous (11,520 W at 240 V). A bigger
-// load -- a leaky 3-car in Minneapolis is about 25 kW -- is two or more heaters, each on its own circuit: split it
-// evenly across the fewest identical circuits within that cap instead of throwing (or prescribing a 70-80 A
-// heater circuit no listed garage heater uses).
-const MAX_HEATER_AMPS = 48;
-const MAX_CIRCUIT_WATTS_240 = MAX_HEATER_AMPS * 240;
+// The circuit (or circuits) electric-resistance heaters sized to a whole load need. Each circuit feeds one heater,
+// and the largest resistance heater the planner models is 10 kW on a 60 A circuit (catalog e_240_10k, inside NEC
+// 424.22(B)'s 48 A / 60 A element cap), so one circuit carries at most 10,000 W. A bigger load -- a leaky 3-car in
+// Minneapolis is about 25 kW -- is two or more heaters, each on its own circuit: split it evenly across the
+// fewest identical circuits within that cap instead of throwing, or prescribing a circuit no modeled heater uses.
+// plan.test.ts pins this to the catalog's 10 kW class.
+export const MAX_HEATER_CIRCUIT_WATTS = 10_000;
 export function circuitsForLoad(watts: number): { spec: CircuitSpec; count: number } {
-  const count = Math.max(1, Math.ceil(watts / MAX_CIRCUIT_WATTS_240));
+  const count = Math.max(1, Math.ceil(watts / MAX_HEATER_CIRCUIT_WATTS));
   return { spec: circuitFor(watts / count, 240, 240), count };
 }
 
