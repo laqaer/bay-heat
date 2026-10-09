@@ -15,7 +15,7 @@ import { heaterClass } from "@/lib/planner/catalog";
 import type { HeaterClassId } from "@/lib/planner/types";
 import { plan } from "@/lib/planner/plan";
 import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
-import { primaryProduct, productWarning } from "@/lib/commerce/products";
+import { primaryProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { getSource } from "@/lib/facts";
 import { SAFETY_SCOPE } from "@/lib/site";
@@ -121,7 +121,7 @@ export default function Page() {
               const links = product ? route(product, "site", entry.href) : [];
               const primary = links.find((l) => l.slot === "primary") ?? links[0];
               const [lo, hi] = hc.outputBtuh;
-              const warning = productWarning(product) ? product?.safetyLine?.text : undefined; // the whole line, not only the part beyond the standard one
+              const warning = primary ? product?.safetyLine?.text : undefined; // every row with a buy button shows that product's whole line, the standard flammables rule included
               return (
                 <Fragment key={id}>
                 <tr className={warning ? "align-top" : "border-b border-(--color-line)/50 align-top"}>

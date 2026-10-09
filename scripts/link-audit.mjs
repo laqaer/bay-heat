@@ -78,15 +78,28 @@ function visibleText(html) {
     .trim();
 }
 
-// A plate that links a product directly must show that product's own manual warning where the reader can see it:
-// the DR-975's "do not use as a residential heater", the Big Maxx's minimum mounting height, the diesel heaters'
-// "not for constant garage heating". Returns the ids of products linked on the page whose safety line is missing
-// from the visible text. `products` is ALL_PRODUCTS.
-export function missingProductWarnings(html, products) {
-  const text = visibleText(html);
-  return products
-    .filter((p) => p.asin && p.safetyLine && html.includes(`/dp/${p.asin}`) && !text.includes(visibleText(p.safetyLine.text)))
-    .map((p) => p.id);
+// A plate that links a product directly must show that product's own manual warning where the reader can see it,
+// next to the button: the DR-975's "do not use as a residential heater", the Big Maxx's minimum mounting height, the
+// DR-238's mounting height, the diesel heaters' "not for constant garage heating". A line that exists somewhere else
+// on a long page is not at the point of sale, so the check is per link: the warning must appear in the visible text
+// within WINDOW characters of HTML on either side of each /dp/ link. Returns the ids of products with a link that
+// fails. `products` is ALL_PRODUCTS.
+const WARNING_WINDOW = 3500;
+export function missingProductWarnings(html, products, window = WARNING_WINDOW) {
+  // Only links a reader can click count: blank out <script> bodies (Next's RSC payload repeats every href there) while
+  // keeping offsets, then look for the link inside an href.
+  const dom = html.replace(/<script[\s\S]*?<\/script>/g, (m) => " ".repeat(m.length));
+  const out = new Set();
+  for (const p of products) {
+    if (!p.asin || !p.safetyLine) continue;
+    const needle = visibleText(p.safetyLine.text);
+    const marker = `href="https://www.amazon.com/dp/${p.asin}`;
+    for (let at = dom.indexOf(marker); at !== -1; at = dom.indexOf(marker, at + marker.length)) {
+      const near = visibleText(dom.slice(Math.max(0, at - window), at + window));
+      if (!near.includes(needle)) out.add(p.id);
+    }
+  }
+  return [...out];
 }
 
 async function loadPlaywright() {
