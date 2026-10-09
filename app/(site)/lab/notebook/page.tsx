@@ -41,9 +41,9 @@ export default function Page() {
               <td className="py-3">
                 Model v1.0.1. Correction: the planner failed to load a report for very large or very leaky garages,
                 and for some garages where a gas or diesel heater was the top pick. The &ldquo;Power it&rdquo;
-                circuit now matches the electric heaters the report recommends, one circuit per heater. With no
-                electric heater recommended, it shows the heater sizes we model (4, 5, 7.5 or 10 kW) that cover the
-                load, as many as it takes. Heat loads did not change.
+                circuit now matches the electric heaters the report recommends, one circuit per heater. If no
+                recommended electric heater covers the whole load, it shows the heater sizes we model (4, 5, 7.5 or
+                10 kW) that do, as many as it takes. Heat loads did not change.
               </td>
             </tr>
           </tbody>

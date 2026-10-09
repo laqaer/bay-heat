@@ -57,13 +57,9 @@ function formatCircuit(c?: string): string {
 
 export default function Page() {
   const result = plan(EXAMPLE_A_INPUT);
-  // The worked example's electric answer: the top resistance-heater pick, whose per-unit circuit plan() reports as
-  // circuits.forSize (one circuit per heater). Read from the recommendation, so the sentence can't name a heater
-  // size the circuit wasn't sized for.
-  const electricPick = result.recommendations.find((r) => {
-    const cls = heaterClass(r.classId);
-    return cls.energy === "electric" && typeof cls.eta === "number" && r.circuit !== undefined;
-  });
+  // The worked example's electric answer: the heater class plan() sized circuits.forSize for (one circuit per heater).
+  // Read from plan() itself, so the sentence can't name a heater size the circuit wasn't sized for.
+  const electricPick = result.recommendations.find((r) => r.classId === result.circuits.forSizeClassId);
   const sources = SOURCE_IDS.map((id) => getSource(id)).filter((s): s is NonNullable<typeof s> => s !== null);
 
   return (

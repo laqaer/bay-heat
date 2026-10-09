@@ -285,7 +285,16 @@ export type PlannerResult = {
   };
   cooling?: CoolingResult; // undefined in v1
   warmup: { classId: HeaterClassId; kw: number; janMinutes: number | null; curve: [number, number][] /* [min, degF] */ };
-  circuits: { forSize: CircuitSpec; forSizeCount: number; user?: CircuitSpec; fits: boolean; panelCheck: "ok" | "load_calc" | "unknown"; notes: string[] };
+  circuits: {
+    forSize: CircuitSpec;
+    forSizeCount: number;
+    // The recommended heater class forSize is the per-unit circuit for; undefined when it is sized for the whole load.
+    forSizeClassId?: HeaterClassId;
+    user?: CircuitSpec;
+    fits: boolean;
+    panelCheck: "ok" | "load_calc" | "unknown";
+    notes: string[];
+  };
   usage: { mode: "continuous" | "sessions"; seasonMonths: string[]; tBal?: number; hddAtBal?: number };
   costs: CostRow[];
   sessions?: SessionRow[];

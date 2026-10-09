@@ -8,7 +8,7 @@ import { heatLossDesign, freeFloatTemp } from "./heatLoss.ts";
 import { hddAtBase } from "./climate.ts";
 import { lightCapacitance, simulateSession } from "./warmup.ts";
 import { balancePoint, seasonalLoadContinuous, heatPumpSeasonal } from "./seasonal.ts";
-import { circuitFor, circuitsForLoad } from "./electrical.ts";
+import { MAX_HEATER_CIRCUIT_WATTS, circuitFor, circuitsForLoad } from "./electrical.ts";
 import { costsForSeasonalLoad } from "./fuels.ts";
 import { rankSystems, type RecommendContext } from "./recommend.ts";
 import { insulateFirst, fixFirst, bundleCheapMeasures, type RoiContext } from "./roi.ts";
@@ -155,18 +155,33 @@ export function plan(input: GarageInput): PlannerResult {
   if (input.ceilingIns === "unknown") assumptions.push(`Ceiling insulation unknown -- assumed ${envelope.ceilingIns} [A]`);
   if (input.tightness === "unknown") assumptions.push(`Tightness unknown -- assumed ${envelope.tightness} (${heatBand.unknowns} field(s) still uncertain) [A]`);
 
-  // "Power it" is the wiring for the electric-resistance heaters this report recommends: the top resistance pick's
-  // own per-unit circuit, one per unit, so it can never disagree with that recommendation card. With no resistance
-  // pick (gas, diesel or heat-pump only, or nothing fits), it falls back to the modeled heaters that cover the whole
-  // load (circuitsForLoad). It used to divide the load by the warm-up class's efficiency, which for a gas or diesel
-  // top pick turned fuel INPUT into electric watts and threw past an 80 A breaker.
+  // "Power it" is the wiring for the electric-resistance heaters this report recommends: the top resistance pick that
+  // covers the whole sized load, its own per-unit circuit, one per unit, so it can never disagree with that card.
+  // rankSystems() also keeps picks that cover only part of the load (60% for keep-warm and tier-3 classes); those
+  // don't count here. With no covering resistance pick (gas, diesel or heat-pump only, a partial fit, or nothing
+  // fits), it falls back to the modeled heaters that cover the whole load (circuitsForLoad). It used to divide the
+  // load by the warm-up class's efficiency, which for a gas or diesel top pick turned fuel INPUT into electric watts
+  // and threw past an 80 A breaker.
   const resistancePick = recommendations.find((r) => {
     const cls = HEATER_CLASSES[r.classId];
-    return cls.energy === "electric" && typeof cls.eta === "number" && r.circuit !== undefined;
+    return cls.energy === "electric" && typeof cls.eta === "number" && r.circuit !== undefined && r.capacityBtuh >= Math.round(heatLoss.qSize);
   });
   const forSize = resistancePick?.circuit
     ? { spec: resistancePick.circuit, count: resistancePick.units as number }
     : circuitsForLoad(heatLoss.qSize / 3.412);
+  // Load calculation: more heater load than one heater circuit carries (over 10 kW, so several circuits) needs one
+  // whatever the panel size. Below that -- one heater, or a pair of plug-ins -- only a 100 A panel adding a 30 A+
+  // heater load does (circuit.load_calc_threshold), judged on the heaters' total draw, not just the heat load.
+  const heaterWatts = forSize.spec.watts * forSize.count;
+  const panelCheck: PlannerResult["circuits"]["panelCheck"] =
+    heaterWatts > MAX_HEATER_CIRCUIT_WATTS
+      ? "load_calc"
+      : input.panelAmps === "unknown"
+        ? "unknown"
+        : input.panelAmps === 100 && Math.max(heatLoss.qSize, heaterWatts * 3.412) > 20000
+          ? "load_calc"
+          : "ok";
+  const oneCircuitCovers = heatLoss.qSize / 3.412 <= MAX_HEATER_CIRCUIT_WATTS;
 
   return {
     modelVersion: MODEL_VERSION,
@@ -197,15 +212,17 @@ export function plan(input: GarageInput): PlannerResult {
     circuits: {
       forSize: forSize.spec,
       forSizeCount: forSize.count,
+      forSizeClassId: resistancePick?.classId,
       user: input.circuit !== "unknown" ? circuitFor(circuitVolts(circuit) * circuitAmps(circuit) * 0.8, circuitVolts(circuit), circuitVolts(circuit)) : undefined,
       fits: top ? Boolean(top.circuit) : false,
-      // Several heater circuits add tens of kW to the service whatever the panel size, so they always need a load
-      // calculation; a single heater only trips the 100 A panel rule of thumb.
-      panelCheck:
-        forSize.count > 1 ? "load_calc" : input.panelAmps === "unknown" ? "unknown" : input.panelAmps === 100 && heatLoss.qSize > 20000 ? "load_calc" : "ok",
+      panelCheck,
       notes: [
         ...(forSize.count > 1
-          ? [`No single heater circuit covers this load: it takes ${forSize.count} heaters, each on its own circuit as above, a fuel-fired heater, or fixing the envelope first.`]
+          ? [
+              oneCircuitCovers
+                ? `Sized for the ${forSize.count} recommended heaters, each on its own circuit as above.`
+                : `No single heater circuit covers this load: it takes ${forSize.count} heaters, each on its own circuit as above, a fuel-fired heater, or fixing the envelope first.`,
+            ]
           : []),
         ...(input.circuit === "unknown" ? ["Circuit not yet known -- the planner will ask in step 5."] : []),
       ],

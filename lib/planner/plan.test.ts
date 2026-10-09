@@ -197,10 +197,67 @@ test("Power it uses the top resistance recommendation's per-unit circuit and cou
     const r = plan(input);
     const pick = r.recommendations.find((x) => {
       const cls = HEATER_CLASSES[x.classId];
-      return cls.energy === "electric" && typeof cls.eta === "number" && x.circuit !== undefined;
+      return cls.energy === "electric" && typeof cls.eta === "number" && x.circuit !== undefined && x.capacityBtuh >= Math.round(r.heating.qSize);
     });
     assert.ok(pick, "expected an electric resistance pick for the worked example");
+    assert.equal(r.circuits.forSizeClassId, pick.classId);
     assert.equal(r.circuits.forSizeCount, pick.units);
     assert.equal(r.circuits.forSize.breakerA, pick.circuit!.breakerA);
   }
+});
+
+// Codex review on #26: rankSystems() keeps keep-warm picks that cover 60% of the load. A 28x28x10 ft detached, leaky
+// Minneapolis garage kept at 55 °F gets 2 x 7.5 kW (71%) and 2 x 10 kW (94%) cards; neither covers the load, so
+// "Power it" must size the whole load (3 circuits), not report the partial pair as if it covered it.
+test("Power it ignores resistance picks that cover only part of the load", () => {
+  const r = plan({
+    ...EXAMPLE_A_INPUT,
+    preset: "custom",
+    width: 28,
+    depth: 28,
+    height: 10,
+    attached: false,
+    commonWallLen: 0,
+    wallType: "uninsulated_finished",
+    tightness: "leaky",
+    stationId: "MN-minneapolis",
+    state: "MN",
+    zip3: "554",
+    useCase: "keep",
+  });
+  const electric = r.recommendations.filter((x) => HEATER_CLASSES[x.classId].energy === "electric");
+  assert.ok(electric.length > 0 && electric.every((x) => x.fitPct < 100), "expected only partial-fit electric picks");
+  assert.equal(r.circuits.forSizeClassId, undefined);
+  assert.ok(r.circuits.forSize.watts * r.circuits.forSizeCount >= r.heating.qSize / 3.412, "Power it covers the whole load");
+  assert.equal(r.circuits.forSizeCount, circuitsForLoad(r.heating.qSize / 3.412).count);
+  assert.ok(r.circuits.notes.some((n) => n.startsWith("No single heater circuit")));
+  assert.equal(r.circuits.panelCheck, "load_calc");
+});
+
+// Codex review on #26: two 1.5 kW plug-in heaters are about 3 kW, not "tens of kW". They need no load calculation on
+// a 200 A panel, and one heater circuit could cover the load, so the report must not say none does.
+test("a pair of small heaters gets the panel rule of thumb, not a blanket load calculation", () => {
+  const oneCar = {
+    ...EXAMPLE_A_INPUT,
+    preset: "1car" as const,
+    width: 12,
+    depth: 22,
+    height: 8,
+    commonWallLen: 12,
+    garageDoors: [{ w: 9, h: 7, type: "steel_single" as const }],
+    windowsFt2: 0,
+    ceilingIns: "R30" as const,
+    tightness: "tight" as const,
+    circuit: "120V20A" as const,
+    usage: { mode: "sessions" as const, sessionsPerWeek: 3, hoursPerSession: 2, doorOpeningsPerSession: 2 },
+  };
+  const r = plan(oneCar);
+  assert.equal(r.circuits.forSizeClassId, "e_port_1500");
+  assert.equal(r.circuits.forSizeCount, 2);
+  assert.equal(r.circuits.panelCheck, "ok");
+  assert.ok(!r.circuits.notes.some((n) => n.startsWith("No single heater circuit")));
+  assert.ok(r.circuits.notes.some((n) => n.startsWith("Sized for the 2 recommended heaters")));
+  // A 100 A panel still gets the rule of thumb on the heaters' total draw; 3 kW stays under it.
+  assert.equal(plan({ ...oneCar, panelAmps: 100 }).circuits.panelCheck, "ok");
+  assert.equal(plan({ ...oneCar, panelAmps: "unknown" }).circuits.panelCheck, "unknown");
 });

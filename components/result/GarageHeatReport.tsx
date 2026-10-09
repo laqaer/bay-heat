@@ -245,8 +245,8 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
           </p>
           {result.circuits.panelCheck === "load_calc" && result.circuits.forSizeCount > 1 ? (
             <p className="mt-2 text-sm text-(--color-alarm)">
-              {result.circuits.forSizeCount} heater circuits: ask an electrician for a load calculation before you add them, whatever your
-              panel size (NEC 2023 §220.83 method — your local adopted edition governs).
+              {result.circuits.forSizeCount} heater circuits: ask an electrician for a load calculation before you add them (NEC 2023
+              §220.83 method — your local adopted edition governs).
             </p>
           ) : result.circuits.panelCheck === "load_calc" ? (
             <p className="mt-2 text-sm text-(--color-alarm)">100A panel + a 30A+ heater: ask for an NEC load calculation (§220.83 / §120.83 — your local adopted edition governs).</p>
