@@ -45,8 +45,8 @@ export default function Page() {
         <li>
           <strong>Anonymous usage events, only where analytics is turned on.</strong>{" "}
           {analyticsConfigured
-            ? "This deployment has an analytics provider configured. Events carry no name, email, or full ZIP code — at most a three-digit ZIP prefix."
-            : "This deployment currently has no analytics provider configured, so no usage events are sent anywhere."}{" "}
+            ? "This deployment has an event analytics provider configured. Events carry no name, email, or full ZIP code — at most a three-digit ZIP prefix."
+            : `This deployment has no event analytics configured, so no usage events (clicks, calculator steps) are sent anywhere${CF_WEB_ANALYTICS_TOKEN ? " beyond the page-view counts above" : ""}.`}{" "}
           Analytics events never include your garage&apos;s size, address, or the saved-garage summary above.
         </li>
       </ul>

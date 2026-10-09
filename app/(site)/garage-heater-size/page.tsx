@@ -6,6 +6,7 @@ import { Callout } from "@/components/ui/Callout";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { QuickPick } from "@/components/commerce/QuickPick";
 import { findProduct } from "@/lib/commerce/products";
+import { getFact } from "@/lib/facts";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
 import { pageMetadata } from "@/lib/seo";
@@ -98,11 +99,13 @@ function runTier(presetKey: Exclude<Preset, "custom">, tier: TierName, stationId
 
 // Heaters that can be bought in one click at the two bracket sizes most garages land in: a 1,500 W plug-in and a
 // 5 kW 240 V unit. Which rows each one covers is computed from the table, never typed, and only at the tight end:
-// a single heater that covers a leaky garage on paper is the purchase this page tells readers not to make.
-const PICKS = [
+// a single heater that covers a leaky garage on paper is the purchase this page tells readers not to make. A pick
+// with a manual mounting limit (`maxCeilingFact`) never lists a preset taller than that limit. That is why the 5 kW
+// pick is the wall-or-ceiling FUH54: the CZ220's manual caps ceiling mounting at 8 ft, below the 2-4 car presets.
+const PICKS: { productId: string; label: string; maxCeilingFact?: string }[] = [
   { productId: "cz798-1500w-milkhouse", label: "1,500 W, 120 V plug-in" },
-  { productId: "cz220-5kw-ceiling", label: "5 kW on a 240 V, 30 A circuit" },
-] as const;
+  { productId: "fuh54-5kw", label: "5 kW on a 240 V, 30 A circuit, wall or ceiling" },
+];
 
 type Row = { presetKey: Exclude<Preset, "custom">; presetLabel: string; stationId: string; stationLabel: string; tight: HeatLossResult; leaky: HeatLossResult };
 
@@ -123,9 +126,12 @@ export default function Page() {
   const short = (r: Row) => `${r.presetLabel} ${r.stationId === "IL-chicago" ? "Chicago" : "Atlanta"}`;
   const picks = PICKS.map((pick) => {
     const output = findProduct(pick.productId)?.outputBtuh ?? 0;
-    return { ...pick, covers: rows.filter((r) => r.tight.qSize <= output).map(short) };
+    const maxCeiling = pick.maxCeilingFact ? Number(getFact(pick.maxCeilingFact)?.value ?? 0) : Infinity;
+    const fits = (r: Row) => r.tight.qSize <= output && PRESET_DEFAULTS[r.presetKey].height <= maxCeiling;
+    return { ...pick, covers: rows.filter(fits).map(short) };
   }).filter((pick) => pick.covers.length > 0);
-  const beyond = rows.filter((r) => r.tight.qSize > (findProduct("cz220-5kw-ceiling")?.outputBtuh ?? 0)).map(short);
+  const largest = Math.max(...PICKS.map((pick) => findProduct(pick.productId)?.outputBtuh ?? 0));
+  const beyond = rows.filter((r) => r.tight.qSize > largest).map(short);
 
   return (
     <ReportPage entry={entry} sources={[]}>
