@@ -16,4 +16,9 @@ export const FACTS: AnyFact[] = [
   { id: "code.irc.m1307_3", value: "Appliances with a spark, flame, or other ignition source must be elevated at least 18 in above a garage floor", ev: "R", sourceId: "irc-2021", checked: "2026-09-25", status: "verified", note: "IRC 2021 M1307.3, Elevation of ignition source" },
   { id: "code.ifgc.621", value: "Unvented room heater aggregate input limited relative to room volume", ev: "R", sourceId: "ifgc-2021", checked: "2026-09-25", status: "verified", note: "IFGC 621; borrowed here as an extra check, not a room-heater installation" },
   { id: "code.nfpa58.cylinder_storage", value: "LP-gas cylinder storage inside residential buildings is restricted to small (1 lb class) cylinders", ev: "R", sourceId: "nfpa-58", checked: "2026-09-25", status: "verify", note: "state/local adoption varies -- confirm exact NFPA 58 section before publishing" },
+
+  // Plain-English paraphrases of rules the natural gas garage heater page states; the text is ours, never the code's wording.
+  { id: "code.ifgc.305_5.private_garage_height", value: "Appliances in a private garage sit at least 6 ft above the floor unless protected from vehicle impact", ev: "R", sourceId: "ifgc-2021", checked: "2026-10-09", status: "verified", note: "IFGC 2021 §305.5 / IRC 2021 §G2408.3" },
+  { id: "code.irc.r315.new_construction", value: "New dwellings need CO alarms if they contain a fuel-fired appliance or have a garage that opens into the dwelling", ev: "R", sourceId: "irc-2021", checked: "2026-10-09", status: "verified", note: "IRC 2021 §R315.2.1; adoption varies by jurisdiction" },
+  { id: "code.irc.r315.permitted_work", value: "Permitted alterations, repairs and additions to an existing dwelling need CO alarms", ev: "R", sourceId: "irc-2021", checked: "2026-10-09", status: "verified", note: "IRC 2021 §R315.2.2; adoption varies by jurisdiction" },
 ];

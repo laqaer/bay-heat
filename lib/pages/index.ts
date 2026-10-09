@@ -13,6 +13,13 @@ import { PAGES as FUEL } from "./fuel.ts";
 // of hard-coding a route list, so a new page can't ship without a title/description/H1.
 export const PAGES: PageEntry[] = [...CORE, ...SAFETY, ...LAB, ...TRUST, ...DATA, ...SEAL, ...ELECTRIC, ...FUEL];
 
+// Whether search engines get this page: registered as indexable AND not awaiting the editor. A page published with
+// humanReview "pending" stays out of the sitemap and IndexNow and carries noindex (lib/seo.ts) until it is approved
+// (BLUEPRINT.md §5.2: verdict-first pages are editor-approved before they're promoted).
+export function isIndexed(entry: PageEntry): boolean {
+  return entry.indexable && entry.humanReview !== "pending";
+}
+
 export function findPage(href: string): PageEntry | undefined {
   return PAGES.find((p) => p.href === href);
 }

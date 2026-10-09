@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
@@ -131,9 +132,9 @@ export default function Page() {
       </p>
       <FuelCostBars rows={result.costs} />
       <p>
-        Natural gas is cheapest per MMBtu almost everywhere it&apos;s piped to the garage — but that&apos;s the
-        catch: most detached garages don&apos;t have a gas line, and running one plus a B-vent through the roof is
-        its own project. Propane trades a cylinder or bulk tank for that piping. Electric needs neither, at the
+        <Link href="/natural-gas-garage-heater">Natural gas</Link> is cheapest per MMBtu almost everywhere it&apos;s
+        piped to the garage. The catch: most detached garages don&apos;t have a gas line. Running one plus a B-vent
+        through the roof is its own project. Propane trades a cylinder or bulk tank for that piping. Electric needs neither, at the
         cost of the highest rate per MMBtu in most states.
       </p>
 
@@ -180,6 +181,7 @@ export default function Page() {
           <p className="mt-2 text-sm text-(--color-fg-2)">
             Cheapest rate above, on either fuel — but budget for the gas line, regulator and vent run before
             comparing it to a plug-and-go electric unit. See{" "}
+            <a href="/natural-gas-garage-heater">the natural gas page</a> for sizing and venting, and{" "}
             <a href="/propane-heater-for-garage">the propane page</a> for the safety conditions.
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)" data-source={bigMaxx.safetyLine?.sourceId}>{bigMaxx.safetyLine?.text}</p>

@@ -103,4 +103,24 @@ export const PAGES: PageEntry[] = [
     updated: "2026-10-09",
     rev: 2,
   },
+  {
+    href: "/natural-gas-garage-heater",
+    id: "G-029",
+    title: "Natural gas garage heater: vent it outdoors, hang it high, hire a licensed fitter",
+    h1: "Natural gas garage heaters",
+    description: "How to size, vent and hook up a natural gas garage heater, why a vent-free one is a no in an attached garage, and its cost per hour against electric.",
+    kind: "money",
+    layout: "verdict-first",
+    nav: { group: "heaters", label: "Natural gas" },
+    primaryKeyword: "natural gas garage heater",
+    volume: 2900,
+    reviewed: "gas",
+    // Awaiting the human editor's sign-off (two automated fact-check rounds failed, so it escalated per
+    // .claude/agents/fact-checker.md): the label says "pending" until the editor approves it.
+    humanReview: "pending",
+    indexable: true,
+    published: "2026-10-09",
+    updated: "2026-10-09",
+    rev: 1,
+  },
 ];

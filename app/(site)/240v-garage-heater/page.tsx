@@ -215,7 +215,8 @@ export default function Page() {
       />
       <p>
         See the <Link href="/garage-heater-calculator">garage heater calculator</Link> for the exact load your
-        garage needs before picking a class.
+        garage needs before picking a class. Then see where 240V fits on the <Link href="/best-garage-heater">best garage heater</Link> page.
+        Heating a workshop? The <Link href="/shop-heater">shop heater guide</Link> sets a 240V unit beside vented gas and diesel.
       </p>
 
       <h2>Safety</h2>

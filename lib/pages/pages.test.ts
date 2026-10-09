@@ -75,3 +75,12 @@ test("the footer's last-correction date matches the newest notebook entry", () =
   assert.ok(stamp, "LAST_CORRECTION not found in lib/site.ts");
   assert.equal(stamp, dates[dates.length - 1]);
 });
+
+// Codex review on #28: a page awaiting the editor (humanReview "pending") must not be promoted to search engines.
+// isIndexed drives the sitemap, IndexNow and the page's robots meta (lib/seo.ts), so one test pins all three.
+test("pages awaiting editor review are not indexed", async () => {
+  const { PAGES, isIndexed } = await import("./index.ts");
+  const pending = PAGES.filter((p) => p.humanReview === "pending");
+  for (const p of pending) assert.equal(isIndexed(p), false, `${p.href} is pending review but indexed`);
+  for (const p of PAGES.filter((x) => x.indexable && x.humanReview !== "pending")) assert.equal(isIndexed(p), true, p.href);
+});

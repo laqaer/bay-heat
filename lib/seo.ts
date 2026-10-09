@@ -3,6 +3,7 @@
 // pageMetadata() instead of hand-building a Metadata object, so canonical, og:url and og:image are always set.
 import type { Metadata, Route } from "next";
 import { BRAND, LOCALE, SITE_URL } from "@/lib/site";
+import { findPage, isIndexed } from "@/lib/pages";
 
 export function pageMetadata(p: {
   path: Route;
@@ -15,11 +16,15 @@ export function pageMetadata(p: {
 }): Metadata {
   // Home uses app/opengraph-image.tsx; every other page has a prebuilt card at /og/<path>.png (app/og/[...slug]).
   const image = p.image ?? (p.path === "/" ? "/opengraph-image" : `/og${p.path}.png`);
+  // A registered page that isn't indexed -- not indexable, or awaiting editor review -- gets noindex too, so the
+  // registry decides it in one place (lib/pages isIndexed) along with the sitemap.
+  const entry = findPage(p.path);
+  const noindex = p.noindex || (entry !== undefined && !isIndexed(entry));
   return {
     title: p.title,
     description: p.description,
     alternates: { canonical: p.path },
-    robots: p.noindex ? { index: false, follow: true } : undefined,
+    robots: noindex ? { index: false, follow: true } : undefined,
     openGraph: {
       type: p.type ?? "article",
       url: p.path,

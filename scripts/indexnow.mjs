@@ -12,15 +12,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PAGES } from "../lib/pages/index.ts";
+import { PAGES, isIndexed } from "../lib/pages/index.ts";
 
 const HOST = "bayheatguide.com";
 const ORIGIN = `https://${HOST}`;
 const ENDPOINT = "https://api.indexnow.org/indexnow";
 
-// Every indexable page in the registry (lib/pages), the same set sitemap.xml lists, so a new page is submitted
+// Every indexed page in the registry (lib/pages; isIndexed leaves out pages awaiting editor review), the same set sitemap.xml lists, so a new page is submitted
 // without editing this file. IndexNow takes up to 10,000 URLs per call.
-const PATHS = PAGES.filter((p) => p.indexable).map((p) => p.href);
+const PATHS = PAGES.filter(isIndexed).map((p) => p.href);
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 

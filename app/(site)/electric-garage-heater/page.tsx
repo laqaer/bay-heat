@@ -41,11 +41,12 @@ const CLASS_ORDER: HeaterClassId[] = [
   "hp_12_24k_230",
 ];
 
-const SUBPAGES: { href: "/240v-garage-heater" | "/portable-garage-heater" | "/ceiling-mount-garage-heater" | "/best-wall-mount-garage-heaters"; label: string; blurb: string }[] = [
+const SUBPAGES: { href: "/240v-garage-heater" | "/portable-garage-heater" | "/ceiling-mount-garage-heater" | "/best-wall-mount-garage-heaters" | "/shop-heater"; label: string; blurb: string }[] = [
   { href: "/240v-garage-heater", label: "240V garage heaters", blurb: "Breaker size, wire gauge and GFCI for a hardwired 4-10 kW unit, and why 4 kW doesn't fit a 20A circuit." },
   { href: "/portable-garage-heater", label: "Portable garage heaters", blurb: "What a 15A or 20A garage outlet can actually run without tripping." },
   { href: "/ceiling-mount-garage-heater", label: "Ceiling-mount garage heaters", blurb: "Mounting height, throw and clearance for a 5 kW or 7.5 kW ceiling unit." },
   { href: "/best-wall-mount-garage-heaters", label: "Wall-mount garage heaters", blurb: "1.5 kW to 7.5 kW wall units, with the clearances from each manual." },
+  { href: "/shop-heater", label: "Shop heaters", blurb: "How a 240V electric unit heater compares with vented gas and diesel in a workshop." },
 ];
 
 const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual", "cz220-manual", "dr975-manual", "dr238-manual", "dr910f-manual", "epa-608"];
@@ -76,7 +77,8 @@ export default function Page() {
       <p>
         The <Link href="/garage-heater-calculator">garage heater calculator</Link> sizes the exact class for your garage from its
         dimensions, insulation and local design temperature. This page lists every class side by side; the pages below cover one class
-        each in depth.
+        each in depth. For one pick per situation, from a small 1-car garage to a gas-heated shop, see our{" "}
+        <Link href="/best-garage-heater">garage heater picks by situation</Link>.
       </p>
       <div className="not-prose my-6">
         <ButtonLink href="/garage-heater-calculator">Size your garage free →</ButtonLink>
@@ -171,7 +173,8 @@ export default function Page() {
         smaller because its wattage number is lower — a{" "}
         <Num v={4000} unit="W" ev="S" src="lib/planner/catalog.ts HEATER_CLASSES.e_240_4k" /> unit still needs a dedicated{" "}
         25A circuit, not the 20A circuit already run to most garages. The{" "}
-        <Link href="/240v-garage-heater">240V page</Link> shows exactly why.
+        <Link href="/240v-garage-heater">240V page</Link> shows exactly why. For a workshop, the{" "}
+        <Link href="/shop-heater">shop heater guide</Link> weighs an electric unit heater against gas and diesel.
       </p>
 
       <h2>How big is &quot;enough&quot;? A worked example</h2>

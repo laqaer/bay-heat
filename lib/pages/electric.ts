@@ -2,6 +2,27 @@ import type { PageEntry } from "./types.ts";
 
 export const PAGES: PageEntry[] = [
   {
+    href: "/best-garage-heater",
+    id: "G-030",
+    title: "Best garage heater: size the garage first, then match the heater to your circuit or fuel",
+    h1: "Best garage heater, picked by fit to your garage",
+    description:
+      "Garage heater picks by situation, chosen from manufacturer specs and our load model: plug-in, hardwired ceiling, infrared, vented gas and mini-split.",
+    kind: "money",
+    layout: "verdict-first",
+    nav: { group: "heaters", label: "Best picks" },
+    primaryKeyword: "best garage heater",
+    volume: 5400,
+    reviewed: "electrical",
+    // Awaiting the human editor's sign-off (two automated fact-check rounds failed, so it escalated per
+    // .claude/agents/fact-checker.md): the label says "pending" until the editor approves it.
+    humanReview: "pending",
+    indexable: true,
+    published: "2026-10-09",
+    updated: "2026-10-09",
+    rev: 1,
+  },
+  {
     href: "/electric-garage-heater",
     id: "G-015",
     title: "Electric garage heaters: 1.5 kW spot heat to 10 kW, and the circuit each one needs",

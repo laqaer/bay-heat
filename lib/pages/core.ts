@@ -34,4 +34,27 @@ export const PAGES: PageEntry[] = [
     updated: "2026-10-09",
     rev: 2,
   },
+  {
+    href: "/shop-heater",
+    id: "G-028",
+    title: "Shop heater: 240V electric or vented gas for a closed shop, and no torpedo heaters",
+    h1: "Shop heaters",
+    description:
+      "Compare 240V electric, vented gas and diesel shop heaters by circuit, vent and CO rule, and see why a torpedo heater doesn't belong in a closed shop.",
+    // "money" / "verdict-first": the page carries paid links and combustion-safety verdicts, so BLUEPRINT.md §5.2
+    // applies (100% of buy pages are editor-approved before publishing).
+    kind: "money",
+    layout: "verdict-first",
+    // Awaiting the human editor's sign-off (two automated fact-check rounds failed, so it escalated per
+    // .claude/agents/fact-checker.md): the label says "pending" until the editor approves it.
+    humanReview: "pending",
+    nav: { group: "heaters", label: "Shop heaters" },
+    primaryKeyword: "shop heater",
+    volume: 6600,
+    reviewed: "gas",
+    indexable: true,
+    published: "2026-10-09",
+    updated: "2026-10-09",
+    rev: 1,
+  },
 ];
