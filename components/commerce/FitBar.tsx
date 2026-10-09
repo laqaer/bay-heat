@@ -1,5 +1,7 @@
 // "Won't keep up" is a dashed bar, never red (BLUEPRINT.md §0.3) -- color is never the only safety signal.
-export function FitBar({ pct }: { pct: number }) {
+// `label` finishes the sentence "N% ...": the planner's own result card says "of your load"; a page that runs a
+// worked-example garage passes "of this garage's load" so the bar never claims to know the reader's garage.
+export function FitBar({ pct, label = "of your load" }: { pct: number; label?: string }) {
   const short = pct < 100;
   return (
     <div className="flex items-center gap-2">
@@ -9,7 +11,9 @@ export function FitBar({ pct }: { pct: number }) {
           style={{ width: `${Math.min(100, pct)}%` }}
         />
       </div>
-      <span className="font-mono text-xs text-(--color-fg-2)">{Math.round(pct)}% of your load</span>
+      <span className="font-mono text-xs text-(--color-fg-2)">
+        {Math.round(pct)}% {label}
+      </span>
     </div>
   );
 }

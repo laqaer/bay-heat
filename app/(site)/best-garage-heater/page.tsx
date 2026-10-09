@@ -5,14 +5,13 @@ import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { VerdictStamp } from "@/components/safety/VerdictStamp";
-import { Disclosure } from "@/components/commerce/Disclosure";
 import { QuickPick } from "@/components/commerce/QuickPick";
 import { FitBar } from "@/components/commerce/FitBar";
 import { WhyNot } from "@/components/commerce/WhyNot";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
-import { getSource } from "@/lib/facts";
+import { getFact, getSource } from "@/lib/facts";
 import { findProduct, primaryProduct, productForRecommendation, productWarning } from "@/lib/commerce/products";
 import { plan } from "@/lib/planner/plan";
 import { heaterClass } from "@/lib/planner/catalog";
@@ -25,6 +24,7 @@ import { HEAT_CONTENT } from "@/lib/planner/fuels";
 import type { CircuitSpec, GarageDoorType, GarageInput, HeaterClassId, Measure } from "@/lib/planner/types";
 import { verdictFor } from "@/lib/safety/verdict";
 import type { Situation } from "@/lib/safety/types";
+import type { Ev } from "@/lib/types/evidence";
 import { SAFETY_SCOPE, SAVINGS_VARY } from "@/lib/site";
 
 const entry = findPage("/best-garage-heater")!;
@@ -35,11 +35,27 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["nec-2023", "irc-2021", "ifgc-2021", "cz798-manual", "cz220-manual", "fuh54-manual", "dr238-manual", "dr975-manual", "big-maxx-manual"];
+const SOURCE_IDS = [
+  "nec-2023",
+  "irc-2021",
+  "ifgc-2021",
+  "cz798-manual",
+  "cz220-manual",
+  "fuh54-manual",
+  "dr238-manual",
+  "dr975-manual",
+  "dr910f-manual",
+  "big-maxx-manual",
+  "vevor-diesel-manual",
+  "kidde-c3010-datasheet",
+];
 
 // Two stations that bracket the climate question for a plug-in heater. The worked example (Chicago) is the cold one.
 const MILD_STATION = "GA-atlanta";
 const COLD_STATION = "IL-chicago";
+
+// FitBar's end of the sentence: every bar on this page is a worked-example garage, never the reader's.
+const BAR = "of this garage's load";
 
 type Tier = "tight" | "leaky";
 const TIERS: Record<Tier, { wallType: GarageInput["wallType"]; ceilingIns: GarageInput["ceilingIns"]; doorType: GarageDoorType; tightness: GarageInput["tightness"] }> = {
@@ -106,17 +122,25 @@ function joinList(items: string[]): string {
   return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
 
-function parseCircuit(c: string | undefined): { volts: number; amps: number } {
-  const m = /^(\d+)V(\d+)A$/.exec(c ?? "");
-  if (!m) throw new Error(`best-garage-heater: unexpected circuit "${c}"`);
-  return { volts: Number(m[1]), amps: Number(m[2]) };
+// A numeric fact's value, so a sum built from facts never carries a retyped figure.
+function factNum(id: string): number {
+  const fact = getFact(id);
+  if (!fact || typeof fact.value !== "number") throw new Error(`best-garage-heater: fact ${id} is missing or not a number`);
+  return fact.value;
+}
+
+// The Product registry carries a listing's rated size only in its name ("... 12,000 BTU ..."), with no outputBtuh on file.
+function ratedBtuhFromName(name: string): number {
+  const m = /([\d,]+)\s*BTU/i.exec(name);
+  if (!m) throw new Error(`best-garage-heater: no BTU rating in product name "${name}"`);
+  return Number(m[1].replace(/,/g, ""));
 }
 
 // BTU/h and kW as a pair, rounded per BLUEPRINT.md §5.1 (BTU/h to the nearest 100, kW to 0.1).
-function Load({ q, src }: { q: number; src: string }) {
+function Load({ q, src, ev = "C" }: { q: number; src: string; ev?: Ev }) {
   return (
     <>
-      <Num v={q} unit="BTU/h" round={100} ev="C" src={src} /> (<Num v={q / HEAT_CONTENT.btuPerKwh} unit="kW" round={0.1} ev="C" src={src} />)
+      <Num v={q} unit="BTU/h" round={100} ev={ev} src={src} /> (<Num v={q / HEAT_CONTENT.btuPerKwh} unit="kW" round={0.1} ev={ev} src={src} />)
     </>
   );
 }
@@ -140,6 +164,7 @@ export default function Page() {
   const asBuilt = asIs.heating.qSize;
   const sealed = fix.qAfter;
   const station = asIs.station;
+  const exampleCeilingFt = EXAMPLE_A_INPUT.height;
   const doorsPct = asIs.heating.items.find((i) => i.key === "garage_doors")?.pct ?? 0;
   const whyNotPortable = asIs.whyNot.filter((r) => r.classId === "e_port_1500");
   const whyNotTorpedo = asIs.whyNot.filter((r) => r.classId === "torpedo");
@@ -159,10 +184,8 @@ export default function Page() {
   const c1500 = circuitFor(classWatts("e_port_1500"), 120, 120);
   const c4 = circuitFor(classWatts("e_240_4k"), 240, 240);
   const c5 = circuitFor(classWatts("e_240_5k"), 240, 240);
-  const c10 = circuitFor(classWatts("e_240_10k"), 240, 240);
-  const miniCircuit = parseCircuit(miniSplit.circuit);
 
-  // --- Pick 1: a small, tight 1-car in attended sessions, in a mild and a cold climate.
+  // --- Pick 1: a small, tight 1-car in attended work sessions, in a mild and a cold climate.
   const oneMild = plan(garage("1car", "tight", MILD_STATION));
   const oneCold = plan(garage("1car", "tight", COLD_STATION));
   const mildFit = (portableOut / oneMild.heating.qSize) * 100;
@@ -174,12 +197,15 @@ export default function Page() {
   const bareTwoCar = plan(garage("2car", "leaky", COLD_STATION, { circuit: "unknown", canAddCircuit: true }));
   const bareTwoCarFit = (portableOut / bareTwoCar.heating.qSize) * 100;
 
-  // --- Picks 2 and 3: the 5 kW class against the sealed example garage. A direct link only if one unit covers the load.
-  const sealedFit = (fiveKwOut / sealed) * 100;
+  // --- Picks 2 and 3: two 5 kW heaters against the sealed example garage. A direct link only if one unit covers the load.
+  const fuh54 = findProduct("fuh54-5kw");
+  const fuh54Out = fuh54?.outputBtuh ?? fiveKwOut;
+  const sealedFit = (fuh54Out / sealed) * 100;
   const fiveKwUnitsAsBuilt = Math.ceil(asBuilt / fiveKwOut);
   const fiveKwUnitsSealed = Math.ceil(sealed / fiveKwOut);
-  const pick2 = productForRecommendation(fiveKw.productIds, { capacityBtuh: sealed, units: 1 });
-  const pick3 = productForRecommendation(["fuh54-5kw"], { capacityBtuh: sealed, units: 1 });
+  const pickFuh = productForRecommendation(["fuh54-5kw"], { capacityBtuh: sealed, units: 1 });
+  const pickCz = productForRecommendation(["cz220-5kw-ceiling"], { capacityBtuh: sealed, units: 1 });
+  const cz220 = findProduct("cz220-5kw-ceiling");
   const dr975Warning = productWarning(findProduct("dr975-7k5-shop"));
   const dieselWarning = productWarning(findProduct("diesel-heater-8kw"));
 
@@ -187,40 +213,55 @@ export default function Page() {
   const pick4 = primaryProduct(infrared.productIds);
   const infraredFit = (infraredOut / asBuilt) * 100;
 
-  // --- Pick 5: vented gas. The same garage as built, with natural gas listed.
-  const gasPlan = plan({ ...EXAMPLE_A_INPUT, fuels: ["electric", "natural_gas"], ventingPossible: true });
-  const gasFirst = gasPlan.recommendations[0]?.classId === "g_vented_unit";
+  // --- Pick 5: vented gas. The Big Maxx manual's mounting height rules out the 9 ft example garage, so this pick runs the
+  // same garage with the 3-car preset's taller ceiling.
+  const tallHeight = PRESET_DEFAULTS["3car"].height;
+  const tallInput = { ...EXAMPLE_A_INPUT, height: tallHeight };
+  const tallElectric = plan(tallInput);
+  const tallGas = plan({ ...tallInput, fuels: ["electric", "natural_gas"], ventingPossible: true });
+  const tallLoad = tallElectric.heating.qSize;
+  const gasFirst = tallGas.recommendations[0]?.classId === "g_vented_unit";
+  const tallMini = tallElectric.recommendations.find((r) => r.classId === "hp_12_24k_230");
+  const tallFive = tallElectric.recommendations.find((r) => r.classId === "e_240_5k");
+  const bigMaxxMinCeilingIn = factNum("bigmaxx.garage_min_height_ft") * 12 + factNum("bigmaxx.mhu50.body_min_in") + factNum("bigmaxx.top_clearance_in");
+  const bigMaxxOut = factNum("bigmaxx.mhu50.output_btuh");
+  const bigMaxxFit = (bigMaxxOut / tallLoad) * 100;
+  const exampleTakesBigMaxx = exampleCeilingFt * 12 >= bigMaxxMinCeilingIn;
   const pick5 = primaryProduct(vented.productIds);
   const buddyVerdict = verdictFor("buddy", ATTACHED_BUDDY);
 
   // --- Pick 6: mini-split. Output at the design temperature, relative to its 47 F rating (cold-climate curve).
   const pick6 = primaryProduct(miniSplit.productIds);
   const derate = heatPumpCapacity("cold_climate", station.h99, 1);
+  const smallRated = pick6 ? ratedBtuhFromName(pick6.name) : 0;
+  const smallAtDesign = heatPumpCapacity("cold_climate", station.h99, smallRated);
+  const smallFit = (smallAtDesign / sealed) * 100;
+  const smallUnits = smallAtDesign > 0 ? Math.ceil(sealed / smallAtDesign) : 0;
+  const smallPairFit = ((smallUnits * smallAtDesign) / sealed) * 100;
   const bigMiniAtDesign = heatPumpCapacity("cold_climate", station.h99, miniSplit.outputBtuh[1]);
   const bigMiniFitAsBuilt = (bigMiniAtDesign / asBuilt) * 100;
+  const asBuiltMini = asIs.recommendations.find((r) => r.classId === "hp_12_24k_230");
 
   return (
     <ReportPage entry={entry} sources={sources}>
       <AnswerBlock>
         The best garage heater is the one sized to your garage and your circuit. Our example 2-car garage in {station.city} needs{" "}
         <Load q={asBuilt} src="plan(EXAMPLE_A_INPUT).heating.qSize — lib/planner/plan.ts" /> as built. Sealed, it needs{" "}
-        <Load q={sealed} src="plan(EXAMPLE_A_INPUT).fixFirst.qAfter — lib/planner/roi.ts" />. A{" "}
-        <Num f="cz220.watts.high" /> ceiling heater covers the sealed load on a{" "}
-        <Num v={c5.breakerA} unit="A" ev="C" src="circuitFor(5000, 240, 240).breakerA — lib/planner/electrical.ts" />, {c5.wireNM}, 240 V circuit. Plan your
-        garage first, then pick from the six cases below.
+        <Load q={sealed} src="plan(EXAMPLE_A_INPUT).fixFirst.qAfter — lib/planner/roi.ts" />. A <Num f="fuh54.watts.high" /> wall or ceiling heater covers the
+        sealed load on a <Num v={c5.breakerA} unit="A" ev="C" src="circuitFor(5000, 240, 240).breakerA — lib/planner/electrical.ts" />, {c5.wireNM}, 240 V
+        circuit. Plan your garage first, then pick from the six cases below.
       </AnswerBlock>
+      <p className="text-xs text-(--color-fg-2)">{SAVINGS_VARY}</p>
 
       <div className="not-prose my-6">
         <ButtonLink href="/garage-heater-calculator">Plan your garage first, free →</ButtonLink>
       </div>
 
-      <Disclosure />
-
-      {pick2.direct && pick2.product ? (
+      {pickFuh.direct && pickFuh.product ? (
         <QuickPick
-          productId={pick2.product.id}
+          productId={pickFuh.product.id}
           page={entry.href}
-          headline="For a sealed 2-car garage: a ceiling heater on its own 240 V circuit. The calculator tells you whether yours qualifies."
+          headline="For a sealed 2-car garage: a 5 kW wall or ceiling heater on its own 240 V circuit."
           compareHref="#picks"
           compareLabel="See all six picks"
         />
@@ -228,11 +269,11 @@ export default function Page() {
 
       <h2 id="plan">Plan your garage first</h2>
       <p>
-        Wattage on a box says nothing about your garage. The load does. It is the heat your garage loses on a cold design day, an outdoor
-        temperature that only a few winter hours fall below. Walls, ceiling, door and air leaks set it.
+        Wattage on a box says nothing about your garage. The load does. The load is the heat your garage loses on a cold design day. That is an outdoor
+        temperature only a few winter hours fall below. Walls, ceiling, door and air leaks set it.
       </p>
       <p>
-        In our example, {joinList(fixLabels)} move the load from <Load q={asBuilt} src="plan(EXAMPLE_A_INPUT).heating.qSize" /> to{" "}
+        Three fixes cut the example&apos;s load: {joinList(fixLabels)}. It falls from <Load q={asBuilt} src="plan(EXAMPLE_A_INPUT).heating.qSize" /> to{" "}
         <Load q={sealed} src="plan(EXAMPLE_A_INPUT).fixFirst.qAfter" />. The envelope grade goes from{" "}
         <Num v={fix.gradeBefore} ev="C" src="plan(EXAMPLE_A_INPUT).fixFirst.gradeBefore" /> to{" "}
         <Num v={fix.gradeAfter} ev="C" src="plan(EXAMPLE_A_INPUT).fixFirst.gradeAfter" />. Counted in 5 kW units, the answer drops from{" "}
@@ -242,7 +283,7 @@ export default function Page() {
       <p className="text-xs text-(--color-fg-2)">{SAVINGS_VARY}</p>
       <p>
         Not sure of your insulation? The calculator gives a range until you tell it. The <Link href="/garage-heater-size">size chart</Link> shows tight and
-        leaky garages in four sizes, and <Link href="/how-to-insulate-a-garage">the insulation guide</Link> puts the fixes in payback order.
+        leaky garages in four sizes. <Link href="/how-to-insulate-a-garage">The insulation guide</Link> puts the fixes in payback order.
       </p>
 
       <h2 id="picks">Six picks, by situation</h2>
@@ -264,13 +305,13 @@ export default function Page() {
             <tr className="border-b border-(--color-line)/50 align-top">
               <td className="py-3 pr-3 text-(--color-fg)">
                 <a className="underline underline-offset-4" href="#pick-1">
-                  Small, tight 1-car, 120 V outlet
+                  Small, tight 1-car, 120 V outlet, attended
                 </a>
               </td>
               <td className="py-3 pr-3 font-mono">
                 <Load q={oneMild.heating.qSize} src="plan(1-car, tight, mild station, sessions).heating.qSize" />
                 <span className="block text-xs text-(--color-fg-2)">
-                  {oneMild.station.city}, {oneMild.station.st}
+                  {oneMild.station.city}, {oneMild.station.st} · work session
                 </span>
               </td>
               <td className="py-3 pr-3">{portable.label}</td>
@@ -288,7 +329,7 @@ export default function Page() {
                 <Load q={sealed} src="plan(EXAMPLE_A_INPUT).fixFirst.qAfter" />
                 <span className="block text-xs text-(--color-fg-2)">sealed example</span>
               </td>
-              <td className="py-3 pr-3">{fiveKw.label}</td>
+              <td className="py-3 pr-3">{fuh54?.name ?? fiveKw.label}</td>
               <td className="py-3 font-mono">
                 <Circuit c={c5} src="circuitFor(5000, 240, 240)" />
               </td>
@@ -299,10 +340,12 @@ export default function Page() {
                   Ceiling mount, floor kept clear
                 </a>
               </td>
-              <td className="py-3 pr-3 font-mono">Same 5 kW class</td>
-              <td className="py-3 pr-3">Fahrenheat FUH54 or Comfort Zone CZ220</td>
+              <td className="py-3 pr-3 font-mono">
+                Ceiling <Num f="cz220.max_ceiling_ft" /> or lower
+              </td>
+              <td className="py-3 pr-3">{cz220?.name ?? "Comfort Zone CZ220"}</td>
               <td className="py-3 font-mono">
-                <Num f="fuh54.clearance_floor_ft" /> headroom
+                <Num f="cz220.clearance_floor_ft" /> headroom
               </td>
             </tr>
             <tr className="border-b border-(--color-line)/50 align-top">
@@ -320,12 +363,12 @@ export default function Page() {
             <tr className="border-b border-(--color-line)/50 align-top">
               <td className="py-3 pr-3 text-(--color-fg)">
                 <a className="underline underline-offset-4" href="#pick-5">
-                  Big or drafty, gas piped in
+                  Big or drafty, gas piped in, tall ceiling
                 </a>
               </td>
               <td className="py-3 pr-3 font-mono">
-                <Load q={asBuilt} src="plan(EXAMPLE_A_INPUT).heating.qSize" />
-                <span className="block text-xs text-(--color-fg-2)">example as built</span>
+                <Load q={tallLoad} src="plan({...EXAMPLE_A_INPUT, height: 3-car preset height}).heating.qSize" />
+                <span className="block text-xs text-(--color-fg-2)">example with a taller ceiling</span>
               </td>
               <td className="py-3 pr-3">{vented.label}</td>
               <td className="py-3 font-mono">Gas line, gas fitter, vent</td>
@@ -341,9 +384,7 @@ export default function Page() {
                 <span className="block text-xs text-(--color-fg-2)">sealed example</span>
               </td>
               <td className="py-3 pr-3">{miniSplit.label}</td>
-              <td className="py-3 font-mono">
-                <Num v={miniCircuit.amps} ev="S" src="HEATER_CLASSES.hp_12_24k_230.circuit — lib/planner/catalog.ts" format={() => `${miniCircuit.volts} V / ${miniCircuit.amps} A, HVAC installer`} />
-              </td>
+              <td className="py-3 font-mono">Dedicated 240 V circuit, HVAC installer</td>
             </tr>
           </tbody>
         </table>
@@ -351,32 +392,48 @@ export default function Page() {
 
       <h3 id="pick-1">1. Small, tight 1-car garage on a 120 V outlet</h3>
       <p>
-        This one is right when you work in the garage a few hours at a time and you are there the whole time. It also needs an insulated, sealed garage: R-13
-        walls, an R-30 ceiling and an insulated door kit. The <Link href="/garage-heater-size">size chart</Link> calls that “tight.” In {oneMild.station.city},{" "}
-        {oneMild.station.st}, a detached 1-car garage like that needs{" "}
-        <Load q={oneMild.heating.qSize} src="plan(1-car, tight, mild station, sessions).heating.qSize" /> on its design day,{" "}
-        <Num v={oneMild.heating.tOutDesign} unit="°F" round={1} ev="C" src="plan().heating.tOutDesign — station h99 plus the session offset" /> outside. A{" "}
-        <Num f="cz798.watts" /> plug-in heater gives up to{" "}
-        <Load q={portableOut} src="HEATER_CLASSES.e_port_1500.outputBtuh[1] — lib/planner/catalog.ts" />, which is{" "}
+        This one is right for a work session: a few hours at a time, with you there the whole time. The garage must be insulated and sealed, and nothing
+        flammable can be stored in it. That means R-13 walls, an R-30 ceiling and an insulated door kit, which the{" "}
+        <Link href="/garage-heater-size">size chart</Link> calls “tight.”
+      </p>
+      <p>
+        In {oneMild.station.city}, {oneMild.station.st}, a detached 1-car garage like that needs{" "}
+        <Load q={oneMild.heating.qSize} src="plan(1-car, tight, mild station, sessions).heating.qSize" /> for a work session at{" "}
+        <Num v={oneMild.heating.tOutDesign} unit="°F" round={0.1} ev="C" src="plan().heating.tOutDesign — station h99 plus the session offset" /> outside. That is
+        the station&apos;s <Num v={oneMild.station.h99} unit="°F" round={0.1} ev="R" src="ASHRAE 99% design dry-bulb — lib/planner/stations.ts" /> design temperature
+        plus the planner&apos;s{" "}
+        <Num
+          v={oneMild.heating.tOutDesign - oneMild.station.h99}
+          unit="°F"
+          round={1}
+          ev="E"
+          src="designTempFor(): h99 + 5 °F for daytime sessions — lib/planner/uncertainty.ts"
+        />{" "}
+        daytime-session offset.
+      </p>
+      <p>
+        A <Num f="cz798.watts" /> plug-in heater gives up to <Load q={portableOut} src="HEATER_CLASSES.e_port_1500.outputBtuh[1] — lib/planner/catalog.ts" />. That is{" "}
         <Pct v={mildFit} src="e_port_1500 output / plan(1-car, tight, mild station).heating.qSize" /> of the load.
       </p>
-      <FitBar pct={mildFit} />
+      <FitBar pct={mildFit} label={BAR} />
       <p>
         Move the same garage to {oneCold.station.city}, {oneCold.station.st} and the load is{" "}
         <Load q={oneCold.heating.qSize} src="plan(1-car, tight, cold station, sessions).heating.qSize" />. One plug-in covers{" "}
         <Pct v={coldFit} src="e_port_1500 output / plan(1-car, tight, cold station).heating.qSize" /> of that
         {coldFit < 100 && coldRec ? (
           <>
-            , so the planner asks for{" "}
-            <Num v={coldRec.units} ev="C" src="plan(1-car, tight, cold station).recommendations[e_port_1500].units" /> of them, or a 240 V unit
+            . The planner asks for{" "}
+            <Num v={coldRec.units} ev="C" src="plan(1-car, tight, cold station).recommendations[e_port_1500].units" /> of them, each on its own{" "}
+            <Num v={c1500.breakerA} unit="A" ev="C" src="circuitFor(1500, 120, 120).breakerA" /> circuit
           </>
         ) : null}
         . Enter your ZIP code in the calculator before you buy.
       </p>
-      <FitBar pct={coldFit} />
+      <FitBar pct={coldFit} label={BAR} />
       <p>
         Plug it straight into a {c1500.volts} V, <Num v={c1500.breakerA} unit="A" ev="C" src="circuitFor(1500, 120, 120).breakerA" /> circuit with nothing else on
-        it. Most garages already have one (NEC 2023 §210.11(C)(4): <Num f="code.nec.210_11_c_4" />).
+        it. Newer garages have one (NEC 2023 §210.11(C)(4) for new wiring: <Num f="code.nec.210_11_c_4" />). If yours is shared, unplug everything else while
+        it runs.
       </p>
       {pick1?.direct && pick1.product ? (
         <QuickPick
@@ -386,70 +443,81 @@ export default function Page() {
         />
       ) : null}
       <p>
-        <strong>Don&apos;t buy a 1,500 W heater for an uninsulated 2-car garage.</strong> With bare walls, a bare ceiling and a steel door, a detached 2-car in{" "}
-        {bareTwoCar.station.city} needs{" "}
+        <strong>Don&apos;t buy a 1,500 W heater for an uninsulated 2-car garage.</strong> Take a detached 2-car in {bareTwoCar.station.city} with bare walls, a
+        bare ceiling and a steel door. It needs{" "}
         <Load q={bareTwoCar.heating.qSize} src="plan(2-car, leaky, cold station, sessions).heating.qSize" /> even for daytime sessions. A plug-in covers{" "}
         <Pct v={bareTwoCarFit} src="e_port_1500 output / plan(2-car, leaky, cold station).heating.qSize" /> of it. Seal the garage first, or move up to a
         hardwired unit.
       </p>
-      <FitBar pct={bareTwoCarFit} />
+      <FitBar pct={bareTwoCarFit} label={BAR} />
       <WhyNot rows={whyNotPortable} />
 
       <h3 id="pick-2">2. 2-car garage with a 240 V circuit: the 5 kW class</h3>
       <p>
-        This one is right when the sealed load is under <Num f="cz220.btuh.high" /> (<Num f="cz220.watts.high" />) and you can run a 240 V circuit. Our sealed example needs <Load q={sealed} src="plan(EXAMPLE_A_INPUT).fixFirst.qAfter" />, so one unit covers{" "}
-        <Pct v={sealedFit} src="cz220.btuh.high / plan(EXAMPLE_A_INPUT).fixFirst.qAfter" /> of it.
+        This one is right when the sealed load is under <Num f="fuh54.btuh.high" /> (<Num f="fuh54.watts.high" />) and you can run a 240 V circuit. Our sealed
+        example needs <Load q={sealed} src="plan(EXAMPLE_A_INPUT).fixFirst.qAfter" />. One unit covers{" "}
+        <Pct v={sealedFit} src="fuh54.btuh.high / plan(EXAMPLE_A_INPUT).fixFirst.qAfter" /> of it.
       </p>
       <p>
-        It needs a <Num v={c5.breakerA} unit="A" ev="C" src="circuitFor(5000, 240, 240).breakerA" /> breaker and {c5.wireNM} copper. A fixed heater is a
-        continuous load, so the breaker is sized at 125% of the running current (NEC 2023 §424.4(B): <Num f="code.nec.424_4_b" />).
+        The FUH54 manual asks for <Num f="fuh54.wire" /> and a fuse of no more than <Num f="fuh54.fuse_max" />. That matches the planner&apos;s{" "}
+        <Num v={c5.breakerA} unit="A" ev="C" src="circuitFor(5000, 240, 240).breakerA" /> breaker. A fixed heater is a continuous load, so the breaker is sized at
+        125% of the running current. The rule is NEC 2023 §424.4(B): <Num f="code.nec.424_4_b" />.
       </p>
-      {pick2.direct && pick2.product ? (
+      <p>
+        It is sold for wall or ceiling mounting. We have no ceiling-height limit on file for it, so read its mounting section before you order. Pick 3 explains
+        why that matters for a <Num v={exampleCeilingFt} unit="ft" ev="E" src="EXAMPLE_A_INPUT.height — lib/planner/fixtures.ts" /> ceiling.
+      </p>
+      {pickFuh.direct && pickFuh.product ? (
         <QuickPick
-          productId={pick2.product.id}
+          productId={pickFuh.product.id}
           page={entry.href}
-          headline="A ceiling heater on its own 240 V circuit. One unit covers the sealed example garage with room to spare."
+          headline="A 5 kW heater for wall or ceiling mounting, on its own 240 V circuit. One unit covers the sealed example garage."
         />
       ) : null}
       <p>
-        <strong>Don&apos;t buy a 4 kW 240 V heater to fit a 20 A circuit.</strong> It draws{" "}
-        <Num v={c4.amps} unit="A" ev="C" src="circuitFor(4000, 240, 240).amps" />, but the breaker is sized at 125% of that:{" "}
-        <Num v={c4.minAmps} unit="A" ev="C" src="circuitFor(4000, 240, 240).minAmps" />. The next standard size is{" "}
+        <strong>Don&apos;t buy a 4 kW 240 V heater to fit a 20 A circuit.</strong> It draws <Num v={c4.amps} unit="A" ev="C" src="circuitFor(4000, 240, 240).amps" />.
+        The breaker is sized at 125% of that: <Num v={c4.minAmps} unit="A" ev="C" src="circuitFor(4000, 240, 240).minAmps" />. The next standard size is{" "}
         <Num v={c4.breakerA} unit="A" ev="C" src="circuitFor(4000, 240, 240).breakerA" />, so it needs its own circuit too. The{" "}
         <Link href="/240v-garage-heater">240 V page</Link> lists every size.
       </p>
 
       <h3 id="pick-3">3. Ceiling mount, to keep the floor and walls clear</h3>
       <p>
-        The CZ220 manual asks for <Num f="cz220.clearance_floor_ft" /> of headroom below the heater, <Num f="cz220.clearance_wall_in" /> from any wall, and
-        lists a maximum ceiling height of <Num f="cz220.max_ceiling_ft" />. The FUH54 manual asks for <Num f="fuh54.clearance_floor_ft" /> of headroom.
+        A ceiling unit keeps the floor and walls free. The CZ220 manual asks for <Num f="cz220.clearance_floor_ft" /> of headroom below the heater and{" "}
+        <Num f="cz220.clearance_wall_in" /> from any wall.
       </p>
       <p>
-        The FUH54 is the other verified unit. It is sold for ceiling or wall mounting, so it suits a ceiling above the CZ220 limit or a high wall mount. We have
-        no maximum ceiling height on file for it, so read the mounting section of its manual before you order. The{" "}
-        <Link href="/ceiling-mount-garage-heater">ceiling-mount page</Link> has both clearance lists.
+        The same manual gives <Num f="cz220.max_ceiling_ft" /> as the maximum recommended ceiling height for effective airflow. So the CZ220 suits a ceiling of{" "}
+        <Num f="cz220.max_ceiling_ft" /> or lower. Our example garage has a <Num v={exampleCeilingFt} unit="ft" ev="E" src="EXAMPLE_A_INPUT.height" /> ceiling, so it
+        gets the FUH54 from pick 2. The FUH54 manual also asks for <Num f="fuh54.clearance_floor_ft" /> of headroom.
       </p>
-      {pick3.direct && pick3.product ? (
+      <p>
+        The <Link href="/ceiling-mount-garage-heater">ceiling-mount page</Link> has both clearance lists.
+      </p>
+      {pickCz.direct && pickCz.product ? (
         <QuickPick
-          productId={pick3.product.id}
+          productId={pickCz.product.id}
           page={entry.href}
-          headline="The other verified 5 kW ceiling heater: ceiling or wall mount, on its own 240 V circuit."
+          headline="The other 5 kW heater we link. A ceiling mount for ceilings within its airflow limit, on its own 240 V circuit."
         />
       ) : null}
       <p>
-        <strong>Don&apos;t buy a 7.5 kW or 10 kW Dr. Infrared shop heater for a home garage without asking the maker.</strong> The DR-975 and DR-910F manuals
-        carry a residential warning. {dr975Warning}
+        {dr975Warning} <strong>Don&apos;t buy a 7.5 kW or 10 kW Dr. Infrared shop heater for a home garage.</strong> The DR-975 and DR-910F manuals both print that
+        warning.
       </p>
 
       <h3 id="pick-4">4. Spot heat with the garage door open: infrared</h3>
       <p>
         This one is right when you work in one bay with the door up. Forced-air heat leaves with the air. In our example the garage door is{" "}
         <Num v={doorsPct} unit="%" round={1} ev="C" src="plan(EXAMPLE_A_INPUT).heating.items[garage_doors].pct" /> of the design load even when it is shut.
-        Radiant heat lands on you and the floor first, so judge a spot heater by where it points, not by the garage&apos;s load.
       </p>
       <p>
-        It plugs into a 120 V outlet and mounts on a wall or ceiling. Its manual sets a minimum height of <Num f="dr238.mount_height_in" /> to the heater&apos;s
-        lowest part, so measure your ceiling first. The <Link href="/infrared-garage-heater">infrared page</Link> explains the comfort trade-off.
+        Radiant heat lands on you and the floor first. Judge a spot heater by where it points, not by the garage&apos;s load. This unit plugs into a 120 V outlet
+        and mounts on a wall or ceiling.
+      </p>
+      <p>
+        Its manual sets a minimum height of <Num f="dr238.mount_height_in" /> to the heater&apos;s lowest part, so measure your ceiling first. The{" "}
+        <Link href="/infrared-garage-heater">infrared page</Link> explains the comfort trade-off.
       </p>
       {pick4 ? (
         <QuickPick
@@ -460,26 +528,48 @@ export default function Page() {
       ) : null}
       <p>
         <strong>Don&apos;t buy an infrared panel to warm the air in a closed garage.</strong> Its output tops out near{" "}
-        <Load q={infraredOut} src="HEATER_CLASSES.e_ir_wall_1500.outputBtuh[1] — lib/planner/catalog.ts" />, only{" "}
-        <Pct v={infraredFit} src="e_ir_wall_1500 output / plan(EXAMPLE_A_INPUT).heating.qSize" /> of our example as built. It does nothing for the air your tools and
-        paint sit in.
+        <Load q={infraredOut} src="HEATER_CLASSES.e_ir_wall_1500.outputBtuh[1] — lib/planner/catalog.ts" />. That is only{" "}
+        <Pct v={infraredFit} src="e_ir_wall_1500 output / plan(EXAMPLE_A_INPUT).heating.qSize" /> of our example as built. It does nothing for the air your tools
+        and paint sit in.
       </p>
-      <FitBar pct={infraredFit} />
+      <FitBar pct={infraredFit} label={BAR} />
 
       <h3 id="pick-5">5. Big or drafty garage with natural gas available: a vented unit heater</h3>
       <p>
-        This one is right when the load is more than one electric unit carries and gas is already piped in. As built, our example needs{" "}
-        <Load q={asBuilt} src="plan(EXAMPLE_A_INPUT).heating.qSize" />. The electric answer is{" "}
-        <Num v={fiveKwUnitsAsBuilt} ev="C" src="ceil(qSize / HEATER_CLASSES.e_240_5k.outputBtuh[1])" /> of the 5 kW units, each on its own circuit, or one 10 kW
-        unit on a <Num v={c10.breakerA} unit="A" ev="C" src="circuitFor(10000, 240, 240).breakerA" /> breaker and {c10.wireNM} NM cable.
+        This one is right when gas is already piped in and the garage is big or drafty. It also needs a tall ceiling. The Big Maxx manual wants{" "}
+        <Num f="bigmaxx.garage_min_height_ft" /> from the floor to the heater&apos;s bottom and <Num f="bigmaxx.top_clearance_in" /> of clearance above its top.
+        The MHU50&apos;s smallest body dimension is <Num f="bigmaxx.mhu50.body_min_in" />.
+      </p>
+      <p>
+        So the ceiling must be at least{" "}
+        <Num
+          v={bigMaxxMinCeilingIn}
+          ev="C"
+          src="bigmaxx.garage_min_height_ft x 12 + bigmaxx.mhu50.body_min_in + bigmaxx.top_clearance_in"
+          format={(x) => `${Math.floor(Number(x) / 12)} ft ${Number(x) % 12} in`}
+        />
+        . Our example garage has a <Num v={exampleCeilingFt} unit="ft" ev="E" src="EXAMPLE_A_INPUT.height" /> ceiling, so{" "}
+        {exampleTakesBigMaxx ? "it can take this model" : "it can't take this model"}. A <Num v={tallHeight} unit="ft" ev="E" src="PRESET_DEFAULTS['3car'].height — lib/planner/presets.ts" />{" "}
+        ceiling, as in the planner&apos;s 3-car preset, can.
+      </p>
+      <p>
+        At that height the same garage needs <Load q={tallLoad} src="plan({...EXAMPLE_A_INPUT, height: 3-car preset height}).heating.qSize" /> as built. The
+        Big Maxx MHU50 delivers <Load q={bigMaxxOut} ev="S" src="bigmaxx.mhu50.output_btuh — lib/facts/fuel.ts" />, which is{" "}
+        <Pct v={bigMaxxFit} src="bigmaxx.mhu50.output_btuh / plan(tall example).heating.qSize" /> of that.
         {gasFirst ? " With natural gas listed, the planner ranks a vented unit heater first." : ""}
+        {tallMini && tallFive ? (
+          <>
+            {" "}
+            Its electric answers are <Num v={tallMini.units} ev="C" src="plan(tall example).recommendations[hp_12_24k_230].units" /> mini-splits, or{" "}
+            <Num v={tallFive.units} ev="C" src="plan(tall example).recommendations[e_240_5k].units" /> heaters of the 5 kW class. Each unit gets its own circuit.
+          </>
+        ) : null}
       </p>
       <p>
         Vented units in this class run from <Load q={vented.outputBtuh[0]} src="HEATER_CLASSES.g_vented_unit.outputBtuh[0] — lib/planner/catalog.ts" /> to{" "}
         <Load q={vented.outputBtuh[1]} src="HEATER_CLASSES.g_vented_unit.outputBtuh[1]" />, at about{" "}
         <Num f="fuel.vented_unit.eta" format={(v) => `${Math.round(Number(v) * 100)}%`} /> efficiency. A flue sends the exhaust outdoors. A licensed gas fitter
-        installs it, and a permit is required. The manual&apos;s minimum mounting height, in the box below, rules out a low ceiling. Fuel costs are on the{" "}
-        <Link href="/electric-vs-propane-garage-heater">fuel comparison</Link>.
+        installs it, and a permit is required. Fuel costs are on the <Link href="/electric-vs-propane-garage-heater">fuel comparison</Link>.
       </p>
       {pick5 ? (
         <QuickPick
@@ -496,7 +586,7 @@ export default function Page() {
       />
       <p>
         <strong>Don&apos;t buy an unvented propane heater for an attached garage.</strong> Our Can I Run It? tool returns the verdict below for a Buddy-type heater
-        in an attached garage, and Buddy-type heaters never get a buy button on this site.
+        in an attached garage. Buddy-type heaters never get a buy button on this site.
       </p>
       <VerdictStamp verdict={buddyVerdict} />
       <p>
@@ -506,52 +596,72 @@ export default function Page() {
 
       <h3 id="pick-6">6. Heat and cooling all year: a mini-split</h3>
       <p>
-        This one is right when the garage is sealed, you want cooling too, and you can run a{" "}
-        <Num v={miniCircuit.amps} unit="A" ev="S" src="HEATER_CLASSES.hp_12_24k_230.circuit — lib/planner/catalog.ts" />, {miniCircuit.volts} V circuit. A
-        mini-split loses output as it gets cold. At {station.city}&apos;s <Num v={station.h99} unit="°F" ev="S" src="plan(EXAMPLE_A_INPUT).station.h99" /> design
-        temperature, a cold-climate unit gives about{" "}
-        <Pct v={derate * 100} src="heatPumpCapacity('cold_climate', station.h99, 1) — lib/planner/seasonal.ts" /> of its rated heat. Size it by that number,
-        not the nameplate.
+        This one is right when the garage is sealed and you want cooling too. It needs a dedicated 240 V circuit sized to the unit&apos;s nameplate. A mini-split
+        loses output as it gets cold. At {station.city}&apos;s <Num v={station.h99} unit="°F" round={0.1} ev="R" src="ASHRAE 99% design dry-bulb — lib/planner/stations.ts" />{" "}
+        design temperature, a cold-climate unit gives about{" "}
+        <Pct v={derate * 100} src="heatPumpCapacity('cold_climate', station.h99, 1) — lib/planner/seasonal.ts" /> of its rated heat.
       </p>
       <p>
-        It also cools in summer. We have not modeled cooling load yet, so this page quotes no cooling size. A licensed HVAC contractor does the refrigerant work.
-        The <Link href="/heat-pump-mini-split-for-garage">mini-split page</Link> compares five-year running cost against a resistance heater.
+        The linked listing is the <Load q={smallRated} ev="S" src="rated size in the listing's product name — lib/commerce/products/fuel.ts" /> size. At that design temperature it
+        delivers about <Load q={smallAtDesign} src="heatPumpCapacity('cold_climate', station.h99, rated) — lib/planner/seasonal.ts" />. That is{" "}
+        <Pct v={smallFit} src="heatPumpCapacity(...) / plan(EXAMPLE_A_INPUT).fixFirst.qAfter" /> of the sealed example&apos;s load.
+        {smallUnits > 1 ? (
+          <>
+            {" "}
+            Together, <Num v={smallUnits} ev="C" src="ceil(fixFirst.qAfter / heatPumpCapacity(...))" /> of them cover{" "}
+            <Pct v={smallPairFit} src="units x heatPumpCapacity(...) / fixFirst.qAfter" />.
+          </>
+        ) : null}{" "}
+        The planner sizes this class at its{" "}
+        <Load q={miniSplit.outputBtuh[1]} src="HEATER_CLASSES.hp_12_24k_230.outputBtuh[1] — lib/planner/catalog.ts" /> top size.
       </p>
+      <FitBar pct={smallFit} label={BAR} />
       {pick6 ? (
         <QuickPick
           productId={pick6.id}
           page={entry.href}
-          headline="A 230 V mini-split that heats and cools. This listing is one size in the class, so match its heat output at your low temperature to the calculator's BTU/h."
+          headline="A 230 V mini-split that heats and cools. This listing is the small size, so check its heat output at your low temperature against the calculator's BTU/h."
         />
       ) : null}
       <p>
-        <strong>Don&apos;t buy a mini-split for a garage you have not sealed.</strong> The largest unit in the class, rated{" "}
-        <Load q={miniSplit.outputBtuh[1]} src="HEATER_CLASSES.hp_12_24k_230.outputBtuh[1] — lib/planner/catalog.ts" />, gives about{" "}
-        <Load q={bigMiniAtDesign} src="heatPumpCapacity('cold_climate', station.h99, rated) — lib/planner/seasonal.ts" /> at that design temperature. That is{" "}
-        <Pct v={bigMiniFitAsBuilt} src="heatPumpCapacity(...) / plan(EXAMPLE_A_INPUT).heating.qSize" /> of our example as built.
+        It also cools in summer. We have not modeled cooling load yet, so this page quotes no cooling size. A licensed HVAC contractor does the refrigerant work.
+        The <Link href="/heat-pump-mini-split-for-garage">mini-split page</Link> compares five-year running cost against a resistance heater.
       </p>
-      <FitBar pct={bigMiniFitAsBuilt} />
+      <p>
+        <strong>Don&apos;t buy a mini-split for a garage you have not sealed.</strong> The largest unit in the class, rated{" "}
+        <Load q={miniSplit.outputBtuh[1]} src="HEATER_CLASSES.hp_12_24k_230.outputBtuh[1]" />, gives about{" "}
+        <Load q={bigMiniAtDesign} src="heatPumpCapacity('cold_climate', station.h99, rated) — lib/planner/seasonal.ts" /> at that design temperature. One unit covers{" "}
+        <Pct v={bigMiniFitAsBuilt} src="heatPumpCapacity(...) / plan(EXAMPLE_A_INPUT).heating.qSize" /> of our example as built.
+        {asBuiltMini ? (
+          <>
+            {" "}
+            The planner&apos;s answer for that garage is{" "}
+            <Num v={asBuiltMini.units} ev="C" src="plan(EXAMPLE_A_INPUT).recommendations[hp_12_24k_230].units" /> of them, each on its own circuit.
+          </>
+        ) : null}
+      </p>
+      <FitBar pct={bigMiniFitAsBuilt} label={BAR} />
 
       <h2>What is not on this list</h2>
       <p>
-        Diesel air heaters have no buy button here. Our safety note for them: {dieselWarning} Read the <Link href="/diesel-heater-for-garage">diesel page</Link> before you decide.
-        Open-flame torpedo heaters are out for any enclosed garage.
+        Diesel air heaters have no buy button here. Our safety note for them: {dieselWarning} Read the <Link href="/diesel-heater-for-garage">diesel page</Link>{" "}
+        before you decide. Open-flame torpedo heaters are out for any enclosed garage.
       </p>
       <WhyNot rows={whyNotTorpedo} />
 
       <h2>Safety</h2>
       <SafetyCallout>
         <p>
-          A plug-in heater needs GFCI protection on its outlet (NEC 2023 §210.8(A)(2): <Num f="code.nec.210_8_a" />). A fixed 240 V heater is a continuous load
-          (NEC 2023 §424.4(B): <Num f="code.nec.424_4_b" />). A gas heater needs a licensed gas fitter. A house with an attached garage needs a CO alarm
-          (IRC 2021 R315: <Num f="code.irc.r315" />). Your electrician and your local code edition govern.
+          A plug-in heater needs GFCI protection on its outlet. The rule is NEC 2023 §210.8(A)(2): <Num f="code.nec.210_8_a" />. A fixed 240 V heater is a
+          continuous load. The rule is NEC 2023 §424.4(B): <Num f="code.nec.424_4_b" />. A gas heater needs a licensed gas fitter. A house with an attached garage
+          needs a CO alarm. The rule is IRC 2021 R315: <Num f="code.irc.r315" />. Your electrician and your local code edition govern.
         </p>
         <p className="mt-2">{SAFETY_SCOPE}</p>
       </SafetyCallout>
 
       <h2>Next step</h2>
       <p>
-        <Link href="/garage-heater-calculator">Run your own garage through the calculator →</Link> for a load, a heater class and a breaker sized to your
+        <Link href="/garage-heater-calculator">Run your own garage through the calculator →</Link> You get a load, a heater class and a breaker sized to your
         dimensions. Then read the page for your class: <Link href="/240v-garage-heater">240 V</Link>, <Link href="/portable-garage-heater">portable</Link>,{" "}
         <Link href="/infrared-garage-heater">infrared</Link>, or <Link href="/garage-heaters">every fuel at your state&apos;s prices</Link>.
       </p>
