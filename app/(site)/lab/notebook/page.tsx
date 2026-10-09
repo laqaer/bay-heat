@@ -50,6 +50,19 @@ export default function Page() {
                 longer suggests a second heater when you can&apos;t add a circuit. Heat loads did not change.
               </td>
             </tr>
+            <tr>
+              <td className="py-3 pr-3 font-mono whitespace-nowrap">2026-10-09</td>
+              <td className="py-3">
+                Model v1.0.2. Corrections from a fact-check of our live pages. No gas unit heater is the pick for a shop
+                with solvent vapor: the Modine and Mr. Heater manuals rule out a flammable atmosphere. Can I Run It?
+                now gives a vented gas heater with no listing mark a no-go. Price dates now name the period each price
+                covers. Natural gas is the 2025 annual average. Propane is the last reading of last winter, March 30,
+                2026. The CO alarm line now separates the house code from BayHeat&apos;s own garage advice. Product
+                cards gained lines from their manuals: the CZ220&apos;s combustible-dust limit, and attended-use rules
+                for the CZ798 and DR-238. The Buddy heater lines said &ldquo;emergency indoor heating only&rdquo;. Their US
+                manuals say recreational and emergency indoor use, never unattended, so the lines now say that.
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

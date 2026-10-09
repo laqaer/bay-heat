@@ -1,7 +1,7 @@
 // Brand constants and the exact compliance/disclosure strings (BLUEPRINT.md §5.3). These strings live here
 // and nowhere else -- every disclosure, safety-scope and AI-assistance line on the site renders one of these
 // exports, verbatim, so there is exactly one place to fix the wording.
-import { SITE_URL, CONTACT_EMAIL, EDITOR_NAME, REVIEWERS_JSON } from "@/lib/env.public";
+import { SITE_URL, CONTACT_EMAIL, EDITOR_NAME, REVIEWERS_JSON } from "./env.public.ts";
 
 export { SITE_URL, CONTACT_EMAIL };
 
@@ -10,11 +10,13 @@ export const DESCRIPTOR = "Garage Climate Lab";
 export const TAGLINE = "Every number shows its work.";
 export const PUBLISHER = "Laqaer Products";
 export const LOCALE = "en-US";
-export const MODEL_VERSION = "1.0.1";
+export const MODEL_VERSION = "1.0.2";
 // Date of the newest dated line in the Lab notebook's log (app/(site)/lab/notebook). The site footer prints it;
 // update both together whenever a correction ships.
 export const LAST_CORRECTION = "2026-10-09";
-export const PRICES_AS_OF = "2026-09";
+// When the energy prices were last checked against EIA (the footer says "Prices checked"; each price's own period is
+// in lib/planner/prices.ts ASOF, e.g. natural gas is the 2025 annual average).
+export const PRICES_AS_OF = "2026-10";
 
 export const DESCRIPTION =
   "BayHeat is the independent garage climate lab. Our open model sizes the heater for your garage, grades every number by where it came from, and tells you plainly when a heater will trip your breaker or fill your garage with carbon monoxide.";
@@ -52,9 +54,9 @@ export function reviewers(): Reviewer[] {
 // PageEntry's own `reviewed` field ("electrical" | "gas" | null); `humanReview` defaults to "sample" (the
 // baseline before 100%-review pages are marked otherwise) -- pass "full" for verdict-first/safety pages per
 // the §5.2 100%-review-gate rule.
-export function aiLine(reviewedKind: "electrical" | "gas" | null, humanReview: "full" | "sample" = "sample"): string {
+export function aiLine(reviewedKind: "electrical" | "gas" | null, humanReview: "full" | "sample" | "pending" = "sample"): string {
   const editor = EDITOR_NAME ?? "BayHeat editorial desk";
-  const reviewClause = `Human review: ${humanReview} by ${editor}.`;
+  const reviewClause = humanReview === "pending" ? `Human review: pending (${editor}).` : `Human review: ${humanReview} by ${editor}.`;
   if (!reviewedKind) {
     return `Drafted with AI assistance. Numbers computed by model v${MODEL_VERSION} or sourced. ${reviewClause} Licensed review: not applicable.`;
   }

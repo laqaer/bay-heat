@@ -55,7 +55,9 @@ export const PRODUCTS: Product[] = [
     priceClass: "$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: { text: "Manual: emergency indoor heating only, on 1-lb cylinders, never while sleeping. Never a refillable cylinder indoors.", ev: "S", sourceId: "mh-buddy-manual" },
+    // MH9BX manual cover and warnings: "for recreational and emergency indoor use"; "never leave the heater unattended
+    // while burning". (Until 2026-10-09 this said "emergency indoor heating only", which the manual doesn't say.)
+    safetyLine: { text: "Manual: for recreational and emergency indoor use. Never leave it unattended while it burns.", ev: "S", sourceId: "mh-buddy-manual" },
   },
   {
     id: "propane-big-buddy-18k",
@@ -66,7 +68,13 @@ export const PRODUCTS: Product[] = [
     priceClass: "$$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: { text: "Manual: emergency indoor heating only, on 1-lb cylinders, never while sleeping. Never a refillable cylinder indoors.", ev: "S", sourceId: "mh-bigbuddy-manual" },
+    // MH18B US manual: "for recreational and emergency indoor use"; "do not leave heater unattended"; "never operate
+    // the heater while sleeping"; "DANGER: NEVER bring a refillable propane cylinder indoors."
+    safetyLine: {
+      text: "Manual: for recreational and emergency indoor use. Never leave it unattended or run it while you sleep. Never bring a refillable propane cylinder indoors.",
+      ev: "S",
+      sourceId: "mrheater-bigbuddy-manual",
+    },
   },
   {
     id: "gas-unit-heater-big-maxx-50",
@@ -79,7 +87,9 @@ export const PRODUCTS: Product[] = [
     priceClassChecked: "2026-09-25",
     specFactIds: [],
     safetyLine: {
-      text: "Licensed gas fitter and permit required. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor (code minimum for burner and ignition: 18 in, IFGC 305.3). Never where gasoline, solvents, paint thinner or dust are present.",
+      // Only what the Big Maxx manual says: this line renders wherever the product does, including the calculator
+      // report, with a link to that one source. Code comparisons (IFGC §305.3/§305.5) stay in page copy that cites them.
+      text: "BayHeat advises a licensed gas fitter and the permit your town requires. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor. Never where gasoline, solvents, paint thinner or dust are present.",
       ev: "S",
       sourceId: "big-maxx-manual",
     },
@@ -93,7 +103,13 @@ export const PRODUCTS: Product[] = [
     priceClass: "$$$$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: { text: "Licensed gas fitter and permit required. Separated combustion -- draws intake air from outside the room, the right pick for a shop with sawdust or solvent vapor (S10).", ev: "S", sourceId: "hot-dawg-hds-manual" },
+    // Manual 6-584.12 pp. 2 and 4 (DANGER). Separated combustion keeps dusty room air out of the burner; it is not a
+    // licence for a solvent or gasoline atmosphere, which an earlier version of this line implied.
+    safetyLine: {
+      text: "BayHeat advises a licensed gas fitter and the permit your town requires. Manual: \u201cAppliances must not be installed where they may be exposed to a potentially explosive or flammable atmosphere.\u201d Separated combustion takes burner air from outdoors; it does not make a room with solvent or gasoline vapor safe.",
+      ev: "S",
+      sourceId: "hot-dawg-hds-manual",
+    },
   },
   {
     // The 115 V DIY class (hp_diy_12k_115) is a different product from the 230 V unit: a reader whose garage cannot take a

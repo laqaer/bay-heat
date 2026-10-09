@@ -19,7 +19,7 @@ import { serialFor } from "./serial.ts";
 import { HEATER_CLASSES } from "./catalog.ts";
 import { WALL_U } from "./constants.ts";
 
-const MODEL_VERSION = "1.0.1";
+const MODEL_VERSION = "1.0.2";
 const SEASON_MONTH_NAMES = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
 function houseCouplingUa(input: GarageInput, envelope: ResolvedEnvelope): number {

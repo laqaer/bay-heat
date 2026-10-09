@@ -14,6 +14,7 @@ import { HEATER_CLASSES } from "@/lib/planner/catalog";
 import { Callout } from "@/components/ui/Callout";
 import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { SAFETY_SCOPE } from "@/lib/site";
+import { SourceLink } from "@/components/evidence/SourceLink";
 import { btuh, kw, amps, commas } from "@/lib/format";
 
 const CLASS_LABEL: Record<string, string> = {
@@ -168,7 +169,10 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
                 </p>
                 {r.safetyLine ? <p className="border-l-2 border-(--color-alarm) pl-2 text-xs text-(--color-alarm)">{r.safetyLine}</p> : null}
                 {productExtra ? (
-                  <p className="border-l-2 border-(--color-alarm) pl-2 text-xs text-(--color-alarm)">{productExtra}</p>
+                  <p className="border-l-2 border-(--color-alarm) pl-2 text-xs text-(--color-alarm)" data-source={product?.safetyLine?.sourceId}>
+                    {productExtra}
+                    <SourceLink sourceId={product?.safetyLine?.sourceId} />
+                  </p>
                 ) : null}
                 <p className="text-xs text-(--color-fg-2)">{r.why}</p>
                 {primary ? (

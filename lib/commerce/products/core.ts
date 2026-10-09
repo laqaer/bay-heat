@@ -45,7 +45,9 @@ export const PRODUCTS: Product[] = [
     priceClass: "$$",
     priceClassChecked: "2026-09-25",
     specFactIds: ["cz220.watts.high", "cz220.amps.high", "cz220.btuh.high", "cz220.breaker", "cz220.wire"],
-    safetyLine: { text: "Manual: not where gasoline, paint or flammable liquids are used or stored.", ev: "S", sourceId: "cz220-manual" },
+    // Manual spec page: "FOR INDOOR USE ONLY, IN A DRY LOCATION FREE OF GASOLINE, PAINT, FLAMMABLE LIQUIDS OR
+    // COMBUSTIBLE DUST OR MATERIALS" -- the dust clause matters in a woodshop, so it rides on every CZ220 plate.
+    safetyLine: { text: "Manual: not where gasoline, paint or flammable liquids are used or stored. Indoors only, in a dry space free of combustible dust.", ev: "S", sourceId: "cz220-manual" },
   },
   {
     id: "fuh54-5kw",
@@ -71,7 +73,7 @@ export const PRODUCTS: Product[] = [
     priceClass: "$",
     priceClassChecked: "2026-09-25",
     specFactIds: ["cz798.watts", "cz798.amps"],
-    safetyLine: { text: "Sole load on the circuit. No extension cords or power strips.", ev: "S", sourceId: "cz798-manual" },
+    safetyLine: { text: "Sole load on the circuit. No extension cords or power strips. Manual: attended use only, never while you're away or asleep, and not where gasoline, paint or flammable liquids are used or stored.", ev: "S", sourceId: "cz798-manual" },
   },
   {
     id: "dr975-7k5-shop",
@@ -114,7 +116,7 @@ export const PRODUCTS: Product[] = [
     priceClassChecked: "2026-09-30",
     specFactIds: ["dr238.watts", "dr238.mount_height_in", "dr238.clearance_ceiling_in", "dr238.clearance_wall_in"],
     safetyLine: {
-      text: "Manual: the lowest part of the heater must be at least 94.5 in above the floor, wall or ceiling mounted, and a wall mount needs 15.8 in to the ceiling, so check your ceiling height first; a standard 8 ft ceiling will not meet it. Not where gasoline, paint or flammable liquids are used or stored. Plug it straight into the outlet: never an extension cord or power strip.",
+      text: "Manual: the lowest part of the heater must be at least 94.5 in above the floor, wall or ceiling mounted, and a wall mount needs 15.8 in to the ceiling, so check your ceiling height first; a standard 8 ft ceiling will not meet it. Not where gasoline, paint or flammable liquids are used or stored. Plug it straight into the outlet: never an extension cord or power strip. Do not leave it unattended when in use.",
       ev: "S",
       sourceId: "dr238-manual",
     },

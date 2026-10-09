@@ -25,7 +25,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["nec-2023", "cz220-manual", "fuh54-manual", "dr975-manual"];
+const SOURCE_IDS = ["nec-2023", "cz220-manual", "fuh54-manual", "dr975-manual", "dr910f-manual"];
 
 export default function Page() {
   // Every row below is circuitFor() called live, at render time -- not a hand-typed table.
@@ -154,7 +154,7 @@ export default function Page() {
           <p className="mt-2 text-sm text-(--color-fg-2)">
             <Num f="cz220.btuh.high" /> on a <Num f="circuit.5000w240v.breaker" />.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{cz220.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={cz220.safetyLine?.sourceId}>{cz220.safetyLine?.text}</p>
           <div className="mt-3 flex flex-wrap items-center gap-4">
             <BuyButton href={route(cz220, "site", entry.href)[0].href}>Check CZ220 price on Amazon</BuyButton>
             <BuyTextLink href={route(fuh54, "site", entry.href)[0].href}>or the FUH54 ↗</BuyTextLink>
@@ -169,7 +169,7 @@ export default function Page() {
           <p className="mt-2 text-sm text-(--color-fg-2)">
             <Num f="dr975.btuh" /> on a <Num f="circuit.7500w240v.breaker" />.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={dr975.safetyLine?.sourceId}>{dr975.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
@@ -183,7 +183,7 @@ export default function Page() {
             <Num v={c4k.breakerA} unit="A" ev="C" src="circuitFor(4000, 240, 240)" /> at the class&apos;s 4,000W
             rating, not a manual.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{e240_4k.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={e240_4k.safetyLine?.sourceId}>{e240_4k.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(e240_4k, "site", entry.href)[0].href}>{route(e240_4k, "site", entry.href)[0].label}</BuyButton>
           </div>
@@ -197,7 +197,7 @@ export default function Page() {
             and 4 AWG NM is enough panel capacity to think through before you buy — see{" "}
             <Num f="code.nec.220_83" />.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{e240_10k.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={e240_10k.safetyLine?.sourceId}>{e240_10k.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(e240_10k, "site", entry.href)[0].href}>{route(e240_10k, "site", entry.href)[0].label}</BuyButton>
           </div>

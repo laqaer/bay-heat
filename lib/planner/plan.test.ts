@@ -18,7 +18,7 @@ test("plan() matches BLUEPRINT.md §0.2's headline numbers for example A", () =>
   near(r.heating.qSize, 31742, 2);
   assert.equal(r.heating.grade, "D");
   near(r.heating.kwSize, 9.3, 3);
-  assert.equal(r.modelVersion, "1.0.1");
+  assert.equal(r.modelVersion, "1.0.2");
 });
 
 test("plan()'s code round-trips through decode() to the same inputsEcho (modulo codec-domain normalization)", () => {

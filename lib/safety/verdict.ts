@@ -21,8 +21,8 @@ function isYes(v: Situation["flammablesStored"] | Situation["ulListed"]): boolea
 }
 
 const CO_CONDITION: Condition = {
-  text: "Put a UL 2034 CO alarm in the house, by the garage door and outside each sleeping area. While this heater runs, use a low-level CO monitor in the garage rated for its temperature range.",
-  cite: "IRC R315",
+  text: "Put a UL 2034 CO alarm in the house outside each sleeping area (code, for new homes and permitted work). BayHeat also advises one by the garage door, and a low-level CO monitor in the garage rated for its temperature range while this heater runs.",
+  cite: "IRC R315 (house alarm); BayHeat (garage door and monitor)",
   edition: "IRC 2021",
   ev: "R",
   severity: "must",
@@ -273,7 +273,7 @@ function dieselVerdict(s: Situation): Verdict {
   // Rule 8: detached + exhaust and intake outdoors -> ONLY IF, 5 conditions.
   return onlyIf(
     [
-      { text: "Tell your insurer and code office before a permanent install.", cite: "IRC M1302.1", edition: "IRC 2021", ev: "R", severity: "must" },
+      { text: "A permanent install of a heater with no listing needs your code official's approval, and tell your insurer.", cite: "IRC M1302.1", edition: "IRC 2021", ev: "R", severity: "must" },
       { text: "Exhaust passes through the maker's metal wall thimble, at the maker's clearance to combustibles.", cite: "Manufacturer manual", ev: "S", severity: "must" },
       { text: "The exhaust ends at least 4 ft from, and at least 1 ft above, any door, operable window or air inlet, and stays above the snow line.", cite: "IFGC 503.8", edition: "IFGC 2021 (borrowed -- written for a different appliance class)", ev: "C", severity: "must" },
       CO_CONDITION,
@@ -296,14 +296,36 @@ function ventedGasVerdict(s: Situation): Verdict {
       ["No natural gas line or bulk propane tank -- cylinders alone don't qualify."],
     );
   }
-  // Rules 16 & 17: attached (with qualifying fuel) or a solvent/sawdust shop -- both are ONLY IF, separated
-  // combustion, licensed install.
+  if (s.ulListed === "no") {
+    // Rule 22: no UL/CSA/ETL mark -> NO-GO for any combustion heater (vented gas was missing this branch).
+    return noGo(
+      [
+        UL_CONDITION,
+        { text: "A gas unit heater with no CSA or UL certification mark hasn't been tested for garage use -- don't install it.", cite: "BayHeat", ev: "C", severity: "must" },
+      ],
+      ["e240", "minisplit"],
+      ["No UL, CSA or ETL listing mark on this heater."],
+    );
+  }
+  // Rules 16 & 17: attached (with qualifying fuel) or a dusty shop -- both are ONLY IF, licensed install. Both gas
+  // unit heater manuals we cite rule out a flammable atmosphere (Modine 6-584.12 DANGER; Mr. Heater MHU: never where
+  // gasoline, solvents, paint thinner or dust are present), so stored flammables add a condition, as for electric.
+  const conditions: Condition[] = [
+    { text: "Installed and permitted by a licensed gas fitter -- this isn't a DIY connection.", cite: "BayHeat", ev: "C", severity: "must" },
+    { text: "Burner at least 18 in above the garage floor, and at least 6 ft up or guarded against vehicle impact.", cite: "IFGC 305.3 / 305.5", edition: "IFGC 2021", ev: "R", severity: "must" },
+    CO_CONDITION,
+  ];
+  if (s.ulListed !== "yes") conditions.push(UL_CONDITION);
+  if (isYes(s.flammablesStored)) {
+    conditions.push({
+      text: "Move gasoline, solvents and paint thinner out of the garage first -- the gas unit heater manuals rule out installing where the air may be flammable.",
+      cite: "Manufacturer manual",
+      ev: "S",
+      severity: "must",
+    });
+  }
   return onlyIf(
-    [
-      { text: "Installed and permitted by a licensed gas fitter -- this isn't a DIY connection.", cite: "BayHeat", ev: "C", severity: "must" },
-      { text: "Burner at least 18 in above the garage floor, and at least 6 ft up or guarded against vehicle impact.", cite: "IFGC 305.3 / 305.5", edition: "IFGC 2021", ev: "R", severity: "must" },
-      CO_CONDITION,
-    ],
+    conditions,
     [],
     ["Licensed install, correct clearances, and CO protection -- safe within code."],
   );
@@ -485,6 +507,10 @@ function electricVerdict(h: "e120" | "e240", s: Situation): Verdict {
     ["The circuit isn't known yet."],
   );
 }
+
+// The heater kinds whose verdict reads `ulListed`: Can I Run It? must ask about the listing mark for each of them, or
+// its answer stays "unknown" and a NO-GO rule like rule 22 can never fire (verdict.test.ts checks this list).
+export const ASKS_LISTING: readonly HeaterKind[] = ["e120", "e240", "kerosene", "vented_gas"];
 
 export function verdictFor(h: HeaterKind, s: Situation): Verdict {
   switch (h) {

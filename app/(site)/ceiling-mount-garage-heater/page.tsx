@@ -188,7 +188,7 @@ export default function Page() {
             <Num f="circuit.5000w240v.breaker" />. Best for an insulated 2-car garage, or a bare one once it&apos;s
             sealed.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{cz220.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={cz220.safetyLine?.sourceId}>{cz220.safetyLine?.text}</p>
           <div className="mt-3 flex flex-wrap items-center gap-4">
             <BuyButton href={route(cz220, "site", entry.href)[0].href}>Check CZ220 price on Amazon</BuyButton>
             <BuyTextLink href={route(fuh54, "site", entry.href)[0].href}>or the FUH54 ↗</BuyTextLink>
@@ -202,7 +202,7 @@ export default function Page() {
             <Num f="dr975.btuh" /> at <Num f="dr975.watts" />, on a <Num f="circuit.7500w240v.breaker" />. Fits a larger
             or leakier 2–3 car garage without doubling up units.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={dr975.safetyLine?.sourceId}>{dr975.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>

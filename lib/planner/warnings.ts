@@ -94,9 +94,9 @@ export function planWarnings(input: GarageInput, recommendations: RankedSystem[]
     warnings.push({
       code: "S10",
       severity: "warn",
-      text: "A shop with sawdust or solvent vapor should prefer a separated-combustion unit heater over a standard atmospheric burner.",
-      cite: "BayHeat",
-      ev: "C",
+      text: "In a dusty shop, prefer a separated-combustion unit heater, which takes its burner air from outdoors. No gas unit heater goes where solvent, paint or gasoline vapor can build up: the manuals rule out a flammable atmosphere.",
+      cite: "Modine HDS manual 6-584.12; Mr. Heater MHU manual",
+      ev: "S",
     });
   }
 

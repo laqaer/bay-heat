@@ -34,7 +34,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["eia-electric-power-monthly", "nec-2023"];
+const SOURCE_IDS = ["eia-electric-power-monthly", "nec-2023", "epa-608"];
 
 export default function Page() {
   // Same worked-example garage as every other page (24x24 attached 2-car, Chicago), but sealed first --
@@ -231,7 +231,7 @@ export default function Page() {
           <Num v="240V/30A" ev="S" src="HEATER_CLASSES.hp_12_24k_230.circuit — lib/planner/catalog.ts" /> circuit.
           Refrigerant work needs a licensed HVAC contractor — see the safety note below.
         </p>
-        {minisplit.safetyLine ? <p className="mt-2 text-xs text-(--color-alarm)">{minisplit.safetyLine.text}</p> : null}
+        {minisplit.safetyLine ? <p className="mt-2 text-xs text-(--color-alarm)" data-source={minisplit.safetyLine.sourceId}>{minisplit.safetyLine.text}</p> : null}
         <div className="mt-3">
           <BuyButton href={route(minisplit, "site", entry.href)[0].href}>Search current listings</BuyButton>
         </div>

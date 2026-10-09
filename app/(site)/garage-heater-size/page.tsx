@@ -6,7 +6,7 @@ import { Callout } from "@/components/ui/Callout";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { QuickPick } from "@/components/commerce/QuickPick";
 import { findProduct } from "@/lib/commerce/products";
-import { getFact } from "@/lib/facts";
+import { getFact, getSource } from "@/lib/facts";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
 import { pageMetadata } from "@/lib/seo";
@@ -20,6 +20,8 @@ import { SIZING_MARGIN } from "@/lib/planner/constants";
 import type { CeilingIns, GarageDoorType, GarageInput, Preset, Tightness, WallType } from "@/lib/planner/types";
 
 const entry = findPage("/garage-heater-size")!;
+// The manuals behind the product safety lines this page prints (scripts/source-audit.mjs checks it).
+const SOURCE_IDS = ["fuh54-manual"];
 
 export const metadata: Metadata = pageMetadata({
   path: entry.href,
@@ -135,7 +137,7 @@ export default function Page() {
   const beyond = rows.filter((r) => r.tight.qSize > largest).map(short);
 
   return (
-    <ReportPage entry={entry} sources={[]}>
+    <ReportPage entry={entry} sources={SOURCE_IDS.map((id) => getSource(id)).filter((x): x is NonNullable<typeof x> => x !== null)}>
       <AnswerBlock>
         A tight, insulated 2-car garage in Chicago needs about{" "}
         <Num v={twoCarCold.tight.kwSize * 1000} unit="W" round={100} ev="C" src="heatLossDesign(), tight envelope, IL-chicago h99" /> to{" "}

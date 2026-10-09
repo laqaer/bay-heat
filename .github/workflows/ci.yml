@@ -46,5 +46,8 @@ jobs:
             test -s "$f" || { echo "::error::missing $f"; exit 1; }
           done
           grep -q "^/r/:code " out/_redirects
+      # Every product safety line a page shows must list its manual in that page's Sources.
+      - name: Source audit
+        run: node scripts/source-audit.mjs
       - name: Validate Worker config
         run: npx --yes wrangler@4.135.0 deploy --dry-run --outdir "$RUNNER_TEMP/wrangler-dry-run"

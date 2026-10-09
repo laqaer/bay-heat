@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { HeaterKind, Situation } from "@/lib/safety/types";
-import { verdictFor } from "@/lib/safety/verdict";
+import { ASKS_LISTING, verdictFor } from "@/lib/safety/verdict";
 import { VerdictStamp, HEATER_LABEL } from "./VerdictStamp";
 import { clsx } from "@/lib/clsx";
 import { QuickPick } from "@/components/commerce/QuickPick";
@@ -224,7 +224,7 @@ export function CanIRunItForm() {
               </>
             ) : null}
 
-            {(kind === "e120" || kind === "e240" || kind === "kerosene") ? (
+            {ASKS_LISTING.includes(kind) ? (
               <TriState label="UL, CSA or ETL mark on the heater?" value={situation.ulListed} onChange={(v) => set("ulListed", v)} />
             ) : null}
 

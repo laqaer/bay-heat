@@ -32,7 +32,7 @@ export const FACTS: AnyFact[] = [
   { id: "fuh54.btuh.high", value: 17065, unit: "BTU/h", ev: "S", sourceId: "fuh54-manual", checked: "2026-09-25", status: "verified" },
   { id: "fuh54.fuse_max", value: 30, unit: "A", ev: "S", sourceId: "fuh54-manual", checked: "2026-09-25", status: "verified" },
   { id: "fuh54.wire", value: "10 AWG Cu minimum, no aluminum", ev: "S", sourceId: "fuh54-manual", checked: "2026-09-25", status: "verified" },
-  { id: "fuh54.watts_208v", value: 3755, unit: "W", ev: "C", sourceId: "fuh54-manual", checked: "2026-09-25", status: "verified", note: "(208/240)^2 x 5000" },
+  { id: "fuh54.watts_208v", value: 3750, unit: "W", ev: "S", sourceId: "fuh54-manual", checked: "2026-10-09", status: "verified", note: "manual table: 3750W @ 208V, 12,799 BTU/h (the (208/240)^2 x 5000 estimate was 3,755)" },
   { id: "fuh54.clearance_floor_ft", value: 6, unit: "ft", ev: "S", sourceId: "fuh54-manual", checked: "2026-09-25", status: "verified" },
   { id: "fuh54.price_class", value: "$300-1,000 street price Sept 2026 ($468-500 typical)", ev: "E", sourceId: "fuh54-manual", checked: "2026-09-25", status: "verified", note: "audit E1: not under $200" },
   // Dr. Infrared DR-975 (ASIN B01M8KXXAB)

@@ -108,7 +108,7 @@ export default function Page() {
             120V outlet, mounted at <Num f="hs1500tt.mount_height_in_us" /> or higher. Sized for a workbench or one
             bay, not a whole garage.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={hs1500tt.safetyLine?.sourceId}>{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label}</BuyButton>
           </div>
@@ -116,7 +116,7 @@ export default function Page() {
             Or the Dr. Infrared DR-238 (<Num f="dr238.watts" />, mounts at <Num f="dr238.mount_height_in" /> or higher):{" "}
             <BuyTextLink href={route(dr238, "site", entry.href)[0].href}>{route(dr238, "site", entry.href)[0].label} ↗</BuyTextLink>
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{dr238.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={dr238.safetyLine?.sourceId}>{dr238.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>
         <div className="border border-(--color-line) p-4">
@@ -130,7 +130,7 @@ export default function Page() {
             ceiling, it&apos;s built for a drafty shop or a bay that runs with the door up, not a sealed, evenly
             heated room.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{irTube.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={irTube.safetyLine?.sourceId}>{irTube.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(irTube, "site", entry.href)[0].href}>Search on Amazon</BuyButton>
           </div>

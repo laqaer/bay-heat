@@ -102,7 +102,7 @@ export default function Page() {
 
       <Callout variant="safety">
         Every heater on this page ships with a manual instruction to be the <strong>only</strong> thing plugged into
-        its circuit — {cz798.safetyLine?.text} That instruction is what makes the 15A sole-load row above hold; skip
+        its circuit — <span data-source={cz798.safetyLine?.sourceId}>{cz798.safetyLine?.text}</span> That instruction is what makes the 15A sole-load row above hold; skip
         it and you&apos;re back to the shared-circuit math, which doesn&apos;t fit.
       </Callout>
 
@@ -114,7 +114,7 @@ export default function Page() {
           <p className="mt-2 text-sm text-(--color-fg-2)">
             <Num f="cz798.watts" /> at <Num f="cz798.amps" />. Floor-standing, fan-forced.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{cz798.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={cz798.safetyLine?.sourceId}>{cz798.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(cz798, "site", entry.href)[0].href}>Check CZ798 price on Amazon</BuyButton>
           </div>
@@ -127,7 +127,7 @@ export default function Page() {
             <Num f="hs1500tt.watts" />, wall-mounted at <Num f="hs1500tt.mount_height_in_us" /> minimum, with{" "}
             <Num f="hs1500tt.clearance_side_in" /> side clearance.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={hs1500tt.safetyLine?.sourceId}>{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label}</BuyButton>
           </div>
@@ -140,7 +140,7 @@ export default function Page() {
             No verified nameplate on file for a specific model here — the 12.5A figure above comes from{" "}
             <Num f="circuit.1500w120v.amps" />, the standard 1,500W/120V draw, not a manual.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{generic.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={generic.safetyLine?.sourceId}>{generic.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(generic, "site", entry.href)[0].href}>Search 1,500W portable heaters</BuyButton>
           </div>

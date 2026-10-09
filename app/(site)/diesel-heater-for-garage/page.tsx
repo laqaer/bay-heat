@@ -29,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["eia-electric-power-monthly", "eia-diesel-weekly", "irc-2021", "ifgc-2021"];
+const SOURCE_IDS = ["eia-electric-power-monthly", "eia-diesel-weekly", "irc-2021", "ifgc-2021", "vevor-diesel-manual", "kidde-c3010-datasheet"];
 
 const BASE_SITUATION: Situation = {
   attached: false,
@@ -84,7 +84,7 @@ export default function Page() {
   return (
     <ReportPage entry={entry} sources={sources}>
       <AnswerBlock>
-        At Illinois&apos; own {prices.asOf.diesel} diesel price and {prices.asOf.elec} electricity price, a{" "}
+        At the Midwest regional {prices.asOf.diesel} diesel price and Illinois&apos; {prices.asOf.elec} electricity price, a{" "}
         <Num v={repOutputBtuh} unit="BTU/h" round={100} ev="S" src="HEATER_CLASSES.diesel_air.outputBtuh — lib/planner/catalog.ts" />{" "}
         diesel air heater costs about <Cost amount={dieselPerHour} per="hr" /> to run flat out, against{" "}
         <Cost amount={electricPerHour} per="hr" /> for an electric resistance heater putting out the same heat.
@@ -166,7 +166,7 @@ export default function Page() {
         <div className="border border-(--color-line) p-4">
           <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">DIESEL AIR · 5KW CLASS</p>
           <p className="mt-1 text-lg font-bold text-(--color-fg)">{diesel5kw.name}</p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{diesel5kw.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={diesel5kw.safetyLine?.sourceId}>{diesel5kw.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {diesel5kw.priceClass}</p>
           <div className="mt-3">
             <BuyButton href={route(diesel5kw, "site", entry.href)[0].href}>{route(diesel5kw, "site", entry.href)[0].label}</BuyButton>
@@ -175,7 +175,7 @@ export default function Page() {
         <div className="border border-(--color-line) p-4">
           <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">DIESEL AIR · 8KW CLASS</p>
           <p className="mt-1 text-lg font-bold text-(--color-fg)">{diesel8kw.name}</p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{diesel8kw.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={diesel8kw.safetyLine?.sourceId}>{diesel8kw.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {diesel8kw.priceClass}</p>
           <div className="mt-3">
             <BuyButton href={route(diesel8kw, "site", entry.href)[0].href}>{route(diesel8kw, "site", entry.href)[0].label}</BuyButton>

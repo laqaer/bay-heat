@@ -24,6 +24,16 @@ const STANDARD_FLAMMABLES = "Manual: not where gasoline, paint or flammable liqu
 // A product's own manual warning, beyond the standard flammables line, or undefined when it has none. Anything
 // a maker prints that a reader should see before buying (for example "do not use as a residential heater")
 // goes through here so a plate that links to that product can never leave it out.
+// Generic product classes ("a 240 V 4 kW heater") cite the instruction every listed heater's manual carries, not one
+// model's manual, so there is no single document to link or list (components/evidence/SourceLink,
+// scripts/source-audit.mjs). Every other safety line's sourceId must resolve in lib/facts (commerce.test.ts).
+export const GENERIC_SOURCE_IDS: ReadonlySet<string> = new Set([
+  "generic-electric-heater-manual",
+  "generic-infrared-heater-manual",
+  "generic-portable-heater-manual",
+  "generic-thermostat-manual",
+]);
+
 export function productWarning(p: Product | undefined): string | undefined {
   const text = p?.safetyLine?.text.replace(STANDARD_FLAMMABLES, "").trim();
   return text ? text : undefined;

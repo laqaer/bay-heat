@@ -34,17 +34,19 @@ export const SOURCES: Record<string, Source> = {
   },
   "cz220-manual": {
     id: "cz220-manual",
-    title: "Comfort Zone CZ220 ceiling heater owner's manual",
-    publisher: "Comfort Zone / Home Depot",
-    url: "https://images.thdstatic.com/catalog/pdfImages/09/09b17c0e-owners-manual.pdf",
-    retrieved: "2026-09-25",
+    title: "Comfort Zone CZ220 Series ceiling mounted heater owner's manual",
+    publisher: "Comfort Zone (Lowe's copy)",
+    url: "https://pdf.lowes.com/productdocuments/a293375b-caf2-4aa6-b3fe-6ff954f52323/60559140.pdf",
+    retrieved: "2026-10-09",
   },
   "fuh54-manual": {
     id: "fuh54-manual",
-    title: "Fahrenheat FUH54/FUH54C owner's manual",
+    // The full installation manual (the spec sheet ZBL-FUH54 has the ratings but not the wiring rules): copper only,
+    // no aluminum; 30 A max fuse; mounting height 6-11 ft for vertical (downward) air, 6-8 ft for horizontal.
+    title: "Fahrenheat FUH54 / FUH54C installation, operation and maintenance instructions (5200-11195-000)",
     publisher: "Marley Engineered Products",
-    url: "https://www.marleymep.com/products/fuh54",
-    retrieved: "2026-09-25",
+    url: "https://www.marleymep.com/wp-content/uploads/5200-11195-000.pdf",
+    retrieved: "2026-10-09",
   },
   "dr975-manual": {
     id: "dr975-manual",
@@ -74,6 +76,27 @@ export const SOURCES: Record<string, Source> = {
     url: "https://www.shareddocs.com/hvac/docs/2001/Public/03/Data_Sheet_Kidde_C3010_ENG.pdf",
     retrieved: "2026-09-30",
   },
+  "epa-608": {
+    id: "epa-608",
+    title: "Section 608 of the Clean Air Act: stationary refrigeration and air conditioning",
+    publisher: "US Environmental Protection Agency",
+    url: "https://www.epa.gov/section608",
+    retrieved: "2026-10-09",
+  },
+  "eia-therm-faq": {
+    id: "eia-therm-faq",
+    title: "How do I convert natural gas prices in dollars per Mcf to dollars per therm? (100 ft³ = 103,700 Btu = 1.037 therms)",
+    publisher: "US Energy Information Administration",
+    url: "https://www.eia.gov/tools/faqs/faq.php?id=45",
+    retrieved: "2026-10-09",
+  },
+  "hot-dawg-hds-manual": {
+    id: "hot-dawg-hds-manual",
+    title: "Modine HDS/HDC separated combustion gas-fired unit heaters, installation and service manual 6-584.12 (April 2018)",
+    publisher: "Modine Manufacturing",
+    url: "https://www.modinehvac.com/wp-content/uploads/2020/01/Hot-Dog-Separated-Combustion.pdf",
+    retrieved: "2026-10-09",
+  },
   "big-maxx-manual": {
     id: "big-maxx-manual",
     title: "Mr. Heater MHU50 / MHU80 / MHU125 operating instructions and owner's manual",
@@ -97,10 +120,12 @@ export const SOURCES: Record<string, Source> = {
   },
   "cz798-manual": {
     id: "cz798-manual",
-    title: "Comfort Zone CZ798 milkhouse heater owner's manual",
-    publisher: "Comfort Zone",
-    url: "https://comfortzoneproducts.com/products/cz798",
-    retrieved: "2026-09-25",
+    // The US product page now 404s; the CZ798CA2 manual (the same CZ798 milkhouse heater, sold in Canada) is the
+    // live copy: 1,500 W / 12.5 A, attended use only, not where flammable liquids are used or stored.
+    title: "Comfort Zone CZ798CA2 milkhouse heater instruction manual (Canadian Tire copy)",
+    publisher: "Comfort Zone / Canadian Tire",
+    url: "https://media-www.canadiantire.ca/manual/product/0438409/im-cz798ca2-043-8409-milkhouseheater-mastercraft-english-2020-hires-5383ab15-0aa3-42fe-9c0f-3bf055285061.pdf",
+    retrieved: "2026-10-09",
   },
   "eia-electric-power-monthly": {
     id: "eia-electric-power-monthly",
@@ -130,12 +155,23 @@ export const SOURCES: Record<string, Source> = {
     url: "https://www.eia.gov/dnav/pet/pet_pri_gnd_a_epd2d_pte_dpgal_w.htm",
     retrieved: "2026-09-25",
   },
+  // The US edition ("for recreational and emergency indoor use, for US sale except Massachusetts"). Until 2026-10-09
+  // this pointed at a Home Depot copy of the Canada & Massachusetts edition, which says the opposite: for
+  // recreational and commercial use, never in an enclosed space. Mr. Heater's own download links now return 404.
   "mrheater-bigbuddy-manual": {
     id: "mrheater-bigbuddy-manual",
-    title: "Mr. Heater Big Buddy MH18B owner's manual",
+    title: "Mr. Heater Big Buddy MH18B operating instructions and owner's manual (US, except Massachusetts)",
     publisher: "Mr. Heater / Enerco",
-    url: "https://images.thdstatic.com/catalog/pdfImages/53/53c06813-2588-49a2-ad28-8bf3eb3a9ae7.pdf",
-    retrieved: "2026-09-25",
+    url: "https://images.toolsid.com/mr-heater/items/pdf/f274805-manual.pdf",
+    retrieved: "2026-10-09",
+  },
+  // A copy of the maker's document; Mr. Heater's own download link (Buddy series support page) returns 404.
+  "mh-buddy-manual": {
+    id: "mh-buddy-manual",
+    title: "Mr. Heater Portable Buddy MH9BX operating instructions and owner's manual (US)",
+    publisher: "Mr. Heater / Enerco",
+    url: "https://www.manualslib.mx/manual/625893/Mr-Heater-Mh9Bx.html",
+    retrieved: "2026-10-09",
   },
   // Lab Report BH-001 ("The 4x Problem") published sizing-rule sources -- see lib/facts/rules-of-thumb.ts.
   // Car and Driver and AC Direct could not be verified (no reachable article with a sizing rule as of
