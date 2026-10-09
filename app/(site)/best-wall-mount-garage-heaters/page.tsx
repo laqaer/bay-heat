@@ -21,7 +21,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["hs1500tt-manual", "dr238-manual", "fuh54-manual", "dr975-manual", "nec-2023", "dr910f-manual"];
+const SOURCE_IDS = ["hs1500tt-manual", "dr238-manual", "fuh54-manual", "dr975-manual", "nec-2023"];
 
 export default function Page() {
   const hs1500tt = findProduct("hs1500tt-wall-infrared")!;
@@ -67,7 +67,7 @@ export default function Page() {
             either side and <Num f="hs1500tt.clearance_top_in" /> above. Best for a workbench or a single bay, not
             a whole garage.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{hs1500tt.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={hs1500tt.safetyLine?.sourceId}>{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label}</BuyButton>
           </div>
@@ -75,7 +75,7 @@ export default function Page() {
             Or the Dr. Infrared DR-238 (<Num f="dr238.watts" />, mounts at <Num f="dr238.mount_height_in" /> or higher):{" "}
             <BuyTextLink href={route(dr238, "site", entry.href)[0].href}>{route(dr238, "site", entry.href)[0].label} ↗</BuyTextLink>
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{dr238.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={dr238.safetyLine?.sourceId}>{dr238.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
         </div>
         <div className="border border-(--color-line) p-4">
@@ -87,7 +87,7 @@ export default function Page() {
             ceiling mount; it doesn&apos;t publish a separate side-wall clearance figure for a wall install, so
             follow the mounting bracket instructions in the box, not a guess.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{fuh54.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={fuh54.safetyLine?.sourceId}>{fuh54.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(fuh54, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>
@@ -101,7 +101,7 @@ export default function Page() {
             <Num f="dr975.wire" />. The manual calls for <Num f="dr975.clearance_side_ft" /> clearance on each side
             and <Num f="dr975.clearance_back_in" /> off the back wall — check that gap before you pick a stud.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{dr975.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={dr975.safetyLine?.sourceId}>{dr975.safetyLine?.text}</p>
           <div className="mt-3">
             <BuyButton href={route(dr975, "site", entry.href)[0].href}>Check price on Amazon</BuyButton>
           </div>

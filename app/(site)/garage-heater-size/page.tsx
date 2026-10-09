@@ -21,7 +21,7 @@ import type { CeilingIns, GarageDoorType, GarageInput, Preset, Tightness, WallTy
 
 const entry = findPage("/garage-heater-size")!;
 // The manuals behind the product safety lines this page prints (scripts/source-audit.mjs checks it).
-const SOURCE_IDS = ["fuh54-manual", "hs1500tt-manual"];
+const SOURCE_IDS = ["fuh54-manual"];
 
 export const metadata: Metadata = pageMetadata({
   path: entry.href,

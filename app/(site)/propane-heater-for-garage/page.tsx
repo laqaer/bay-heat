@@ -27,7 +27,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["eia-propane-weekly", "mrheater-bigbuddy-manual", "ifgc-2021", "irc-2021", "big-maxx-manual", "hot-dawg-hds-manual", "kidde-c3010-datasheet"];
+const SOURCE_IDS = ["eia-propane-weekly", "mh-buddy-manual", "mrheater-bigbuddy-manual", "ifgc-2021", "irc-2021", "big-maxx-manual", "hot-dawg-hds-manual", "kidde-c3010-datasheet"];
 
 const DETACHED_BUDDY: Situation = {
   attached: false,
@@ -127,7 +127,7 @@ export default function Page() {
           <p className="mt-2 text-sm text-(--color-fg-2)">
             Runs on natural gas or LP; a fan-forced flue keeps combustion products outdoors.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{bigMaxx.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={bigMaxx.safetyLine?.sourceId}>{bigMaxx.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {bigMaxx.priceClass}</p>
           <div className="mt-3">
             <BuyButton href={route(bigMaxx, "site", entry.href)[0].href}>{route(bigMaxx, "site", entry.href)[0].label}</BuyButton>
@@ -140,7 +140,7 @@ export default function Page() {
             Draws its combustion air from outdoors, so dusty shop air doesn&apos;t feed the burner. It is not for a
             room with solvent or gasoline vapor: the manual rules out any flammable atmosphere.
           </p>
-          <p className="mt-2 text-xs text-(--color-alarm)">{hotDawg.safetyLine?.text}</p>
+          <p className="mt-2 text-xs text-(--color-alarm)" data-source={hotDawg.safetyLine?.sourceId}>{hotDawg.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hotDawg.priceClass}</p>
           <div className="mt-3">
             <BuyButton href={route(hotDawg, "site", entry.href)[0].href}>{route(hotDawg, "site", entry.href)[0].label}</BuyButton>
@@ -174,7 +174,7 @@ export default function Page() {
         <p>{attachedVerdict.reasons[0]}</p>
       </SafetyCallout>
       <p>
-        {buddy9k.safetyLine?.text} A 20-lb refillable cylinder can only feed this heater from outdoors, on the
+        <span data-source={buddy9k.safetyLine?.sourceId}>{buddy9k.safetyLine?.text}</span> A 20-lb refillable cylinder can only feed this heater from outdoors, on the
         maker&apos;s own hose and fuel filter — never stored or used inside the garage, attached or detached. That
         manual scope is why this class carries no buy button on this page: it&apos;s a real product for a narrow
         job, not a whole-garage heating system to shop for here. Run your own situation through{" "}

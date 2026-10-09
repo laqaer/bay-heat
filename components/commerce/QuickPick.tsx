@@ -69,7 +69,7 @@ export function QuickPick({
         ) : null}
       </div>
       {product.safetyLine ? (
-        <p className="mt-2 max-w-none border-l-2 border-(--color-alarm) pl-2 text-[11px] leading-4 text-(--color-fg-2)">{product.safetyLine.text}</p>
+        <p className="mt-2 max-w-none border-l-2 border-(--color-alarm) pl-2 text-[11px] leading-4 text-(--color-fg-2)" data-source={product.safetyLine.sourceId}>{product.safetyLine.text}</p>
       ) : null}
     </div>
   );

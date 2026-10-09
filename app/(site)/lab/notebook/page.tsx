@@ -59,7 +59,8 @@ export default function Page() {
                 covers. Natural gas is the 2025 annual average. Propane is the last reading of last winter, March 30,
                 2026. The CO alarm line now separates the house code from BayHeat&apos;s own garage advice. Product
                 cards gained lines from their manuals: the CZ220&apos;s combustible-dust limit, and attended-use rules
-                for the CZ798 and DR-238.
+                for the CZ798 and DR-238. The Buddy heater lines said &ldquo;emergency indoor heating only&rdquo;. Their US
+                manuals say recreational and emergency indoor use, never unattended, so the lines now say that.
               </td>
             </tr>
           </tbody>

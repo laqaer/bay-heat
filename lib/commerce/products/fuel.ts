@@ -55,7 +55,9 @@ export const PRODUCTS: Product[] = [
     priceClass: "$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: { text: "Manual: emergency indoor heating only, on 1-lb cylinders, never while sleeping. Never a refillable cylinder indoors.", ev: "S", sourceId: "mh-buddy-manual" },
+    // MH9BX manual cover and warnings: "for recreational and emergency indoor use"; "never leave the heater unattended
+    // while burning". (Until 2026-10-09 this said "emergency indoor heating only", which the manual doesn't say.)
+    safetyLine: { text: "Manual: for recreational and emergency indoor use. Never leave it unattended while it burns.", ev: "S", sourceId: "mh-buddy-manual" },
   },
   {
     id: "propane-big-buddy-18k",
@@ -66,7 +68,13 @@ export const PRODUCTS: Product[] = [
     priceClass: "$$",
     priceClassChecked: "2026-09-25",
     specFactIds: [],
-    safetyLine: { text: "Manual: emergency indoor heating only, on 1-lb cylinders, never while sleeping. Never a refillable cylinder indoors.", ev: "S", sourceId: "mh-bigbuddy-manual" },
+    // MH18B US manual: "for recreational and emergency indoor use"; "do not leave heater unattended"; "never operate
+    // the heater while sleeping"; "DANGER: NEVER bring a refillable propane cylinder indoors."
+    safetyLine: {
+      text: "Manual: for recreational and emergency indoor use. Never leave it unattended or run it while you sleep. Never bring a refillable propane cylinder indoors.",
+      ev: "S",
+      sourceId: "mrheater-bigbuddy-manual",
+    },
   },
   {
     id: "gas-unit-heater-big-maxx-50",

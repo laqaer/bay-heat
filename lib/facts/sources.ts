@@ -155,12 +155,23 @@ export const SOURCES: Record<string, Source> = {
     url: "https://www.eia.gov/dnav/pet/pet_pri_gnd_a_epd2d_pte_dpgal_w.htm",
     retrieved: "2026-09-25",
   },
+  // The US edition ("for recreational and emergency indoor use, for US sale except Massachusetts"). Until 2026-10-09
+  // this pointed at a Home Depot copy of the Canada & Massachusetts edition, which says the opposite: for
+  // recreational and commercial use, never in an enclosed space. Mr. Heater's own download links now return 404.
   "mrheater-bigbuddy-manual": {
     id: "mrheater-bigbuddy-manual",
-    title: "Mr. Heater Big Buddy MH18B owner's manual",
+    title: "Mr. Heater Big Buddy MH18B operating instructions and owner's manual (US, except Massachusetts)",
     publisher: "Mr. Heater / Enerco",
-    url: "https://images.thdstatic.com/catalog/pdfImages/53/53c06813-2588-49a2-ad28-8bf3eb3a9ae7.pdf",
-    retrieved: "2026-09-25",
+    url: "https://images.toolsid.com/mr-heater/items/pdf/f274805-manual.pdf",
+    retrieved: "2026-10-09",
+  },
+  // A copy of the maker's document; Mr. Heater's own download link (Buddy series support page) returns 404.
+  "mh-buddy-manual": {
+    id: "mh-buddy-manual",
+    title: "Mr. Heater Portable Buddy MH9BX operating instructions and owner's manual (US)",
+    publisher: "Mr. Heater / Enerco",
+    url: "https://www.manualslib.mx/manual/625893/Mr-Heater-Mh9Bx.html",
+    retrieved: "2026-10-09",
   },
   // Lab Report BH-001 ("The 4x Problem") published sizing-rule sources -- see lib/facts/rules-of-thumb.ts.
   // Car and Driver and AC Direct could not be verified (no reachable article with a sizing rule as of

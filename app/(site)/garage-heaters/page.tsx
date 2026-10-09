@@ -25,7 +25,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["eia-electric-power-monthly", "eia-ng-annual", "eia-propane-weekly", "eia-diesel-weekly", "irc-2021", "cz220-manual", "fuh54-manual", "hs1500tt-manual", "vevor-diesel-manual", "big-maxx-manual", "epa-608"];
+const SOURCE_IDS = ["eia-electric-power-monthly", "eia-ng-annual", "eia-propane-weekly", "eia-diesel-weekly", "irc-2021", "cz220-manual", "vevor-diesel-manual", "big-maxx-manual", "epa-608"];
 
 const SYSTEM_LABEL: Record<CostRow["system"], string> = {
   electric_resistance: "Electric resistance",
@@ -165,7 +165,7 @@ export default function Page() {
               <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">{SYSTEM_LABEL[system]}</p>
               <p className="mt-1 text-lg font-bold text-(--color-fg)">{product.name}</p>
               <p className="mt-2 text-sm text-(--color-fg-2)">{note}</p>
-              {product.safetyLine ? <p className="mt-2 text-xs text-(--color-alarm)">{product.safetyLine.text}</p> : null}
+              {product.safetyLine ? <p className="mt-2 text-xs text-(--color-alarm)" data-source={product.safetyLine.sourceId}>{product.safetyLine.text}</p> : null}
               <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {product.priceClass}</p>
               <div className="mt-3">
                 <BuyButton href={primary.href}>{primary.label}</BuyButton>
