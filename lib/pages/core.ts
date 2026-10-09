@@ -34,24 +34,4 @@ export const PAGES: PageEntry[] = [
     updated: "2026-10-02",
     rev: 1,
   },
-  {
-    href: "/shop-heater",
-    id: "G-028",
-    title: "Shop heater: 240V electric or vented gas for a closed shop, and no torpedo heaters",
-    h1: "Shop heaters",
-    description:
-      "Four kinds of shop heater: 240V electric, vented gas, diesel and torpedo. The circuit, vent and CO rule each one needs, and why a torpedo doesn't belong in a closed shop.",
-    // "money" / "verdict-first" because the page carries paid links and combustion-safety verdicts: LabLabel then
-    // prints "Human review: full" (BLUEPRINT.md §5.2 -- 100% of buy pages are editor-approved before publishing).
-    kind: "money",
-    layout: "verdict-first",
-    nav: { group: "heaters", label: "Shop heaters" },
-    primaryKeyword: "shop heater",
-    volume: 6600,
-    reviewed: "gas",
-    indexable: true,
-    published: "2026-10-09",
-    updated: "2026-10-09",
-    rev: 1,
-  },
 ];
