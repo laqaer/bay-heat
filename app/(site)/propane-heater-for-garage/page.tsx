@@ -115,8 +115,9 @@ export default function Page() {
 
       <h2 id="vented">Vented unit heaters: the class this page sells</h2>
       <p>
-        A vented natural gas or propane unit heater covers a whole garage from one wall-mounted unit. Code sets a
-        floor for where its burner can sit: <Num f="code.ifgc.305_3" />. Both units below need a licensed gas
+        A vented natural gas or propane unit heater covers a whole garage from one wall-mounted unit. On a gas line,
+        see the <Link href="/natural-gas-garage-heater">natural gas garage heater page</Link> for sizing and venting.
+        Code sets a floor for where its burner can sit: <Num f="code.ifgc.305_3" />. Both units below need a licensed gas
         fitter for the connection and the permit — this isn&apos;t a DIY hookup.
       </p>
       <Disclosure />
