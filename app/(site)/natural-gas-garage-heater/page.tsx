@@ -156,12 +156,14 @@ function loadFor(presetKey: (typeof SIZE_ROWS)[number]["key"], tier: TierName): 
   return heatLossDesign(input, resolveEnvelope(input), designTempFor(input, station), station.elevFt).qSize;
 }
 
-// The three sizes in the Big Maxx manual, smallest first, read from the fact registry.
+// The three sizes in the Big Maxx manual, smallest first, read from the fact registry: gas input, heat output and
+// cabinet height (dimension A on the back view, manual p.3).
 const LADDER = [
-  { model: "MHU50", inId: "bigmaxx.mhu50.input_btuh", outId: "bigmaxx.mhu50.output_btuh" },
-  { model: "MHU80", inId: "bigmaxx.mhu80.input_btuh", outId: "bigmaxx.mhu80.output_btuh" },
-  { model: "MHU125", inId: "bigmaxx.mhu125.input_btuh", outId: "bigmaxx.mhu125.output_btuh" },
+  { model: "MHU50", inId: "bigmaxx.mhu50.input_btuh", outId: "bigmaxx.mhu50.output_btuh", heightId: "bigmaxx.mhu50.height_in" },
+  { model: "MHU80", inId: "bigmaxx.mhu80.input_btuh", outId: "bigmaxx.mhu80.output_btuh", heightId: "bigmaxx.mhu80.height_in" },
+  { model: "MHU125", inId: "bigmaxx.mhu125.input_btuh", outId: "bigmaxx.mhu125.output_btuh", heightId: "bigmaxx.mhu125.height_in" },
 ] as const;
+type Size = (typeof LADDER)[number];
 
 // Cost to put the MHU50's rated output into the garage for one hour, on gas and on electric resistance, at one
 // state's EIA prices. Same costPerMMBtuDelivered() the fuel hub and /electric-vs-propane-garage-heater use.
@@ -198,14 +200,16 @@ export default function Page() {
     throw new Error("natural-gas-garage-heater: bigmaxx.efficiency and ETA.ventedGas80 disagree");
   }
 
-  // Ceiling stack-up (manual p.4, Table 1, p.3): bottom of the heater 8 ft up, the body, then 1 in of clearance above
-  // it. The manual's text doesn't say which printed dimension is the height, so the smallest one (12 in) is used as a
-  // floor and the result is rounded up to a whole foot, which also leaves room for the brackets.
+  // Ceiling stack-up, from the floor: the bottom of the heater at least 8 ft up (manual p.4), then the cabinet (dimension
+  // A, back view p.3), then the 1 in strip the hanging brackets add above it (back view p.3). Table 1 also asks for 1 in
+  // of clearance at the top; it is not added here, and the check below proves that counting it as extra changes no row.
   const bottomIn = factNumber("bigmaxx.min_height_ft") * 12;
-  const bodyIn = factNumber("bigmaxx.body_dimension_in");
+  const bracketIn = factNumber("bigmaxx.bracket_strip_in");
   const topClearIn = factNumber("bigmaxx.clearance_top_sides_in");
-  const stackIn = bottomIn + bodyIn + topClearIn;
-  const requiredCeilingFt = Math.ceil(stackIn / 12);
+  const needIn = (l: Size) => bottomIn + factNumber(l.heightId) + bracketIn;
+  const mhu50 = LADDER[0];
+  const mhu80 = LADDER[1];
+  const mhu50NeedIn = needIn(mhu50);
 
   const ventedVerdict = verdictFor("vented_gas", ATTACHED);
   const unventedPropane = verdictFor("buddy", { ...ATTACHED, cylinder: "1lb", cylinderStoredWhere: "outdoors" });
@@ -213,28 +217,32 @@ export default function Page() {
   const sizeRows = SIZE_ROWS.flatMap((row) =>
     (["tight", "leaky"] as const).map((tier) => {
       const load = loadFor(row.key, tier);
-      const bigger = LADDER.find((l) => factNumber(l.outId) >= load);
       const ceilingFt = PRESET_DEFAULTS[row.key].height;
-      return {
-        row,
-        tier,
-        load,
-        input: load / ETA.ventedGas80,
-        fitsHeat: load <= mhu50Out,
-        overshoot: mhu50Out / load,
-        bigger,
-        ceilingFt,
-        ceilingOk: ceilingFt >= requiredCeilingFt,
-      };
+      const ceilingIn = ceilingFt * 12;
+      // Sizes whose output covers the load, smallest first; the first of those whose cabinet also fits under the ceiling.
+      const covering = LADDER.filter((l) => factNumber(l.outId) >= load);
+      const fitting = covering.find((l) => ceilingIn >= needIn(l));
+      const status: "yes" | "ceiling" | "stepup" | "nofit" | "toobig" =
+        covering[0] === mhu50 ? (ceilingIn >= mhu50NeedIn ? "yes" : "ceiling") : fitting ? "stepup" : covering.length > 0 ? "nofit" : "toobig";
+      // Counting Table 1's top clearance as extra height must not change any answer on this page.
+      for (const l of LADDER) {
+        if ((ceilingIn >= needIn(l)) !== (ceilingIn >= needIn(l) + topClearIn)) {
+          throw new Error(`natural-gas-garage-heater: Table 1 top clearance changes the ceiling answer for ${row.label} ${tier} ${l.model}`);
+        }
+      }
+      return { row, tier, load, input: load / ETA.ventedGas80, overshoot: mhu50Out / load, ceilingFt, ceilingIn, covering, fitting, status };
     }),
   );
-  const passing = sizeRows.filter((r) => r.fitsHeat && r.ceilingOk);
-  // The worked example in the answer box must itself pass both filters, or the page's own claim would be false.
+  const passing = sizeRows.filter((r) => r.status === "yes" || r.status === "stepup");
+  // The worked example in the answer box must itself get an MHU50, or the page's own claim would be false.
   const example = sizeRows.find((r) => r.row.key === "3car" && r.tier === "tight")!;
-  if (!(example.fitsHeat && example.ceilingOk)) throw new Error("natural-gas-garage-heater: the worked example no longer fits an MHU50");
-  const lowCeilingPresets = SIZE_ROWS.filter((r) => PRESET_DEFAULTS[r.key].height < requiredCeilingFt);
+  if (example.status !== "yes") throw new Error("natural-gas-garage-heater: the worked example no longer fits an MHU50");
+  // The standard 2-car example garage (EXAMPLE_A_INPUT) is called out as unable to take the unit; keep that true.
+  if (!(EXAMPLE_A_INPUT.height * 12 < mhu50NeedIn)) throw new Error("natural-gas-garage-heater: the standard example garage now clears an MHU50");
+  const lowCeilingPresets = SIZE_ROWS.filter((r) => PRESET_DEFAULTS[r.key].height * 12 < mhu50NeedIn);
   const leaky3 = sizeRows.find((r) => r.row.key === "3car" && r.tier === "leaky")!;
   const marginPushesPastMhu80 = leaky3.load > mhu80Out && leaky3.load / SIZING_MARGIN <= mhu80Out;
+  const mhu80FitsLeaky3Ceiling = leaky3.ceilingIn >= needIn(mhu80);
 
   // Cost per hour: the table states, then the all-state summary computed over every row of the price table.
   const tableRows = [
@@ -261,13 +269,14 @@ export default function Page() {
   return (
     <ReportPage entry={entry} sources={sources}>
       <AnswerBlock>
-        Our insulated 3-car example in Chicago needs about{" "}
-        <BtuhKw btuh={example.load} src="heatLossDesign().qSize, 3-car, tight, IL-chicago" /> of heat on its design day. A
-        natural gas unit heater at <Num f="bigmaxx.efficiency" format={asPercentUnit} /> efficiency must burn about{" "}
+        Size our insulated 3-car example in Chicago for about{" "}
+        <BtuhKw btuh={example.load} src="heatLossDesign().qSize, 3-car, tight, IL-chicago" />: its design-day loss plus a{" "}
+        <Num v={SIZING_MARGIN} ev="C" src="SIZING_MARGIN — lib/planner/constants.ts" format={(v) => `${Math.round((Number(v) - 1) * 100)}%`} />{" "}
+        margin. A natural gas unit heater at <Num f="bigmaxx.efficiency" format={asPercentUnit} /> efficiency must burn about{" "}
         <Num v={example.input} unit="BTU/h" round={100} ev="C" src="heatLossDesign().qSize / ETA.ventedGas80, 3-car, tight" /> of
-        gas to supply it. One <Num f="bigmaxx.mhu50.input_btuh" /> input unit covers that. Its bottom must hang at least{" "}
+        gas to supply that. One <Num f="bigmaxx.mhu50.input_btuh" /> input unit covers it. Its bottom must hang at least{" "}
         <Num f="bigmaxx.min_height_ft" /> up, so the ceiling needs to be at least{" "}
-        <Num v={requiredCeilingFt} unit="ft" ev="C" src="ceil((8 ft + body dimension + top clearance) / 12), bigmaxx facts" />.
+        <Num v={mhu50NeedIn / 12} unit="ft" round={0.1} ev="C" src="(bigmaxx.min_height_ft × 12 + bigmaxx.mhu50.height_in + bigmaxx.bracket_strip_in) / 12" />.
       </AnswerBlock>
 
       <QuickPick
@@ -348,34 +357,39 @@ export default function Page() {
       <h3>Heat is the first filter. Ceiling height is the second.</h3>
       <p>
         The manual puts the bottom of the heater at least <Num f="bigmaxx.min_height_ft" /> above a residential garage
-        floor. Table 1 adds <Num f="bigmaxx.clearance_top_sides_in" /> of clearance above the top. The body, the brackets
-        and the joist all have to fit between those two lines.
+        floor. The cabinet and its hanging brackets sit above that line, so the unit&apos;s own height counts against your
+        ceiling.
       </p>
       <p>
-        The manual&apos;s drawing (page 3) gives the MHU50 a <Num f="bigmaxx.body_dimension_in" /> dimension. Its text
-        doesn&apos;t say which dimension is the height. Even if <Num f="bigmaxx.body_dimension_in" /> were the height, the
-        stack comes to{" "}
-        <Num v={stackIn} unit="in" ev="C" src="bigmaxx.min_height_ft × 12 + bigmaxx.body_dimension_in + bigmaxx.clearance_top_sides_in" />.
-        That is taller than the 2-car preset&apos;s{" "}
-        <Num v={PRESET_DEFAULTS["2car"].height} unit="ft" ev="E" src="PRESET_DEFAULTS['2car'].height — lib/planner/presets.ts" /> ceiling (
-        <Num v={PRESET_DEFAULTS["2car"].height * 12} unit="in" ev="C" src="PRESET_DEFAULTS['2car'].height × 12 — lib/planner/presets.ts" />
-        ). So BayHeat asks for a ceiling of at least{" "}
-        <Num v={requiredCeilingFt} unit="ft" ev="C" src="ceil(stack / 12), rounded up to leave room for brackets" /> for this
-        unit. Your fitter checks the exact height on the drawing.
+        The manual gives that height. Its back view (page 3) shows dimension A as the cabinet height. That is{" "}
+        <Num f="bigmaxx.mhu50.height_in" /> for the MHU50, with the hanging brackets <Num f="bigmaxx.bracket_strip_in" />{" "}
+        above it. So the MHU50 needs <Num v={mhu50NeedIn} unit="in" ev="C" src="bigmaxx.min_height_ft × 12 + bigmaxx.mhu50.height_in + bigmaxx.bracket_strip_in" /> from
+        floor to ceiling (<Num v={mhu50NeedIn / 12} unit="ft" round={0.1} ev="C" src="MHU50 need / 12" />). The MHU80&apos;s cabinet
+        is <Num f="bigmaxx.mhu80.height_in" />, so it needs <Num v={needIn(mhu80)} unit="in" ev="C" src="bigmaxx.min_height_ft × 12 + bigmaxx.mhu80.height_in + bigmaxx.bracket_strip_in" />.
+        The MHU125&apos;s is <Num f="bigmaxx.mhu125.height_in" />, so it needs{" "}
+        <Num v={needIn(LADDER[2])} unit="in" ev="C" src="bigmaxx.min_height_ft × 12 + bigmaxx.mhu125.height_in + bigmaxx.bracket_strip_in" />.
       </p>
       <p>
-        That rules out the standard 2-car example garage used across BayHeat. Its ceiling is{" "}
-        <Num v={EXAMPLE_A_INPUT.height} unit="ft" ev="E" src="EXAMPLE_A_INPUT.height — lib/planner/fixtures.ts" />.
+        Table 1 also asks for <Num f="bigmaxx.clearance_top_sides_in" /> of clearance at the top. If your fitter counts that
+        on top of the brackets, each figure rises by that much. No answer in the table below changes.
+      </p>
+      <p>
+        The 2-car preset&apos;s <Num v={PRESET_DEFAULTS["2car"].height} unit="ft" ev="E" src="PRESET_DEFAULTS['2car'].height — lib/planner/presets.ts" />{" "}
+        ceiling is <Num v={PRESET_DEFAULTS["2car"].height * 12} unit="in" ev="C" src="PRESET_DEFAULTS['2car'].height × 12" />,{" "}
+        <Num v={mhu50NeedIn - PRESET_DEFAULTS["2car"].height * 12} unit="in" ev="C" src="MHU50 need − 2-car ceiling" /> short for the
+        MHU50. The standard 2-car example garage used across BayHeat has the same ceiling, so it can&apos;t take this unit.
+        The 1-car preset&apos;s <Num v={PRESET_DEFAULTS["1car"].height} unit="ft" ev="E" src="PRESET_DEFAULTS['1car'].height — lib/planner/presets.ts" />{" "}
+        is far short.
       </p>
       <div className="not-prose my-4 overflow-x-auto">
-        <table className="w-full min-w-[720px] border-collapse text-sm">
+        <table className="w-full min-w-[760px] border-collapse text-sm">
           <thead>
             <tr className="border-b border-(--color-line) text-left text-(--color-fg-2)">
               <th className="py-2 pr-3 font-normal">Garage</th>
               <th className="py-2 pr-3 font-normal">Envelope</th>
-              <th className="py-2 pr-3 text-right font-normal">Heat needed</th>
+              <th className="py-2 pr-3 text-right font-normal">Heat to size for</th>
               <th className="py-2 pr-3 text-right font-normal">Gas input needed</th>
-              <th className="py-2 font-normal">Does the MHU50 fit?</th>
+              <th className="py-2 font-normal">Does a Big Maxx fit?</th>
             </tr>
           </thead>
           <tbody>
@@ -393,20 +407,31 @@ export default function Page() {
                   <Num v={r.input} unit="BTU/h" round={100} ev="C" src={`heatLossDesign().qSize / ETA.ventedGas80, ${r.row.label}, ${r.tier}`} />
                 </td>
                 <td className="py-2">
-                  {r.fitsHeat && r.ceilingOk ? (
+                  {r.status === "yes" ? (
                     <>
-                      Yes, with <Num v={r.overshoot} unit="times the load" round={0.1} ev="C" src="MHU50 output / heatLossDesign().qSize" />
+                      Yes: the MHU50, with <Num v={r.overshoot} unit="times the load" round={0.1} ev="C" src="MHU50 output / heatLossDesign().qSize" />. It
+                      clears the ceiling by <Num v={r.ceilingIn - mhu50NeedIn} unit="in" ev="C" src="ceiling − MHU50 need" />.
                     </>
-                  ) : r.fitsHeat ? (
-                    <>Enough heat, but the ceiling rules it out</>
-                  ) : !r.ceilingOk ? (
-                    <>No. Too small for the load, and the ceiling is already too low for the MHU50</>
-                  ) : r.bigger ? (
+                  ) : r.status === "ceiling" ? (
                     <>
-                      No. Step up to the <Num f={r.bigger.inId} /> size ({r.bigger.model}), and check its height on the drawing
+                      Enough heat, but the ceiling rules it out. The MHU50 needs{" "}
+                      <Num v={mhu50NeedIn} unit="in" ev="C" src="MHU50 need" />; this ceiling is{" "}
+                      <Num v={r.ceilingIn} unit="in" ev="C" src="preset ceiling × 12" />.
+                    </>
+                  ) : r.status === "stepup" && r.fitting ? (
+                    <>
+                      No. Step up to the <Num f={r.fitting.inId} /> size ({r.fitting.model}). It needs{" "}
+                      <Num v={needIn(r.fitting)} unit="in" ev="C" src={`${r.fitting.model} need`} />, and this ceiling is{" "}
+                      <Num v={r.ceilingIn} unit="in" ev="C" src="preset ceiling × 12" />.
+                    </>
+                  ) : r.status === "nofit" && r.covering[0] ? (
+                    <>
+                      No single Big Maxx fits. The smallest size that covers the load, the {r.covering[0].model}, needs{" "}
+                      <Num v={needIn(r.covering[0])} unit="in" ev="C" src={`${r.covering[0].model} need`} />; this ceiling is{" "}
+                      <Num v={r.ceilingIn} unit="in" ev="C" src="preset ceiling × 12" />. Insulate first.
                     </>
                   ) : (
-                    <>No. It needs more than one unit</>
+                    <>No single Big Maxx covers this load. Insulate first.</>
                   )}
                 </td>
               </tr>
@@ -421,9 +446,10 @@ export default function Page() {
       </p>
       <p>
         Read the last column from the top. Only{" "}
-        <Num v={passing.length} ev="C" src="rows where the MHU50 covers the load and the ceiling clears the stack" /> of the{" "}
-        <Num v={sizeRows.length} ev="C" src="sizing rows" /> garages {passing.length === 1 ? "passes" : "pass"} both filters, and
-        the ceiling margin there is thin.
+        <Num v={passing.length} ev="C" src="rows with a Big Maxx that covers the load and clears the ceiling" /> of the{" "}
+        <Num v={sizeRows.length} ev="C" src="sizing rows" /> garages {passing.length === 1 ? "gets" : "get"} a Big Maxx that
+        covers its load and clears its ceiling. The tight 3-car clears it by{" "}
+        <Num v={example.ceilingIn - mhu50NeedIn} unit="in" ev="C" src="3-car ceiling − MHU50 need" />.
       </p>
       <p>
         A tight garage gets far more heat from the smallest unit than it needs. Look at a smaller heater or an electric
@@ -436,7 +462,14 @@ export default function Page() {
             <Num v={SIZING_MARGIN} ev="C" src="SIZING_MARGIN — lib/planner/constants.ts" format={(v) => `${Math.round((Number(v) - 1) * 100)}%`} />{" "}
             margin is what pushes the leaky 3-car garage past the MHU80. Without it the load is{" "}
             <Num v={leaky3.load / SIZING_MARGIN} unit="BTU/h" round={100} ev="C" src="heatLossDesign().qSize / SIZING_MARGIN, 3-car, leaky" />, under
-            the MHU80&apos;s <Num f="bigmaxx.mhu80.output_btuh" />.
+            the MHU80&apos;s <Num f="bigmaxx.mhu80.output_btuh" />
+            {mhu80FitsLeaky3Ceiling ? (
+              <>
+                , and the MHU80 fits that ceiling (<Num v={needIn(mhu80)} unit="in" ev="C" src="MHU80 need" /> under{" "}
+                <Num v={leaky3.ceilingIn} unit="in" ev="C" src="3-car ceiling × 12" />). That is why insulating first matters here
+              </>
+            ) : null}
+            .
           </>
         ) : null}
       </p>
@@ -456,7 +489,8 @@ export default function Page() {
       <ul>
         <li>
           <strong>Up through the roof.</strong> The manual lists the unit as a Category I appliance on this route. Use a
-          Type B-1 gas vent or single-wall metal pipe, with a listed cap. Single-wall pipe needs{" "}
+          Type B-1 gas vent or single-wall metal pipe, with a listed cap. Single-wall pipe can&apos;t pass through an attic or
+          other concealed space, so use Type B-1 there (Figure 2, page 6). Single-wall pipe needs{" "}
           <Num f="bigmaxx.vent_single_wall_clearance_in" /> of clearance to anything that burns, unless a listed thimble is
           used. Insulate single-wall vent along its whole length if it runs longer than{" "}
           <Num f="bigmaxx.vent_single_wall_insulate_ft" />, elbows included, or through an unheated space. Use at least{" "}
@@ -474,9 +508,15 @@ export default function Page() {
       </ul>
       <p>
         A wall vent must end at least <Num f="bigmaxx.vent_term_opening_ft" /> from any door, window, gravity air inlet,
-        gas or electric meter, or regulator. It must end at least <Num f="bigmaxx.vent_term_grade_in" /> above the ground and
-        the deepest snow. It must stay <Num f="bigmaxx.vent_term_forced_air_ft" /> from any forced-air inlet, such as a
-        dryer&apos;s fresh-air intake. Those are the U.S. figures in the manual (pages 6 and 7).
+        gas or electric meter, or regulator. It must end at least <Num f="bigmaxx.vent_term_soffit_ft" /> below, or{" "}
+        <Num f="bigmaxx.vent_term_soffit_ft" /> beside, any soffit or under-eave vent. Keep it at least{" "}
+        <Num f="bigmaxx.vent_term_inside_corner_ft" /> from an inside corner of two outside walls.
+      </p>
+      <p>
+        It must end at least <Num f="bigmaxx.vent_term_grade_in" /> above the ground and the deepest snow. It must stay{" "}
+        <Num f="bigmaxx.vent_term_forced_air_ft" /> from any forced-air inlet, such as a dryer&apos;s fresh-air intake. Do
+        not end it directly under roof eaves or over a walkway, where condensate can drip. These are the manual&apos;s U.S.
+        figures from section C (pages 6 and 7), and the list is not complete.
       </p>
       <p>
         The unit itself needs <Num f="bigmaxx.clearance_top_sides_in" /> of clearance to combustibles at the top and sides,
@@ -493,10 +533,10 @@ export default function Page() {
       <p>Code sets two lower floors, in short:</p>
       <ul>
         <li>
-          Ignition source (IFGC 2021 §305.3; IRC 2021 §G2408.2): &quot;<Num f="code.ifgc.305_3" />.&quot;
+          Rule one (IFGC 2021 §305.3; IRC 2021 §G2408.2): <Num f="code.ifgc.305_3" />.
         </li>
         <li>
-          Whole appliance (IFGC 2021 §305.5; IRC 2021 §G2408.3): &quot;<Num f="code.ifgc.305_5.private_garage_height" />.&quot;
+          Rule two (IFGC 2021 §305.5; IRC 2021 §G2408.3): <Num f="code.ifgc.305_5.private_garage_height" />.
         </li>
       </ul>
       <p>The manual&apos;s number is stricter than both, so for this unit the manual wins.</p>
@@ -531,8 +571,8 @@ export default function Page() {
           <Num f="bigmaxx.ng_inlet_max_inwc" /> (manual Table 6).
         </li>
         <li>
-          A drip leg, plus a shutoff valve and a ground-joint union where local code asks for them. A plugged test tap goes
-          just upstream of the unit.
+          A drip leg, and a shutoff valve for the heater near it, which the fuel gas code requires. A ground-joint union
+          goes with it where local code asks. A plugged test tap goes just upstream of the unit.
         </li>
         <li>A soap-solution leak check of every joint. Never a flame.</li>
         <li>
@@ -714,8 +754,8 @@ export default function Page() {
         </li>
         <li>
           <strong>Any heater before you check the ceiling.</strong> The bottom of this unit has to sit at least{" "}
-          <Num f="bigmaxx.min_height_ft" /> above the floor. In practice that means a ceiling of at least{" "}
-          <Num v={requiredCeilingFt} unit="ft" ev="C" src="ceil(stack / 12), bigmaxx facts" />.{" "}
+          <Num f="bigmaxx.min_height_ft" /> above the floor. The MHU50 needs{" "}
+          <Num v={mhu50NeedIn} unit="in" ev="C" src="MHU50 need" /> in all.{" "}
           {lowCeilingPresets.map((r, i) => (
             <span key={r.key}>
               {i > 0 ? " and the " : "The "}
@@ -744,10 +784,10 @@ export default function Page() {
       <p>Alarm rules depend on your place and on when the house was built. In short:</p>
       <ul>
         <li>
-          IRC 2021 §R315.2.1: &quot;<Num f="code.irc.r315.new_construction" />.&quot;
+          IRC 2021 §R315.2.1: <Num f="code.irc.r315.new_construction" />.
         </li>
         <li>
-          IRC 2021 §R315.2.2: &quot;<Num f="code.irc.r315.permitted_work" />.&quot; Adding a gas heater can count.
+          IRC 2021 §R315.2.2: <Num f="code.irc.r315.permitted_work" />. Adding a gas heater can count.
         </li>
       </ul>
       <p>Your local code edition governs.</p>

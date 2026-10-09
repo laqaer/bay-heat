@@ -24,9 +24,13 @@ export const FACTS: AnyFact[] = [
   { id: "bigmaxx.mhu50.volts", value: 120, unit: "V", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.2 rating table: 120 V, 60 Hz, single phase" },
   { id: "bigmaxx.mhu50.amps", value: 2.3, unit: "A", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.2 rating table: MHU50 2.3 A" },
 
-  // Body size, manual p.3 (Unit dimensions). The drawing's text does not say which dimension is the height, so this
-  // is used only as a floor: the stack-up 96 in + this + 1 in top clearance already exceeds a 9 ft (108 in) ceiling.
-  { id: "bigmaxx.body_dimension_in", value: 12, unit: "in", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.3, variable dimension A for the MHU50: 12 in (305 mm). The drawing also prints 12 1/2 in, 18 1/2 in and 25 in overall dimensions, and the text does not say which one is the height" },
+  // Cabinet height, manual p.3 (Unit dimensions, back view). Dimension A is the cabinet's vertical dimension and the
+  // hanging brackets add a 1 in (25 mm) strip above it, so the unit's stack above the "bottom of the heater" line is
+  // A + 1 in. (Table 1's 1 in top clearance is not added on top; the page checks that counting it as extra changes no answer.)
+  { id: "bigmaxx.mhu50.height_in", value: 12, unit: "in", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.3, back view: dimension A, the cabinet height, is 12 in (305 mm) for the MHU50" },
+  { id: "bigmaxx.mhu80.height_in", value: 17, unit: "in", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.3, back view: dimension A, the cabinet height, is 17 in (432 mm) for the MHU80" },
+  { id: "bigmaxx.mhu125.height_in", value: 24.67, unit: "in", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.3, back view: dimension A, the cabinet height, is 24.67 in (626.8 mm) for the MHU125" },
+  { id: "bigmaxx.bracket_strip_in", value: 1, unit: "in", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.3, back view: the hanging brackets sit in a 1 in (25 mm) strip above the cabinet" },
 
   // Residential garage mounting height, manual p.4 (Requirements, CSA in the USA).
   { id: "bigmaxx.min_height_ft", value: 8, unit: "ft", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.4: in a residential garage the bottom of the heater is no less than 8 ft above the floor" },
@@ -43,6 +47,8 @@ export const FACTS: AnyFact[] = [
   { id: "bigmaxx.vent_term_opening_ft", value: 4, unit: "ft", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.6, section C.4: horizontal termination at least 4 ft from any door, window, gravity air inlet, gas or electric meter, regulator or relief equipment (U.S.)" },
   { id: "bigmaxx.vent_term_grade_in", value: 12, unit: "in", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.6, section C.2: horizontal termination at least 12 in above grade level and maximum snow height" },
   { id: "bigmaxx.vent_term_forced_air_ft", value: 10, unit: "ft", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.7, section C.7: horizontal termination at least 10 ft from any forced-air inlet" },
+  { id: "bigmaxx.vent_term_soffit_ft", value: 4, unit: "ft", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.6, section C.5: horizontal termination at least 4 ft below or 4 ft horizontally from any soffit vent or under-eave vent" },
+  { id: "bigmaxx.vent_term_inside_corner_ft", value: 6, unit: "ft", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.6, section C.6: horizontal vent at least 6 ft from an inside corner formed by two exterior walls (10 ft if possible)" },
   { id: "bigmaxx.clearance_top_sides_in", value: 1, unit: "in", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.4, Table 1: clearance to combustibles, top and sides" },
   { id: "bigmaxx.clearance_rear_in", value: 18, unit: "in", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.4, Table 1: clearance to combustibles, rear" },
   { id: "bigmaxx.clearance_access_in", value: 18, unit: "in", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.4, Table 1: clearance at the service access panel" },
@@ -56,11 +62,5 @@ export const FACTS: AnyFact[] = [
   { id: "bigmaxx.ng_inlet_min_inwc", value: 5, unit: "in. w.c.", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.17, Table 6: natural gas inlet pressure minimum" },
   { id: "bigmaxx.ng_inlet_max_inwc", value: 14, unit: "in. w.c.", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.17, Table 6: natural gas inlet pressure maximum" },
   { id: "bigmaxx.full_input_altitude_ft", value: 2000, unit: "ft", ev: "S", sourceId: MANUAL, checked: CHECKED, status: "verified", note: "Manual p.12: full input up to 2,000 ft above sea level; above that, manifold pressure must be adjusted on some units" },
-
-  // Code rules this page quotes in short. Sourced to the free-access index of each code body (lib/facts/sources.ts);
-  // the exact wording is paraphrased, never copied.
-  { id: "code.ifgc.305_5.private_garage_height", value: "Appliances in a private garage sit at least 6 ft above the floor unless protected from vehicle impact", ev: "R", sourceId: "ifgc-2021", checked: CHECKED, status: "verified", note: "IFGC 2021 §305.5 / IRC 2021 §G2408.3" },
-  { id: "code.irc.r315.new_construction", value: "New construction needs CO alarms where the garage opens into the dwelling", ev: "R", sourceId: "irc-2021", checked: CHECKED, status: "verified", note: "IRC 2021 §R315.2.1; adoption varies by jurisdiction" },
-  { id: "code.irc.r315.permitted_work", value: "Permitted alterations, repairs and additions to an existing dwelling need CO alarms", ev: "R", sourceId: "irc-2021", checked: CHECKED, status: "verified", note: "IRC 2021 §R315.2.2; adoption varies by jurisdiction" },
 ];
 export const SOURCES: Record<string, Source> = {};
