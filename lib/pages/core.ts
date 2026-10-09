@@ -41,10 +41,12 @@ export const PAGES: PageEntry[] = [
     h1: "Shop heaters",
     description:
       "Compare 240V electric, vented gas and diesel shop heaters by circuit, vent and CO rule, and see why a torpedo heater doesn't belong in a closed shop.",
-    // "money" / "verdict-first" because the page carries paid links and combustion-safety verdicts: LabLabel then
-    // prints "Human review: full" (BLUEPRINT.md §5.2 -- 100% of buy pages are editor-approved before publishing).
+    // "money" / "verdict-first": the page carries paid links and combustion-safety verdicts, so BLUEPRINT.md §5.2
+    // applies (100% of buy pages are editor-approved before publishing).
     kind: "money",
     layout: "verdict-first",
+    // TODO(corrections branch): add `humanReview: "pending",` here once PageEntry has that field (not in this
+    // branch's lib/pages/types.ts, so adding it now fails typecheck). Until then LabLabel derives its review label from `layout`.
     nav: { group: "heaters", label: "Shop heaters" },
     primaryKeyword: "shop heater",
     volume: 6600,

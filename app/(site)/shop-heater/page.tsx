@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
@@ -43,6 +44,7 @@ const SOURCE_IDS = [
   "ifgc-2021",
   "irc-2021",
   "cz220-manual",
+  "cz798-manual",
   "fuh54-manual",
   "dr975-manual",
   "dr910f-manual",
@@ -125,6 +127,13 @@ function VerdictBlock({ title, verdict, reason = false, conditions = false }: { 
   );
 }
 
+// The point-of-risk line directly under a stamp that sits in a table cell (BLUEPRINT.md §5.3).
+function ScopeLine() {
+  return <span className="mt-1 block text-[11px] leading-4 text-(--color-fg-2)">{SAFETY_SCOPE}</span>;
+}
+
+const MODINE_HDS_URL = "https://www.modinehvac.com/all-products/gas-fired-unit-heaters/hot-dawg-separated-combustion-gas-fired-unit-heater-hds-hdc/";
+
 const classOutput = (id: HeaterClassId) => HEATER_CLASSES[id].outputBtuh;
 const classSrc = (id: HeaterClassId) => `HEATER_CLASSES.${id}.outputBtuh — lib/planner/catalog.ts`;
 // The class's nameplate wattage, recovered from its BTU/h output (W = BTU/h / 3.412), so no wattage is typed by hand.
@@ -135,7 +144,7 @@ type CardProduct = { product: Product; shortName: string };
 // A buy card: the product's own manual warning sits above its button, and the router picks the tagged link.
 // data-buy-group marks the card as one purchase unit for the link audit. An internal rule id such as "(S10)" is
 // hidden from the reader; nothing else in a product's line is changed.
-function ProductCard({ eyebrow, main, note, extra = [] }: { eyebrow: string; main: CardProduct; note: string; extra?: CardProduct[] }) {
+function ProductCard({ eyebrow, main, note, extra = [] }: { eyebrow: string; main: CardProduct; note: ReactNode; extra?: CardProduct[] }) {
   const all = [main, ...extra];
   const link = route(main.product, "site", entry.href)[0];
   const lines = [...new Set(all.flatMap(({ product }) => (product.safetyLine ? [product.safetyLine.text.replace(/\s*\(S\d+\)/g, "")] : [])))];
@@ -219,6 +228,7 @@ export default function Page() {
   const dr910f = findProduct("e-240-10k-generic")!;
   const bigMaxx = findProduct("gas-unit-heater-big-maxx-50")!;
   const hotDawg = findProduct("gas-unit-heater-hot-dawg-45")!;
+  const dieselUnit = findProduct("diesel-heater-8kw")!;
 
   const sources = SOURCE_IDS.map((id) => getSource(id)).filter((s): s is NonNullable<typeof s> => s !== null);
 
@@ -229,8 +239,8 @@ export default function Page() {
         <Num v={c5k.breakerA} unit="A" ev="C" src="circuitFor(5000, 240, 240).breakerA — lib/planner/electrical.ts" /> breaker and{" "}
         <Num v={c5k.wireNM} ev="C" src="circuitFor(5000, 240, 240).wireNM — lib/planner/electrical.ts" /> copper wire. A vented gas unit
         heater starts at <Output v={gasIn[0]} src={classSrc("g_vented_unit")} ev="E" /> of fuel input. It needs a licensed gas fitter and a
-        flue to the outdoors. A diesel air heater suits a detached shop, and only while you are in it. BayHeat does not recommend a
-        torpedo heater in a closed shop.
+        flue to the outdoors. A diesel air heater suits only a detached shop with its exhaust and intake outdoors, and only while you
+        are in it. BayHeat does not recommend a torpedo heater in a closed shop.
       </AnswerBlock>
       <p className="text-sm">
         <a href="#buy">Jump to the heaters ↓</a>
@@ -241,7 +251,7 @@ export default function Page() {
         of your building. The best shop heater is the one your building can feed: a circuit, a gas line or an outdoor exhaust.
       </p>
       <p>
-        Size it before you shop. BayHeat&apos;s example 24×24 ft {EXAMPLE_A_INPUT.attached ? "attached" : "detached"} 2-car garage in
+        Size it before you shop. BayHeat&apos;s example {EXAMPLE_A_INPUT.width}×{EXAMPLE_A_INPUT.depth} ft {EXAMPLE_A_INPUT.attached ? "attached" : "detached"} 2-car garage in
         Chicago needs <Output v={example.heating.qSize} src="plan(EXAMPLE_A_INPUT).heating.qSize — lib/planner/plan.ts" ev="C" /> to hold{" "}
         <Num v={EXAMPLE_A_INPUT.targetTemp} unit="°F" ev="E" src="EXAMPLE_A_INPUT.targetTemp — lib/planner/fixtures.ts" /> on a design
         day. Your shop will differ with its insulation, doors and climate. Run the{" "}
@@ -273,6 +283,7 @@ export default function Page() {
               </td>
               <td className="py-3">
                 <Stamp verdict={electricVerdict} />
+                <ScopeLine />
                 <span className="mt-1 block text-xs text-(--color-fg-2)">
                   For {kw5} kW on a {c5k.breakerA} A circuit, with the breaker and wire in the table below. Bigger units need bigger circuits.
                 </span>
@@ -294,6 +305,7 @@ export default function Page() {
               <td className="py-3 pr-3">A natural gas line or bulk propane tank, a flue to the outdoors, and a licensed gas fitter.</td>
               <td className="py-3">
                 <Stamp verdict={gasVerdict} />
+                <ScopeLine />
                 <span className="mt-1 block text-xs text-(--color-fg-2)">
                   Licensed install, burner height, CO protection, and nothing flammable stored.
                 </span>
@@ -309,9 +321,10 @@ export default function Page() {
               <td className="py-3 pr-3">Exhaust and intake routed outdoors, in a detached building, while you are in the shop.</td>
               <td className="py-3">
                 <Stamp verdict={dieselDetached} />
-                <span className="mt-1 block text-xs text-(--color-fg-2)">Detached, and only while you are in it.</span>
+                <ScopeLine />
+                <span className="mt-1 block text-xs text-(--color-fg-2)">Detached, exhaust outdoors, and only while you are in it.</span>
                 <span className="mt-1 block text-xs text-(--color-fg-2)">
-                  Attached: <Stamp verdict={dieselAttached} /> Left running: <Stamp verdict={dieselUnattended} />
+                  Attached: {dieselAttached.stamp}. Left running: {dieselUnattended.stamp}. Details below.
                 </span>
               </td>
             </tr>
@@ -325,6 +338,7 @@ export default function Page() {
               <td className="py-3 pr-3">A flue, which it does not have: all of its exhaust stays in the room.</td>
               <td className="py-3">
                 <Stamp verdict={torpedoVerdict} />
+                <ScopeLine />
                 <span className="mt-1 block text-xs text-(--color-fg-2)">Any closed shop or garage.</span>
               </td>
             </tr>
@@ -332,19 +346,24 @@ export default function Page() {
         </table>
       </div>
       <p className="text-sm text-(--color-fg-2)">
-        Verdicts assume a detached shop, an attended heater, a listed unit and nothing flammable stored. {SAFETY_SCOPE}
+        Verdicts assume a detached shop, an attended heater and nothing flammable stored, with a listed electric or gas unit.
       </p>
 
       <SafetyCallout>
         <p className="font-medium text-(--color-fg)">Check what the shop stores before you pick a type.</p>
         <p className="mt-2">
-          The electric makers&apos; manuals say not to use their heaters where gasoline, paint or flammable liquids are used or stored. The
-          Big Maxx manual adds solvents, paint thinner and dust. If your shop holds finishes or fuel cans, move them out first. Otherwise, heat the
-          room another way. Run your own case through <Link href="/can-i-run-it">Can I run it?</Link>
+          The manuals on this page rule out gasoline, paint and other flammable liquids. Several also rule out dust. The CZ220 manual allows
+          indoor use only, in a dry place. It must be free of gasoline, paint, flammable liquids or combustible dust or materials. The Big
+          Maxx manual rules out dust as well as gasoline, solvents and paint thinner. VEVOR&apos;s diesel manual says its heater shall not be
+          used in places with flammable vapor or dust.
+        </p>
+        <p className="mt-2">
+          If your shop holds finishes or fuel cans, move them out first. Otherwise, heat the room another way. Run your own case through{" "}
+          <Link href="/can-i-run-it">Can I run it?</Link>
         </p>
       </SafetyCallout>
 
-      <h2 id="electric">240 V electric unit heater: it needs a circuit, nothing else</h2>
+      <h2 id="electric">240 V electric unit heater: it needs a circuit and a shop free of flammables and dust</h2>
       <p>
         An electric unit heater has no flame, no flue and no fuel line. An electrician wires it to its own 240 V circuit. The rule, in NEC
         2023 §424.4(B): <Num f="code.nec.424_4_b" />.
@@ -364,15 +383,15 @@ export default function Page() {
           <tbody>
             {(
               [
-                ["e_240_5k", e5k, c5k, "S"],
-                ["e_240_7k5", e7k5, c7k5, "S"],
-                ["e_240_10k", e10k, c10k, "C"],
+                ["e_240_5k", e5k, c5k, "cz220.btuh.high"],
+                ["e_240_7k5", e7k5, c7k5, "dr975.btuh"],
+                ["e_240_10k", e10k, c10k, null],
               ] as const
-            ).map(([id, watts, c, ev], i) => (
+            ).map(([id, watts, c, fact], i) => (
               <tr key={id} className={i < 2 ? "border-b border-(--color-line)/50" : undefined}>
                 <td className="py-3 pr-3 text-(--color-fg)">240 V, {kw(watts / 1000)} kW</td>
                 <td className="py-3 pr-3 font-mono">
-                  <Output v={classOutput(id)[1]} src={classSrc(id)} ev={ev} />
+                  {fact ? <Num f={fact} format={pair} /> : <Output v={classOutput(id)[1]} src={classSrc(id)} ev="C" />}
                 </td>
                 <td className="py-3 pr-3 font-mono">
                   <Num v={c.amps} unit="A" ev="C" src={`circuitFor(${watts}, 240, 240).amps`} />
@@ -401,18 +420,24 @@ export default function Page() {
         </IfVerified>
         The manual for the unit you buy has the last word on wire.
       </p>
+      <p>BayHeat&apos;s verdict tool, asked about one case:</p>
+      <VerdictBlock title={`240 V electric, ${kw5} kW on a ${c5k.breakerA} A circuit`} verdict={electricVerdict} conditions />
+      <p className="text-sm text-(--color-fg-2)">
+        A hardwired heater has no plug, so your electrician applies the grounding line to its wiring. The tool covers this one case only.
+        The 7.5 kW and 10 kW units need the larger circuits in the table.
+      </p>
       <p>
         Check the panel too. BayHeat&apos;s rule of thumb: before you add a large 240 V circuit to a panel, ask your electrician for a load
         calculation. NEC 2023 §220.83 is one method. Do it before you buy, not after.
       </p>
       <p>
-        Check the supply voltage. Your shop may be fed 208 V instead of 240 V. Then a {e5k.toLocaleString("en-US")} W 240 V heater, like
+        Check the supply voltage. Your shop may be fed 208 V instead of 240 V. Then a <Num f="fuh54.watts.high" /> 240 V heater, like
         the Fahrenheat FUH54, draws only about{" "}
         <Num
           f="fuh54.watts_208v"
           format={(v) => `${Number(v).toLocaleString("en-US")} W (${btuh((Number(v) * HEAT_CONTENT.btuPerKwh) / 1000)} BTU/h)`}
         />
-        . That is less than the <Num f="cz220.btuh.high" format={pair} /> it makes on 240 V.
+        . That is less than the <Num f="fuh54.btuh.high" format={pair} /> it makes on 240 V.
       </p>
       <p>
         These figures also assume single-phase power. A three-phase unit heater needs different math, so have an electrician confirm
@@ -422,7 +447,7 @@ export default function Page() {
       <h3>Don&apos;t buy a plug-in heater as your shop heater</h3>
       <p>
         A <Num f="cz798.watts" /> plug-in heater draws <Num f="circuit.1500w120v.amps" /> and puts out at most{" "}
-        <Output v={classOutput("e_port_1500")[1]} src={classSrc("e_port_1500")} ev="S" />. That warms one workbench, not a room. NEC 2023
+        <Output v={classOutput("e_port_1500")[1]} src={classSrc("e_port_1500")} ev="C" />. That warms one workbench, not a room. NEC 2023
         §210.23(A)(1) sets the limit for a plug-in appliance. <Num f="code.nec.210_23_a_1" />. The{" "}
         <Link href="/portable-garage-heater">portable heater page</Link> shows what a garage outlet can run.
       </p>
@@ -453,16 +478,17 @@ export default function Page() {
       </p>
       <p>
         Dust changes the pick. A separated-combustion unit, such as the Modine Hot Dawg HDS below, draws its combustion air from outside the
-        room. That keeps dusty shop air out of the burner. It does not make a flammable atmosphere safe.
+        room. <a href={MODINE_HDS_URL} rel="noopener noreferrer" target="_blank">Modine&apos;s HDS product page</a> says it is
+        &ldquo;Designed for environments where dust, dirt, or fumes are present.&rdquo; That keeps dusty shop air out of the burner.
       </p>
       <p>
-        No heater on this page is rated for a solvent or gasoline atmosphere. The Modine manual&apos;s DANGER line: &ldquo;Appliances must not be
-        installed where they may be exposed to a potentially explosive or flammable atmosphere.&rdquo; Store solvents, finishes and fuel somewhere
-        else, or ventilate the room well before the heater runs.
+        It does not make a flammable atmosphere safe. No heater on this page is rated for a solvent or gasoline atmosphere. The Modine
+        manual&apos;s DANGER line: &ldquo;Appliances must not be installed where they may be exposed to a potentially explosive or flammable
+        atmosphere.&rdquo; Store solvents, finishes and fuel somewhere else, and don&apos;t run the heater while you use them.
       </p>
       <Callout variant="fix">
-        Don&apos;t buy the Big Maxx for a dusty woodshop. The safety line on file for it says never where gasoline, solvents, paint
-        thinner or dust are present. It suits a clean shop or garage.
+        Don&apos;t buy the Big Maxx for a dusty woodshop. The Big Maxx manual says never where gasoline, solvents, paint thinner or dust are
+        present. It suits a clean shop or garage.
       </Callout>
       <p>
         Gas cylinders alone don&apos;t count as a fuel supply here. See the <Link href="/propane-heater-for-garage">propane page</Link>{" "}
@@ -472,9 +498,14 @@ export default function Page() {
       <h2 id="diesel">Diesel air heater: detached shop only, and only while you&apos;re in it</h2>
       <p>
         A diesel air heater is a small parking-heater-style unit. Its output runs from{" "}
-        <OutputRange lo={classOutput("diesel_air")[0]} hi={classOutput("diesel_air")[1]} src={classSrc("diesel_air")} ev="E" />. Even the top
-        end only matches a {kw5} kW electric heater. It carries no UL or CSA listing for building heat.
+        <OutputRange lo={classOutput("diesel_air")[0]} hi={classOutput("diesel_air")[1]} src={classSrc("diesel_air")} ev="E" />. In
+        BayHeat&apos;s estimate, even the top end only matches a {kw5} kW electric heater. Makers&apos; labels can claim more, so read the
+        rated output in the manual. It carries no UL or CSA listing for building heat.
       </p>
+      <SafetyCallout>
+        <p>{dieselUnit.safetyLine?.text}</p>
+        <p className="mt-2">The same manual says the heater shall not be used in places with flammable vapor or dust.</p>
+      </SafetyCallout>
       <p>Every one of these has to hold at once, in a detached shop with the exhaust and intake outdoors:</p>
       <VerdictBlock title="Detached shop, attended" verdict={dieselDetached} conditions />
       <VerdictBlock title="Attached to a house" verdict={dieselAttached} reason />
@@ -493,13 +524,12 @@ export default function Page() {
       <VerdictStamp verdict={torpedoVerdict} />
       <p>
         In a closed shop the exhaust has nowhere to go. BayHeat points you to a 240 V electric unit heater, a vented gas unit heater or a{" "}
-        <Link href="/heat-pump-mini-split-for-garage">mini-split heat pump</Link>. A diesel air heater is a narrower option: detached shop
-        only, and only while you are in it. Check any heater with <Link href="/can-i-run-it">Can I run it?</Link>
+        <Link href="/heat-pump-mini-split-for-garage">mini-split heat pump</Link>. Check any heater with <Link href="/can-i-run-it">Can I run it?</Link>
       </p>
 
       <h2 id="cost">What each type costs to run</h2>
       <p>
-        The table gives the same heat from each fuel: <Output v={refBtuh} src={classSrc("e_240_5k")} ev="S" /> for one hour. That is the
+        The table gives the same heat from each fuel: <Num f="cz220.btuh.high" format={pair} /> for one hour. That is the
         full output of a {kw5} kW electric heater.
       </p>
       <p>
@@ -559,7 +589,14 @@ export default function Page() {
           eyebrow={`240 V · ${kw5} kW · ${c5k.breakerA} A`}
           main={{ product: cz220, shortName: "CZ220" }}
           extra={[{ product: fuh54, shortName: "FUH54" }]}
-          note={`A ${kw5} kW ceiling heater on its own circuit. The FUH54 is the same class and sits in a higher price class.`}
+          note={
+            <>
+              A {kw5} kW ceiling heater on its own circuit. The FUH54 is the same class in a higher price class. The CZ220 manual&apos;s maximum
+              ceiling height is <Num f="cz220.max_ceiling_ft" />, and BayHeat&apos;s example garage has a{" "}
+              <Num v={EXAMPLE_A_INPUT.height} unit="ft" ev="E" src="EXAMPLE_A_INPUT.height — lib/planner/fixtures.ts" /> ceiling. For a taller
+              shop, read the FUH54 manual&apos;s mounting height first. The CZ220 manual also asks for a dry place free of combustible dust.
+            </>
+          }
         />
         <ProductCard
           eyebrow={`240 V · ${kw7k5} kW · ${c7k5.breakerA} A`}
