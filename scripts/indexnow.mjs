@@ -12,26 +12,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { PAGES } from "../lib/pages/index.ts";
 
 const HOST = "bayheatguide.com";
 const ORIGIN = `https://${HOST}`;
 const ENDPOINT = "https://api.indexnow.org/indexnow";
 
-/** Pages with Associates links or a recent change worth recrawl. */
-const PATHS = [
-  "/",
-  "/electric-garage-heater",
-  "/240v-garage-heater",
-  "/ceiling-mount-garage-heater",
-  "/best-wall-mount-garage-heaters",
-  "/infrared-garage-heater",
-  "/portable-garage-heater",
-  "/garage-heaters",
-  "/cost-to-heat-a-garage",
-  "/garage-heater-size",
-  "/garage-heater-calculator",
-  "/can-i-run-it",
-];
+// Every indexable page in the registry (lib/pages), the same set sitemap.xml lists, so a new page is submitted
+// without editing this file. IndexNow takes up to 10,000 URLs per call.
+const PATHS = PAGES.filter((p) => p.indexable).map((p) => p.href);
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
