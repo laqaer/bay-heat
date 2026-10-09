@@ -79,7 +79,7 @@ export const PRODUCTS: Product[] = [
     priceClassChecked: "2026-09-25",
     specFactIds: [],
     safetyLine: {
-      text: "Licensed gas fitter and permit required. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor (code minimum for burner and ignition: 18 in, IFGC 2021 §305.3). Never where gasoline, solvents, paint thinner or dust are present.",
+      text: "Licensed gas fitter and permit required. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor. Code minimum for burner and ignition: 18 in (IFGC 2021 §305.3). Never where gasoline, solvents, paint thinner or dust are present.",
       ev: "S",
       sourceId: "big-maxx-manual",
     },
