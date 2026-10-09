@@ -112,7 +112,8 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
             BayHeat cost assumption: median of manufacturer list and Home Depot/Lowe&apos;s prices checked 2026-09; not a live or Amazon price.
           </p>
           <p className="mt-1 text-sm text-(--color-fg-2)">
-            Circuit: {result.circuits.forSize.breakerA}A / {result.circuits.forSize.wireNM} today.
+            Circuit: {result.circuits.forSizeCount > 1 ? `${result.circuits.forSizeCount} × ` : ""}
+            {result.circuits.forSize.breakerA}A / {result.circuits.forSize.wireNM} today.
           </p>
           <FixCart measures={result.fixFirst.measures} doors={result.inputsEcho.garageDoors} page={page} />
         </section>
@@ -232,6 +233,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
         <h2 className="text-2xl font-bold text-(--color-fg)">Power it</h2>
         <div className="mt-4 border border-(--color-line) bg-(--color-surface) p-5">
           <p className="font-mono text-sm text-(--color-fg)">
+            {result.circuits.forSizeCount > 1 ? `${result.circuits.forSizeCount} circuits, each: ` : ""}
             {result.circuits.forSize.breakerA}A breaker · {result.circuits.forSize.wireNM} (NM) or {result.circuits.forSize.wireTHHN} (THHN) ·{" "}
             {amps(result.circuits.forSize.amps)}
           </p>

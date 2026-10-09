@@ -8,7 +8,7 @@ import { heatLossDesign, freeFloatTemp } from "./heatLoss.ts";
 import { hddAtBase } from "./climate.ts";
 import { lightCapacitance, simulateSession } from "./warmup.ts";
 import { balancePoint, seasonalLoadContinuous, heatPumpSeasonal } from "./seasonal.ts";
-import { circuitFor } from "./electrical.ts";
+import { circuitFor, circuitsForLoad } from "./electrical.ts";
 import { costsForSeasonalLoad } from "./fuels.ts";
 import { rankSystems, type RecommendContext } from "./recommend.ts";
 import { insulateFirst, fixFirst, bundleCheapMeasures, type RoiContext } from "./roi.ts";
@@ -18,7 +18,7 @@ import { serialFor } from "./serial.ts";
 import { HEATER_CLASSES } from "./catalog.ts";
 import { WALL_U } from "./constants.ts";
 
-const MODEL_VERSION = "1.0.0";
+const MODEL_VERSION = "1.0.1";
 const SEASON_MONTH_NAMES = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
 function houseCouplingUa(input: GarageInput, envelope: ResolvedEnvelope): number {
@@ -155,7 +155,10 @@ export function plan(input: GarageInput): PlannerResult {
   if (input.ceilingIns === "unknown") assumptions.push(`Ceiling insulation unknown -- assumed ${envelope.ceilingIns} [A]`);
   if (input.tightness === "unknown") assumptions.push(`Tightness unknown -- assumed ${envelope.tightness} (${heatBand.unknowns} field(s) still uncertain) [A]`);
 
-  const forSizeEta = etaFor(warmupClassId);
+  // The "Power it" circuit is the one an electric-resistance heater sized to the whole load needs. It used to
+  // divide by the warm-up class's efficiency, which for a gas or diesel top pick turned fuel INPUT into electric
+  // watts (and threw past an 80 A breaker); combustion units' own blower circuits come from their nameplates.
+  const forSize = circuitsForLoad(heatLoss.qSize / 3.412);
 
   return {
     modelVersion: MODEL_VERSION,
@@ -184,11 +187,17 @@ export function plan(input: GarageInput): PlannerResult {
     },
     warmup: { classId: warmupClassId, kw: Math.round((warmupCapacityBtuh / 3412) * 10) / 10, janMinutes: janSim.minutesToTarget, curve: janSim.curve },
     circuits: {
-      forSize: circuitFor(heatLoss.qSize / forSizeEta / 3.412, 240, 240),
+      forSize: forSize.spec,
+      forSizeCount: forSize.count,
       user: input.circuit !== "unknown" ? circuitFor(circuitVolts(circuit) * circuitAmps(circuit) * 0.8, circuitVolts(circuit), circuitVolts(circuit)) : undefined,
       fits: top ? Boolean(top.circuit) : false,
       panelCheck: input.panelAmps === "unknown" ? "unknown" : input.panelAmps === 100 && heatLoss.qSize > 20000 ? "load_calc" : "ok",
-      notes: input.circuit === "unknown" ? ["Circuit not yet known -- the planner will ask in step 5."] : [],
+      notes: [
+        ...(forSize.count > 1
+          ? [`No single heater circuit covers this load: it takes ${forSize.count} heaters, each on its own circuit as above, a fuel-fired heater, or fixing the envelope first.`]
+          : []),
+        ...(input.circuit === "unknown" ? ["Circuit not yet known -- the planner will ask in step 5."] : []),
+      ],
     },
     usage: { mode: input.usage.mode, seasonMonths, tBal, hddAtBal },
     costs,

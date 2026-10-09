@@ -10,7 +10,7 @@ export const DESCRIPTOR = "Garage Climate Lab";
 export const TAGLINE = "Every number shows its work.";
 export const PUBLISHER = "Laqaer Products";
 export const LOCALE = "en-US";
-export const MODEL_VERSION = "1.0.0";
+export const MODEL_VERSION = "1.0.1";
 export const PRICES_AS_OF = "2026-09";
 
 export const DESCRIPTION =

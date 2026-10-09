@@ -16,7 +16,7 @@ test("plan() matches BLUEPRINT.md §0.2's headline numbers for example A", () =>
   near(r.heating.qSize, 31742, 2);
   assert.equal(r.heating.grade, "D");
   near(r.heating.kwSize, 9.3, 3);
-  assert.equal(r.modelVersion, "1.0.0");
+  assert.equal(r.modelVersion, "1.0.1");
 });
 
 test("plan()'s code round-trips through decode() to the same inputsEcho (modulo codec-domain normalization)", () => {
@@ -136,4 +136,34 @@ test("plan() in a climate warmer than the target has no design heating load and 
   assert.equal(r.fixFirst, null);
   assert.ok(r.heating.items.every((i) => i.btuh === 0 && i.pct === 0));
   assert.ok(r.heating.uaExt > 0, "the raw UA is still computed");
+});
+
+// Regression (2026-10-09): plan() threw "No standard breaker covers N A" for about 1 in 5 realistic garages -- any
+// load past one 80 A circuit, and gas/diesel top picks whose fuel input was sized as electric watts -- so the
+// planner page broke for exactly the big, leaky garages most in need of a heater.
+test("plan() sizes very large loads as several identical circuits instead of throwing", async () => {
+  const { PRESET_DEFAULTS } = await import("./presets.ts");
+  const p = PRESET_DEFAULTS["3car"];
+  const leaky = {
+    ...EXAMPLE_A_INPUT,
+    preset: "3car" as const,
+    width: p.width,
+    depth: p.depth,
+    height: p.height,
+    garageDoors: p.garageDoors.map((d) => ({ ...d, type: "steel_single" as const })),
+    wallType: "uninsulated_finished" as const,
+    ceilingIns: "drywall_uninsulated" as const,
+    tightness: "leaky" as const,
+    stationId: "MN-minneapolis",
+    state: "MN",
+  };
+  for (const fuels of [["electric"], ["electric", "natural_gas"]] as const) {
+    const r = plan({ ...leaky, fuels: [...fuels], ventingPossible: true });
+    assert.ok(r.circuits.forSizeCount > 1, `expected more than one circuit for ${Math.round(r.heating.qSize)} BTU/h`);
+    assert.ok(r.circuits.forSize.breakerA <= 80);
+    // Each circuit carries an equal share of the electric-resistance load (eta 1), whatever the top pick burns.
+    const totalWatts = r.circuits.forSize.watts * r.circuits.forSizeCount;
+    assert.ok(Math.abs(totalWatts - r.heating.qSize / 3.412) <= r.circuits.forSizeCount, `${totalWatts} W vs ${r.heating.qSize / 3.412} W`);
+    assert.ok(r.circuits.notes.some((n) => n.startsWith("No single heater circuit")));
+  }
 });

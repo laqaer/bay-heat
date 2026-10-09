@@ -66,6 +66,16 @@ export function circuitFor(watts: number, voltsSupply: 120 | 208 | 240, voltsRat
   };
 }
 
+// The circuit (or circuits) an electric-resistance heater sized to a whole load needs. One 80 A breaker, the top
+// of STANDARD_BREAKERS, carries 80 / 1.25 = 64 A continuous (15,360 W at 240 V). A bigger load -- a leaky 3-car in
+// Minneapolis is about 25 kW -- is not one heater on one breaker; it is two or more heaters, each on its own
+// circuit, so the load is split evenly across the fewest identical circuits that fit instead of throwing.
+const MAX_CIRCUIT_WATTS_240 = (STANDARD_BREAKERS[STANDARD_BREAKERS.length - 1] / 1.25) * 240;
+export function circuitsForLoad(watts: number): { spec: CircuitSpec; count: number } {
+  const count = Math.max(1, Math.ceil(watts / MAX_CIRCUIT_WATTS_240));
+  return { spec: circuitFor(watts / count, 240, 240), count };
+}
+
 // A combustion class's `circuit` field (catalog.ts, e.g. g_vented_unit's 120V15A) is the manufacturer's fixed
 // blower/ignition-control rating -- the electrical load that actually exists on a gas- or oil-fired unit --
 // not something to re-derive from the class's heat OUTPUT the way circuitFor() sizes an electric-resistance
