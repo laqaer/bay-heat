@@ -110,7 +110,7 @@ export function SiteFooter() {
       <div className="border-t border-(--color-line)">
         <div className="mx-auto max-w-[1392px] space-y-2 px-4 py-6 text-xs leading-5 text-(--color-fg-2) sm:px-6">
           <p className="font-mono text-[11px] uppercase tracking-[0.1em]">
-            Model v{MODEL_VERSION} · Prices as of {PRICES_AS_OF} · Last correction{" "}
+            Model v{MODEL_VERSION} · Prices checked {PRICES_AS_OF} · Last correction{" "}
             <Link href="/lab/notebook" className="underline underline-offset-2 hover:text-(--color-fg)">
               {LAST_CORRECTION}
             </Link>

@@ -10,11 +10,13 @@ export const DESCRIPTOR = "Garage Climate Lab";
 export const TAGLINE = "Every number shows its work.";
 export const PUBLISHER = "Laqaer Products";
 export const LOCALE = "en-US";
-export const MODEL_VERSION = "1.0.1";
+export const MODEL_VERSION = "1.0.2";
 // Date of the newest dated line in the Lab notebook's log (app/(site)/lab/notebook). The site footer prints it;
 // update both together whenever a correction ships.
 export const LAST_CORRECTION = "2026-10-09";
-export const PRICES_AS_OF = "2026-09";
+// When the energy prices were last checked against EIA (the footer says "Prices checked"; each price's own period is
+// in lib/planner/prices.ts ASOF, e.g. natural gas is the 2025 annual average).
+export const PRICES_AS_OF = "2026-10";
 
 export const DESCRIPTION =
   "BayHeat is the independent garage climate lab. Our open model sizes the heater for your garage, grades every number by where it came from, and tells you plainly when a heater will trip your breaker or fill your garage with carbon monoxide.";
