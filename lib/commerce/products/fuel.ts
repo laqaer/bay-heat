@@ -79,7 +79,7 @@ export const PRODUCTS: Product[] = [
     priceClassChecked: "2026-09-25",
     specFactIds: [],
     safetyLine: {
-      text: "Licensed gas fitter and permit required. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor. Code minimum for burner and ignition: 18 in (IFGC 2021 §305.3). Never where gasoline, solvents, paint thinner or dust are present.",
+      text: "BayHeat advises a licensed gas fitter and the permit your town requires. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor, stricter than the code minimums (IFGC 2021 §305.3 and §305.5). Never where gasoline, solvents, paint thinner or dust are present.",
       ev: "S",
       sourceId: "big-maxx-manual",
     },
@@ -96,7 +96,7 @@ export const PRODUCTS: Product[] = [
     // Manual 6-584.12 pp. 2 and 4 (DANGER). Separated combustion keeps dusty room air out of the burner; it is not a
     // licence for a solvent or gasoline atmosphere, which an earlier version of this line implied.
     safetyLine: {
-      text: "Licensed gas fitter and permit required. Manual: \u201cAppliances must not be installed where they may be exposed to a potentially explosive or flammable atmosphere.\u201d Separated combustion takes burner air from outdoors; it does not make a room with solvent or gasoline vapor safe.",
+      text: "BayHeat advises a licensed gas fitter and the permit your town requires. Manual: \u201cAppliances must not be installed where they may be exposed to a potentially explosive or flammable atmosphere.\u201d Separated combustion takes burner air from outdoors; it does not make a room with solvent or gasoline vapor safe.",
       ev: "S",
       sourceId: "hot-dawg-hds-manual",
     },

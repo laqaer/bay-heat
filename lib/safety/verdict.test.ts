@@ -268,3 +268,12 @@ test("vented gas with flammables stored carries the manuals' move-them-out condi
   const clear = verdictFor("vented_gas", { ...BASE, attached: false, cylinder: undefined, flammablesStored: "no" });
   assert.ok(!clear.conditions.some((c) => /rule out installing where the air may be flammable/.test(c.text)));
 });
+
+// Rule 22 for vented gas: no listing mark -> NO-GO; an unknown mark -> the listing condition.
+test("vented gas without a listing mark is NO-GO; an unknown mark adds the listing condition", () => {
+  const unmarked = verdictFor("vented_gas", { ...BASE, attached: false, cylinder: undefined, ulListed: "no" });
+  assert.equal(unmarked.verdict, "NO_GO");
+  const unknown = verdictFor("vented_gas", { ...BASE, attached: false, cylinder: undefined, ulListed: "unknown" });
+  assert.equal(unknown.verdict, "GO_IF");
+  assert.ok(unknown.conditions.some((c) => /listing mark/.test(c.text)));
+});

@@ -101,8 +101,9 @@ export default function Page() {
 
       <h2>Fuel Cost Meter: every system, one garage, today&apos;s prices</h2>
       <p>
-        This table runs the same 2-car garage, held at 55°F on the coldest day of a Chicago winter, through all six
-        systems at Illinois&apos; own energy prices ({result.prices.asOf.elec} electricity, {result.prices.asOf.diesel} diesel).
+        This table runs the same 2-car garage, held at 55°F on a Chicago design day (the 99% design temperature),
+        through all six systems at Illinois energy prices ({result.prices.asOf.elec} electricity; diesel is the
+        Midwest regional average, {result.prices.asOf.diesel}).
         The <Link href="/garage-heater-calculator">calculator</Link> re-runs this exact math against your garage&apos;s size and
         your own state&apos;s prices instead of Illinois&apos; — the numbers below are one example, not a national average.
       </p>

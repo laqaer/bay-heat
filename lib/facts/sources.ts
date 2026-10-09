@@ -34,17 +34,17 @@ export const SOURCES: Record<string, Source> = {
   },
   "cz220-manual": {
     id: "cz220-manual",
-    title: "Comfort Zone CZ220 ceiling heater owner's manual",
-    publisher: "Comfort Zone / Home Depot",
-    url: "https://images.thdstatic.com/catalog/pdfImages/09/09b17c0e-owners-manual.pdf",
-    retrieved: "2026-09-25",
+    title: "Comfort Zone CZ220 Series ceiling mounted heater owner's manual",
+    publisher: "Comfort Zone (Lowe's copy)",
+    url: "https://pdf.lowes.com/productdocuments/a293375b-caf2-4aa6-b3fe-6ff954f52323/60559140.pdf",
+    retrieved: "2026-10-09",
   },
   "fuh54-manual": {
     id: "fuh54-manual",
-    title: "Fahrenheat FUH54/FUH54C owner's manual",
+    title: "Fahrenheat FUH54 / FUH724 unit heater specification sheet (ZBL-FUH54)",
     publisher: "Marley Engineered Products",
-    url: "https://www.marleymep.com/products/fuh54",
-    retrieved: "2026-09-25",
+    url: "https://marleymep.com/wp-content/uploads/zbl-fuh54.pdf",
+    retrieved: "2026-10-09",
   },
   "dr975-manual": {
     id: "dr975-manual",
@@ -73,6 +73,20 @@ export const SOURCES: Record<string, Source> = {
     publisher: "Kidde",
     url: "https://www.shareddocs.com/hvac/docs/2001/Public/03/Data_Sheet_Kidde_C3010_ENG.pdf",
     retrieved: "2026-09-30",
+  },
+  "epa-608": {
+    id: "epa-608",
+    title: "Section 608 of the Clean Air Act: stationary refrigeration and air conditioning",
+    publisher: "US Environmental Protection Agency",
+    url: "https://www.epa.gov/section608",
+    retrieved: "2026-10-09",
+  },
+  "eia-therm-faq": {
+    id: "eia-therm-faq",
+    title: "How do I convert natural gas prices in dollars per Mcf to dollars per therm? (100 ft³ = 103,700 Btu = 1.037 therms)",
+    publisher: "US Energy Information Administration",
+    url: "https://www.eia.gov/tools/faqs/faq.php?id=45",
+    retrieved: "2026-10-09",
   },
   "hot-dawg-hds-manual": {
     id: "hot-dawg-hds-manual",
@@ -104,10 +118,12 @@ export const SOURCES: Record<string, Source> = {
   },
   "cz798-manual": {
     id: "cz798-manual",
-    title: "Comfort Zone CZ798 milkhouse heater owner's manual",
-    publisher: "Comfort Zone",
-    url: "https://comfortzoneproducts.com/products/cz798",
-    retrieved: "2026-09-25",
+    // The US product page now 404s; the CZ798CA2 manual (the same CZ798 milkhouse heater, sold in Canada) is the
+    // live copy: 1,500 W / 12.5 A, attended use only, not where flammable liquids are used or stored.
+    title: "Comfort Zone CZ798CA2 milkhouse heater instruction manual (Canadian Tire copy)",
+    publisher: "Comfort Zone / Canadian Tire",
+    url: "https://media-www.canadiantire.ca/manual/product/0438409/im-cz798ca2-043-8409-milkhouseheater-mastercraft-english-2020-hires-5383ab15-0aa3-42fe-9c0f-3bf055285061.pdf",
+    retrieved: "2026-10-09",
   },
   "eia-electric-power-monthly": {
     id: "eia-electric-power-monthly",

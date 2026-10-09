@@ -84,7 +84,7 @@ export default function Page() {
   return (
     <ReportPage entry={entry} sources={sources}>
       <AnswerBlock>
-        At Illinois&apos; own {prices.asOf.diesel} diesel price and {prices.asOf.elec} electricity price, a{" "}
+        At the Midwest regional {prices.asOf.diesel} diesel price and Illinois&apos; {prices.asOf.elec} electricity price, a{" "}
         <Num v={repOutputBtuh} unit="BTU/h" round={100} ev="S" src="HEATER_CLASSES.diesel_air.outputBtuh — lib/planner/catalog.ts" />{" "}
         diesel air heater costs about <Cost amount={dieselPerHour} per="hr" /> to run flat out, against{" "}
         <Cost amount={electricPerHour} per="hr" /> for an electric resistance heater putting out the same heat.

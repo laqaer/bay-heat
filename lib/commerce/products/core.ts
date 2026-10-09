@@ -71,7 +71,7 @@ export const PRODUCTS: Product[] = [
     priceClass: "$",
     priceClassChecked: "2026-09-25",
     specFactIds: ["cz798.watts", "cz798.amps"],
-    safetyLine: { text: "Sole load on the circuit. No extension cords or power strips.", ev: "S", sourceId: "cz798-manual" },
+    safetyLine: { text: "Sole load on the circuit. No extension cords or power strips. Manual: attended use only, never while you're away or asleep, and not where gasoline, paint or flammable liquids are used or stored.", ev: "S", sourceId: "cz798-manual" },
   },
   {
     id: "dr975-7k5-shop",

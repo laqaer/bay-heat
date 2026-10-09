@@ -1,9 +1,15 @@
 import type { PriceSet } from "./types.ts";
 import { RAW_PRICES, US_AVG } from "./prices-data.ts";
 
-// EIA-sourced prices as of Sept 2026: electricity Jul-2026 (Electric Power Monthly 5.6.B), natural gas the
-// 2026 annual residential figure, propane/diesel the 2026-09-21 weekly release (planner-engineering.md §9.4-9.5).
-const ASOF = { elec: "2026-07", ng: "2026-01", propane: "2026-09", diesel: "2026-09-21" };
+// EIA-sourced prices (planner-engineering.md §9.4-9.5), labelled by the period each value actually covers --
+// re-checked against EIA on 2026-10-09 by an adversarial fact-check:
+// - electricity: year-to-date through Jul-2026 (Electric Power Monthly 5.6.B);
+// - natural gas: the 2025 ANNUAL residential average (EIA's newest annual column; IL $11.25/Mcf = $1.086/therm),
+//   previously mislabelled "2026-01";
+// - propane: the weekly residential series' last reading of the 2025-26 heating season, 2026-03-30 (the series
+//   resumed 2026-10-05; refreshing to it is a data-desk task), previously mislabelled "2026-09";
+// - diesel: the 2026-09-21 weekly release -- a PADD REGIONAL average, not a per-state price.
+const ASOF = { elec: "2026-07", ng: "2025 annual", propane: "2026-03-30", diesel: "2026-09-21" };
 const SOURCES = ["eia-electric-power-monthly", "eia-ng-annual", "eia-propane-weekly", "eia-diesel-weekly"];
 
 function toPriceSet(state: string, row: (typeof RAW_PRICES)[string]): PriceSet {

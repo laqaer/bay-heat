@@ -21,8 +21,8 @@ function isYes(v: Situation["flammablesStored"] | Situation["ulListed"]): boolea
 }
 
 const CO_CONDITION: Condition = {
-  text: "Put a UL 2034 CO alarm in the house, by the garage door and outside each sleeping area. While this heater runs, use a low-level CO monitor in the garage rated for its temperature range.",
-  cite: "IRC R315",
+  text: "Put a UL 2034 CO alarm in the house outside each sleeping area (code, for new homes and permitted work). BayHeat also advises one by the garage door, and a low-level CO monitor in the garage rated for its temperature range while this heater runs.",
+  cite: "IRC R315 (house alarm); BayHeat (garage door and monitor)",
   edition: "IRC 2021",
   ev: "R",
   severity: "must",
@@ -296,6 +296,17 @@ function ventedGasVerdict(s: Situation): Verdict {
       ["No natural gas line or bulk propane tank -- cylinders alone don't qualify."],
     );
   }
+  if (s.ulListed === "no") {
+    // Rule 22: no UL/CSA/ETL mark -> NO-GO for any combustion heater (vented gas was missing this branch).
+    return noGo(
+      [
+        UL_CONDITION,
+        { text: "A gas unit heater with no CSA or UL certification mark hasn't been tested for garage use -- don't install it.", cite: "BayHeat", ev: "C", severity: "must" },
+      ],
+      ["e240", "minisplit"],
+      ["No UL, CSA or ETL listing mark on this heater."],
+    );
+  }
   // Rules 16 & 17: attached (with qualifying fuel) or a dusty shop -- both are ONLY IF, licensed install. Both gas
   // unit heater manuals we cite rule out a flammable atmosphere (Modine 6-584.12 DANGER; Mr. Heater MHU: never where
   // gasoline, solvents, paint thinner or dust are present), so stored flammables add a condition, as for electric.
@@ -304,6 +315,7 @@ function ventedGasVerdict(s: Situation): Verdict {
     { text: "Burner at least 18 in above the garage floor, and at least 6 ft up or guarded against vehicle impact.", cite: "IFGC 305.3 / 305.5", edition: "IFGC 2021", ev: "R", severity: "must" },
     CO_CONDITION,
   ];
+  if (s.ulListed !== "yes") conditions.push(UL_CONDITION);
   if (isYes(s.flammablesStored)) {
     conditions.push({
       text: "Move gasoline, solvents and paint thinner out of the garage first -- the gas unit heater manuals rule out installing where the air may be flammable.",
