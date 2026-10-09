@@ -1,16 +1,13 @@
 import { findProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { HEATER_CLASSES } from "@/lib/planner/catalog";
+import { circuitLabel, classCircuit } from "@/lib/planner/classCircuit";
 import type { Surface } from "@/lib/commerce/types";
 import type { HeaterClassId } from "@/lib/planner/types";
 import { BuyButton } from "@/components/ui/BuyButton";
 import { DISCLOSURE_INLINE } from "@/lib/site";
 import { PaidLabel } from "./PaidLabel";
 
-function circuitLabel(c: string): string {
-  const m = /^(\d+)V(\d+)A$/.exec(c);
-  return m ? `${m[1]} V / ${m[2]} A` : c;
-}
 
 // The above-the-fold pick (BLUEPRINT.md §3.3): one product, one button, inside the first screen on a phone. The
 // revenue model's click-through rate assumes a buy plate within ~700 px; before this, every money page put its
@@ -48,7 +45,7 @@ export function QuickPick({
   const specs = !cls || !point
     ? null
     : cls.energy === "electric"
-      ? `${(cls.outputBtuh[1] / 3.412 / 1000).toFixed(1)} kW${cls.circuit ? ` · ${circuitLabel(cls.circuit)}` : ""}`
+      ? `${(cls.outputBtuh[1] / 3.412 / 1000).toFixed(1)} kW${classCircuit(cls) ? ` · ${circuitLabel(classCircuit(cls)!)}` : ""}`
       : `${Math.round(cls.outputBtuh[1]).toLocaleString("en-US")} BTU/h`;
 
   return (

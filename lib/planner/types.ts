@@ -293,6 +293,8 @@ export type PlannerResult = {
     user?: CircuitSpec;
     fits: boolean;
     panelCheck: "ok" | "load_calc" | "unknown";
+    // The reader can't add a circuit and theirs can't carry an electric heater that covers the load; notes[0] says so.
+    beyondUserCircuit?: boolean;
     notes: string[];
   };
   usage: { mode: "continuous" | "sessions"; seasonMonths: string[]; tBal?: number; hddAtBal?: number };

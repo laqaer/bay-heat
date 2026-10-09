@@ -54,15 +54,26 @@ test("outputBtuh ranges are non-decreasing [low, high] pairs", () => {
   }
 });
 
-// Every fixed (hardwired) electric resistance class must fit the circuit it claims at its own top-of-range
-// wattage under NEC 424.4(B)'s 125% rule. Found 2026-10-09: e_240_4k claimed 240V20A (it needs 25 A) and e_ir_240
-// claimed 240V30A (6 kW needs 35 A). Cord-and-plug 120 V classes follow NEC 210.23(A)(1) instead and are skipped.
-test("every hardwired electric class fits the circuit it claims", async () => {
-  const { circuitFor } = await import("./electrical.ts");
+// The catalog's `circuit` string and the requirement readers see must be one requirement. Found 2026-10-09:
+// e_240_4k claimed 240V20A (4 kW needs 25 A), e_ir_240 claimed 240V30A (6 kW needs 35 A), and the 1,500 W plug-ins
+// were eligible on 15 A while their cards showed 20 A. classCircuit() is now the one source: eligibility, cards,
+// "Power it" and the pages all read it, and each catalog string must be the smallest circuit in the planner's picker
+// that carries it.
+test("every class's catalog circuit is the smallest picker circuit that carries its requirement", async () => {
+  const { classCircuit, circuitCovers, CIRCUIT_AMPS } = await import("./classCircuit.ts");
+  const picker = (Object.keys(CIRCUIT_AMPS) as (keyof typeof CIRCUIT_AMPS)[]).sort((a, b) => CIRCUIT_AMPS[a] - CIRCUIT_AMPS[b]);
   for (const c of Object.values(HEATER_CLASSES)) {
-    if (c.energy !== "electric" || typeof c.eta !== "number" || !c.circuit || c.circuit.startsWith("120")) continue;
-    const amps = Number(/V(\d+)A$/.exec(c.circuit)![1]);
-    const spec = circuitFor(c.outputBtuh[1] / c.eta / 3.412, 240, 240);
-    assert.ok(spec.breakerA <= amps, `${c.id}: ${Math.round(c.outputBtuh[1] / 3.412)} W needs ${spec.breakerA} A, class claims ${c.circuit}`);
+    const spec = classCircuit(c);
+    if (!c.circuit) {
+      assert.equal(spec, undefined, `${c.id}: no catalog circuit, so no requirement`);
+      continue;
+    }
+    const smallest = picker.find((p) => circuitCovers(p, spec!));
+    assert.equal(c.circuit, smallest, `${c.id}: needs ${spec!.volts} V / ${spec!.breakerA} A, so its catalog circuit is ${smallest}`);
   }
+  // The two the fact-check caught, and the plug-in rule from lib/safety/verdict.ts (15 A only with nothing else on it).
+  assert.equal(classCircuit(HEATER_CLASSES.e_240_4k)!.breakerA, 25);
+  assert.equal(classCircuit(HEATER_CLASSES.e_ir_240)!.breakerA, 35);
+  assert.equal(classCircuit(HEATER_CLASSES.e_port_1500)!.breakerA, 15);
+  assert.match(classCircuit(HEATER_CLASSES.e_port_1500)!.notes[0], /nothing else on that circuit/);
 });

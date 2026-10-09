@@ -252,7 +252,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
             <p className="mt-2 text-sm text-(--color-alarm)">100A panel + a 30A+ heater: ask for an NEC load calculation (§220.83 / §120.83 — your local adopted edition governs).</p>
           ) : null}
           {result.circuits.notes.map((n, i) => (
-            <p key={i} className="mt-2 text-sm text-(--color-fg-2)">
+            <p key={i} className={`mt-2 text-sm ${i === 0 && result.circuits.beyondUserCircuit ? "text-(--color-alarm)" : "text-(--color-fg-2)"}`}>
               {n}
             </p>
           ))}

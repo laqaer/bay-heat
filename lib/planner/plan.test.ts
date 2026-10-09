@@ -262,21 +262,43 @@ test("a pair of small heaters gets the panel rule of thumb, not a blanket load c
   assert.equal(plan({ ...oneCar, panelAmps: "unknown" }).circuits.panelCheck, "unknown");
 });
 
-// Codex review on #26: with a 240 V / 30 A circuit and no way to add one, a 40 °F sessions garage used to get the
-// 240 V infrared class, whose catalog row claimed 240V30A while its 6 kW top needs a 35 A breaker, so "Power it"
-// prescribed 35 A. The catalog fix (catalog.test.ts checks every hardwired class against its wattage) closes it;
-// this pins the reader-facing promise: no new circuit allowed means "Power it" never picks a bigger breaker.
-test("Power it never prescribes a bigger breaker than the reader's circuit when they can't add one", () => {
+// Codex review on #26: a reader who can't add a circuit must never be handed a new circuit as the answer. Found:
+// 240 V infrared on a 30 A circuit (its 6 kW top needs 35 A), a 1,500 W plug-in eligible on 15 A while "Power it"
+// showed 20 A, and the whole-load fallback prescribing 240 V / 25 A on a 120 V / 15 A circuit. Now a pick-based
+// "Power it" is one heater the reader's circuit carries; otherwise it is flagged, and notes[0] says the circuit can't.
+test("Power it never passes off a new circuit as the answer when the reader can't add one", async () => {
+  const { circuitCovers } = await import("./classCircuit.ts");
   const sessions = { mode: "sessions" as const, sessionsPerWeek: 3, hoursPerSession: 2, doorOpeningsPerSession: 2 };
-  for (const circuit of ["120V20A", "240V20A", "240V30A", "240V40A", "240V50A"] as const) {
-    const amps = Number(circuit.split("V")[1].replace("A", ""));
-    for (const targetTemp of [40, 45, 50, 55]) {
-      for (const usage of [EXAMPLE_A_INPUT.usage, sessions]) {
-        const r = plan({ ...EXAMPLE_A_INPUT, targetTemp, circuit, canAddCircuit: false, usage });
-        if (r.circuits.forSizeClassId === undefined) continue; // sized for the whole load, not a pick on this circuit
-        assert.equal(r.circuits.forSizeCount, 1, `${circuit} ${targetTemp}F: one existing circuit means one heater`);
-        assert.ok(r.circuits.forSize.breakerA <= amps, `${circuit} ${targetTemp}F ${usage.mode}: ${r.circuits.forSizeClassId} needs ${r.circuits.forSize.breakerA} A`);
+  const oneCar = { ...EXAMPLE_A_INPUT, preset: "1car" as const, width: 12, depth: 22, height: 8, commonWallLen: 12, garageDoors: [{ w: 9, h: 7, type: "steel_single" as const }], windowsFt2: 0, ceilingIns: "R30" as const, tightness: "tight" as const };
+  let picks = 0;
+  let flagged = 0;
+  for (const base of [EXAMPLE_A_INPUT, oneCar]) {
+    for (const circuit of ["120V15A", "120V20A", "240V20A", "240V30A", "240V40A", "240V50A"] as const) {
+      for (const targetTemp of [40, 45, 50, 55]) {
+        for (const usage of [EXAMPLE_A_INPUT.usage, sessions]) {
+          const r = plan({ ...base, targetTemp, circuit, canAddCircuit: false, usage });
+          const where = `${base.preset} ${circuit} ${targetTemp}F ${usage.mode}`;
+          if (r.circuits.beyondUserCircuit) {
+            flagged++;
+            assert.equal(r.circuits.forSizeClassId, undefined, `${where}: a pick is always one the circuit carries`);
+            assert.match(r.circuits.notes[0], /You said you can't add a circuit/, where);
+          } else {
+            picks++;
+            assert.equal(r.circuits.forSizeCount, 1, `${where}: one existing circuit means one heater`);
+            assert.ok(circuitCovers(circuit, r.circuits.forSize), `${where}: ${r.circuits.forSizeClassId} needs ${r.circuits.forSize.breakerA} A`);
+          }
+        }
       }
     }
   }
+  assert.ok(picks > 0 && flagged > 0, `expected both outcomes, got ${picks} picks and ${flagged} flagged`);
+  // Codex's two cases on a tight 1-car with a 120 V / 15 A circuit: a load one plug-in covers gets it (15 A, nothing
+  // else on the circuit -- not a 20 A circuit the reader ruled out), and at 50 °F, where nothing that circuit carries
+  // covers the load, it is flagged instead of prescribing 240 V / 25 A.
+  const at35 = plan({ ...oneCar, targetTemp: 35, circuit: "120V15A", canAddCircuit: false, usage: sessions });
+  assert.equal(at35.circuits.forSizeClassId, "e_port_1500");
+  assert.equal(at35.circuits.forSize.breakerA, 15);
+  assert.ok(at35.circuits.notes.some((n) => n.startsWith("Plug-in: nothing else on that circuit")));
+  const at50 = plan({ ...oneCar, targetTemp: 50, circuit: "120V15A", canAddCircuit: false, usage: sessions });
+  assert.equal(at50.circuits.beyondUserCircuit, true);
 });

@@ -1,6 +1,6 @@
 import type { Circuit, ClimateStation, GarageInput, HeaterClass, HeaterClassId, PriceSet, RankedSystem, WhyNot } from "./types.ts";
 import { HEATER_CLASSES } from "./catalog.ts";
-import { circuitFor, circuitSpecForNameplate } from "./electrical.ts";
+import { circuitCovers, classCircuit } from "./classCircuit.ts";
 import { balancePoint, seasonalLoadContinuous, heatPumpCapacity, heatPumpCop, heatPumpSeasonal, type HeatPumpClass } from "./seasonal.ts";
 import { simulateSession } from "./warmup.ts";
 import { HEAT_CONTENT } from "./fuels.ts";
@@ -19,12 +19,6 @@ const HP_CLASS_FOR: Partial<Record<HeaterClassId, HeatPumpClass>> = {
 // catalog, so this filter is unconditional for now; see BLUEPRINT.md §2.5's hard-filter note).
 const CORD_CONNECTED_PORTABLE: HeaterClassId[] = ["e_port_1500", "e_ir_wall_1500", "g_unvented_buddy", "k_unvented", "torpedo"];
 
-const CIRCUIT_VOLTS: Record<Circuit, 120 | 240> = { "120V15A": 120, "120V20A": 120, "240V20A": 240, "240V30A": 240, "240V40A": 240, "240V50A": 240, "240V60A": 240 };
-const CIRCUIT_AMPS: Record<Circuit, number> = { "120V15A": 15, "120V20A": 20, "240V20A": 20, "240V30A": 30, "240V40A": 40, "240V50A": 50, "240V60A": 60 };
-
-function circuitFits(userCircuit: Circuit, required: Circuit): boolean {
-  return CIRCUIT_VOLTS[userCircuit] === CIRCUIT_VOLTS[required] && CIRCUIT_AMPS[userCircuit] >= CIRCUIT_AMPS[required];
-}
 
 const NEVER_RECOMMEND_REASON: Partial<Record<HeaterClassId, string>> = {
   torpedo: "Open-flame forced-air heaters are never recommended for an enclosed garage.",
@@ -179,20 +173,11 @@ export function rankSystems(ctx: RecommendContext): { recommendations: RankedSys
       if (capacityBtuh < threshold) continue;
 
       let circuitCost = 0;
-      let circuitSpec: RankedSystem["circuit"];
-      if (cls.circuit) {
-        if (cls.energy === "electric") {
-          // Per-UNIT wattage: each unit is its own circuit, not `units` heaters sharing one bigger breaker.
-          const perUnitCapacityBtuh = capacityBtuhFor(cls, 1, ctx.tOut);
-          const requiredWatts = perUnitCapacityBtuh / (typeof cls.eta === "number" ? cls.eta : 1) / 3.412;
-          const volts = CIRCUIT_VOLTS[cls.circuit] as 120 | 240;
-          circuitSpec = circuitFor(requiredWatts, volts, volts);
-        } else {
-          // A combustion class's circuit (e.g. g_vented_unit's 120V15A) is its blower/control nameplate
-          // rating, not something to derive from its BTU output the way an electric heater's circuit is.
-          circuitSpec = circuitSpecForNameplate(cls.circuit);
-        }
-        const fits = circuitFits(ctx.circuit, cls.circuit);
+      // Per-UNIT requirement: each unit is its own circuit, not `units` heaters sharing one bigger breaker. The same
+      // spec decides eligibility and is what the card shows (classCircuit.ts).
+      const circuitSpec: RankedSystem["circuit"] = classCircuit(cls);
+      if (circuitSpec) {
+        const fits = circuitCovers(ctx.circuit, circuitSpec);
         if (!fits) {
           if (!input.canAddCircuit) continue; // excluded for this unit count; a different class may still fit
           circuitCost = mid(NEW_CIRCUIT_COST) * units; // every unit needs its own new circuit here

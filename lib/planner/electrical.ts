@@ -86,7 +86,10 @@ export function circuitsForLoad(watts: number): { spec: CircuitSpec; count: numb
 // heater's circuit from its wattage. Found via a real crash: rankSystems() was feeding g_vented_unit's
 // 125,000 BTU/h top-of-range output through circuitFor() as if it were electric wattage, demanding a 381 A
 // breaker no STANDARD_BREAKERS entry covers.
-export function circuitSpecForNameplate(circuit: Circuit): CircuitSpec {
+export function circuitSpecForNameplate(
+  circuit: Circuit,
+  note = "Manufacturer-specified control/blower circuit -- independent of the unit's BTU output.",
+): CircuitSpec {
   const breakerA = Number(/V(\d+)A$/.exec(circuit)![1]);
   const voltsRated = circuit.startsWith("120") ? 120 : 240;
   const wireNM = smallestWireAtLeast(NM_60C, breakerA);
@@ -101,7 +104,7 @@ export function circuitSpecForNameplate(circuit: Circuit): CircuitSpec {
     wireNM,
     wireTHHN,
     gfciReceptacle: false,
-    notes: ["Manufacturer-specified control/blower circuit -- independent of the unit's BTU output."],
+    notes: [note],
   };
 }
 

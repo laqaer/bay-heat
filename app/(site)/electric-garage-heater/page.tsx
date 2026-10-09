@@ -12,6 +12,7 @@ import { BuyButton, ButtonLink } from "@/components/ui/ButtonLink";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
 import { heaterClass } from "@/lib/planner/catalog";
+import { circuitLabel, classCircuit } from "@/lib/planner/classCircuit";
 import type { HeaterClassId } from "@/lib/planner/types";
 import { plan } from "@/lib/planner/plan";
 import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
@@ -49,11 +50,6 @@ const SUBPAGES: { href: "/240v-garage-heater" | "/portable-garage-heater" | "/ce
 
 const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual", "cz220-manual", "dr975-manual"];
 
-function formatCircuit(c?: string): string {
-  if (!c) return "—";
-  const m = /^(\d+)V(\d+)A$/.exec(c);
-  return m ? `${m[1]}V / ${m[2]}A` : c;
-}
 
 export default function Page() {
   const result = plan(EXAMPLE_A_INPUT);
@@ -141,7 +137,10 @@ export default function Page() {
                       </>
                     ) : null}
                   </td>
-                  <td className="py-3 pr-3 font-mono whitespace-nowrap">{formatCircuit(hc.circuit)}</td>
+                  <td className="py-3 pr-3 font-mono whitespace-nowrap">{(() => {
+                    const spec = classCircuit(hc);
+                    return spec ? circuitLabel(spec) : "—";
+                  })()}</td>
                   <td className="py-3 pr-3 font-mono">{product?.priceClass ?? "—"}</td>
                   <td className="py-3">
                     {primary ? (

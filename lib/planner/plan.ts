@@ -9,6 +9,7 @@ import { hddAtBase } from "./climate.ts";
 import { lightCapacitance, simulateSession } from "./warmup.ts";
 import { balancePoint, seasonalLoadContinuous, heatPumpSeasonal } from "./seasonal.ts";
 import { MAX_HEATER_CIRCUIT_WATTS, circuitFor, circuitsForLoad } from "./electrical.ts";
+import { circuitCovers, circuitLabel } from "./classCircuit.ts";
 import { costsForSeasonalLoad } from "./fuels.ts";
 import { rankSystems, type RecommendContext } from "./recommend.ts";
 import { insulateFirst, fixFirst, bundleCheapMeasures, type RoiContext } from "./roi.ts";
@@ -182,6 +183,11 @@ export function plan(input: GarageInput): PlannerResult {
           ? "load_calc"
           : "ok";
   const oneCircuitCovers = heatLoss.qSize / 3.412 <= MAX_HEATER_CIRCUIT_WATTS;
+  // A reader who can't add a circuit gets a pick only if it runs on their circuit (rankSystems). When none covers the
+  // load, "Power it" still shows what covering it takes, but says plainly that their circuit can't -- it never
+  // passes off a new circuit as the answer for someone who ruled one out (Codex review on #26).
+  const beyondUserCircuit =
+    !input.canAddCircuit && input.circuit !== "unknown" && (forSize.count > 1 || !circuitCovers(input.circuit, forSize.spec));
 
   return {
     modelVersion: MODEL_VERSION,
@@ -216,7 +222,15 @@ export function plan(input: GarageInput): PlannerResult {
       user: input.circuit !== "unknown" ? circuitFor(circuitVolts(circuit) * circuitAmps(circuit) * 0.8, circuitVolts(circuit), circuitVolts(circuit)) : undefined,
       fits: top ? Boolean(top.circuit) : false,
       panelCheck,
+      beyondUserCircuit: beyondUserCircuit || undefined,
       notes: [
+        ...(beyondUserCircuit && input.circuit !== "unknown"
+          ? [
+              `You said you can't add a circuit, and your ${circuitLabel(input.circuit)} circuit can't carry an electric heater that covers this load. Covering it takes what's above; otherwise fix the envelope first or use a fuel-fired heater.`,
+            ]
+          : []),
+        // The pick's own circuit notes: the plug-in "nothing else on that circuit" condition, a 208 V derate.
+        ...(resistancePick?.circuit?.notes ?? []),
         ...(forSize.count > 1
           ? [
               oneCircuitCovers

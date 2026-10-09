@@ -14,6 +14,7 @@ import { getSource } from "@/lib/facts";
 import { route } from "@/lib/commerce/route";
 import { findProduct } from "@/lib/commerce/products";
 import { heaterClass } from "@/lib/planner/catalog";
+import { classCircuit } from "@/lib/planner/classCircuit";
 import { plan } from "@/lib/planner/plan";
 import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
 
@@ -37,6 +38,7 @@ export default function Page() {
   const irTube = findProduct("e-ir-240-generic")!;
   const irWallClass = heaterClass("e_ir_wall_1500");
   const irTubeClass = heaterClass("e_ir_240");
+  const irTubeCircuit = classCircuit(irTubeClass)!;
 
   const sources = SOURCE_IDS.map((id) => getSource(id)).filter((s): s is NonNullable<typeof s> => s !== null);
 
@@ -123,8 +125,8 @@ export default function Page() {
           <p className="mt-2 text-sm text-(--color-fg-2)">
             <Num v={irTubeClass.outputBtuh[0]} unit="BTU/h" round={100} ev="C" src="HEATER_CLASSES.e_ir_240.outputBtuh — lib/planner/catalog.ts" />–
             <Num v={irTubeClass.outputBtuh[1]} unit="BTU/h" round={100} ev="C" src="HEATER_CLASSES.e_ir_240.outputBtuh" /> on a{" "}
-            <Num v={240} unit="V" ev="C" src="HEATER_CLASSES.e_ir_240.circuit — lib/planner/catalog.ts" />,{" "}
-            <Num v={30} unit="A" ev="C" src="HEATER_CLASSES.e_ir_240.circuit" /> circuit. Aimed down from a high
+            <Num v={irTubeCircuit.volts} unit="V" ev="C" src="classCircuit(HEATER_CLASSES.e_ir_240) — lib/planner/classCircuit.ts" />,{" "}
+            <Num v={irTubeCircuit.breakerA} unit="A" ev="C" src="classCircuit(HEATER_CLASSES.e_ir_240).breakerA: 125% of its 6 kW top (NEC 424.4(B))" /> circuit. Aimed down from a high
             ceiling, it&apos;s built for a drafty shop or a bay that runs with the door up, not a sealed, evenly
             heated room.
           </p>
