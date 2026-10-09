@@ -40,11 +40,12 @@ const CLASS_ORDER: HeaterClassId[] = [
   "hp_12_24k_230",
 ];
 
-const SUBPAGES: { href: "/240v-garage-heater" | "/portable-garage-heater" | "/ceiling-mount-garage-heater" | "/best-wall-mount-garage-heaters"; label: string; blurb: string }[] = [
+const SUBPAGES: { href: "/240v-garage-heater" | "/portable-garage-heater" | "/ceiling-mount-garage-heater" | "/best-wall-mount-garage-heaters" | "/shop-heater"; label: string; blurb: string }[] = [
   { href: "/240v-garage-heater", label: "240V garage heaters", blurb: "Breaker size, wire gauge and GFCI for a hardwired 4-10 kW unit, and why 4 kW doesn't fit a 20A circuit." },
   { href: "/portable-garage-heater", label: "Portable garage heaters", blurb: "What a 15A or 20A garage outlet can actually run without tripping." },
   { href: "/ceiling-mount-garage-heater", label: "Ceiling-mount garage heaters", blurb: "Mounting height, throw and clearance for a 5 kW or 7.5 kW ceiling unit." },
   { href: "/best-wall-mount-garage-heaters", label: "Wall-mount garage heaters", blurb: "1.5 kW to 7.5 kW wall units, with the clearances from each manual." },
+  { href: "/shop-heater", label: "Shop heaters", blurb: "How a 240V electric unit heater compares with vented gas, diesel and a torpedo in a workshop." },
 ];
 
 const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual", "cz220-manual", "dr975-manual"];
@@ -169,7 +170,8 @@ export default function Page() {
         smaller because its wattage number is lower — a{" "}
         <Num v={4000} unit="W" ev="S" src="lib/planner/catalog.ts HEATER_CLASSES.e_240_4k" /> unit still needs a dedicated{" "}
         25A circuit, not the 20A circuit already run to most garages. The{" "}
-        <Link href="/240v-garage-heater">240V page</Link> shows exactly why.
+        <Link href="/240v-garage-heater">240V page</Link> shows exactly why. For a workshop, the{" "}
+        <Link href="/shop-heater">shop heater guide</Link> weighs an electric unit heater against gas and diesel.
       </p>
 
       <h2>How big is &quot;enough&quot;? A worked example</h2>

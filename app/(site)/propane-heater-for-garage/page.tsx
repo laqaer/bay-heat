@@ -185,7 +185,8 @@ export default function Page() {
       <p>
         A forced-air &quot;torpedo&quot; propane heater is excluded from every BayHeat recommendation for any
         enclosed garage, full stop — stricter than some of those heaters&apos; own manuals. Use the vented unit
-        heater above, an electric class, or a mini-split instead.
+        heater above, an electric class, or a mini-split instead. The{" "}
+        <Link href="/shop-heater">shop heater guide</Link> applies the same rule to a workshop.
       </p>
 
       <h2>Safety scope</h2>
