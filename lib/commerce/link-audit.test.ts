@@ -30,4 +30,9 @@ test("a directly linked product whose manual warning is not on the page is repor
   assert.deepEqual(missingProductWarnings(`<p class="a">Manual: \u201cDO NOT USE AS A RESIDENTIAL HEATER.\u201d <!-- -->Ask the maker.</p>${linked}`, [p]), []);
   assert.deepEqual(missingProductWarnings(`<script>"Manual: \u201cDO NOT USE AS A RESIDENTIAL HEATER.\u201d Ask the maker."</script>${linked}`, [p]), ["x-heater"], "text that only exists in a script payload is not visible to the reader");
   assert.deepEqual(missingProductWarnings("<p>no link</p>", [p]), []);
+  assert.deepEqual(missingProductWarnings(`<script>self.__next_f.push(["href","https://www.amazon.com/dp/B0TESTTEST"])</script>`, [p]), [], "a link that only exists in the RSC payload is not a link on the page");
+  const far = `${linked}${"<p>filler filler filler</p>".repeat(400)}<p>Manual: \u201cDO NOT USE AS A RESIDENTIAL HEATER.\u201d Ask the maker.</p>`;
+  assert.deepEqual(missingProductWarnings(far, [p]), ["x-heater"], "a warning far from the button is not at the point of sale");
+  const second = `${linked}<p>Manual: \u201cDO NOT USE AS A RESIDENTIAL HEATER.\u201d Ask the maker.</p>${"<p>filler filler filler</p>".repeat(400)}${linked}`;
+  assert.deepEqual(missingProductWarnings(second, [p]), ["x-heater"], "every link is checked, not just the first");
 });
