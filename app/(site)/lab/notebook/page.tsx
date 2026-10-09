@@ -36,10 +36,23 @@ export default function Page() {
               <td className="py-3 pr-3 font-mono whitespace-nowrap">2026-10-02</td>
               <td className="py-3">Model v1.0.0 released.</td>
             </tr>
+            <tr>
+              <td className="py-3 pr-3 font-mono whitespace-nowrap">2026-10-09</td>
+              <td className="py-3">
+                Model v1.0.1. Correction: the planner failed to load a report for very large or very leaky garages,
+                and for some garages where a gas or diesel heater was the top pick. The &ldquo;Power it&rdquo;
+                circuit now matches the electric heaters the report recommends, one circuit per heater. If no
+                recommended electric heater covers the whole load, it shows the heater sizes we model (4, 5, 7.5 or
+                10 kW) that do, as many as it takes. If you said you can&apos;t add a circuit and yours can&apos;t carry
+                one, it now says so. Circuit corrections shipped with it. A 4 kW heater needs a 25 A breaker, so not a
+                20 A circuit. A 240 V infrared heater needs 35 A, so not a 30 A circuit. Plug-in heaters show the 15 A
+                circuit they may share with nothing else, and mini-splits show their nameplate circuit. The planner no
+                longer suggests a second heater when you can&apos;t add a circuit. Heat loads did not change.
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <p className="text-sm text-(--color-fg-2)">This is the first entry. There is no earlier history to show.</p>
 
       <h2>Our correction policy</h2>
       <p>

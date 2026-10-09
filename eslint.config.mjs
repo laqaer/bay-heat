@@ -11,6 +11,8 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     ".wrangler/**",
+    // Agent worktrees (git worktree checkouts with their own build output); each lints itself.
+    ".claude/worktrees/**",
     "build/**",
     "next-env.d.ts",
     // Workflow orchestration scripts (.claude/workflows/*.mjs): plain JS run by the Workflow tool's own

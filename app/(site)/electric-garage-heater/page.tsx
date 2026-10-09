@@ -12,6 +12,7 @@ import { BuyButton, ButtonLink } from "@/components/ui/ButtonLink";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
 import { heaterClass } from "@/lib/planner/catalog";
+import { circuitLabel, classCircuit } from "@/lib/planner/classCircuit";
 import type { HeaterClassId } from "@/lib/planner/types";
 import { plan } from "@/lib/planner/plan";
 import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
@@ -49,14 +50,12 @@ const SUBPAGES: { href: "/240v-garage-heater" | "/portable-garage-heater" | "/ce
 
 const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual", "cz220-manual", "dr975-manual"];
 
-function formatCircuit(c?: string): string {
-  if (!c) return "—";
-  const m = /^(\d+)V(\d+)A$/.exec(c);
-  return m ? `${m[1]}V / ${m[2]}A` : c;
-}
 
 export default function Page() {
   const result = plan(EXAMPLE_A_INPUT);
+  // The worked example's electric answer: the heater class plan() sized circuits.forSize for (one circuit per heater).
+  // Read from plan() itself, so the sentence can't name a heater size the circuit wasn't sized for.
+  const electricPick = result.recommendations.find((r) => r.classId === result.circuits.forSizeClassId);
   const sources = SOURCE_IDS.map((id) => getSource(id)).filter((s): s is NonNullable<typeof s> => s !== null);
 
   return (
@@ -138,7 +137,10 @@ export default function Page() {
                       </>
                     ) : null}
                   </td>
-                  <td className="py-3 pr-3 font-mono whitespace-nowrap">{formatCircuit(hc.circuit)}</td>
+                  <td className="py-3 pr-3 font-mono whitespace-nowrap">{(() => {
+                    const spec = classCircuit(hc);
+                    return spec ? circuitLabel(spec) : "—";
+                  })()}</td>
                   <td className="py-3 pr-3 font-mono">{product?.priceClass ?? "—"}</td>
                   <td className="py-3">
                     {primary ? (
@@ -181,11 +183,15 @@ export default function Page() {
       </p>
       <GradeScale current={result.heating.grade} />
       <HeatLossBars items={result.heating.items} fig={1} />
-      <p>
-        That load calls for a{" "}
-        <Num v={result.circuits.forSize.breakerA} unit="A" ev="C" src="circuitFor() inside plan(EXAMPLE_A_INPUT) — lib/planner/electrical.ts" />{" "}
-        breaker and {result.circuits.forSize.wireNM} copper — a 10 kW class heater, not the smallest thing on the shelf.
-      </p>
+      {electricPick ? (
+        <p>
+          The planner&apos;s electric answer for that load is{" "}
+          {result.circuits.forSizeCount > 1 ? `${result.circuits.forSizeCount} heaters of the ${heaterClass(electricPick.classId).label} class` : `one ${heaterClass(electricPick.classId).label}`},
+          each on its own{" "}
+          <Num v={result.circuits.forSize.breakerA} unit="A" ev="C" src="plan(EXAMPLE_A_INPUT).circuits.forSize — the top electric pick's per-unit circuit" />{" "}
+          breaker and {result.circuits.forSize.wireNM} copper. That is not the smallest thing on the shelf.
+        </p>
+      ) : null}
 
       <h2>Safety</h2>
       <SafetyCallout>

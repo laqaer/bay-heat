@@ -14,6 +14,7 @@ export type HeroState = {
   kw: number;
   breakerA: number;
   wireAwg: string;
+  circuits: number; // plan().circuits.forSizeCount: the breaker and wire above are per circuit when this is > 1
 };
 
 const AS_IS: GarageInput = { ...EXAMPLE_A_INPUT };
@@ -43,6 +44,7 @@ function stateFor(key: HeroState["key"], input: GarageInput): HeroState {
     kw: r.heating.kwSize,
     breakerA: r.circuits.forSize.breakerA,
     wireAwg: r.circuits.forSize.wireNM,
+    circuits: r.circuits.forSizeCount,
   };
 }
 

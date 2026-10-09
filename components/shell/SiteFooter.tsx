@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BRAND, CONTACT_EMAIL, DISCLOSURE_FOOTER, MODEL_VERSION, PRICES_AS_OF, PUBLISHER } from "@/lib/site";
+import { BRAND, CONTACT_EMAIL, DISCLOSURE_FOOTER, LAST_CORRECTION, MODEL_VERSION, PRICES_AS_OF, PUBLISHER } from "@/lib/site";
 import { POSTAL_ADDRESS } from "@/lib/env.public";
 
 export function SiteFooter() {
@@ -110,7 +110,10 @@ export function SiteFooter() {
       <div className="border-t border-(--color-line)">
         <div className="mx-auto max-w-[1392px] space-y-2 px-4 py-6 text-xs leading-5 text-(--color-fg-2) sm:px-6">
           <p className="font-mono text-[11px] uppercase tracking-[0.1em]">
-            Model v{MODEL_VERSION} · Prices as of {PRICES_AS_OF} · Last correction —
+            Model v{MODEL_VERSION} · Prices as of {PRICES_AS_OF} · Last correction{" "}
+            <Link href="/lab/notebook" className="underline underline-offset-2 hover:text-(--color-fg)">
+              {LAST_CORRECTION}
+            </Link>
           </p>
           <p>{DISCLOSURE_FOOTER}</p>
           <p>

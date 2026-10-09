@@ -53,3 +53,27 @@ test("outputBtuh ranges are non-decreasing [low, high] pairs", () => {
     assert.ok(cls.outputBtuh[0] <= cls.outputBtuh[1], `${cls.id}: outputBtuh ${cls.outputBtuh} is not [low, high]`);
   }
 });
+
+// The catalog's `circuit` string and the requirement readers see must be one requirement. Found 2026-10-09:
+// e_240_4k claimed 240V20A (4 kW needs 25 A), e_ir_240 claimed 240V30A (6 kW needs 35 A), and the 1,500 W plug-ins
+// were eligible on 15 A while their cards showed 20 A. classCircuit() is now the one source: eligibility, cards,
+// "Power it" and the pages all read it, and each catalog string must be the smallest circuit in the planner's picker
+// that carries it.
+test("every class's catalog circuit is the smallest picker circuit that carries its requirement", async () => {
+  const { classCircuit, circuitCovers, CIRCUIT_AMPS } = await import("./classCircuit.ts");
+  const picker = (Object.keys(CIRCUIT_AMPS) as (keyof typeof CIRCUIT_AMPS)[]).sort((a, b) => CIRCUIT_AMPS[a] - CIRCUIT_AMPS[b]);
+  for (const c of Object.values(HEATER_CLASSES)) {
+    const spec = classCircuit(c);
+    if (!c.circuit) {
+      assert.equal(spec, undefined, `${c.id}: no catalog circuit, so no requirement`);
+      continue;
+    }
+    const smallest = picker.find((p) => circuitCovers(p, spec!));
+    assert.equal(c.circuit, smallest, `${c.id}: needs ${spec!.volts} V / ${spec!.breakerA} A, so its catalog circuit is ${smallest}`);
+  }
+  // The two the fact-check caught, and the plug-in rule from lib/safety/verdict.ts (15 A only with nothing else on it).
+  assert.equal(classCircuit(HEATER_CLASSES.e_240_4k)!.breakerA, 25);
+  assert.equal(classCircuit(HEATER_CLASSES.e_ir_240)!.breakerA, 35);
+  assert.equal(classCircuit(HEATER_CLASSES.e_port_1500)!.breakerA, 15);
+  assert.match(classCircuit(HEATER_CLASSES.e_port_1500)!.notes[0], /nothing else on that circuit/);
+});

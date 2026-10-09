@@ -1,5 +1,5 @@
 // Display formatting. Rounding rules per BLUEPRINT.md §5.1: BTU/h to the nearest 100, kW to 0.1, dollars
-// whole or cents under $10. Units are always paired in prose ("31,700 BTU/h (9.3 kW)"), never bare.
+// whole or cents under $10. Units are always paired in prose ("31,900 BTU/h (9.3 kW)"), never bare.
 
 export function btuh(n: number): string {
   return `${Math.round(n / 100) * 100}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");

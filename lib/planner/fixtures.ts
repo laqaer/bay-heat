@@ -154,6 +154,7 @@ export const EXAMPLE_A_RESULT: PlannerResult = {
       gfciReceptacle: false,
       notes: ["Fixed heater, not a receptacle: NEC 424.4(B) continuous-load sizing, not 210.8(A) GFCI."],
     },
+    forSizeCount: 1,
     fits: false,
     panelCheck: "unknown",
     notes: ["Circuit not yet known -- the planner will ask in step 5."],

@@ -112,7 +112,8 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
             BayHeat cost assumption: median of manufacturer list and Home Depot/Lowe&apos;s prices checked 2026-09; not a live or Amazon price.
           </p>
           <p className="mt-1 text-sm text-(--color-fg-2)">
-            Circuit: {result.circuits.forSize.breakerA}A / {result.circuits.forSize.wireNM} today.
+            Circuit: {result.circuits.forSizeCount > 1 ? `${result.circuits.forSizeCount} × ` : ""}
+            {result.circuits.forSize.volts}V / {result.circuits.forSize.breakerA}A / {result.circuits.forSize.wireNM} today.
           </p>
           <FixCart measures={result.fixFirst.measures} doors={result.inputsEcho.garageDoors} page={page} />
         </section>
@@ -150,10 +151,16 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
             const productExtra = warningToShow(product, r.safetyLine);
             return (
               <div key={r.classId} className="flex flex-col gap-3 border border-(--color-line) bg-(--color-surface) p-5">
-                <p className="font-bold text-(--color-fg)">{CLASS_LABEL[r.classId] ?? r.classId}</p>
+                <p className="font-bold text-(--color-fg)">
+                  {r.units > 1 ? `${r.units} × ` : ""}
+                  {CLASS_LABEL[r.classId] ?? r.classId}
+                </p>
                 {direct && product ? <p className="-mt-2 text-xs text-(--color-fg-2)">Linked: {product.name}</p> : null}
                 <p className="font-mono text-sm text-(--color-fg-2)">
-                  {btuh(r.capacityBtuh)} BTU/h · {r.circuit ? `${r.circuit.volts}V/${r.circuit.breakerA}A, ${r.circuit.wireNM}` : "no new circuit"}
+                  {btuh(r.capacityBtuh)} BTU/h{r.units > 1 ? " total" : ""} ·{" "}
+                  {r.circuit
+                    ? `${r.units > 1 ? `${r.units} circuits, each ` : ""}${r.circuit.volts}V/${r.circuit.breakerA}A, ${r.circuit.wireNM}`
+                    : "no new circuit"}
                 </p>
                 <FitBar pct={r.fitPct} />
                 <p className="text-sm text-(--color-fg-2)">
@@ -232,14 +239,21 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
         <h2 className="text-2xl font-bold text-(--color-fg)">Power it</h2>
         <div className="mt-4 border border-(--color-line) bg-(--color-surface) p-5">
           <p className="font-mono text-sm text-(--color-fg)">
-            {result.circuits.forSize.breakerA}A breaker · {result.circuits.forSize.wireNM} (NM) or {result.circuits.forSize.wireTHHN} (THHN) ·{" "}
+            {result.circuits.forSizeCount > 1 ? `${result.circuits.forSizeCount} circuits, each: ` : ""}
+            {result.circuits.forSize.volts}V · {result.circuits.forSize.breakerA}A breaker · {result.circuits.forSize.wireNM} (NM) or{" "}
+            {result.circuits.forSize.wireTHHN} (THHN) ·{" "}
             {amps(result.circuits.forSize.amps)}
           </p>
-          {result.circuits.panelCheck === "load_calc" ? (
+          {result.circuits.panelCheck === "load_calc" && result.circuits.forSizeCount > 1 ? (
+            <p className="mt-2 text-sm text-(--color-alarm)">
+              {result.circuits.forSizeCount} heater circuits: ask an electrician for a load calculation before you add them (NEC 2023
+              §220.83 method — your local adopted edition governs).
+            </p>
+          ) : result.circuits.panelCheck === "load_calc" ? (
             <p className="mt-2 text-sm text-(--color-alarm)">100A panel + a 30A+ heater: ask for an NEC load calculation (§220.83 / §120.83 — your local adopted edition governs).</p>
           ) : null}
           {result.circuits.notes.map((n, i) => (
-            <p key={i} className="mt-2 text-sm text-(--color-fg-2)">
+            <p key={i} className={`mt-2 text-sm ${i === 0 && result.circuits.beyondUserCircuit ? "text-(--color-alarm)" : "text-(--color-fg-2)"}`}>
               {n}
             </p>
           ))}

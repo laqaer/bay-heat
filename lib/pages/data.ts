@@ -4,7 +4,7 @@ export const PAGES: PageEntry[] = [
   {
     href: "/garage-heater-calculator/methodology",
     id: "G-003",
-    title: "How the planner gets 31,700 BTU/h for a 2-car garage: every formula and constant",
+    title: "How the planner gets 31,900 BTU/h for a 2-car garage: every formula and constant",
     h1: "Methodology",
     description: "Every formula, constant and source behind the BayHeat planner — conduction, infiltration, warm-up simulation, prices, and the BayGrade formula.",
     kind: "guide",
@@ -13,8 +13,8 @@ export const PAGES: PageEntry[] = [
     reviewed: null,
     indexable: true,
     published: "2026-10-02",
-    updated: "2026-10-02",
-    rev: 1,
+    updated: "2026-10-09",
+    rev: 2,
   },
   {
     href: "/cost-to-heat-a-garage",

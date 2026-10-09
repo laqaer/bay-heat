@@ -44,6 +44,7 @@ export function HeroFrame({ states, station }: { states: HeroState[]; station: {
           <div className="text-[9px] uppercase tracking-[0.1em] text-white/60">{current.label}</div>
           <div className="mt-0.5 text-lg font-bold tabular-nums">{kw(current.kw)} kW</div>
           <div className="text-[10px] text-white/70">
+            {current.circuits > 1 ? `${current.circuits} circuits × ` : ""}
             {amps(current.breakerA)} · {current.wireAwg}
           </div>
         </div>

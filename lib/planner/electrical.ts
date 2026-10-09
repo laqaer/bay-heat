@@ -1,9 +1,8 @@
 import type { Circuit, CircuitSpec, Wire } from "./types.ts";
 
-// NEC 240.6(A) standard overcurrent device sizes. Heater classes top out at 10 kW / 60 A, but the "forSize"
-// circuit (plan.ts) sizes straight off the raw design load for any envelope, including a bare/leaky one no
-// catalog class actually covers -- so this table (and the wire tables below) run one size past 60 A to 80 A
-// rather than throw on a heater-shaped input the catalog itself would flag as "why not" undersized.
+// NEC 240.6(A) standard overcurrent device sizes. Heater classes top out at 10 kW / 60 A, and circuitsForLoad()
+// keeps each heater circuit within NEC 424.22(B)'s 48 A / 60 A cap; 70 and 80 A stay in the table so a direct
+// circuitFor() call on a larger single load still returns a spec instead of throwing.
 const STANDARD_BREAKERS = [15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80] as const;
 
 // NEC Table 310.16 copper ampacities, 60degC column (NM/Romex per NEC 334.80) and 75degC column (THHN in
@@ -66,13 +65,31 @@ export function circuitFor(watts: number, voltsSupply: 120 | 208 | 240, voltsRat
   };
 }
 
+// The circuit (or circuits) for hardwired electric-resistance heaters that cover a whole load. Each circuit feeds
+// one heater, and the heater must be one the planner actually models -- the fixed 240 V classes (catalog e_240_4k,
+// e_240_5k, e_240_7k5, e_240_10k; plan.test.ts pins this list to the catalog). So: the fewest heaters of at most
+// 10 kW that cover the load, each share rounded UP to the smallest modeled heater that covers it, and each circuit
+// sized for that heater (NEC 424.4(B)). A 9.3 kW load is one 10 kW heater on 60 A, not a 9.3 kW heater nobody sells;
+// a leaky 3-car in Minneapolis (about 25 kW) is three heaters, each on its own circuit. This never throws.
+export const HEATER_TIERS_W = [4000, 5000, 7500, 10_000] as const;
+export const MAX_HEATER_CIRCUIT_WATTS = HEATER_TIERS_W[HEATER_TIERS_W.length - 1];
+export function circuitsForLoad(watts: number): { spec: CircuitSpec; count: number; heaterWatts: number } {
+  const count = Math.max(1, Math.ceil(watts / MAX_HEATER_CIRCUIT_WATTS));
+  const share = watts / count;
+  const heaterWatts = HEATER_TIERS_W.find((t) => t >= share) ?? MAX_HEATER_CIRCUIT_WATTS;
+  return { spec: circuitFor(heaterWatts, 240, 240), count, heaterWatts };
+}
+
 // A combustion class's `circuit` field (catalog.ts, e.g. g_vented_unit's 120V15A) is the manufacturer's fixed
 // blower/ignition-control rating -- the electrical load that actually exists on a gas- or oil-fired unit --
 // not something to re-derive from the class's heat OUTPUT the way circuitFor() sizes an electric-resistance
 // heater's circuit from its wattage. Found via a real crash: rankSystems() was feeding g_vented_unit's
 // 125,000 BTU/h top-of-range output through circuitFor() as if it were electric wattage, demanding a 381 A
 // breaker no STANDARD_BREAKERS entry covers.
-export function circuitSpecForNameplate(circuit: Circuit): CircuitSpec {
+export function circuitSpecForNameplate(
+  circuit: Circuit,
+  note = "Manufacturer-specified control/blower circuit -- independent of the unit's BTU output.",
+): CircuitSpec {
   const breakerA = Number(/V(\d+)A$/.exec(circuit)![1]);
   const voltsRated = circuit.startsWith("120") ? 120 : 240;
   const wireNM = smallestWireAtLeast(NM_60C, breakerA);
@@ -87,7 +104,7 @@ export function circuitSpecForNameplate(circuit: Circuit): CircuitSpec {
     wireNM,
     wireTHHN,
     gfciReceptacle: false,
-    notes: ["Manufacturer-specified control/blower circuit -- independent of the unit's BTU output."],
+    notes: [note],
   };
 }
 
