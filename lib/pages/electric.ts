@@ -15,8 +15,8 @@ export const PAGES: PageEntry[] = [
     reviewed: "electrical",
     indexable: true,
     published: "2026-10-02",
-    updated: "2026-10-02",
-    rev: 1,
+    updated: "2026-10-09",
+    rev: 2,
   },
   {
     href: "/240v-garage-heater",
@@ -32,8 +32,8 @@ export const PAGES: PageEntry[] = [
     reviewed: "electrical",
     indexable: true,
     published: "2026-10-02",
-    updated: "2026-10-02",
-    rev: 1,
+    updated: "2026-10-09",
+    rev: 2,
   },
   {
     href: "/portable-garage-heater",
@@ -49,8 +49,8 @@ export const PAGES: PageEntry[] = [
     reviewed: "electrical",
     indexable: true,
     published: "2026-10-02",
-    updated: "2026-10-02",
-    rev: 1,
+    updated: "2026-10-09",
+    rev: 2,
   },
   {
     href: "/ceiling-mount-garage-heater",
@@ -66,8 +66,8 @@ export const PAGES: PageEntry[] = [
     reviewed: "electrical",
     indexable: true,
     published: "2026-10-02",
-    updated: "2026-10-02",
-    rev: 1,
+    updated: "2026-10-09",
+    rev: 2,
   },
   {
     href: "/best-wall-mount-garage-heaters",
@@ -83,7 +83,7 @@ export const PAGES: PageEntry[] = [
     reviewed: "electrical",
     indexable: true,
     published: "2026-10-02",
-    updated: "2026-10-02",
-    rev: 1,
+    updated: "2026-10-09",
+    rev: 2,
   },
 ];

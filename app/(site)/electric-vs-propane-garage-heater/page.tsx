@@ -31,7 +31,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["eia-electric-power-monthly", "eia-ng-annual", "eia-propane-weekly", "eia-diesel-weekly", "ifgc-2021"];
+const SOURCE_IDS = ["eia-electric-power-monthly", "eia-ng-annual", "eia-propane-weekly", "eia-diesel-weekly", "ifgc-2021", "dr975-manual", "dr910f-manual", "big-maxx-manual", "kidde-c3010-datasheet"];
 
 type RateRow = { label: string; electric: number; propane: number; ng: number; diesel: number };
 

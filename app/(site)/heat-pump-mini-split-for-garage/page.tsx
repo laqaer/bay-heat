@@ -34,7 +34,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["eia-electric-power-monthly", "nec-2023"];
+const SOURCE_IDS = ["eia-electric-power-monthly", "nec-2023", "epa-608"];
 
 export default function Page() {
   // Same worked-example garage as every other page (24x24 attached 2-car, Chicago), but sealed first --

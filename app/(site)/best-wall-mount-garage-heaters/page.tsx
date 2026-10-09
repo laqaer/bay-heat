@@ -21,7 +21,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["hs1500tt-manual", "dr238-manual", "fuh54-manual", "dr975-manual", "nec-2023"];
+const SOURCE_IDS = ["hs1500tt-manual", "dr238-manual", "fuh54-manual", "dr975-manual", "nec-2023", "dr910f-manual"];
 
 export default function Page() {
   const hs1500tt = findProduct("hs1500tt-wall-infrared")!;

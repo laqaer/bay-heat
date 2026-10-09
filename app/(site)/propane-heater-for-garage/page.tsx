@@ -27,7 +27,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["eia-propane-weekly", "mrheater-bigbuddy-manual", "ifgc-2021", "irc-2021"];
+const SOURCE_IDS = ["eia-propane-weekly", "mrheater-bigbuddy-manual", "ifgc-2021", "irc-2021", "big-maxx-manual", "hot-dawg-hds-manual", "kidde-c3010-datasheet"];
 
 const DETACHED_BUDDY: Situation = {
   attached: false,

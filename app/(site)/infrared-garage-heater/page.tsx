@@ -26,7 +26,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["hs1500tt-manual", "dr238-manual", "nec-2023"];
+const SOURCE_IDS = ["hs1500tt-manual", "dr238-manual", "nec-2023", "fuh54-manual"];
 
 export default function Page() {
   const result = plan(EXAMPLE_A_INPUT);

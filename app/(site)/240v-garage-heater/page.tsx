@@ -25,7 +25,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["nec-2023", "cz220-manual", "fuh54-manual", "dr975-manual"];
+const SOURCE_IDS = ["nec-2023", "cz220-manual", "fuh54-manual", "dr975-manual", "hs1500tt-manual", "dr910f-manual"];
 
 export default function Page() {
   // Every row below is circuitFor() called live, at render time -- not a hand-typed table.

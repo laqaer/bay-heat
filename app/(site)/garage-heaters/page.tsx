@@ -25,7 +25,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["eia-electric-power-monthly", "eia-ng-annual", "eia-propane-weekly", "eia-diesel-weekly", "irc-2021"];
+const SOURCE_IDS = ["eia-electric-power-monthly", "eia-ng-annual", "eia-propane-weekly", "eia-diesel-weekly", "irc-2021", "cz220-manual", "fuh54-manual", "hs1500tt-manual", "vevor-diesel-manual", "big-maxx-manual", "epa-608"];
 
 const SYSTEM_LABEL: Record<CostRow["system"], string> = {
   electric_resistance: "Electric resistance",

@@ -24,7 +24,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual"];
+const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual", "fuh54-manual"];
 
 export default function Page() {
   // Live calls against the same fitsCordAndPlug() the calculator uses -- not a hand-typed yes/no.

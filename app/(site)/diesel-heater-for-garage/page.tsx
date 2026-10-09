@@ -29,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["eia-electric-power-monthly", "eia-diesel-weekly", "irc-2021", "ifgc-2021"];
+const SOURCE_IDS = ["eia-electric-power-monthly", "eia-diesel-weekly", "irc-2021", "ifgc-2021", "vevor-diesel-manual", "kidde-c3010-datasheet"];
 
 const BASE_SITUATION: Situation = {
   attached: false,

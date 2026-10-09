@@ -48,7 +48,7 @@ const SUBPAGES: { href: "/240v-garage-heater" | "/portable-garage-heater" | "/ce
   { href: "/best-wall-mount-garage-heaters", label: "Wall-mount garage heaters", blurb: "1.5 kW to 7.5 kW wall units, with the clearances from each manual." },
 ];
 
-const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual", "cz220-manual", "dr975-manual"];
+const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual", "cz220-manual", "dr975-manual", "fuh54-manual", "dr238-manual", "dr910f-manual", "epa-608"];
 
 
 export default function Page() {

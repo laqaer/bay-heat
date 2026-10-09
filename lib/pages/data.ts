@@ -45,7 +45,7 @@ export const PAGES: PageEntry[] = [
     reviewed: null,
     indexable: true,
     published: "2026-10-02",
-    updated: "2026-10-02",
-    rev: 1,
+    updated: "2026-10-09",
+    rev: 2,
   },
 ];
