@@ -81,7 +81,8 @@ export default function Page() {
         Every fuel heats a garage the same way — it just prices the BTUs differently, and each one carries its own
         install rule and its own carbon monoxide risk. This page compares all six systems side by side at one
         worked example; the pages below cover each fuel&apos;s heater classes, clearances and safety conditions in
-        depth.
+        depth. If you would rather pick by your situation than by fuel, see the{" "}
+        <Link href="/best-garage-heater">best garage heater for each kind of garage</Link>.
         Heating a workshop instead of a garage? The <Link href="/shop-heater">shop heater guide</Link> matches each type to the
         circuit, flue or exhaust a shop needs.
       </p>

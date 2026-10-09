@@ -78,7 +78,8 @@ export default function Page() {
       <p>
         The <Link href="/garage-heater-calculator">garage heater calculator</Link> sizes the exact class for your garage from its
         dimensions, insulation and local design temperature. This page lists every class side by side; the pages below cover one class
-        each in depth.
+        each in depth. For one pick per situation, from a small 1-car garage to a gas-heated shop, see our{" "}
+        <Link href="/best-garage-heater">garage heater picks by situation</Link>.
       </p>
       <div className="not-prose my-6">
         <ButtonLink href="/garage-heater-calculator">Size your garage free →</ButtonLink>
