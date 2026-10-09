@@ -48,7 +48,6 @@ const SOURCE_IDS = [
   "big-maxx-manual",
   "vevor-diesel-manual",
   "kidde-c3010-datasheet",
-  "hs1500tt-manual",
   "epa-608",
 ];
 
@@ -219,8 +218,10 @@ export default function Page() {
   const pickFuh = productForRecommendation(["fuh54-5kw"], { capacityBtuh: sealed, units: 1 });
   const pickCz = productForRecommendation(["cz220-5kw-ceiling"], { capacityBtuh: sealed, units: 1 });
   const cz220 = findProduct("cz220-5kw-ceiling");
-  const dr975Warning = productWarning(findProduct("dr975-7k5-shop"));
-  const dieselWarning = productWarning(findProduct("diesel-heater-8kw"));
+  const dr975Product = findProduct("dr975-7k5-shop");
+  const dieselProduct = findProduct("diesel-heater-8kw");
+  const dr975Warning = productWarning(dr975Product);
+  const dieselWarning = productWarning(dieselProduct);
 
   // --- Pick 4: infrared spot heat. The product is the class's first verified listing.
   const pick4 = primaryProduct(infrared.productIds);
@@ -536,7 +537,7 @@ export default function Page() {
         />
       ) : null}
       <p>
-        {dr975Warning} <strong>Don&apos;t buy a 7.5 kW or 10 kW Dr. Infrared shop heater for a home garage.</strong> The DR-975 and DR-910F manuals both print that
+        <span data-source={dr975Product?.safetyLine?.sourceId}>{dr975Warning}</span> <strong>Don&apos;t buy a 7.5 kW or 10 kW Dr. Infrared shop heater for a home garage.</strong> The DR-975 and DR-910F manuals both print that
         warning.
       </p>
 
@@ -689,7 +690,7 @@ export default function Page() {
 
       <h2>What is not on this list</h2>
       <p>
-        Diesel air heaters have no buy button here. Our safety note for them: {dieselWarning} Read the <Link href="/diesel-heater-for-garage">diesel page</Link>{" "}
+        Diesel air heaters have no buy button here. Our safety note for them: <span data-source={dieselProduct?.safetyLine?.sourceId}>{dieselWarning}</span> Read the <Link href="/diesel-heater-for-garage">diesel page</Link>{" "}
         before you decide. Open-flame torpedo heaters are out for any enclosed garage.
       </p>
       <WhyNot rows={whyNotTorpedo} />

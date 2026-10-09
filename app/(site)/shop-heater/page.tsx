@@ -56,7 +56,6 @@ const SOURCE_IDS = [
   "eia-ng-annual",
   "eia-propane-weekly",
   "eia-diesel-weekly",
-  "hs1500tt-manual",
 ];
 
 // The shop every verdict below is asked about: detached, attended, listed heater, nothing flammable stored,
@@ -148,14 +147,20 @@ type CardProduct = { product: Product; shortName: string };
 function ProductCard({ eyebrow, main, note, extra = [] }: { eyebrow: string; main: CardProduct; note: ReactNode; extra?: CardProduct[] }) {
   const all = [main, ...extra];
   const link = route(main.product, "site", entry.href)[0];
-  const lines = [...new Set(all.flatMap(({ product }) => (product.safetyLine ? [product.safetyLine.text.replace(/\s*\(S\d+\)/g, "")] : [])))];
+  // One line per wording, tagged with the first product's source (scripts/source-audit.mjs reads data-source).
+  const lines: [text: string, sourceId: string | undefined][] = [];
+  for (const { product } of all) {
+    if (!product.safetyLine) continue;
+    const text = product.safetyLine.text.replace(/\s*\(S\d+\)/g, "");
+    if (!lines.some(([t]) => t === text)) lines.push([text, product.safetyLine.sourceId]);
+  }
   return (
     <div data-buy-group className="border border-(--color-line) p-4">
       <p className="font-mono text-xs uppercase tracking-[0.1em] text-(--color-fg-2)">{eyebrow}</p>
       <p className="mt-1 text-lg font-bold text-(--color-fg)">{main.product.name}</p>
       <p className="mt-2 text-sm text-(--color-fg-2)">{note}</p>
-      {lines.map((text) => (
-        <p key={text} className="mt-2 text-xs text-(--color-alarm)">
+      {lines.map(([text, sourceId]) => (
+        <p key={text} className="mt-2 text-xs text-(--color-alarm)" data-source={sourceId}>
           {text}
         </p>
       ))}
@@ -504,7 +509,7 @@ export default function Page() {
         rated output in the manual. It carries no UL or CSA listing for building heat.
       </p>
       <SafetyCallout>
-        <p>{dieselUnit.safetyLine?.text}</p>
+        <p data-source={dieselUnit.safetyLine?.sourceId}>{dieselUnit.safetyLine?.text}</p>
         <p className="mt-2">The same manual says the heater shall not be used in places with flammable vapor or dust.</p>
       </SafetyCallout>
       <p>Every one of these has to hold at once, in a detached shop with the exhaust and intake outdoors:</p>

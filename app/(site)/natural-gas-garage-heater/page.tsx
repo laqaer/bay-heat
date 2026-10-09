@@ -725,7 +725,7 @@ export default function Page() {
           <dt className="text-(--color-fg-2)">Bottom of unit above floor</dt>
           <dd>at least <Num f="bigmaxx.min_height_ft" /></dd>
         </dl>
-        <p className="mt-3 text-xs text-(--color-alarm)">{bigMaxx.safetyLine?.text}</p>
+        <p className="mt-3 text-xs text-(--color-alarm)" data-source={bigMaxx.safetyLine?.sourceId}>{bigMaxx.safetyLine?.text}</p>
         <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {bigMaxx.priceClass}</p>
         <div className="mt-3">
           <BuyButton href={buyLink.href}>{buyLink.label}</BuyButton>
