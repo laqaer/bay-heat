@@ -41,9 +41,11 @@ export const SOURCES: Record<string, Source> = {
   },
   "fuh54-manual": {
     id: "fuh54-manual",
-    title: "Fahrenheat FUH54 / FUH724 unit heater specification sheet (ZBL-FUH54)",
+    // The full installation manual (the spec sheet ZBL-FUH54 has the ratings but not the wiring rules): copper only,
+    // no aluminum; 30 A max fuse; mounting height 6-11 ft for vertical (downward) air, 6-8 ft for horizontal.
+    title: "Fahrenheat FUH54 / FUH54C installation, operation and maintenance instructions (5200-11195-000)",
     publisher: "Marley Engineered Products",
-    url: "https://marleymep.com/wp-content/uploads/zbl-fuh54.pdf",
+    url: "https://www.marleymep.com/wp-content/uploads/5200-11195-000.pdf",
     retrieved: "2026-10-09",
   },
   "dr975-manual": {

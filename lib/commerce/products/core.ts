@@ -116,7 +116,7 @@ export const PRODUCTS: Product[] = [
     priceClassChecked: "2026-09-30",
     specFactIds: ["dr238.watts", "dr238.mount_height_in", "dr238.clearance_ceiling_in", "dr238.clearance_wall_in"],
     safetyLine: {
-      text: "Manual: the lowest part of the heater must be at least 94.5 in above the floor, wall or ceiling mounted, and a wall mount needs 15.8 in to the ceiling, so check your ceiling height first; a standard 8 ft ceiling will not meet it. Not where gasoline, paint or flammable liquids are used or stored. Plug it straight into the outlet: never an extension cord or power strip.",
+      text: "Manual: the lowest part of the heater must be at least 94.5 in above the floor, wall or ceiling mounted, and a wall mount needs 15.8 in to the ceiling, so check your ceiling height first; a standard 8 ft ceiling will not meet it. Not where gasoline, paint or flammable liquids are used or stored. Plug it straight into the outlet: never an extension cord or power strip. Do not leave it unattended when in use.",
       ev: "S",
       sourceId: "dr238-manual",
     },
