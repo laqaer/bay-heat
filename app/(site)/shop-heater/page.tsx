@@ -56,6 +56,7 @@ const SOURCE_IDS = [
   "eia-ng-annual",
   "eia-propane-weekly",
   "eia-diesel-weekly",
+  "hs1500tt-manual",
 ];
 
 // The shop every verdict below is asked about: detached, attended, listed heater, nothing flammable stored,

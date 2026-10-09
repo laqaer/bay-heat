@@ -48,6 +48,8 @@ const SOURCE_IDS = [
   "big-maxx-manual",
   "vevor-diesel-manual",
   "kidde-c3010-datasheet",
+  "hs1500tt-manual",
+  "epa-608",
 ];
 
 // Two stations that bracket the climate question for a plug-in heater. The worked example (Chicago) is the cold one.

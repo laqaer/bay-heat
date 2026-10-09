@@ -40,7 +40,7 @@ export const metadata: Metadata = pageMetadata({
   description: entry.description,
 });
 
-const SOURCE_IDS = ["big-maxx-manual", "ifgc-2021", "irc-2021", "eia-ng-annual", "eia-electric-power-monthly"];
+const SOURCE_IDS = ["big-maxx-manual", "ifgc-2021", "irc-2021", "eia-ng-annual", "eia-electric-power-monthly", "kidde-c3010-datasheet"];
 
 // A fact's number, or a loud build failure: every figure on this page traces to a registered fact or a planner call.
 function factNumber(id: string): number {
