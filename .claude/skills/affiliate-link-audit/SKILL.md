@@ -12,7 +12,7 @@ Run this whenever `lib/commerce/**` changes, and on a standing weekly cadence (M
 ```
 node scripts/verify-asins.mjs                                   # is every listing we link to still buyable? (plain URLs, no affiliate clicks)
 npm run build && node scripts/link-audit.mjs                    # counts, dp vs search, tags, rel, disclosure above the first link
-next start -p 3000 & node scripts/link-audit.mjs --rail http://localhost:3000   # first paid link position on a phone and desktop
+npm start & node scripts/link-audit.mjs --rail http://localhost:3000   # first paid link position on a phone and desktop
 ```
 
 `verify-asins.mjs` is the only thing that touches Amazon, and it never sends an affiliate URL or retries past a robot check. It re-checks parked listings in `company/research/asin-ledger.json` and prints `RESTORE` when one is back. A listing that reads `unavailable` or `offers-only` earns nothing: park it (drop its `asin` and its `VERIFIED_ASINS` entry, mark it `parked` in the ledger) instead of leaving a dead link. `company/REVENUE-ANALYSIS.md` explains why.

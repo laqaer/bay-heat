@@ -37,3 +37,14 @@ jobs:
       - run: npm test
 
       - run: npm run build
+
+      # The site ships as a static export to Cloudflare (wrangler.jsonc). Fail here if the export, the generated
+      # routing files, or the per-page share cards go missing.
+      - name: Check static export
+        run: |
+          for f in out/index.html out/404.html out/_redirects out/_headers out/sitemap.xml out/robots.txt out/opengraph-image out/og/garage-heater-calculator.png; do
+            test -s "$f" || { echo "::error::missing $f"; exit 1; }
+          done
+          grep -q "^/r/:code " out/_redirects
+      - name: Validate Worker config
+        run: npx --yes wrangler@4.135.0 deploy --dry-run --outdir "$RUNNER_TEMP/wrangler-dry-run"

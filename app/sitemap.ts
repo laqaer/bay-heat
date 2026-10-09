@@ -2,8 +2,10 @@ import type { MetadataRoute } from "next";
 import { PAGES } from "@/lib/pages";
 import { SITE_URL } from "@/lib/site";
 
-// Indexable routes only (BLUEPRINT.md §3.3): /r/[code], the CSV data routes and the OG image routes are
-// excluded. This file is static by default (no request-time API used).
+// Indexable routes only (BLUEPRINT.md §3.3): the CSV data routes and the OG image routes are excluded.
+// force-static: the site is a static export, so this is written to out/sitemap.xml at build time.
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return PAGES.filter((p) => p.indexable).map((p) => ({
     url: `${SITE_URL}${p.href}`,

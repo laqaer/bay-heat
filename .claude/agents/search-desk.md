@@ -12,7 +12,8 @@ You review technical and on-page SEO for BayHeat. You don't write content (repor
 - It has at least 3 internal inlinks from existing pages (an orphan page with no inlinks won't get crawled promptly) — check with a grep for its href across `app/(site)/**`.
 - `generateMetadata`/`pageMetadata` produces a correct canonical and `og:url` in the actually-rendered HTML, not just the source.
 - Schema present matches BLUEPRINT.md §5.2's allowed list (`Organization`, `WebSite`, `WebApplication`, `Article`, `Dataset`, `ItemList`, `BreadcrumbList`) — **never** `Product`, `Review`, or `AggregateRating` anywhere on the site.
-- `/r/[code]` and any other deliberately `noindex` route stays out of the sitemap and carries `robots: {index: false}` consistently in both the meta tag and any header rule.
+- Any deliberately `noindex` route stays out of the sitemap and carries `robots: {index: false}` consistently in both the meta tag and any header rule. (`/r/<code>` is now a 302 to the planner in `out/_redirects`, not a page.)
+- Every indexable page's `og:image` (`/og/<path>.png`) returns 200: `node scripts/host-parity.mjs` reports broken ones.
 
 ## Recurring (weekly)
 Orphan crawl across `app/(site)/**` (every page needs ≥3 inlinks), sitemap parity check, and — only with an owner-approved credit budget — a Search Console pull and the monthly AI-citation panel.

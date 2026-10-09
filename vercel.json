@@ -1,8 +1,110 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "git": {
     "deploymentEnabled": {
       "infra/cloudflare-static-export": false,
       "infra/cloudflare-preview-workflow": false
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/best-electric-garage-heaters-by-size",
+      "destination": "/garage-heater-size",
+      "permanent": true
+    },
+    {
+      "source": "/electric-garage-heater-operating-cost",
+      "destination": "/cost-to-heat-a-garage",
+      "permanent": true
+    },
+    {
+      "source": "/120v-vs-240v-garage-heater",
+      "destination": "/240v-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/hardwired-vs-plugin-garage-heater",
+      "destination": "/240v-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/portable-garage-heaters-15a-circuit",
+      "destination": "/portable-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/forced-air-vs-infrared-garage-heater",
+      "destination": "/infrared-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/best-ceiling-mount-garage-heaters-under-200",
+      "destination": "/ceiling-mount-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/wall-mount-vs-ceiling-garage-heater",
+      "destination": "/ceiling-mount-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/insulate-garage-before-heater-upgrade",
+      "destination": "/how-to-insulate-a-garage",
+      "permanent": true
+    },
+    {
+      "source": "/best-infrared-garage-heaters",
+      "destination": "/infrared-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/r/:code",
+      "destination": "/garage-heater-calculator?g=:code",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/((?!embed).*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
+      ]
+    },
+    {
+      "source": "/embed/:path*",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors *"
+        }
+      ]
+    }
+  ]
 }

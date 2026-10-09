@@ -7,7 +7,7 @@
  *   node scripts/link-audit.mjs --json company/research/link-audit.json
  *
  * Static mode reads the prerendered HTML in .next/server/app and never touches the network. Rail mode drives a
- * running `next start` with Playwright (resolved from PLAYWRIGHT_MODULE, or the local/global install) and measures
+ * running static build (`npm start`, which serves out/ with wrangler dev) with Playwright (resolved from PLAYWRIGHT_MODULE, or the local/global install) and measures
  * how far down the page the first paid link sits at 390x844 and 1440x900 -- the blueprint's "first plate within
  * 700 px" rule (BLUEPRINT.md §3.3), which the model's click-through assumptions rest on.
  *

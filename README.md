@@ -3,7 +3,7 @@
 Boring comparison site for electric garage and workshop heaters: 120V vs 240V, hardwired vs plug-in, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, seal-first vs more watts, operating cost (watts × hours × your rate), and electric vs propane.
 
 **Brand:** BayHeat Guide  
-**Domain:** [bayheatguide.com](https://bayheatguide.com) (live on Vercel; production domain wired, www → apex)  
+**Domain:** [bayheatguide.com](https://bayheatguide.com) (served by Vercel until the nameserver cutover; the same build runs on Cloudflare at [bay-heat.laqaer-products.workers.dev](https://bay-heat.laqaer-products.workers.dev). See `docs/cloudflare-migration.md`)  
 **Contact:** [hello@bayheatguide.com](mailto:hello@bayheatguide.com)  
 **Publisher:** Laqaer Products
 
@@ -18,7 +18,7 @@ Mogul is the factory that ships small, useful buying-guide sites (circuit-honest
 - Next.js App Router (16) + TypeScript
 - Tailwind CSS v4
 - Static editorial pages, JSON-LD (`WebSite` + `Article` on guides)
-- Vercel-ready (`npm run build` / `npm run start`; no env vars required)
+- Static export (`npm run build` writes `out/`, plus `out/_redirects` and `out/_headers`), served as an assets-only Cloudflare Worker (`wrangler.jsonc`); no env vars required
 
 ## Local setup
 
@@ -36,13 +36,13 @@ npm run lint
 npm run build
 ```
 
-## Deploy on Vercel
+## Deploy on Cloudflare
 
-1. Import `laqaer/bay-heat`.
-2. Framework preset: **Next.js**. Leave build/output commands at defaults (`next build`).
-3. No environment variables are required for the editorial site.
-4. Production domain `bayheatguide.com` is wired (apex 200, www → apex). The default Vercel hostname `bay-heat.vercel.app` remains available for previews.
-5. Replace `public/ads.txt` before serving ads. Amazon Associates links (tag `laqaer-20`) are live on the homepage, the 120 V vs 240 V guide, the forced-air vs infrared guide, the ceiling-mount, 15 A portable, by-size, wall-mount, and infrared guides, and on the hardwired-vs-plug-in, insulate-first, operating-cost, and electric-vs-propane guides.
+1. `npm run build` runs `next build` (static export to `out/`) and then `scripts/cloudflare-routing.mjs`, which writes `out/_redirects` (from `lib/redirects.ts`) and `out/_headers`.
+2. Every push to `main` deploys through `.github/workflows/deploy.yml`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. To deploy by hand: `CLOUDFLARE_ACCOUNT_ID=... npx wrangler@4.135.0 deploy`.
+3. To preview locally: `npm run build && npx wrangler@4.135.0 dev`. That serves `out/` with the same redirects and headers as production.
+4. `bayheatguide.com` moves from Vercel when the Name.com nameservers change. Until then `vercel.json` keeps the redirects and headers on Vercel. The steps are in `docs/cloudflare-migration.md`.
+5. Replace `public/ads.txt` before serving ads.
 
 ## IndexNow
 
