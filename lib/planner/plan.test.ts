@@ -261,3 +261,22 @@ test("a pair of small heaters gets the panel rule of thumb, not a blanket load c
   assert.equal(plan({ ...oneCar, panelAmps: 100 }).circuits.panelCheck, "ok");
   assert.equal(plan({ ...oneCar, panelAmps: "unknown" }).circuits.panelCheck, "unknown");
 });
+
+// Codex review on #26: with a 240 V / 30 A circuit and no way to add one, a 40 °F sessions garage used to get the
+// 240 V infrared class, whose catalog row claimed 240V30A while its 6 kW top needs a 35 A breaker, so "Power it"
+// prescribed 35 A. The catalog fix (catalog.test.ts checks every hardwired class against its wattage) closes it;
+// this pins the reader-facing promise: no new circuit allowed means "Power it" never picks a bigger breaker.
+test("Power it never prescribes a bigger breaker than the reader's circuit when they can't add one", () => {
+  const sessions = { mode: "sessions" as const, sessionsPerWeek: 3, hoursPerSession: 2, doorOpeningsPerSession: 2 };
+  for (const circuit of ["120V20A", "240V20A", "240V30A", "240V40A", "240V50A"] as const) {
+    const amps = Number(circuit.split("V")[1].replace("A", ""));
+    for (const targetTemp of [40, 45, 50, 55]) {
+      for (const usage of [EXAMPLE_A_INPUT.usage, sessions]) {
+        const r = plan({ ...EXAMPLE_A_INPUT, targetTemp, circuit, canAddCircuit: false, usage });
+        if (r.circuits.forSizeClassId === undefined) continue; // sized for the whole load, not a pick on this circuit
+        assert.equal(r.circuits.forSizeCount, 1, `${circuit} ${targetTemp}F: one existing circuit means one heater`);
+        assert.ok(r.circuits.forSize.breakerA <= amps, `${circuit} ${targetTemp}F ${usage.mode}: ${r.circuits.forSizeClassId} needs ${r.circuits.forSize.breakerA} A`);
+      }
+    }
+  }
+});

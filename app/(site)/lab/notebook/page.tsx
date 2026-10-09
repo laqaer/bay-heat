@@ -43,7 +43,9 @@ export default function Page() {
                 and for some garages where a gas or diesel heater was the top pick. The &ldquo;Power it&rdquo;
                 circuit now matches the electric heaters the report recommends, one circuit per heater. If no
                 recommended electric heater covers the whole load, it shows the heater sizes we model (4, 5, 7.5 or
-                10 kW) that do, as many as it takes. Heat loads did not change.
+                10 kW) that do, as many as it takes. Two circuit corrections shipped with it. A 4 kW heater needs a
+                30 A circuit, not 20 A, and a 240 V infrared heater needs 40 A, not 30 A. The planner no longer
+                suggests a second heater when you said you can&apos;t add a circuit. Heat loads did not change.
               </td>
             </tr>
           </tbody>
