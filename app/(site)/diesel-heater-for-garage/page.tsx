@@ -157,7 +157,8 @@ export default function Page() {
         Don&apos;t buy a diesel air heater to heat an attached garage full time — buy a listed electric or vented
         natural-gas unit heater for that job instead (see the <Link href="/garage-heaters">fuel hub</Link>). A diesel
         heater&apos;s manual scope is a detached space, attended or thermostatically monitored, with its exhaust kit
-        installed — not a set-and-forget house-adjacent heater.
+        installed — not a set-and-forget house-adjacent heater. Heating a workshop? The{" "}
+        <Link href="/shop-heater">shop heater guide</Link> compares diesel with 240V electric, vented gas and a torpedo.
       </p>
 
       <h2>Buy: 5 kW and 8 kW classes, plus the exhaust kit the safety rule requires</h2>
