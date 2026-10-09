@@ -4,6 +4,9 @@ import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { Callout } from "@/components/ui/Callout";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { QuickPick } from "@/components/commerce/QuickPick";
+import { findProduct } from "@/lib/commerce/products";
+import { getFact } from "@/lib/facts";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
 import { pageMetadata } from "@/lib/seo";
@@ -94,6 +97,17 @@ function runTier(presetKey: Exclude<Preset, "custom">, tier: TierName, stationId
   return heatLossDesign(input, envelope, tOut, station.elevFt);
 }
 
+// Heaters that can be bought in one click for the brackets most garages land in. Which rows each one covers is
+// computed from the table, never typed, and only at the tight end: a single heater that covers a leaky garage on
+// paper is the purchase this page tells readers not to make. Every row models holding the garage warm
+// continuously, so only hardwired, thermostat-controlled heaters qualify: a 120 V portable is attended-use only
+// (lib/safety/verdict.ts rule 21). A pick with a manual mounting limit (`maxCeilingFact`) never lists a preset
+// taller than that limit, which is why the 5 kW pick is the wall-or-ceiling FUH54: the CZ220's manual caps ceiling
+// mounting at 8 ft, below the 2-4 car presets.
+const PICKS: { productId: string; label: string; maxCeilingFact?: string }[] = [
+  { productId: "fuh54-5kw", label: "5 kW on a 240 V, 30 A circuit, wall or ceiling" },
+];
+
 type Row = { presetKey: Exclude<Preset, "custom">; presetLabel: string; stationId: string; stationLabel: string; tight: HeatLossResult; leaky: HeatLossResult };
 
 export default function Page() {
@@ -110,6 +124,15 @@ export default function Page() {
 
   const twoCarCold = rows.find((r) => r.presetKey === "2car" && r.stationId === "IL-chicago")!;
   const twoCarMild = rows.find((r) => r.presetKey === "2car" && r.stationId === "GA-atlanta")!;
+  const short = (r: Row) => `${r.presetLabel} ${r.stationId === "IL-chicago" ? "Chicago" : "Atlanta"}`;
+  const picks = PICKS.map((pick) => {
+    const output = findProduct(pick.productId)?.outputBtuh ?? 0;
+    const maxCeiling = pick.maxCeilingFact ? Number(getFact(pick.maxCeilingFact)?.value ?? 0) : Infinity;
+    const fits = (r: Row) => r.tight.qSize <= output && PRESET_DEFAULTS[r.presetKey].height <= maxCeiling;
+    return { ...pick, covers: rows.filter(fits).map(short) };
+  }).filter((pick) => pick.covers.length > 0);
+  const largest = Math.max(...PICKS.map((pick) => findProduct(pick.productId)?.outputBtuh ?? 0));
+  const beyond = rows.filter((r) => r.tight.qSize > largest).map(short);
 
   return (
     <ReportPage entry={entry} sources={[]}>
@@ -184,6 +207,35 @@ export default function Page() {
         />{" "}
         sizing margin already applied.
       </p>
+
+      <h2>Heaters that match the tight end of a bracket</h2>
+      <p>
+        If your garage is insulated and sealed like the tight column, check whether its row is listed below. If
+        it&apos;s closer to the leaky column, fix the door and ceiling first: the leaky column needs a much bigger
+        heater, and it loses that extra heat every hour the heater runs. Your garage&apos;s own number from the{" "}
+        <a href="/garage-heater-calculator">calculator</a> beats either column.
+      </p>
+      <p>
+        No 1,500 W plug-in heater is on this list. Every row here holds the garage warm all day, and a cord-and-plug
+        portable is for attended use only: unplug it when you leave. It suits spot heat while you work; the{" "}
+        <a href="/portable-garage-heater">portable heater guide</a> covers that.
+      </p>
+      {picks.map((pick) => (
+        <QuickPick
+          key={pick.productId}
+          productId={pick.productId}
+          page={entry.href}
+          eyebrow={`Model pick · ${pick.label}`}
+          headline={`Covers the tight end of: ${pick.covers.join(", ")}.`}
+        />
+      ))}
+      {beyond.length > 0 ? (
+        <p>
+          Above 5 kW ({beyond.join(", ")} even when tight), one 5 kW unit won&apos;t carry it. Compare a
+          bigger 240 V unit on the <a href="/240v-garage-heater">240 V page</a> with gas, propane and heat-pump options
+          on the <a href="/garage-heaters">fuel comparison</a>.
+        </p>
+      ) : null}
 
       <h2>Why the same size garage needs 3x more heater</h2>
       <p>

@@ -1,6 +1,7 @@
 import { Archivo, Martian_Mono } from "next/font/google";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/jsonld";
 import { rootMetadata } from "@/lib/seo";
+import { CF_WEB_ANALYTICS_TOKEN } from "@/lib/env.public";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -35,6 +36,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         {children}
+        {CF_WEB_ANALYTICS_TOKEN ? (
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={JSON.stringify({ token: CF_WEB_ANALYTICS_TOKEN })}
+          />
+        ) : null}
       </body>
     </html>
   );
