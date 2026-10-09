@@ -58,6 +58,9 @@ for (const file of pages(OUT)) {
   const page = relative(OUT, file);
   // The flight data in <script> repeats every string on the page; only rendered markup counts.
   const html = readFileSync(file, "utf8").replace(/<script\b[\s\S]*?<\/script>/g, "");
+  // The page's Sources list (components/evidence/SourceList): ids, not titles, so a SourceLink's title attribute
+  // elsewhere on the page can't stand in for a missing entry.
+  const listed = new Set([...html.matchAll(/data-source-entry="([^"]+)"/g)].map((m) => m[1]));
   for (const [, , , id, , inner] of html.matchAll(TAGGED)) {
     // The tag must name a source that carries the wording inside it, judged on the longest (most specific) wording
     // it holds: the CZ220 line opens with the flammables sentence the FUH54 shares, but only the CZ220 carries all of it.
@@ -69,7 +72,7 @@ for (const file of pages(OUT)) {
     if (GENERIC_SOURCE_IDS.has(id)) continue;
     const source = getSource(id);
     if (!source) gaps.push(`${page}: a safety line cites "${id}", which has no record in lib/facts`);
-    else if (!inner.includes(`data-source-link="${id}"`) && !onPage(html, source.title)) {
+    else if (!inner.includes(`data-source-link="${id}"`) && !listed.has(id)) {
       gaps.push(`${page}: a safety line cites "${id}", but neither links it nor finds it in the page's Sources`);
     }
   }

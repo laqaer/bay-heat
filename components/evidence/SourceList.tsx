@@ -7,7 +7,7 @@ export function SourceList({ sources }: { sources: Source[] }) {
       <h2 className="font-mono text-xs uppercase tracking-[0.12em] text-(--color-fg-2)">Sources</h2>
       <ol className="mt-3 space-y-1 text-xs leading-5 text-(--color-fg-2)">
         {sources.map((s, i) => (
-          <li key={s.id} id={`source-${i + 1}`}>
+          <li key={s.id} id={`source-${i + 1}`} data-source-entry={s.id}>
             [{i + 1}]{" "}
             <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-(--color-link) underline">
               {s.title}
