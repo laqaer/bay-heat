@@ -259,8 +259,7 @@ export default function Page() {
         For a bracket, that&apos;s the point — it tells you the shape of the problem before you measure anything.
         For a heater purchase, run the <a href="/garage-heater-calculator">garage heater calculator</a> with your
         actual dimensions, and see every class side by side on the{" "}
-        <a href="/electric-garage-heater">electric heater page</a>. Don&apos;t buy by wattage alone off this chart. Once you have your load, the{" "}
-        <a href="/best-garage-heater">best garage heater</a> page matches it to a heater, a circuit or a fuel.
+        <a href="/electric-garage-heater">electric heater page</a>. Don&apos;t buy by wattage alone off this chart.
       </p>
     </ReportPage>
   );
