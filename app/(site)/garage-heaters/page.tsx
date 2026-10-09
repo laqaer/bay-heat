@@ -36,11 +36,10 @@ const SYSTEM_LABEL: Record<CostRow["system"], string> = {
   diesel_78: "Diesel air heater",
 };
 
-const SUBPAGES: { href: "/electric-garage-heater" | "/diesel-heater-for-garage" | "/propane-heater-for-garage" | "/natural-gas-garage-heater" | "/heat-pump-mini-split-for-garage" | "/infrared-garage-heater" | "/electric-vs-propane-garage-heater" | "/shop-heater"; label: string; blurb: string }[] = [
+const SUBPAGES: { href: "/electric-garage-heater" | "/diesel-heater-for-garage" | "/propane-heater-for-garage" | "/heat-pump-mini-split-for-garage" | "/infrared-garage-heater" | "/electric-vs-propane-garage-heater" | "/shop-heater"; label: string; blurb: string }[] = [
   { href: "/electric-garage-heater", label: "Electric garage heaters", blurb: "1.5 kW plug-in to 10 kW hardwired — circuit size for every class." },
   { href: "/diesel-heater-for-garage", label: "Diesel heaters", blurb: "Cost per hour against electric, and why the exhaust has to go outside." },
   { href: "/propane-heater-for-garage", label: "Propane heaters", blurb: "Vented unit heaters vs portable Buddy-type radiant, and when each is safe." },
-  { href: "/natural-gas-garage-heater", label: "Natural gas heaters", blurb: "Sizing in BTU/h in and out, venting, the gas fitter, and cost per hour against electric." },
   { href: "/heat-pump-mini-split-for-garage", label: "Mini-split heat pumps", blurb: "Whether a pricier heat-pump install beats a cheap electric heater over 5 years." },
   { href: "/infrared-garage-heater", label: "Infrared garage heaters", blurb: "Radiant vs forced-air heat with the door open." },
   { href: "/electric-vs-propane-garage-heater", label: "Electric vs propane, head to head", blurb: "Delivered cost per million BTU, side by side." },
@@ -184,8 +183,7 @@ export default function Page() {
         pulls ahead once electricity costs more than roughly 21¢/kWh, closer to California or New England rates than
         Illinois&apos;. A mini-split beats resistance heat any month it stays above freezing, then loses that edge on
         the coldest nights. None of that changes the install rule: combustion heat needs a place for exhaust to go
-        and a CO alarm; electric heat needs a circuit sized for its nameplate, not just its price tag. For the natural gas
-        row, the <Link href="/natural-gas-garage-heater">natural gas page</Link> covers sizing, venting and the gas fitter.
+        and a CO alarm; electric heat needs a circuit sized for its nameplate, not just its price tag.
       </p>
 
       <h2>Safety scope</h2>
