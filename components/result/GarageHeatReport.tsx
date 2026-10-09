@@ -113,7 +113,7 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
           </p>
           <p className="mt-1 text-sm text-(--color-fg-2)">
             Circuit: {result.circuits.forSizeCount > 1 ? `${result.circuits.forSizeCount} × ` : ""}
-            {result.circuits.forSize.breakerA}A / {result.circuits.forSize.wireNM} today.
+            {result.circuits.forSize.volts}V / {result.circuits.forSize.breakerA}A / {result.circuits.forSize.wireNM} today.
           </p>
           <FixCart measures={result.fixFirst.measures} doors={result.inputsEcho.garageDoors} page={page} />
         </section>
@@ -240,7 +240,8 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
         <div className="mt-4 border border-(--color-line) bg-(--color-surface) p-5">
           <p className="font-mono text-sm text-(--color-fg)">
             {result.circuits.forSizeCount > 1 ? `${result.circuits.forSizeCount} circuits, each: ` : ""}
-            {result.circuits.forSize.breakerA}A breaker · {result.circuits.forSize.wireNM} (NM) or {result.circuits.forSize.wireTHHN} (THHN) ·{" "}
+            {result.circuits.forSize.volts}V · {result.circuits.forSize.breakerA}A breaker · {result.circuits.forSize.wireNM} (NM) or{" "}
+            {result.circuits.forSize.wireTHHN} (THHN) ·{" "}
             {amps(result.circuits.forSize.amps)}
           </p>
           {result.circuits.panelCheck === "load_calc" && result.circuits.forSizeCount > 1 ? (
