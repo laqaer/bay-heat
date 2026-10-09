@@ -4,31 +4,24 @@
  *
  *   npm run build && node scripts/source-audit.mjs        # exits 1 and lists each gap
  *
- * A product's safetyLine quotes or paraphrases a manual (its sourceId, lib/facts/sources.ts). Pages render each
- * line inside an element tagged data-source="<sourceId>", and the page's Sources list must carry that source, or a
- * reader can't check the claim (Codex review on #27). Three kinds of gap fail the audit:
- * - a tagged line whose source is registered but missing from the page's Sources;
+ * A product's safetyLine quotes or paraphrases a manual (its sourceId; the registry is lib/facts). Pages render each
+ * line inside an element tagged data-source="<sourceId>", and the line must be traceable: either the element links
+ * its own source (components/evidence/SourceLink, used by QuickPick and the calculator report, which also render in
+ * client-only views this static scan can't reach) or the page's Sources list carries it (Codex review on #27).
+ * Gaps that fail the audit:
+ * - a tagged line whose source is registered but neither linked in the element nor listed in the page's Sources;
  * - a tagged line whose source isn't registered at all, unless it is one of the GENERIC_SOURCE_IDS below;
- * - a product's safety line on the page with no tag naming a source that carries that wording, so a new render
- *   site can't skip the tag. Several products share one wording (the flammables rule), so the tag, not the
- *   text, says which product's manual is being quoted.
- * Reads the static export in out/; never touches the network.
+ * - any occurrence of a product's safety line outside a tagged element, so a new render site can't skip the tag.
+ *   Each occurrence is checked: tagged elements are cut out of the page first, and whatever product wording is
+ *   left is untagged. Several products share one wording (the flammables rule), so the tag, not the text, says
+ *   which product's manual is being quoted.
  */
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import { ALL_PRODUCTS } from "../lib/commerce/products/index.ts";
-import { SOURCES } from "../lib/facts/sources.ts";
+import { ALL_PRODUCTS, GENERIC_SOURCE_IDS } from "../lib/commerce/products/index.ts";
+import { getSource } from "../lib/facts/index.ts";
 
 const OUT = process.argv[2] ?? "out";
-
-// Generic product classes ("a 240 V 4 kW heater") cite the instruction every listed heater's manual carries, not
-// one model's manual, so there is no single document to list.
-export const GENERIC_SOURCE_IDS = new Set([
-  "generic-electric-heater-manual",
-  "generic-infrared-heater-manual",
-  "generic-portable-heater-manual",
-  "generic-thermostat-manual",
-]);
 
 const escapeHtml = (s) => s.replace(/&/g, "&amp;").replace(/'/g, "&#x27;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const onPage = (html, text) => html.includes(text) || html.includes(escapeHtml(text));
@@ -41,38 +34,30 @@ function pages(dir) {
   });
 }
 
-// The sources whose products carry each safety-line wording.
-const sourcesByText = new Map();
-for (const product of ALL_PRODUCTS) {
-  const line = product.safetyLine;
-  if (!line?.sourceId) continue;
-  if (!sourcesByText.has(line.text)) sourcesByText.set(line.text, new Set());
-  sourcesByText.get(line.text).add(line.sourceId);
-}
+const TEXTS = [...new Set(ALL_PRODUCTS.flatMap((p) => (p.safetyLine?.sourceId ? [p.safetyLine.text] : [])))].sort((a, b) => b.length - a.length);
+// One tagged element: <p|span|td ... data-source="id" ...>...</p|span|td>. Safety lines hold only text and links.
+const TAGGED = /<(p|span|td)\b([^>]*?)\sdata-source="([^"]+)"([^>]*)>([\s\S]*?)<\/\1>/g;
 
 const gaps = [];
 for (const file of pages(OUT)) {
-  const html = readFileSync(file, "utf8");
   const page = relative(OUT, file);
-  const tagged = new Set([...html.matchAll(/data-source="([^"]+)"/g)].map((m) => m[1]));
-  for (const id of tagged) {
+  // The flight data in <script> repeats every string on the page; only rendered markup counts.
+  const html = readFileSync(file, "utf8").replace(/<script\b[\s\S]*?<\/script>/g, "");
+  for (const [, , , id, , inner] of html.matchAll(TAGGED)) {
     if (GENERIC_SOURCE_IDS.has(id)) continue;
-    const source = SOURCES[id];
-    if (!source) gaps.push(`${page}: a safety line cites "${id}", which has no record in lib/facts/sources.ts`);
-    else if (!onPage(html, source.title)) gaps.push(`${page}: a safety line cites "${id}", but the page's Sources don't list it`);
-  }
-  // Longest wording first, blanked once matched: the CZ220's line starts with the shared flammables sentence, and
-  // that prefix must not count as a second, untagged line.
-  let rest = html;
-  for (const [text, ids] of [...sourcesByText].sort((a, b) => b[0].length - a[0].length)) {
-    if (!onPage(rest, text)) continue;
-    rest = rest.split(text).join("").split(escapeHtml(text)).join("");
-    if (![...ids].some((id) => tagged.has(id))) {
-      gaps.push(`${page}: shows the safety line "${text.slice(0, 60)}…" without a data-source tag (one of ${[...ids].join(", ")})`);
+    const source = getSource(id);
+    if (!source) gaps.push(`${page}: a safety line cites "${id}", which has no record in lib/facts`);
+    else if (!inner.includes(`data-source-link="${id}"`) && !onPage(html, source.title)) {
+      gaps.push(`${page}: a safety line cites "${id}", but neither links it nor finds it in the page's Sources`);
     }
   }
+  let rest = html.replace(TAGGED, "");
+  for (const text of TEXTS) {
+    if (!onPage(rest, text)) continue;
+    rest = rest.split(text).join("").split(escapeHtml(text)).join("");
+    gaps.push(`${page}: shows the safety line "${text.slice(0, 60)}…" outside a data-source tag`);
+  }
 }
-
 if (gaps.length > 0) {
   process.stderr.write(`source-audit: ${gaps.length} gap(s):\n${gaps.map((g) => `  ${g}`).join("\n")}\n`);
   process.exit(1);

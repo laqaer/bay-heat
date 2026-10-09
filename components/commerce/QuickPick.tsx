@@ -7,6 +7,7 @@ import type { HeaterClassId } from "@/lib/planner/types";
 import { BuyButton } from "@/components/ui/BuyButton";
 import { DISCLOSURE_INLINE } from "@/lib/site";
 import { PaidLabel } from "./PaidLabel";
+import { SourceLink } from "@/components/evidence/SourceLink";
 
 
 // The above-the-fold pick (BLUEPRINT.md §3.3): one product, one button, inside the first screen on a phone. The
@@ -69,7 +70,10 @@ export function QuickPick({
         ) : null}
       </div>
       {product.safetyLine ? (
-        <p className="mt-2 max-w-none border-l-2 border-(--color-alarm) pl-2 text-[11px] leading-4 text-(--color-fg-2)" data-source={product.safetyLine.sourceId}>{product.safetyLine.text}</p>
+        <p className="mt-2 max-w-none border-l-2 border-(--color-alarm) pl-2 text-[11px] leading-4 text-(--color-fg-2)" data-source={product.safetyLine.sourceId}>
+          {product.safetyLine.text}
+          <SourceLink sourceId={product.safetyLine.sourceId} />
+        </p>
       ) : null}
     </div>
   );
