@@ -45,8 +45,9 @@ export const PAGES: PageEntry[] = [
     // applies (100% of buy pages are editor-approved before publishing).
     kind: "money",
     layout: "verdict-first",
-    // TODO(corrections branch): add `humanReview: "pending",` here once PageEntry has that field (not in this
-    // branch's lib/pages/types.ts, so adding it now fails typecheck). Until then LabLabel derives its review label from `layout`.
+    // Awaiting the human editor's sign-off (two automated fact-check rounds failed, so it escalated per
+    // .claude/agents/fact-checker.md): the label says "pending" until the editor approves it.
+    humanReview: "pending",
     nav: { group: "heaters", label: "Shop heaters" },
     primaryKeyword: "shop heater",
     volume: 6600,

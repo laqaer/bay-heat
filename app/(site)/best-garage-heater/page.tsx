@@ -234,7 +234,7 @@ export default function Page() {
   const gasFirst = tallGas.recommendations[0]?.classId === "g_vented_unit";
   const tallMini = tallElectric.recommendations.find((r) => r.classId === "hp_12_24k_230");
   const tallFive = tallElectric.recommendations.find((r) => r.classId === "e_240_5k");
-  const bigMaxxMinCeilingIn = factNum("bigmaxx.garage_min_height_ft") * 12 + factNum("bigmaxx.mhu50.height_in") + factNum("bigmaxx.top_clearance_in");
+  const bigMaxxMinCeilingIn = factNum("bigmaxx.min_height_ft") * 12 + factNum("bigmaxx.mhu50.height_in") + factNum("bigmaxx.clearance_top_sides_in");
   const bigMaxxOut = factNum("bigmaxx.mhu50.output_btuh");
   const bigMaxxIn = factNum("bigmaxx.mhu50.input_btuh");
   const bigMaxxFit = (bigMaxxOut / tallLoad) * 100;
@@ -570,7 +570,7 @@ export default function Page() {
       <h3 id="pick-5">5. Big or drafty garage with natural gas available: a vented unit heater</h3>
       <p>
         This one is right when gas is already piped in and the garage is big or drafty. The model we link needs a tall ceiling. The Big Maxx manual wants{" "}
-        <Num f="bigmaxx.garage_min_height_ft" /> from the floor to the heater&apos;s bottom and <Num f="bigmaxx.top_clearance_in" /> of clearance above its top.
+        <Num f="bigmaxx.min_height_ft" /> from the floor to the heater&apos;s bottom and <Num f="bigmaxx.clearance_top_sides_in" /> of clearance above its top.
         The MHU50&apos;s cabinet is <Num f="bigmaxx.mhu50.height_in" /> tall.
       </p>
       <p>
@@ -578,7 +578,7 @@ export default function Page() {
         <Num
           v={bigMaxxMinCeilingIn}
           ev="C"
-          src="bigmaxx.garage_min_height_ft x 12 + bigmaxx.mhu50.height_in + bigmaxx.top_clearance_in"
+          src="bigmaxx.min_height_ft x 12 + bigmaxx.mhu50.height_in + bigmaxx.clearance_top_sides_in"
           format={(x) => `${Math.floor(Number(x) / 12)} ft ${Number(x) % 12} in`}
         />
         . Our example garage has a <Num v={exampleCeilingFt} unit="ft" ev="E" src="EXAMPLE_A_INPUT.height" /> ceiling, so{" "}

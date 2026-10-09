@@ -115,6 +115,9 @@ export const PAGES: PageEntry[] = [
     primaryKeyword: "natural gas garage heater",
     volume: 2900,
     reviewed: "gas",
+    // Awaiting the human editor's sign-off (two automated fact-check rounds failed, so it escalated per
+    // .claude/agents/fact-checker.md): the label says "pending" until the editor approves it.
+    humanReview: "pending",
     indexable: true,
     published: "2026-10-09",
     updated: "2026-10-09",
