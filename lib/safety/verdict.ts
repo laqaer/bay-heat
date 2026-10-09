@@ -508,6 +508,10 @@ function electricVerdict(h: "e120" | "e240", s: Situation): Verdict {
   );
 }
 
+// The heater kinds whose verdict reads `ulListed`: Can I Run It? must ask about the listing mark for each of them, or
+// its answer stays "unknown" and a NO-GO rule like rule 22 can never fire (verdict.test.ts checks this list).
+export const ASKS_LISTING: readonly HeaterKind[] = ["e120", "e240", "kerosene", "vented_gas"];
+
 export function verdictFor(h: HeaterKind, s: Situation): Verdict {
   switch (h) {
     case "buddy":

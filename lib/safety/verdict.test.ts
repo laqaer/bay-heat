@@ -277,3 +277,19 @@ test("vented gas without a listing mark is NO-GO; an unknown mark adds the listi
   assert.equal(unknown.verdict, "GO_IF");
   assert.ok(unknown.conditions.some((c) => /listing mark/.test(c.text)));
 });
+
+// Codex review on #27: Can I Run It? only asked about the listing mark for electric and kerosene heaters, so a vented
+// gas heater's answer stayed "unknown" and its new no-listing NO-GO could never fire. Every kind whose verdict changes
+// with the listing answer must be in ASKS_LISTING, the list the form shows the question for.
+test("the form asks about the listing mark for every heater whose verdict depends on it", async () => {
+  const { ASKS_LISTING } = await import("./verdict.ts");
+  const kinds = ["e120", "e240", "buddy", "torpedo", "kerosene", "diesel", "vented_gas", "minisplit"] as const;
+  for (const kind of kinds) {
+    // The electric verdicts read the listing mark only once a circuit is chosen, as the form requires.
+    const circuit = kind === "e120" ? ("120V20A_dedicated" as const) : kind === "e240" ? ("240V30A" as const) : undefined;
+    const stamps = (["yes", "no", "unknown"] as const).map((ulListed) => JSON.stringify(verdictFor(kind, { ...BASE, circuit, ulListed })));
+    const dependsOnListing = new Set(stamps).size > 1;
+    assert.equal(ASKS_LISTING.includes(kind), dependsOnListing, `${kind}: verdict ${dependsOnListing ? "depends" : "does not depend"} on the listing mark`);
+  }
+  assert.equal(verdictFor("vented_gas", { ...BASE, ulListed: "no" }).verdict, "NO_GO");
+});
