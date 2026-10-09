@@ -160,7 +160,8 @@ test("plan() sizes very large loads as several identical circuits instead of thr
   for (const fuels of [["electric"], ["electric", "natural_gas"]] as const) {
     const r = plan({ ...leaky, fuels: [...fuels], ventingPossible: true });
     assert.ok(r.circuits.forSizeCount > 1, `expected more than one circuit for ${Math.round(r.heating.qSize)} BTU/h`);
-    assert.ok(r.circuits.forSize.breakerA <= 80);
+    // NEC 424.22(B): at most 48 A of element load per heater circuit, protected at 60 A or less.
+    assert.ok(r.circuits.forSize.minAmps <= 60 && r.circuits.forSize.breakerA <= 60, `${r.circuits.forSize.breakerA} A`);
     // Each circuit carries an equal share of the electric-resistance load (eta 1), whatever the top pick burns.
     const totalWatts = r.circuits.forSize.watts * r.circuits.forSizeCount;
     assert.ok(Math.abs(totalWatts - r.heating.qSize / 3.412) <= r.circuits.forSizeCount, `${totalWatts} W vs ${r.heating.qSize / 3.412} W`);

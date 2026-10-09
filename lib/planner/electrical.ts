@@ -1,9 +1,8 @@
 import type { Circuit, CircuitSpec, Wire } from "./types.ts";
 
-// NEC 240.6(A) standard overcurrent device sizes. Heater classes top out at 10 kW / 60 A, but the "forSize"
-// circuit (plan.ts) sizes straight off the raw design load for any envelope, including a bare/leaky one no
-// catalog class actually covers -- so this table (and the wire tables below) run one size past 60 A to 80 A
-// rather than throw on a heater-shaped input the catalog itself would flag as "why not" undersized.
+// NEC 240.6(A) standard overcurrent device sizes. Heater classes top out at 10 kW / 60 A, and circuitsForLoad()
+// keeps each heater circuit within NEC 424.22(B)'s 48 A / 60 A cap; 70 and 80 A stay in the table so a direct
+// circuitFor() call on a larger single load still returns a spec instead of throwing.
 const STANDARD_BREAKERS = [15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80] as const;
 
 // NEC Table 310.16 copper ampacities, 60degC column (NM/Romex per NEC 334.80) and 75degC column (THHN in
@@ -66,11 +65,14 @@ export function circuitFor(watts: number, voltsSupply: 120 | 208 | 240, voltsRat
   };
 }
 
-// The circuit (or circuits) an electric-resistance heater sized to a whole load needs. One 80 A breaker, the top
-// of STANDARD_BREAKERS, carries 80 / 1.25 = 64 A continuous (15,360 W at 240 V). A bigger load -- a leaky 3-car in
-// Minneapolis is about 25 kW -- is not one heater on one breaker; it is two or more heaters, each on its own
-// circuit, so the load is split evenly across the fewest identical circuits that fit instead of throwing.
-const MAX_CIRCUIT_WATTS_240 = (STANDARD_BREAKERS[STANDARD_BREAKERS.length - 1] / 1.25) * 240;
+// The circuit (or circuits) electric-resistance heaters sized to a whole load need. NEC 424.22(B) caps a
+// resistance heater's element load at 48 A, protected at no more than 60 A, and the catalog's largest heater is
+// 10 kW on a 60 A circuit -- so one heater circuit carries at most 48 A continuous (11,520 W at 240 V). A bigger
+// load -- a leaky 3-car in Minneapolis is about 25 kW -- is two or more heaters, each on its own circuit: split it
+// evenly across the fewest identical circuits within that cap instead of throwing (or prescribing a 70-80 A
+// heater circuit no listed garage heater uses).
+const MAX_HEATER_AMPS = 48;
+const MAX_CIRCUIT_WATTS_240 = MAX_HEATER_AMPS * 240;
 export function circuitsForLoad(watts: number): { spec: CircuitSpec; count: number } {
   const count = Math.max(1, Math.ceil(watts / MAX_CIRCUIT_WATTS_240));
   return { spec: circuitFor(watts / count, 240, 240), count };
