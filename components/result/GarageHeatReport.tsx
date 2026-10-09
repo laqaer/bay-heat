@@ -43,7 +43,7 @@ const SYSTEM_LABEL: Record<string, string> = {
 };
 
 // `page` is the path Associates tracking IDs are keyed by (lib/env.public.ts AMAZON_TAGS_BY_PAGE). The planner
-// renders this report at /garage-heater-calculator; the shared permalink passes "/r".
+// renders this report at /garage-heater-calculator (old /r/<code> share links redirect there).
 export function GarageHeatReport({ result, page = "/garage-heater-calculator" }: { result: PlannerResult; page?: string }) {
   const noHeatingLoad = result.heating.qDesign <= 0;
   return (

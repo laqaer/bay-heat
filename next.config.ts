@@ -1,33 +1,12 @@
 import type { NextConfig } from "next";
-import { REDIRECTS } from "./lib/redirects.ts";
 
-const securityHeaders = [
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-];
-
+// Static export (out/), served by Cloudflare Workers static assets (wrangler.jsonc). Redirects and response
+// headers can't live here in an export: scripts/cloudflare-routing.mjs writes them to out/_redirects and
+// out/_headers after the build, from lib/redirects.ts and the header list in that script.
 const nextConfig: NextConfig = {
+  output: "export",
   poweredByHeader: false,
   typedRoutes: true,
-  async redirects() {
-    return REDIRECTS.map((r) => ({ ...r, permanent: true }));
-  },
-  async headers() {
-    return [
-      {
-        source: "/((?!embed).*)",
-        headers: [...securityHeaders, { key: "X-Frame-Options", value: "SAMEORIGIN" }],
-      },
-      {
-        source: "/embed/:path*",
-        headers: [
-          ...securityHeaders,
-          { key: "Content-Security-Policy", value: "frame-ancestors *" },
-        ],
-      },
-    ];
-  },
 };
 
 export default nextConfig;

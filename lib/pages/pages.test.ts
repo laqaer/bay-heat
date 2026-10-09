@@ -29,7 +29,7 @@ test("no duplicate hrefs or ids in the registry", () => {
 
 test("every page.tsx under app/(site) that isn't a system route is in the registry", () => {
   const registered = new Set<string>(PAGES.map((p) => p.href));
-  const skip = new Set(["/r"]); // /r/[code] is a deliberate non-indexed report permalink, not in the content registry
+  const skip = new Set<string>();
 
   function walk(dir: string, urlPrefix: string) {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {

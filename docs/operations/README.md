@@ -10,13 +10,13 @@ Primary offer: circuit-honest comparison pages that earn Amazon Associates commi
 
 Buyer: a homeowner or shop user who is about to purchase a heater and can be harmed by the wrong voltage or mount.
 
-Why this offer: the pages, domain, and tagged listings already exist. Hosting is the Vercel Hobby plan. Direct checkout would need a merchant account that is not connected, and there is no evidence someone wants to pay this site instead of Amazon.
+Why this offer: the pages, domain, and tagged listings already exist. Hosting is the Vercel Hobby plan until the cutover to a free Cloudflare assets-only Worker (`docs/cloudflare-migration.md`). Direct checkout would need a merchant account that is not connected, and there is no evidence someone wants to pay this site instead of Amazon.
 
 Primary channel: organic search. Paid acquisition is not authorized.
 
 ## What exists
 
-- Public repo `laqaer/bay-heat`, production on Vercel (apex 200, `www` 308 to apex, trailing slash 308 to the canonical path). Public DNS is still Vercel (`ns1.vercel-dns.com`). A pending Cloudflare Free Website zone exists for `bayheatguide.com` and is not authoritative until Name.com nameservers change. See `docs/cloudflare-migration.md`.
+- Public repo `laqaer/bay-heat`, production on Vercel (apex 200, `www` 308 to apex, trailing slash 308 to the canonical path). Public DNS is still Vercel (`ns1.vercel-dns.com`). A pending Cloudflare Free Website zone exists for `bayheatguide.com` and is not authoritative until Name.com nameservers change. The same static build already runs on Cloudflare at `bay-heat.laqaer-products.workers.dev`. See `docs/cloudflare-migration.md` for the cutover steps.
 - Static Next.js export. No database, auth, or payment webhook.
 - Associates text links on the product guides. As of this change, the homepage, 120 V vs 240 V guide, and forced-air vs infrared guide also link the same listings.
 - IndexNow key file is live at `/96098d06c16790aabec2db1a232fee8f.txt`.
@@ -55,7 +55,7 @@ Do not change the Associates payout destination. The pending Cloudflare zone may
 
 - Published contact `hello@bayheatguide.com` still has **no public MX**. The pending Cloudflare zone has `MX 1 smtp.google.com`, which is not being served yet. Do not promise a reply to that address until the nameservers are Cloudflare’s and the Workspace accepts the domain.
 - Electrical and fire guidance stays general information. Do not give a job-specific wiring instruction.
-- If the watchdog fails, it opens or comments on one GitHub issue titled `BayHeat production health check failed`. Disable the `Operating watchdog` workflow to stop it. Rollback is the previous Vercel production deployment; this repo has no database to restore.
+- If the watchdog fails, it opens or comments on one GitHub issue titled `BayHeat production health check failed`. Disable the `Operating watchdog` workflow to stop it. Rollback is the previous deployment: `npx wrangler@4.135.0 rollback` on Cloudflare, or the previous Vercel production deployment before the cutover. This repo has no database to restore.
 - Do not request `amazon.com` URLs from the health check. That would create affiliate clicks.
 
 ## Handoff

@@ -13,7 +13,7 @@ BayHeat's pages are registered before they're written — the route, title, and 
 2. **Run `npx next typegen`** so the new route's typed-route entry exists before you write the page component (Next 16's `PageProps<'/your-route'>` needs this).
 3. **Create `app/(site)/your-route/page.tsx`** following the exact boilerplate pattern already used across every other page: `findPage("/your-route")!`, `pageMetadata({...})` for the exported `metadata`, and the page body wrapped in `<ReportPage entry={entry} sources={sources}>`.
 4. **Write the content** — see the `weekly-content-sprint` skill for the drafting/review pipeline this page then goes through.
-5. **Check for an OG image need.** Per BLUEPRINT.md §4.9, most routes inherit `app/opengraph-image.tsx` automatically; only give a page its own `opengraph-image.tsx` if it's one of the small set of dedicated-OG routes (home, the planner, `/r/[code]`, `/can-i-run-it`, a Lab report, `/cost-to-heat-a-garage`, `/garage-heaters`) — don't add a bespoke OG image to an ordinary page.
+5. **OG image: nothing to add.** Every page in the registry (`lib/pages`) gets a prebuilt share card at `/og/<path>.png` from `app/og/[...slug]/route.tsx`, and `lib/seo.ts` points `og:image` at it. Don't add a per-page `opengraph-image.tsx`: the site is a static export, and a nested one was never wired into `og:image` (it 404'd).
 6. **Confirm the build.** `npx next typegen && npx tsc --noEmit -p . && npx eslint . && node --test 'lib/**/*.test.ts' && npx next build` — all clean before opening a PR.
 7. **Link it in.** A new page needs ≥3 inlinks from existing pages before its first crawl (see `search-desk.md`) — add the links as part of the same PR, not as a follow-up.
 

@@ -4,6 +4,8 @@ import { BRAND, DESCRIPTOR } from "@/lib/site";
 export const alt = `${BRAND}: ${DESCRIPTOR}`;
 export const size = OG_SIZE;
 export const contentType = "image/png";
+// Prerendered at build time (the site is a static export).
+export const dynamic = "force-static";
 
 export default async function Image() {
   return card({

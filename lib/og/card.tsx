@@ -42,7 +42,7 @@ export async function card(args: OgCardArgs) {
             </div>
           ) : null}
           {args.sub ? (
-            <div style={{ display: "flex", marginTop: 12, fontFamily: "Martian Mono", fontSize: 24, color: "#F3EFE6" }}>
+            <div style={{ display: "flex", marginTop: 12, maxWidth: 1000, fontFamily: "Martian Mono", fontSize: 24, lineHeight: 1.4, color: "#F3EFE6" }}>
               {args.sub}
             </div>
           ) : null}

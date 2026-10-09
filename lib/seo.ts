@@ -13,7 +13,8 @@ export function pageMetadata(p: {
   image?: string;
   noindex?: boolean;
 }): Metadata {
-  const image = p.image ?? `${p.path === "/" ? "" : p.path}/opengraph-image`;
+  // Home uses app/opengraph-image.tsx; every other page has a prebuilt card at /og/<path>.png (app/og/[...slug]).
+  const image = p.image ?? (p.path === "/" ? "/opengraph-image" : `/og${p.path}.png`);
   return {
     title: p.title,
     description: p.description,

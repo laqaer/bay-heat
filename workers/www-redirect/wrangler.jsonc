@@ -1,0 +1,9 @@
+{
+  // Deploy only after the bayheatguide.com zone is active (docs/cloudflare-migration.md, step 3):
+  //   npx wrangler@4.135.0 deploy -c workers/www-redirect/wrangler.jsonc
+  "name": "bay-heat-www",
+  "main": "index.js",
+  "compatibility_date": "2026-09-18",
+  "workers_dev": false,
+  "routes": [{ "pattern": "www.bayheatguide.com", "custom_domain": true }]
+}

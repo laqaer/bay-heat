@@ -6,8 +6,8 @@
   "description": "BayHeat — the independent garage climate lab. Garage heat-load planner, safety verdicts, and cost data. (Mogul factory Site #1, Laqaer Products.)",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "next build && node scripts/cloudflare-routing.mjs",
+    "start": "npx --yes wrangler@4.135.0 dev --port 3000",
     "lint": "eslint",
     "typegen": "next typegen",
     "typecheck": "tsc --noEmit",
