@@ -87,7 +87,9 @@ export const PRODUCTS: Product[] = [
     priceClassChecked: "2026-09-25",
     specFactIds: [],
     safetyLine: {
-      text: "BayHeat advises a licensed gas fitter and the permit your town requires. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor, stricter than the code minimums (IFGC 2021 §305.3 and §305.5). Never where gasoline, solvents, paint thinner or dust are present.",
+      // Only what the Big Maxx manual says: this line renders wherever the product does, including the calculator
+      // report, with a link to that one source. Code comparisons (IFGC §305.3/§305.5) stay in page copy that cites them.
+      text: "BayHeat advises a licensed gas fitter and the permit your town requires. Manual: in a residential garage the bottom of the heater must be at least 8 ft above the floor. Never where gasoline, solvents, paint thinner or dust are present.",
       ev: "S",
       sourceId: "big-maxx-manual",
     },
