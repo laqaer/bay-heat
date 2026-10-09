@@ -151,10 +151,16 @@ export function GarageHeatReport({ result, page = "/garage-heater-calculator" }:
             const productExtra = warningToShow(product, r.safetyLine);
             return (
               <div key={r.classId} className="flex flex-col gap-3 border border-(--color-line) bg-(--color-surface) p-5">
-                <p className="font-bold text-(--color-fg)">{CLASS_LABEL[r.classId] ?? r.classId}</p>
+                <p className="font-bold text-(--color-fg)">
+                  {r.units > 1 ? `${r.units} × ` : ""}
+                  {CLASS_LABEL[r.classId] ?? r.classId}
+                </p>
                 {direct && product ? <p className="-mt-2 text-xs text-(--color-fg-2)">Linked: {product.name}</p> : null}
                 <p className="font-mono text-sm text-(--color-fg-2)">
-                  {btuh(r.capacityBtuh)} BTU/h · {r.circuit ? `${r.circuit.volts}V/${r.circuit.breakerA}A, ${r.circuit.wireNM}` : "no new circuit"}
+                  {btuh(r.capacityBtuh)} BTU/h{r.units > 1 ? " total" : ""} ·{" "}
+                  {r.circuit
+                    ? `${r.units > 1 ? `${r.units} circuits, each ` : ""}${r.circuit.volts}V/${r.circuit.breakerA}A, ${r.circuit.wireNM}`
+                    : "no new circuit"}
                 </p>
                 <FitBar pct={r.fitPct} />
                 <p className="text-sm text-(--color-fg-2)">

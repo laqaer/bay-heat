@@ -266,7 +266,11 @@ function estimateAnnualHours(input: GarageInput, station: ClimateStation): numbe
 }
 
 function whyFor(cls: HeaterClass, c: Candidate, input: GarageInput): string {
-  if (cls.tier === 1 && cls.energy === "electric" && !HP_CLASS_FOR[cls.id]) return `Covers ${c.fitPct}% of the design load on a circuit you can run today or add easily.`;
+  if (cls.tier === 1 && cls.energy === "electric" && !HP_CLASS_FOR[cls.id]) {
+    return c.units > 1
+      ? `Covers ${c.fitPct}% of the design load with ${c.units} heaters, each on its own circuit.`
+      : `Covers ${c.fitPct}% of the design load on a circuit you can run today or add easily.`;
+  }
   if (HP_CLASS_FOR[cls.id]) return "Also cools in summer, and typically the lowest 5-year cost once the envelope is reasonable.";
   if (cls.vented) return "Vented, licensed-install gas heat for a cold climate or a bare envelope.";
   return `Fits ${input.useCase ?? "your"} use at this garage's size.`;
