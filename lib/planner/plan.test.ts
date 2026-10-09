@@ -4,7 +4,7 @@ import { plan } from "./plan.ts";
 import { EXAMPLE_A_INPUT } from "./fixtures.ts";
 import { decode } from "./codec.ts";
 import type { GarageInput } from "./types.ts";
-import { MAX_HEATER_CIRCUIT_WATTS } from "./electrical.ts";
+import { HEATER_TIERS_W, MAX_HEATER_CIRCUIT_WATTS, circuitsForLoad } from "./electrical.ts";
 import { HEATER_CLASSES } from "./catalog.ts";
 
 function near(actual: number, expected: number, tolPct = 3) {
@@ -162,11 +162,11 @@ test("plan() sizes very large loads as several identical circuits instead of thr
   for (const fuels of [["electric"], ["electric", "natural_gas"]] as const) {
     const r = plan({ ...leaky, fuels: [...fuels], ventingPossible: true });
     assert.ok(r.circuits.forSizeCount > 1, `expected more than one circuit for ${Math.round(r.heating.qSize)} BTU/h`);
-    // One modeled heater per circuit: at most the catalog's 10 kW class, which keeps it inside NEC 424.22(B)'s 60 A.
-    assert.ok(r.circuits.forSize.watts <= MAX_HEATER_CIRCUIT_WATTS + 1 && r.circuits.forSize.breakerA <= 60, `${r.circuits.forSize.watts} W`);
-    // Each circuit carries an equal share of the electric-resistance load (eta 1), whatever the top pick burns.
-    const totalWatts = r.circuits.forSize.watts * r.circuits.forSizeCount;
-    assert.ok(Math.abs(totalWatts - r.heating.qSize / 3.412) <= r.circuits.forSizeCount, `${totalWatts} W vs ${r.heating.qSize / 3.412} W`);
+    // One modeled heater per circuit: a catalog 240 V tier (at most 10 kW, inside NEC 424.22(B)'s 60 A), and the
+    // heaters together cover the electric-resistance load (eta 1), whatever the top pick burns.
+    assert.ok((HEATER_TIERS_W as readonly number[]).includes(r.circuits.forSize.watts), `${r.circuits.forSize.watts} W is not a modeled heater`);
+    assert.ok(r.circuits.forSize.breakerA <= 60, `${r.circuits.forSize.breakerA} A`);
+    assert.ok(r.circuits.forSize.watts * r.circuits.forSizeCount >= r.heating.qSize / 3.412 - 1);
     assert.ok(r.circuits.notes.some((n) => n.startsWith("No single heater circuit")));
     // Several heater circuits always need a load calculation, whatever the panel size.
     for (const panelAmps of [100, 150, 200] as const) {
@@ -175,13 +175,19 @@ test("plan() sizes very large loads as several identical circuits instead of thr
   }
 });
 
-test("the per-circuit cap is the largest resistance heater the catalog models", () => {
-  const largest = Math.max(
-    ...Object.values(HEATER_CLASSES)
-      .filter((c) => c.energy === "electric" && typeof c.eta === "number")
-      .map((c) => c.outputBtuh[1] / 3.412),
-  );
-  assert.ok(Math.abs(largest - MAX_HEATER_CIRCUIT_WATTS) < 1, `catalog max ${largest} W vs cap ${MAX_HEATER_CIRCUIT_WATTS} W`);
+test("the heater tiers are exactly the catalog's fixed 240 V resistance classes", () => {
+  const fixed = Object.values(HEATER_CLASSES)
+    .filter((c) => c.energy === "electric" && typeof c.eta === "number" && c.circuit?.startsWith("240") && c.outputBtuh[0] === c.outputBtuh[1])
+    .map((c) => Math.round(c.outputBtuh[1] / 3.412 / 100) * 100)
+    .sort((a, b) => a - b);
+  assert.deepEqual(fixed, [...HEATER_TIERS_W]);
+  assert.equal(MAX_HEATER_CIRCUIT_WATTS, 10_000);
+  // Codex review on #26: a 17.64 kW load is two 10 kW heaters on 60 A each -- the circuits the recommended heaters
+  // need -- not two 8.82 kW shares on 50 A.
+  const split = circuitsForLoad(17_640);
+  assert.equal(split.count, 2);
+  assert.equal(split.heaterWatts, 10_000);
+  assert.equal(split.spec.breakerA, 60);
   // A load just over 10 kW (a 60 °F "gym" garage, about 10.4 kW) is two heater circuits, not one 60 A circuit.
   const gym = plan({ ...EXAMPLE_A_INPUT, targetTemp: 60 });
   if (gym.heating.kwSize > 10) assert.equal(gym.circuits.forSizeCount, 2);
