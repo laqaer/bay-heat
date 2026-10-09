@@ -40,7 +40,7 @@ export const PAGES: PageEntry[] = [
     title: "Shop heater: 240V electric or vented gas for a closed shop, and no torpedo heaters",
     h1: "Shop heaters",
     description:
-      "Four kinds of shop heater: 240V electric, vented gas, diesel and torpedo. The circuit, vent and CO rule each one needs, and why a torpedo doesn't belong in a closed shop.",
+      "Compare 240V electric, vented gas and diesel shop heaters by circuit, vent and CO rule, and see why a torpedo heater doesn't belong in a closed shop.",
     // "money" / "verdict-first" because the page carries paid links and combustion-safety verdicts: LabLabel then
     // prints "Human review: full" (BLUEPRINT.md §5.2 -- 100% of buy pages are editor-approved before publishing).
     kind: "money",

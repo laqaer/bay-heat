@@ -46,7 +46,7 @@ const SUBPAGES: { href: "/240v-garage-heater" | "/portable-garage-heater" | "/ce
   { href: "/portable-garage-heater", label: "Portable garage heaters", blurb: "What a 15A or 20A garage outlet can actually run without tripping." },
   { href: "/ceiling-mount-garage-heater", label: "Ceiling-mount garage heaters", blurb: "Mounting height, throw and clearance for a 5 kW or 7.5 kW ceiling unit." },
   { href: "/best-wall-mount-garage-heaters", label: "Wall-mount garage heaters", blurb: "1.5 kW to 7.5 kW wall units, with the clearances from each manual." },
-  { href: "/shop-heater", label: "Shop heaters", blurb: "How a 240V electric unit heater compares with vented gas, diesel and a torpedo in a workshop." },
+  { href: "/shop-heater", label: "Shop heaters", blurb: "How a 240V electric unit heater compares with vented gas and diesel in a workshop." },
 ];
 
 const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual", "cz220-manual", "dr975-manual", "dr238-manual", "dr910f-manual", "epa-608"];

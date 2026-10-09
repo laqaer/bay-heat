@@ -43,7 +43,7 @@ const SUBPAGES: { href: "/electric-garage-heater" | "/diesel-heater-for-garage" 
   { href: "/heat-pump-mini-split-for-garage", label: "Mini-split heat pumps", blurb: "Whether a pricier heat-pump install beats a cheap electric heater over 5 years." },
   { href: "/infrared-garage-heater", label: "Infrared garage heaters", blurb: "Radiant vs forced-air heat with the door open." },
   { href: "/electric-vs-propane-garage-heater", label: "Electric vs propane, head to head", blurb: "Delivered cost per million BTU, side by side." },
-  { href: "/shop-heater", label: "Shop heaters", blurb: "240V electric, vented gas, diesel and torpedo, and the circuit, vent and CO rule each one needs." },
+  { href: "/shop-heater", label: "Shop heaters", blurb: "240V electric, vented gas and diesel for a workshop, and why a torpedo heater is out." },
 ];
 
 // One buyable representative class per fuel (BLUEPRINT.md §2.8: a Buddy-type portable propane heater never
@@ -81,8 +81,8 @@ export default function Page() {
         install rule and its own carbon monoxide risk. This page compares all six systems side by side at one
         worked example; the pages below cover each fuel&apos;s heater classes, clearances and safety conditions in
         depth.
-        Heating a workshop instead of a garage? The <Link href="/shop-heater">shop heater guide</Link> matches each type to the
-        circuit, flue or exhaust a shop needs.
+        Heating a workshop instead of a garage? The <Link href="/shop-heater">shop heater guide</Link> matches 240V electric,
+        vented gas and diesel to the circuit, flue or exhaust a shop has.
       </p>
       <div className="not-prose my-6">
         <ButtonLink href="/garage-heater-calculator">Size your garage and price every fuel free →</ButtonLink>
