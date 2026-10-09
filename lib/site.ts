@@ -52,9 +52,9 @@ export function reviewers(): Reviewer[] {
 // PageEntry's own `reviewed` field ("electrical" | "gas" | null); `humanReview` defaults to "sample" (the
 // baseline before 100%-review pages are marked otherwise) -- pass "full" for verdict-first/safety pages per
 // the §5.2 100%-review-gate rule.
-export function aiLine(reviewedKind: "electrical" | "gas" | null, humanReview: "full" | "sample" = "sample"): string {
+export function aiLine(reviewedKind: "electrical" | "gas" | null, humanReview: "full" | "sample" | "pending" = "sample"): string {
   const editor = EDITOR_NAME ?? "BayHeat editorial desk";
-  const reviewClause = `Human review: ${humanReview} by ${editor}.`;
+  const reviewClause = humanReview === "pending" ? `Human review: pending (${editor}).` : `Human review: ${humanReview} by ${editor}.`;
   if (!reviewedKind) {
     return `Drafted with AI assistance. Numbers computed by model v${MODEL_VERSION} or sourced. ${reviewClause} Licensed review: not applicable.`;
   }

@@ -19,7 +19,7 @@ export function LabLabel({ entry }: { entry: PageEntry }) {
         {entry.id} · REV {entry.rev} · CHECKED {entry.updated} · MODEL v{MODEL_VERSION} &#9662;
       </summary>
       <div className="space-y-2 border-t border-(--color-line) px-3 py-3 font-sans text-xs leading-5">
-        <p>{aiLine(entry.reviewed, entry.layout === "verdict-first" || entry.kind === "safety" ? "full" : "sample")}</p>
+        <p>{aiLine(entry.reviewed, entry.humanReview ?? (entry.layout === "verdict-first" || entry.kind === "safety" ? "full" : "sample"))}</p>
         <p>
           {entry.reviewed && signed
             ? `Technical review: checked by a licensed ${REVIEW_LABEL[entry.reviewed]}.`
