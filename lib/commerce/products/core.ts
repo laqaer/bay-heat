@@ -45,7 +45,9 @@ export const PRODUCTS: Product[] = [
     priceClass: "$$",
     priceClassChecked: "2026-09-25",
     specFactIds: ["cz220.watts.high", "cz220.amps.high", "cz220.btuh.high", "cz220.breaker", "cz220.wire"],
-    safetyLine: { text: "Manual: not where gasoline, paint or flammable liquids are used or stored.", ev: "S", sourceId: "cz220-manual" },
+    // Manual spec page: "FOR INDOOR USE ONLY, IN A DRY LOCATION FREE OF GASOLINE, PAINT, FLAMMABLE LIQUIDS OR
+    // COMBUSTIBLE DUST OR MATERIALS" -- the dust clause matters in a woodshop, so it rides on every CZ220 plate.
+    safetyLine: { text: "Manual: not where gasoline, paint or flammable liquids are used or stored. Indoors only, in a dry space free of combustible dust.", ev: "S", sourceId: "cz220-manual" },
   },
   {
     id: "fuh54-5kw",

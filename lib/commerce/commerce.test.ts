@@ -115,8 +115,12 @@ test("warningToShow keeps the maker's flammables rule unless the class line alre
   const { warningToShow, findProduct } = await import("./products/index.ts");
   const FLAM = "Manual: not where gasoline, paint or flammable liquids are used or stored.";
   const cz220 = findProduct("cz220-5kw-ceiling");
+  const fuh54 = findProduct("fuh54-5kw");
   const dr975 = findProduct("dr975-7k5-shop");
-  assert.equal(warningToShow(cz220, `${FLAM} Move them first.`), undefined, "the class line already says it");
+  assert.equal(fuh54?.safetyLine?.text, FLAM);
+  assert.equal(warningToShow(fuh54, `${FLAM} Move them first.`), undefined, "the class line already says it");
+  // The CZ220 manual also rules out combustible dust; that clause must still reach a card whose class line has FLAM.
+  assert.match(warningToShow(cz220, `${FLAM} Move them first.`) ?? "", /combustible dust/);
   assert.equal(warningToShow(cz220, undefined), cz220?.safetyLine?.text, "no flammables in the class line: show the product's whole line");
   assert.equal(warningToShow(cz220, "Elements at least 18 in above the floor."), cz220?.safetyLine?.text);
   const extra = warningToShow(dr975, `${FLAM} Move them first.`);
