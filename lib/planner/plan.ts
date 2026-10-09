@@ -191,7 +191,10 @@ export function plan(input: GarageInput): PlannerResult {
       forSizeCount: forSize.count,
       user: input.circuit !== "unknown" ? circuitFor(circuitVolts(circuit) * circuitAmps(circuit) * 0.8, circuitVolts(circuit), circuitVolts(circuit)) : undefined,
       fits: top ? Boolean(top.circuit) : false,
-      panelCheck: input.panelAmps === "unknown" ? "unknown" : input.panelAmps === 100 && heatLoss.qSize > 20000 ? "load_calc" : "ok",
+      // Several heater circuits add tens of kW to the service whatever the panel size, so they always need a load
+      // calculation; a single heater only trips the 100 A panel rule of thumb.
+      panelCheck:
+        forSize.count > 1 ? "load_calc" : input.panelAmps === "unknown" ? "unknown" : input.panelAmps === 100 && heatLoss.qSize > 20000 ? "load_calc" : "ok",
       notes: [
         ...(forSize.count > 1
           ? [`No single heater circuit covers this load: it takes ${forSize.count} heaters, each on its own circuit as above, a fuel-fired heater, or fixing the envelope first.`]

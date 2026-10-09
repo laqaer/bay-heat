@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
 import { PAGES } from "./index.ts";
@@ -64,4 +64,14 @@ test("the methodology title quotes the worked example's computed load", async ()
   const shown = (Math.round(r.qSize / 100) * 100).toLocaleString("en-US");
   const entry = PAGES.find((p) => p.href === "/garage-heater-calculator/methodology")!;
   assert.ok(entry.title.includes(`${shown} BTU/h`), `methodology title should quote ${shown} BTU/h: "${entry.title}"`);
+});
+
+// The footer's "Last correction" date (lib/site.ts LAST_CORRECTION) must be the newest dated line in the Lab notebook.
+test("the footer's last-correction date matches the newest notebook entry", () => {
+  const site = readFileSync(join(repoRoot, "lib", "site.ts"), "utf8");
+  const notebook = readFileSync(join(siteDir, "lab", "notebook", "page.tsx"), "utf8");
+  const stamp = /LAST_CORRECTION = "(\d{4}-\d{2}-\d{2})"/.exec(site)?.[1];
+  const dates = [...notebook.matchAll(/whitespace-nowrap">(\d{4}-\d{2}-\d{2})</g)].map((m) => m[1]).sort();
+  assert.ok(stamp, "LAST_CORRECTION not found in lib/site.ts");
+  assert.equal(stamp, dates[dates.length - 1]);
 });

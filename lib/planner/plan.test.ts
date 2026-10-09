@@ -166,5 +166,9 @@ test("plan() sizes very large loads as several identical circuits instead of thr
     const totalWatts = r.circuits.forSize.watts * r.circuits.forSizeCount;
     assert.ok(Math.abs(totalWatts - r.heating.qSize / 3.412) <= r.circuits.forSizeCount, `${totalWatts} W vs ${r.heating.qSize / 3.412} W`);
     assert.ok(r.circuits.notes.some((n) => n.startsWith("No single heater circuit")));
+    // Several heater circuits always need a load calculation, whatever the panel size.
+    for (const panelAmps of [100, 150, 200] as const) {
+      assert.equal(plan({ ...leaky, fuels: [...fuels], ventingPossible: true, panelAmps }).circuits.panelCheck, "load_calc");
+    }
   }
 });

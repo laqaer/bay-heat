@@ -11,6 +11,9 @@ export const TAGLINE = "Every number shows its work.";
 export const PUBLISHER = "Laqaer Products";
 export const LOCALE = "en-US";
 export const MODEL_VERSION = "1.0.1";
+// Date of the newest dated line in the Lab notebook's log (app/(site)/lab/notebook). The site footer prints it;
+// update both together whenever a correction ships.
+export const LAST_CORRECTION = "2026-10-09";
 export const PRICES_AS_OF = "2026-09";
 
 export const DESCRIPTION =
