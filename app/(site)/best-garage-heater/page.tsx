@@ -176,7 +176,6 @@ export default function Page() {
   const station = asIs.station;
   const exampleCeilingFt = EXAMPLE_A_INPUT.height;
   const doorsPct = asIs.heating.items.find((i) => i.key === "garage_doors")?.pct ?? 0;
-  const whyNotPortable = asIs.whyNot.filter((r) => r.classId === "e_port_1500");
   const whyNotTorpedo = asIs.whyNot.filter((r) => r.classId === "torpedo");
   const fixLabels = fix.measures.map((m) => MEASURE_LABEL[m]).filter((l): l is string => Boolean(l));
 
@@ -206,6 +205,9 @@ export default function Page() {
   // Don't-buy for pick 1: the same plug-in against an uninsulated 2-car. The planner's own answer for it is two units.
   const bareTwoCar = plan(garage("2car", "leaky", COLD_STATION, { circuit: "unknown", canAddCircuit: true }));
   const bareTwoCarFit = (portableOut / bareTwoCar.heating.qSize) * 100;
+  // The planner's own reason for ruling out the plug-in in THIS scenario (detached, attended sessions), not the
+  // worked example's continuous-use reason.
+  const whyNotPortable = bareTwoCar.whyNot.filter((r) => r.classId === "e_port_1500");
   const bareTwoCarAnswers = bareTwoCar.recommendations.filter((r) => r.units > 1 && (r.classId === "e_240_7k5" || r.classId === "e_240_10k"));
   const tenKwFit = (heaterClass("e_240_10k").outputBtuh[1] / bareTwoCar.heating.qSize) * 100;
 
