@@ -53,3 +53,16 @@ test("outputBtuh ranges are non-decreasing [low, high] pairs", () => {
     assert.ok(cls.outputBtuh[0] <= cls.outputBtuh[1], `${cls.id}: outputBtuh ${cls.outputBtuh} is not [low, high]`);
   }
 });
+
+// Every fixed (hardwired) electric resistance class must fit the circuit it claims at its own top-of-range
+// wattage under NEC 424.4(B)'s 125% rule. Found 2026-10-09: e_240_4k claimed 240V20A (it needs 25 A) and e_ir_240
+// claimed 240V30A (6 kW needs 35 A). Cord-and-plug 120 V classes follow NEC 210.23(A)(1) instead and are skipped.
+test("every hardwired electric class fits the circuit it claims", async () => {
+  const { circuitFor } = await import("./electrical.ts");
+  for (const c of Object.values(HEATER_CLASSES)) {
+    if (c.energy !== "electric" || typeof c.eta !== "number" || !c.circuit || c.circuit.startsWith("120")) continue;
+    const amps = Number(/V(\d+)A$/.exec(c.circuit)![1]);
+    const spec = circuitFor(c.outputBtuh[1] / c.eta / 3.412, 240, 240);
+    assert.ok(spec.breakerA <= amps, `${c.id}: ${Math.round(c.outputBtuh[1] / 3.412)} W needs ${spec.breakerA} A, class claims ${c.circuit}`);
+  }
+});

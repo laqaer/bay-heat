@@ -38,7 +38,10 @@ export const HEATER_CLASSES: Record<HeaterClassId, HeaterClass> = {
     outputBtuh: [13648, 13648],
     energy: "electric",
     eta: 1.0,
-    circuit: "240V20A",
+    // 4,000 W draws 16.7 A; NEC 424.4(B) sizes a fixed heater's circuit at 125% = 20.8 A, so the next standard
+    // breaker is 25 A and the smallest circuit this planner offers that fits is 30 A -- never a 20 A circuit
+    // (the /240v-garage-heater page says so; until 2026-10-09 this class claimed 240V20A).
+    circuit: "240V30A",
     vented: false,
     tier: 1,
     equip: [150, 260],
@@ -94,7 +97,9 @@ export const HEATER_CLASSES: Record<HeaterClassId, HeaterClass> = {
     outputBtuh: [10000, 20000],
     energy: "electric",
     eta: 1.0,
-    circuit: "240V30A",
+    // The planner sizes this ranged class at its top, 20,000 BTU/h = 5,862 W = 24.4 A; at 125% that needs a 35 A
+    // breaker, so the circuit that fits is 40 A (it claimed 240V30A until 2026-10-09).
+    circuit: "240V40A",
     vented: false,
     tier: 1,
     equip: [200, 600],

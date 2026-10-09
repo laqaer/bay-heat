@@ -94,3 +94,32 @@ test("a mini-split candidate is offered when electric-only and the load fits", (
   const { recommendations } = rankSystems(ctx);
   assert.ok(recommendations.some((r) => r.classId === "hp_12_24k_230" || r.classId === "hp_diy_12k_115"), `expected a mini-split candidate among ${recommendations.map((r) => r.classId)}`);
 });
+
+// Found 2026-10-09: with units > 1 the second heater's new circuit was priced but canAddCircuit was never checked,
+// so a reader who said they can't add a circuit was told to run two heaters.
+test("no multi-unit pick when the reader can't add a circuit", async () => {
+  const { plan } = await import("./plan.ts");
+  const { EXAMPLE_A_INPUT } = await import("./fixtures.ts");
+  const { PRESET_DEFAULTS } = await import("./presets.ts");
+  const p = PRESET_DEFAULTS["1car"];
+  // A tight 1-car in Chicago, heated in work sessions on a dedicated 120 V / 20 A circuit: one 1,500 W heater
+  // doesn't cover it, so the old code answered "2 of them" -- the second needing a circuit the reader can't add.
+  const r = plan({
+    ...EXAMPLE_A_INPUT,
+    preset: "1car",
+    width: p.width,
+    depth: p.depth,
+    height: p.height,
+    garageDoors: p.garageDoors.map((d) => ({ ...d, type: "kit_eps_or_batt" as const })),
+    wallType: "R13",
+    ceilingIns: "R30",
+    tightness: "tight",
+    circuit: "120V20A",
+    canAddCircuit: false,
+    fuels: ["electric"],
+    usage: { mode: "sessions", sessionsPerWeek: 3, hoursPerSession: 3, doorOpeningsPerSession: 2 },
+  });
+  for (const rec of r.recommendations) {
+    assert.ok(rec.units === 1 || rec.circuit === undefined, `${rec.classId} x${rec.units} needs new circuits the reader can't add`);
+  }
+});

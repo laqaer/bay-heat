@@ -197,7 +197,10 @@ export function rankSystems(ctx: RecommendContext): { recommendations: RankedSys
           if (!input.canAddCircuit) continue; // excluded for this unit count; a different class may still fit
           circuitCost = mid(NEW_CIRCUIT_COST) * units; // every unit needs its own new circuit here
         } else if (units > 1) {
-          circuitCost = mid(NEW_CIRCUIT_COST) * (units - 1); // the existing circuit covers one unit
+          // The existing circuit covers one unit; every other unit needs its own new circuit, so a reader who
+          // can't add one can't run more than one (until 2026-10-09 this skipped the canAddCircuit check).
+          if (!input.canAddCircuit) continue;
+          circuitCost = mid(NEW_CIRCUIT_COST) * (units - 1);
         }
       }
 
