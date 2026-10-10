@@ -45,16 +45,16 @@ export const PAGES: PageEntry[] = [
     // applies (100% of buy pages are editor-approved before publishing).
     kind: "money",
     layout: "verdict-first",
-    // Awaiting the human editor's sign-off (two automated fact-check rounds failed, so it escalated per
-    // .claude/agents/fact-checker.md): the label says "pending" until the editor approves it.
-    humanReview: "pending",
+    // Escalated to the human editor after two automated fact-check rounds (.claude/agents/fact-checker.md); the
+    // owner approved it on 2026-10-10.
+    humanReview: "full",
     nav: { group: "heaters", label: "Shop heaters" },
     primaryKeyword: "shop heater",
     volume: 6600,
     reviewed: "gas",
     indexable: true,
     published: "2026-10-09",
-    updated: "2026-10-09",
-    rev: 1,
+    updated: "2026-10-10",
+    rev: 2,
   },
 ];
