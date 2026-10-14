@@ -15,4 +15,11 @@ export const REDIRECTS: RedirectRule[] = [
   { source: "/wall-mount-vs-ceiling-garage-heater", destination: "/ceiling-mount-garage-heater" },
   { source: "/insulate-garage-before-heater-upgrade", destination: "/how-to-insulate-a-garage" },
   { source: "/best-infrared-garage-heaters", destination: "/infrared-garage-heater" },
+  // Sep-era plural and shortened money URLs that stayed 404 after the 2026-10 rebuild.
+  { source: "/hardwired-vs-plugin-garage-heaters", destination: "/240v-garage-heater" },
+  { source: "/forced-air-vs-infrared-garage-heaters", destination: "/infrared-garage-heater" },
+  { source: "/best-portable-garage-heaters-15-amp", destination: "/portable-garage-heater" },
+  { source: "/wall-mount-vs-ceiling-mount-garage-heaters", destination: "/ceiling-mount-garage-heater" },
+  { source: "/garage-heater-operating-cost", destination: "/cost-to-heat-a-garage" },
+  { source: "/garage-heater-size-chart", destination: "/garage-heater-size" },
 ];
