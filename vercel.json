@@ -58,6 +58,36 @@
       "permanent": true
     },
     {
+      "source": "/hardwired-vs-plugin-garage-heaters",
+      "destination": "/240v-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/forced-air-vs-infrared-garage-heaters",
+      "destination": "/infrared-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/best-portable-garage-heaters-15-amp",
+      "destination": "/portable-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/wall-mount-vs-ceiling-mount-garage-heaters",
+      "destination": "/ceiling-mount-garage-heater",
+      "permanent": true
+    },
+    {
+      "source": "/garage-heater-operating-cost",
+      "destination": "/cost-to-heat-a-garage",
+      "permanent": true
+    },
+    {
+      "source": "/garage-heater-size-chart",
+      "destination": "/garage-heater-size",
+      "permanent": true
+    },
+    {
       "source": "/r/:code",
       "destination": "/garage-heater-calculator?g=:code",
       "permanent": false
