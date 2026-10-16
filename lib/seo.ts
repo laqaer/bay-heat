@@ -21,7 +21,8 @@ export function pageMetadata(p: {
   const entry = findPage(p.path);
   const noindex = p.noindex || (entry !== undefined && !isIndexed(entry));
   return {
-    title: p.title,
+    // Home already carries the brand in its title, so the root template must not add " · BayHeat" again.
+    title: p.path === "/" ? { absolute: p.title } : p.title,
     description: p.description,
     alternates: { canonical: p.path },
     robots: noindex ? { index: false, follow: true } : undefined,
