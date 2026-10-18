@@ -278,7 +278,7 @@ body {
   }
   @supports (animation-timeline: view()) {
     .reveal {
-      animation: reveal linear; /* no fill: off-screen content keeps full opacity (print, full-page renders) */
+      animation: reveal 1ms linear; /* 1ms: Firefox needs a nonzero duration; the timeline drives progress. No fill: off-screen content keeps full opacity (print, full-page renders) */
       animation-timeline: view();
       animation-range: entry 0% entry 30%;
     }
