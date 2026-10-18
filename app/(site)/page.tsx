@@ -92,7 +92,7 @@ export default function HomePage() {
 
       {/* 02 / Where your heat goes */}
       <section className="border-t border-(--color-line) bg-(--color-surface)">
-        <div className="mx-auto max-w-[1392px] px-4 py-16 sm:px-6 sm:py-24">
+        <div className="reveal mx-auto max-w-[1392px] px-4 py-16 sm:px-6 sm:py-24">
           <p className="font-mono text-xs uppercase tracking-[0.16em] text-(--color-fg-2)">02 / Where your heat goes</p>
           <h2 className="wdth-112 mt-3 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
             The ceiling loses more than the walls. The door loses more than the ceiling.
@@ -110,7 +110,7 @@ export default function HomePage() {
 
       {/* 03 / Can I Run It? */}
       <section className="border-t border-(--color-line)">
-        <div className="mx-auto max-w-[1392px] px-4 py-16 sm:px-6 sm:py-24">
+        <div className="reveal mx-auto max-w-[1392px] px-4 py-16 sm:px-6 sm:py-24">
           <p className="font-mono text-xs uppercase tracking-[0.16em] text-(--color-fg-2)">03 / Can I run it?</p>
           <h2 className="wdth-112 mt-3 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
             Three real questions. Three real answers.
@@ -129,7 +129,7 @@ export default function HomePage() {
           <p className="mt-5 max-w-prose text-sm text-(--color-fg-2)">{SAFETY_SCOPE}</p>
           <Link
             href="/can-i-run-it"
-            className="mt-6 inline-flex h-12 items-center border border-(--color-fg)/25 px-5 text-[15px] font-medium text-(--color-fg) hover:bg-(--color-surface-2)"
+            className="mt-6 inline-flex h-12 items-center border border-(--color-fg)/25 px-5 text-[15px] font-medium text-(--color-fg) transition-colors hover:border-(--color-ember) hover:bg-(--color-surface-2) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-ember)"
           >
             Check my heater →
           </Link>
@@ -138,7 +138,7 @@ export default function HomePage() {
 
       {/* 04 / The Garage Heat Index */}
       <section className="border-t border-(--color-line) bg-(--color-surface)">
-        <div className="mx-auto max-w-[1392px] px-4 py-16 sm:px-6 sm:py-24">
+        <div className="reveal mx-auto max-w-[1392px] px-4 py-16 sm:px-6 sm:py-24">
           <p className="font-mono text-xs uppercase tracking-[0.16em] text-(--color-fg-2)">04 / The Garage Heat Index</p>
           <h2 className="wdth-112 mt-3 max-w-2xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
             The US median garage costs {usd(HOME_INDEX_US_MEDIAN_ELECTRIC)} a season to heat on electric resistance.
@@ -180,7 +180,7 @@ export default function HomePage() {
 
       {/* 07 / How we work */}
       <section className="border-t border-(--color-line)">
-        <div className="mx-auto max-w-[1392px] px-4 py-16 sm:px-6 sm:py-24">
+        <div className="reveal mx-auto max-w-[1392px] px-4 py-16 sm:px-6 sm:py-24">
           <p className="font-mono text-xs uppercase tracking-[0.16em] text-(--color-fg-2)">07 / How we work</p>
           <h2 className="wdth-112 mt-3 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">Seven things we hold ourselves to.</h2>
           <ol className="mt-8 max-w-2xl space-y-4">
