@@ -27,6 +27,8 @@ export function HeroFrame({ states, station }: { states: HeroState[]; station: {
         className="relative aspect-[4/3] w-full overflow-hidden border border-(--color-line) bg-(--color-bg) text-(--color-fg) transition-colors duration-500"
         style={{ background: `color-mix(in oklab, var(--frost-2) ${100 - t}%, var(--forge-2) ${t}%)` }}
       >
+        {/* Decorative heat shimmer (CSS only, transform/opacity; off under reduced motion). Not data. */}
+        <div aria-hidden className="heat-shimmer pointer-events-none absolute inset-0" />
         <div className="absolute inset-3 border border-white/20" />
         <GarageSection className="absolute inset-8 h-[calc(100%-4rem)] w-[calc(100%-4rem)] text-white/70" />
         {/* A dark scrim behind the HUD text: white-on-tint alone measured 2.3-2.5:1 against the lighter
@@ -57,7 +59,7 @@ export function HeroFrame({ states, station }: { states: HeroState[]; station: {
             type="button"
             onClick={() => setActive(s.key)}
             className={clsx(
-              "border px-3 py-2 text-left font-mono text-[11px] transition-colors",
+              "border px-3 py-2 text-left font-mono text-[11px] transition-[color,background-color,border-color,transform] hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-ember)",
               s.key === active ? "border-(--color-ember) bg-(--color-ember)/10 text-(--color-fg)" : "border-(--color-fg)/20 text-(--color-fg-2) hover:border-(--color-fg)/50",
             )}
           >
