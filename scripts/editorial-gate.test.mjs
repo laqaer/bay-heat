@@ -28,7 +28,7 @@ test('content edits with unchanged page revision and added/deleted inputs invali
   assert.equal(changedFiles({},a).length,1);
   assert.equal(protectedPath('lib/facts/electric.ts'),true);
   assert.equal(protectedPath('app/(site)/unclassified-guide/page.tsx'),true);
-  for(const p of ['components/safety/CanIRunItForm.tsx','components/result/HeatReport.tsx','components/commerce/QuickPick.tsx','lib/commerce/route.ts']) assert.equal(protectedPath(p),true,p);
+  for(const p of ['components/safety/CanIRunItForm.tsx','components/result/HeatReport.tsx','components/commerce/QuickPick.tsx','lib/commerce/route.ts','app/(new)/heater/page.jsx','app/heater/page.js','lib/control.cjs','components/ui/Callout.tsx','components/figures/Heat.mdx']) assert.equal(protectedPath(p),true,p);
 });
 test('real production gate rejects missing receipts before any GitHub access', async () => {
   const root=mkdtempSync(join(tmpdir(),'bayheat-gate-'));
