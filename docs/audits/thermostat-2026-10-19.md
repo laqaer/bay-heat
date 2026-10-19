@@ -50,3 +50,9 @@ An administrator must also require `editorial-review` and `check`, enforce revie
 ## Reusable audit brief
 
 Audit the exact merged thermostat-guide revision and its surrounding product/fact registries. Verify electrical control type, load/voltage/motor limits, installation and freeze cautions against original manufacturer documents; separate mathematical correctness from equipment compatibility. Recover actual named approval and production/index evidence independently of registry fields. Preserve valid prior corrections, withdraw unsupported advice, stage factual repairs for qualified review, and test that absent, stale, mismatched or automated approvals cannot release changed safety content. Report verified facts, corrections, evidence limits and the minimum remaining human qualification without fabricating sign-off.
+
+## Handoff snapshot
+
+Observed 2026-10-19 19:40:21 UTC. Enforcement PR #37 remains open at `4c00fd482fc95f82fe804b53e472330080ebec87`; current main is `2812e3b8899a43073ef90e3ef19bca9ef59dc6b3`, and their merge-base is `415470afdb63dd89bfe023530f3b9fc6e2217061`. Hosted `check` passed, initial-policy `editorial-review` jobs reported the bootstrap, and no unresolved review threads remained. Cursor Bugbot and Cursor Security Agent were still in progress. The candidate-review workflow therefore withholds merge readiness; no enforcement deployment is claimed.
+
+PR #38 remains a draft with pending/noindex metadata. The hosted negative result above verifies the base-branch gate rejects its actual article/registry changes without qualified approvals. Production remains the verified #36 withdrawal. An administrator must configure provider protections, and the named human reviewers must approve before the corrected article can be released.
