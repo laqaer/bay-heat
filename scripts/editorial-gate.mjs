@@ -12,8 +12,9 @@ export function blobSha(bytes) {
 export function protectedPath(path) {
   return !/\.test\.[cm]?[jt]sx?$/.test(path) && (
     /^app\/\(site\)\/.*\.(tsx?|mdx|json)$/.test(path) ||
-    /^lib\/(facts|pages|planner|safety|commerce\/products)\/.*\.(tsx?|json)$/.test(path) ||
-    ['lib/site.ts', 'components/evidence/LabLabel.tsx'].includes(path)
+    /^lib\/(facts|pages|planner|safety|commerce)\/.*\.(tsx?|json)$/.test(path) ||
+    /^components\/(safety|result|commerce|planner|evidence|page)\/.*\.(tsx?|json)$/.test(path) ||
+    path === 'lib/site.ts'
   );
 }
 
@@ -27,7 +28,7 @@ export function snapshot(root) {
       else if (protectedPath(path)) files[path] = blobSha(readFileSync(resolve(root, path)));
     }
   }
-  for (const dir of ['app/(site)', 'lib', 'components/evidence']) walk(dir);
+  for (const dir of ['app/(site)', 'lib', 'components']) walk(dir);
   return files;
 }
 
@@ -75,7 +76,7 @@ async function allReviews(pr) {
 
 export async function enforceEditorialReview(root = process.cwd()) {
   const baselineBytes = readFileSync(resolve(root, 'docs/editorial/baseline.json'));
-  const expected = 'bfde9730a1dac38a9b2b12403e21d79315550afcc3e27ce444fd88be3158a548';
+  const expected = 'db39feda96ed5a39a74db4b650cd8c64dfe3ef5ae569111c0bf532f3d6fb9576';
   if (createHash('sha256').update(baselineBytes).digest('hex') !== expected)
     throw new Error('Editorial baseline changed; it is an inventory, never an approval. Restore it.');
   const baseline = JSON.parse(baselineBytes);
@@ -92,7 +93,7 @@ export async function enforceEditorialReview(root = process.cwd()) {
     if (page?.reviewed) roles.add(page.reviewed);
     if (baseline.domains[path]) for (const domain of baseline.domains[path]) roles.add(domain);
     // Shared safety inputs can affect both electrical and gas advice.
-    if (/^lib\/(facts|planner|safety|commerce\/products)\//.test(path)) {
+    if (/^(lib\/(facts|planner|safety|commerce)|components\/(safety|result|commerce|planner))\//.test(path)) {
       if (/\/(electric|electrical)\.ts$/.test(path)) roles.add('electrical');
       else if (/\/(fuel|fuels)\.ts$/.test(path)) roles.add('gas');
       else { roles.add('electrical'); roles.add('gas'); }
