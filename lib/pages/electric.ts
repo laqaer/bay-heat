@@ -116,7 +116,6 @@ export const PAGES: PageEntry[] = [
       "This guide is temporarily unavailable pending recorded editorial and qualified electrical review.",
     kind: "money",
     layout: "verdict-first",
-    nav: { group: "heaters", label: "Thermostat" },
     primaryKeyword: "garage heater thermostat",
     volume: 390,
     reviewed: "electrical",
