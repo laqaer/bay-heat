@@ -13,11 +13,12 @@ import { PAGES as FUEL } from "./fuel.ts";
 // of hard-coding a route list, so a new page can't ship without a title/description/H1.
 export const PAGES: PageEntry[] = [...CORE, ...SAFETY, ...LAB, ...TRUST, ...DATA, ...SEAL, ...ELECTRIC, ...FUEL];
 
-// Whether search engines get this page: registered as indexable AND not awaiting the editor. A page published with
-// humanReview "pending" stays out of the sitemap and IndexNow and carries noindex (lib/seo.ts) until it is approved
-// (BLUEPRINT.md §5.2: verdict-first pages are editor-approved before they're promoted).
+// Safety-sensitive and verdict-first pages need explicit full human review.
+// Omission never opts them into sitemap/IndexNow or removes noindex. Registry
+// changes are protected by the exact-content production build gate.
 export function isIndexed(entry: PageEntry): boolean {
-  return entry.indexable && entry.humanReview !== "pending";
+  const needsFull = entry.reviewed !== null || entry.layout === "verdict-first" || entry.kind === "safety";
+  return entry.indexable && (needsFull ? entry.humanReview === "full" : entry.humanReview !== "pending");
 }
 
 export function findPage(href: string): PageEntry | undefined {

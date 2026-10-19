@@ -12,9 +12,8 @@ export type PageEntry = {
   primaryKeyword?: string;
   volume?: number;
   reviewed: "electrical" | "gas" | null;
-  // BLUEPRINT.md §5.2: verdict-first and safety pages are 100% human-reviewed before they publish, so LabLabel prints
-  // "Human review: full" for them by default. A page published before the editor has signed off sets "pending",
-  // which the label prints instead -- the line must never claim a review that hasn't happened.
+  // Review discipline, not proof of approval. Omission is pending; never infer human
+  // approval from layout. Changes to this registry are covered by the build gate.
   humanReview?: "full" | "sample" | "pending";
   indexable: boolean;
   published: string; // YYYY-MM-DD

@@ -1,0 +1,5 @@
+# Governance ownership only; this does not certify electrical/gas qualifications.
+/.github/ @laqaer
+/docs/editorial/ @laqaer
+/scripts/editorial-gate* @laqaer
+/next.config.ts @laqaer
