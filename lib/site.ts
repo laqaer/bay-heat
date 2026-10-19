@@ -49,20 +49,14 @@ export function reviewers(): Reviewer[] {
   }
 }
 
-// AI_LINE is built per page, not a single fixed sentence (BLUEPRINT.md §5.2 -- a compliance finding: the
-// fixed sentence claimed a named editor and licensed reviewers before either existed). `reviewedKind` is a
-// PageEntry's own `reviewed` field ("electrical" | "gas" | null); `humanReview` defaults to "sample" (the
-// baseline before 100%-review pages are marked otherwise) -- pass "full" for verdict-first/safety pages per
-// the §5.2 100%-review-gate rule.
-export function aiLine(reviewedKind: "electrical" | "gas" | null, humanReview: "full" | "sample" | "pending" = "sample"): string {
+// Review labels describe an explicit page status. Missing status is pending, and
+// site-wide reviewer configuration never proves approval of an individual page.
+export function aiLine(reviewedKind: "electrical" | "gas" | null, humanReview: "full" | "sample" | "pending" = "pending"): string {
   const editor = EDITOR_NAME ?? "BayHeat editorial desk";
   const reviewClause = humanReview === "pending" ? `Human review: pending (${editor}).` : `Human review: ${humanReview} by ${editor}.`;
   if (!reviewedKind) {
     return `Drafted with AI assistance. Numbers computed by model v${MODEL_VERSION} or sourced. ${reviewClause} Licensed review: not applicable.`;
   }
-  const match = reviewers().find((r) => r.kind === reviewedKind);
-  const licensedClause = match
-    ? `Licensed review: ${match.name}, license ${match.license}, ${match.state}, verified ${match.date}.`
-    : "Licensed review: not yet reviewed.";
+  const licensedClause = "Licensed review: no page-specific approval recorded.";
   return `Drafted with AI assistance. Numbers computed by model v${MODEL_VERSION} or sourced. ${reviewClause} ${licensedClause}`;
 }

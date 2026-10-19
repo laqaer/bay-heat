@@ -9,3 +9,8 @@ test("aiLine never claims a human review that is still pending", () => {
   assert.doesNotMatch(pending, /Human review: full/);
   assert.match(aiLine(null, "full"), /Human review: full by /);
 });
+
+test("omitted review status cannot claim review", () => {
+  assert.match(aiLine("electrical"), /Human review: pending/);
+  assert.match(aiLine("electrical"), /no page-specific approval recorded/);
+});

@@ -29,6 +29,10 @@ jobs:
       - name: Generate Next.js route types
         run: npx next typegen
 
+      - name: Recorded editorial review
+        run: npm run check:editorial
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - run: npm run lint
       - run: npm run typecheck
 

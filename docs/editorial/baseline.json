@@ -1,0 +1,726 @@
+{
+  "source": "415470afdb63dd89bfe023530f3b9fc6e2217061 plus review-status truthfulness changes in this gate PR",
+  "note": "Inventory only. Not evidence that any legacy content was reviewed or is safe.",
+  "domains": {
+    "app/(site)/shop-heater/page.tsx": [
+      "gas"
+    ],
+    "app/(site)/can-i-run-it/page.tsx": [
+      "gas"
+    ],
+    "app/(site)/best-garage-heater/page.tsx": [
+      "electrical"
+    ],
+    "app/(site)/electric-garage-heater/page.tsx": [
+      "electrical"
+    ],
+    "app/(site)/240v-garage-heater/page.tsx": [
+      "electrical"
+    ],
+    "app/(site)/portable-garage-heater/page.tsx": [
+      "electrical"
+    ],
+    "app/(site)/ceiling-mount-garage-heater/page.tsx": [
+      "electrical"
+    ],
+    "app/(site)/best-wall-mount-garage-heaters/page.tsx": [
+      "electrical"
+    ],
+    "app/(site)/garage-heater-thermostat/page.tsx": [
+      "electrical"
+    ],
+    "app/(site)/diesel-heater-for-garage/page.tsx": [
+      "gas"
+    ],
+    "app/(site)/propane-heater-for-garage/page.tsx": [
+      "gas"
+    ],
+    "app/(site)/electric-vs-propane-garage-heater/page.tsx": [
+      "gas"
+    ],
+    "app/(site)/heat-pump-mini-split-for-garage/page.tsx": [
+      "electrical"
+    ],
+    "app/(site)/natural-gas-garage-heater/page.tsx": [
+      "gas"
+    ]
+  },
+  "files": {
+    "app/(site)/240v-garage-heater/page.tsx": "f3f5f2bb5968e3c38fbd53d38ba740bc8ab39c03",
+    "app/(site)/about/page.tsx": "3049d4278fe0b33b42a0361cd26ffb3ef94c58f2",
+    "app/(site)/best-garage-heater/page.tsx": "09ab26d5306bc94fba46d16d1b332b64eea88b77",
+    "app/(site)/best-wall-mount-garage-heaters/page.tsx": "1fc9f00fc6c684f13ade520615aa335cb2f532de",
+    "app/(site)/can-i-run-it/page.tsx": "5c6a606b62273e471e91f80e814dc4896dfc5d5c",
+    "app/(site)/ceiling-mount-garage-heater/page.tsx": "0d39409d57b8789cbd3f6ae103d1300a70e08702",
+    "app/(site)/cost-to-heat-a-garage/page.tsx": "b7b9bee51553740a3c6b3571d7b235267f9e4ff5",
+    "app/(site)/diesel-heater-for-garage/page.tsx": "2dfa370a383edf40366473bae9a148b5d63d098c",
+    "app/(site)/electric-garage-heater/page.tsx": "daea5e22ea51a35eaa83fc1b2a399ab56b7576d0",
+    "app/(site)/electric-vs-propane-garage-heater/page.tsx": "46a3f8ba7b6cf43f92915441020f6037d9396b33",
+    "app/(site)/garage-door-bottom-seal/page.tsx": "b4ccbb2e3fbb3f70afa0fb325cc9c4b97e7ee22f",
+    "app/(site)/garage-door-insulation-kit/page.tsx": "62705c17b465c68491ba4a464729a601cded5e02",
+    "app/(site)/garage-door-weather-stripping/page.tsx": "b8e341900d105e7ac589a38bc700d12ce25a18c3",
+    "app/(site)/garage-heater-calculator/methodology/page.tsx": "513a976e0eb0067c09df392ec869109ec815def6",
+    "app/(site)/garage-heater-calculator/page.tsx": "88e74516786992de354744aa4f274f63c3e51706",
+    "app/(site)/garage-heater-size/page.tsx": "3668078051d08a587fa39ce6c639216d015b10a2",
+    "app/(site)/garage-heater-thermostat/page.tsx": "6b84270609cc0d799fe652c029e40d1c67419cad",
+    "app/(site)/garage-heaters/page.tsx": "8ff749f782555269c0aa957eb84e29c96f72dd70",
+    "app/(site)/heat-pump-mini-split-for-garage/page.tsx": "8f1b80922726a9aeedef9ce5a6a62fce59cc92f5",
+    "app/(site)/how-to-insulate-a-garage/page.tsx": "dbddb9db41227d8f2b8c39adc683252a339b75ce",
+    "app/(site)/how-we-work/page.tsx": "d0f131d4092bb8f8b22d2e4ea6421359f9c44243",
+    "app/(site)/infrared-garage-heater/page.tsx": "72adc6b077f40d04ba5b2311187e9b5e1f416369",
+    "app/(site)/lab/notebook/page.tsx": "427ea50cbba520008d0a2ebf405102a52f279ca5",
+    "app/(site)/lab/page.tsx": "658edf46a51ea6179e82085b1457f358dccddefe",
+    "app/(site)/lab/reports/bh-001-the-4x-problem/page.tsx": "3b245b5e39530f3ee10854fe1dd03d21d8641dfd",
+    "app/(site)/layout.tsx": "564311e1e8d30428027053389f7e52524700af05",
+    "app/(site)/natural-gas-garage-heater/page.tsx": "f80e2e94a2233ffd156773c7128668b0d9b3ecc4",
+    "app/(site)/page.tsx": "2fb478bff3904ceb7cc87b27ebd90f7d656831d7",
+    "app/(site)/portable-garage-heater/page.tsx": "382efc8945a8ae2fda0cceb415ed1203a859ffef",
+    "app/(site)/privacy/page.tsx": "dc274479d9a522a50fb3348c89c12b8647f35fd9",
+    "app/(site)/propane-heater-for-garage/page.tsx": "0309381412f67564c161087145bb12907447ea9b",
+    "app/(site)/shop-heater/page.tsx": "b5251d958966477df27e4413a11776934dcb8beb",
+    "lib/commerce/products/core.ts": "da6e0f5635ab2b14df1b3b622b4215bb307ec78d",
+    "lib/commerce/products/electric.ts": "5719023024424144d603581dfa18dfbe5dcb8cfb",
+    "lib/commerce/products/fuel.ts": "adf0d1abea47e749f721a02e96324bc5cf0f7e4c",
+    "lib/commerce/products/index.ts": "54ea402ec4e686dcb65aa2895f27b2585028e9d8",
+    "lib/commerce/products/safety.ts": "732ffb4283d38dc6f0d21fc99bb6755e7708d962",
+    "lib/commerce/products/seal.ts": "d0e997872d5b8d6ef94917e15015b664f3152ade",
+    "lib/facts/circuits.ts": "1b96d8b9761114dfb62c6cc018dd380b48ca1f43",
+    "lib/facts/codes.ts": "339c9dde35af0a23e380858d5f9bfe98e151c1d4",
+    "lib/facts/electric.ts": "973791840d734f6760887cb3abdd512a460f0abb",
+    "lib/facts/fuel.ts": "0a7389f881226faab5fe4c0b6794783034de00e0",
+    "lib/facts/fuels.ts": "0c8132ffd0b799c71bffc0354711b0356c423afc",
+    "lib/facts/index.ts": "d88dfd7dca032aba46164779bbc4f0abd6adea6b",
+    "lib/facts/lab.ts": "6bc7d49a9e5c4ce873396f376a53d18922da52e0",
+    "lib/facts/products.ts": "8ed6347cfc3a430a37ad4392e61495185a640dc0",
+    "lib/facts/rules-of-thumb.ts": "ef68837857293487433f058e14163f804bd24f6e",
+    "lib/facts/safety.ts": "74b1faaecdd32571decfb99213d4fe6f9b8b79a4",
+    "lib/facts/seal.ts": "4b0c9c09ced4812399aec7a1b6632ea6de243f31",
+    "lib/facts/sources.ts": "2d4af6f5d7b97a38658e5e2dccb84e6428c7567a",
+    "lib/pages/core.ts": "cba9d969c68aba1257e4b64d36c932fb18b5d9d7",
+    "lib/pages/data.ts": "b3d0324a73f4f81dcf8a90000cf26083e1c0d06d",
+    "lib/pages/electric.ts": "876455cb5241b9e8d6d3e07a8ce778c9b0091f4e",
+    "lib/pages/fuel.ts": "0ad54eaa89a1b11e1fe80f09770a4c7768c78e37",
+    "lib/pages/index.ts": "70cef315d57c196251c342adfd17f5b68c1c8426",
+    "lib/pages/lab.ts": "9ca0194dca6c2d0ff8c1fedbf6547e58855bedad",
+    "lib/pages/safety.ts": "1fcf0d2626be6803c0ce013c57d8df7f4172a341",
+    "lib/pages/seal.ts": "899b3e0882406f3167acb6effe35095c11530f29",
+    "lib/pages/trust.ts": "d8e2ed60148156954b9b3aa8834899feb3e7c3e5",
+    "lib/pages/types.ts": "9e471ba345985a9ac4b274287f5014fb32098298",
+    "lib/planner/catalog.ts": "c956e6cc7be12b383c1f537aac3a6ccbd034307e",
+    "lib/planner/classCircuit.ts": "a5a76daf4d04909d06030143894519e8fc3aa9f0",
+    "lib/planner/climate.ts": "607b6f9efee28371998e1ea2fedd0d89fa56fb86",
+    "lib/planner/codec.ts": "60cf3c8cf9c7e988b193f170a7b22c087b654619",
+    "lib/planner/constants.ts": "48fc5e855f62fdda7281ea50ca321df59cc47bd6",
+    "lib/planner/defaults.ts": "3fb90400d84f041c52341918817540a65ac8e0b7",
+    "lib/planner/electrical.ts": "ed3aa5da31480832f2c90e36109191cae0b5c4d9",
+    "lib/planner/fixtures.ts": "15a9b5f910c6ceee3b88873242ed3f67b95eea4e",
+    "lib/planner/fuels.ts": "5ba4fda5d42eea7aae47e0228ed4a2c4c593ee23",
+    "lib/planner/geometry.ts": "80b247f5a9304eeccebb8fa089955a70ff23b940",
+    "lib/planner/heatLoss.ts": "d13b68d1936760119cf5d1016ad76aa70f426acb",
+    "lib/planner/plan.ts": "856b888b78bd84d4b1ad1253c33014c813121fdc",
+    "lib/planner/presets.ts": "fc3059d80cb825d4abcf2b69cee420b7ef3c9820",
+    "lib/planner/prices-data.ts": "cba15ae6f4733c6069382f7fa735972265fc49f1",
+    "lib/planner/prices.ts": "12775b442d98cace6f4822d1b8f63987785d6d35",
+    "lib/planner/recommend.ts": "cffd5ecab4725bdbfe21103416245c93626af3f3",
+    "lib/planner/roi.ts": "0798fc5e82cd83c4ae087dde6e4ba74afe28c1d6",
+    "lib/planner/seasonal.ts": "4cc7fc87fad17473b4f95f7b3ad754cd2b9d5707",
+    "lib/planner/serial.ts": "3022ef59bf3bbb4ae4be57c4110cf84de5a64416",
+    "lib/planner/stations.ts": "57d3c6546997e9fc348d6a0e0c6805bfd3ee70b2",
+    "lib/planner/types.ts": "f52691e3d43f3176eb3d488be5641e4fe5cdc710",
+    "lib/planner/uncertainty.ts": "c4fd6dd7d5e3a8faed4e25a797b90f5db5b6457e",
+    "lib/planner/warmup.ts": "aaf1adf8703b29b2f5a53849b247d5d69797f9d0",
+    "lib/planner/warnings.ts": "5eb4d3f0d8c9422808e47ec30197c7011dfe4c18",
+    "lib/planner/wizard-defaults.ts": "200380781fc67572b82336ff7b49706191695cfc",
+    "lib/planner/zip3.data.ts": "90e1a1b0bc6b86f0919a3d1e8650f17d2ace7f21",
+    "lib/planner/zip3.ts": "f8f221f6e3e233be500848ca93a116847d9dfb0e",
+    "lib/safety/types.ts": "32b68daa8b2d4123dd760a5e7e92031daab6563f",
+    "lib/safety/verdict.ts": "08d3b4519cc8c24320651b66e4532a3bc8008851",
+    "lib/site.ts": "a13d0853c162bc222f5eec95e3e8c8025787e89b",
+    "components/evidence/LabLabel.tsx": "5112f40947d67dd0fc9b1dadc2f94f43f79f8f0e"
+  },
+  "pages": [
+    {
+      "href": "/",
+      "id": "G-001",
+      "title": "BayHeat — Garage Climate Lab",
+      "h1": "One garage. Seven answers.",
+      "description": "BayHeat is the independent garage climate lab. An open model sizes the heater for your garage, grades every number by where it came from, and tells you plainly when a heater will trip your breaker or gas you.",
+      "kind": "home",
+      "layout": "report-first",
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/garage-heater-calculator",
+      "id": "G-002",
+      "title": "Garage heater calculator: the BTU/h, breaker and cost per hour for your garage",
+      "h1": "Garage heater calculator",
+      "description": "A ZIP code and five taps give you the heat load, the heater that fits, the breaker it needs, the cost per hour and the warm-up time — with every formula shown.",
+      "kind": "tool",
+      "layout": "report-first",
+      "nav": {
+        "group": "planner",
+        "label": "Planner"
+      },
+      "primaryKeyword": "garage heater calculator",
+      "volume": 880,
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/shop-heater",
+      "id": "G-028",
+      "title": "Shop heater: 240V electric or vented gas for a closed shop, and no torpedo heaters",
+      "h1": "Shop heaters",
+      "description": "Compare 240V electric, vented gas and diesel shop heaters by circuit, vent and CO rule, and see why a torpedo heater doesn't belong in a closed shop.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "humanReview": "full",
+      "nav": {
+        "group": "heaters",
+        "label": "Shop heaters"
+      },
+      "primaryKeyword": "shop heater",
+      "volume": 6600,
+      "reviewed": "gas",
+      "indexable": true,
+      "published": "2026-10-09",
+      "updated": "2026-10-10",
+      "rev": 2
+    },
+    {
+      "href": "/can-i-run-it",
+      "id": "G-004",
+      "title": "Can I run this heater in my garage? A verdict in 20 seconds, with the code section",
+      "h1": "Can I run it?",
+      "description": "Pick your heater and your situation. Get a GO, GO-IF or NO-GO verdict with the exact code section behind it — not a guess.",
+      "kind": "safety",
+      "layout": "report-first",
+      "nav": {
+        "group": "safety",
+        "label": "Can I Run It?"
+      },
+      "primaryKeyword": "kerosene heater indoors",
+      "volume": 22200,
+      "reviewed": "gas",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/lab",
+      "id": "G-005",
+      "title": "The BayHeat Lab",
+      "h1": "The Lab",
+      "description": "Pre-registered tests, each with its prediction published before we measure. No claimed test without a published log.",
+      "kind": "lab",
+      "layout": "report-first",
+      "nav": {
+        "group": "lab",
+        "label": "The Lab"
+      },
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 1
+    },
+    {
+      "href": "/lab/reports/bh-001-the-4x-problem",
+      "id": "G-006",
+      "title": "BH-001: Six publishers, seven answers, one garage (10,200-40,300 BTU/h)",
+      "h1": "BH-001: The 4× problem",
+      "description": "For the same 24x24 two-car garage, six publishers give BTU/h answers 10,200 to 40,300 apart. Here is why, and what our open model computes for four real envelopes.",
+      "kind": "lab",
+      "layout": "report-first",
+      "nav": {
+        "group": "lab",
+        "label": "BH-001"
+      },
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 1
+    },
+    {
+      "href": "/lab/notebook",
+      "id": "G-007",
+      "title": "Lab notebook: every model release, price refresh and correction",
+      "h1": "The Lab notebook",
+      "description": "A dated log of every model version, price refresh and correction. We correct within 72 hours, or 24 for a safety issue.",
+      "kind": "lab",
+      "layout": "report-first",
+      "nav": {
+        "group": "lab",
+        "label": "Notebook"
+      },
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/how-we-work",
+      "id": "G-008",
+      "title": "How we work: 7 pledges, how we make money, and who checks each page",
+      "h1": "How we work",
+      "description": "Seven pledges, the model behind every number, how we make money, and who checks electrical and gas claims before they publish.",
+      "kind": "trust",
+      "layout": "report-first",
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 1
+    },
+    {
+      "href": "/about",
+      "id": "G-026",
+      "title": "About BayHeat: an open garage-climate model, a lab, and the people who check it",
+      "h1": "About BayHeat",
+      "description": "Who publishes BayHeat, how the model works, and how to reach Laqaer Products.",
+      "kind": "legal",
+      "layout": "report-first",
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 2
+    },
+    {
+      "href": "/privacy",
+      "id": "G-027",
+      "title": "Privacy: what BayHeat collects (almost nothing) and why",
+      "h1": "Privacy policy",
+      "description": "What BayHeat collects, what it doesn't, and how email, analytics and the planner's saved-garage feature work.",
+      "kind": "legal",
+      "layout": "report-first",
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 2
+    },
+    {
+      "href": "/garage-heater-calculator/methodology",
+      "id": "G-003",
+      "title": "How the planner gets 31,900 BTU/h for a 2-car garage: every formula and constant",
+      "h1": "Methodology",
+      "description": "Every formula, constant and source behind the BayHeat planner — conduction, infiltration, warm-up simulation, prices, and the BayGrade formula.",
+      "kind": "guide",
+      "layout": "report-first",
+      "nav": {
+        "group": "planner",
+        "label": "Methodology"
+      },
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/cost-to-heat-a-garage",
+      "id": "G-009",
+      "title": "What it costs to keep a 2-car garage at 50°F all winter, in every state",
+      "h1": "The Garage Heat Index",
+      "description": "Season cost to hold a standard attached 2-car garage at 50°F, computed for every state's population-primary station, per fuel, at current EIA prices.",
+      "kind": "data",
+      "layout": "report-first",
+      "primaryKeyword": "cost to heat a garage",
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 1
+    },
+    {
+      "href": "/garage-heater-size",
+      "id": "G-010",
+      "title": "What size heater for a 1-, 2- or 3-car garage: 7,500 to 94,300 BTU/h, depending on the walls",
+      "h1": "Garage heater size",
+      "description": "Wattage brackets for 1-, 2-, 3- and 4-car garages by insulation and climate — a planning bracket, not a load calculation.",
+      "kind": "guide",
+      "layout": "report-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Size chart"
+      },
+      "primaryKeyword": "garage heater size calculator",
+      "volume": 390,
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/garage-door-bottom-seal",
+      "id": "G-011",
+      "title": "Garage door bottom seals: match the retainer, close the gap, cut the draft",
+      "h1": "Garage door bottom seals",
+      "description": "T-style, bulb, J and beaded bottom seals — how to match yours to the retainer you have, and how much draft it actually cuts.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "seal",
+        "label": "Bottom seal"
+      },
+      "primaryKeyword": "garage door bottom seal",
+      "volume": 27100,
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 1
+    },
+    {
+      "href": "/garage-door-weather-stripping",
+      "id": "G-012",
+      "title": "Garage door weather stripping: a $125 package cuts a 2-car garage's heat loss by 12%",
+      "h1": "Garage door weather stripping",
+      "description": "The perimeter stop seal, bottom seal and service-door kit that stop the biggest air leaks around a garage door — with the computed BTU/h it saves.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "seal",
+        "label": "Weather stripping"
+      },
+      "primaryKeyword": "garage door weather stripping",
+      "volume": 22200,
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 1
+    },
+    {
+      "href": "/garage-door-insulation-kit",
+      "id": "G-013",
+      "title": "Garage door insulation kits: how much they help, and when a kit barely helps",
+      "h1": "Garage door insulation kits",
+      "description": "EPS and reflective kits for a steel garage door, what they change about your heat load, and when a bare ceiling means a kit barely helps.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "seal",
+        "label": "Door insulation kit"
+      },
+      "primaryKeyword": "garage door insulation kit",
+      "volume": 22200,
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 1
+    },
+    {
+      "href": "/how-to-insulate-a-garage",
+      "id": "G-014",
+      "title": "How to insulate a garage in the order that pays back",
+      "h1": "How to insulate a garage",
+      "description": "Seal, then the door, then the ceiling — the order that pays back fastest, with a worked example: $675 of fixes cuts a 10 kW heater to 5 kW.",
+      "kind": "guide",
+      "layout": "report-first",
+      "nav": {
+        "group": "seal",
+        "label": "How to insulate"
+      },
+      "primaryKeyword": "how to insulate a garage",
+      "volume": 2400,
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-02",
+      "rev": 1
+    },
+    {
+      "href": "/best-garage-heater",
+      "id": "G-030",
+      "title": "Best garage heater: size the garage first, then match the heater to your circuit or fuel",
+      "h1": "Best garage heater, picked by fit to your garage",
+      "description": "Garage heater picks by situation, chosen from manufacturer specs and our load model: plug-in, hardwired ceiling, infrared, vented gas and mini-split.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Best picks"
+      },
+      "primaryKeyword": "best garage heater",
+      "volume": 5400,
+      "reviewed": "electrical",
+      "humanReview": "full",
+      "indexable": true,
+      "published": "2026-10-09",
+      "updated": "2026-10-10",
+      "rev": 2
+    },
+    {
+      "href": "/electric-garage-heater",
+      "id": "G-015",
+      "title": "Electric garage heaters: 1.5 kW spot heat to 10 kW, and the circuit each one needs",
+      "h1": "Electric garage heaters",
+      "description": "Every electric garage heater class from a 1.5 kW plug-in to a 10 kW ceiling unit, and the exact circuit each one needs.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Electric"
+      },
+      "primaryKeyword": "garage heater electric",
+      "volume": 14800,
+      "reviewed": "electrical",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/240v-garage-heater",
+      "id": "G-016",
+      "title": "240V garage heaters: 5 kW needs a 30A breaker and 10 AWG, and 4 kW won't fit a 20A circuit",
+      "h1": "240V garage heaters",
+      "description": "What a 240V garage heater actually needs: breaker size, wire gauge, GFCI, and why 4 kW doesn't fit a 20A circuit.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "240V"
+      },
+      "primaryKeyword": "240v garage heater",
+      "volume": 590,
+      "reviewed": "electrical",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/portable-garage-heater",
+      "id": "G-017",
+      "title": "Portable garage heaters: 1,500W draws 12.5A and must be the only load on a 15A circuit",
+      "h1": "Portable garage heaters",
+      "description": "What a 15A or 20A garage receptacle can actually run, and which portable heater fits without tripping the breaker.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Portable"
+      },
+      "primaryKeyword": "portable electric garage heater",
+      "volume": 4400,
+      "reviewed": "electrical",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/ceiling-mount-garage-heater",
+      "id": "G-018",
+      "title": "Ceiling-mount garage heaters: 5 kW on 30A, 6 ft minimum height, 8 in from any wall",
+      "h1": "Ceiling-mount garage heaters",
+      "description": "5 kW and 7.5 kW hardwired ceiling heaters — joist load, throw, mounting height, and the clearances the manual actually requires.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Ceiling"
+      },
+      "primaryKeyword": "ceiling mount garage heater",
+      "volume": 480,
+      "reviewed": "electrical",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/best-wall-mount-garage-heaters",
+      "id": "G-019",
+      "title": "Wall-mount garage heaters: 1.5 kW, 5 kW and 7.5 kW, with the clearances from each manual",
+      "h1": "Wall-mount garage heaters",
+      "description": "Wall-listed electric garage heaters from a 1.5 kW infrared panel to a 7.5 kW shop unit, with nameplate and manual figures only.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Wall-mount"
+      },
+      "primaryKeyword": "wall mount garage heater",
+      "volume": 210,
+      "reviewed": "electrical",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/garage-heater-thermostat",
+      "id": "G-031",
+      "title": "Garage heater thermostats — review in progress",
+      "h1": "Garage heater thermostats",
+      "description": "This guide is temporarily unavailable pending recorded editorial and qualified electrical review.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "primaryKeyword": "garage heater thermostat",
+      "volume": 390,
+      "reviewed": "electrical",
+      "humanReview": "pending",
+      "indexable": false,
+      "published": "2026-10-19",
+      "updated": "2026-10-19",
+      "rev": 2
+    },
+    {
+      "href": "/garage-heaters",
+      "id": "G-020",
+      "title": "Garage heaters by fuel: electric, gas, propane, diesel or heat pump, at your prices",
+      "h1": "Garage heaters by fuel",
+      "description": "Every fuel option for garage heat, compared at your own state's energy prices — not a national average.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "All fuels"
+      },
+      "primaryKeyword": "garage heater",
+      "volume": 27100,
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/infrared-garage-heater",
+      "id": "G-021",
+      "title": "Infrared vs forced-air garage heaters: which one wins with the door open",
+      "h1": "Infrared garage heaters",
+      "description": "Radiant vs forced-air heat for a garage — which wins in a drafty shop, an open-door bay, or a single workbench.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Infrared"
+      },
+      "primaryKeyword": "infrared garage heater",
+      "volume": 2400,
+      "reviewed": null,
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/diesel-heater-for-garage",
+      "id": "G-022",
+      "title": "Diesel heater for a garage: cost per hour vs electric, and the exhaust rule",
+      "h1": "Diesel heaters for a garage",
+      "description": "What a diesel air heater actually costs per hour at this week's fuel price, why the exhaust has to go outside, and when it beats electric.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Diesel"
+      },
+      "primaryKeyword": "diesel heater for garage",
+      "volume": 6600,
+      "reviewed": "gas",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/propane-heater-for-garage",
+      "id": "G-023",
+      "title": "Propane heaters for garages: vented vs Buddy-type, an 18-hour tank, and the CO alarm you need",
+      "h1": "Propane heaters for a garage",
+      "description": "Vented unit heaters vs portable Buddy-type radiant heaters, tank runtime, and exactly when each one is safe to run.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Propane"
+      },
+      "primaryKeyword": "propane heater for garage",
+      "volume": 9900,
+      "reviewed": "gas",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/electric-vs-propane-garage-heater",
+      "id": "G-024",
+      "title": "Electric vs propane vs gas vs diesel: cost per million BTU delivered at your state's prices",
+      "h1": "Electric vs propane garage heaters",
+      "description": "Electric, propane, natural gas and diesel compared on delivered cost per million BTU, computed at your own state's prices.",
+      "kind": "guide",
+      "layout": "report-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Electric vs propane"
+      },
+      "primaryKeyword": "electric vs propane garage heater",
+      "volume": 90,
+      "reviewed": "gas",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/heat-pump-mini-split-for-garage",
+      "id": "G-025",
+      "title": "Mini-split heat pump for a garage: does a $2,500-7,000 install beat a $170 heater over 5 years?",
+      "h1": "Mini-split for a garage",
+      "description": "A cold-climate mini-split's 5-year cost against an electric resistance heater, including the cooling credit — and when it wins.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Mini-split"
+      },
+      "primaryKeyword": "mini split for garage",
+      "volume": 3600,
+      "reviewed": "electrical",
+      "indexable": true,
+      "published": "2026-10-02",
+      "updated": "2026-10-09",
+      "rev": 2
+    },
+    {
+      "href": "/natural-gas-garage-heater",
+      "id": "G-029",
+      "title": "Natural gas garage heater: vent it outdoors, hang it high, hire a licensed fitter",
+      "h1": "Natural gas garage heaters",
+      "description": "How to size, vent and hook up a natural gas garage heater, why a vent-free one is a no in an attached garage, and its cost per hour against electric.",
+      "kind": "money",
+      "layout": "verdict-first",
+      "nav": {
+        "group": "heaters",
+        "label": "Natural gas"
+      },
+      "primaryKeyword": "natural gas garage heater",
+      "volume": 2900,
+      "reviewed": "gas",
+      "humanReview": "full",
+      "indexable": true,
+      "published": "2026-10-09",
+      "updated": "2026-10-10",
+      "rev": 2
+    }
+  ]
+}
