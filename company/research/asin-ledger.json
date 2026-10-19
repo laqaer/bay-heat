@@ -639,6 +639,50 @@
    "reviews": "27",
    "checkedAt": "2026-09-30",
    "note": "Cadet T522-W double-pole thermostat. No featured offer on 2026-09-30."
+  },
+  {
+   "asin": "B00KRFKE7C",
+   "productId": "stelpro-swt2f",
+   "role": "wired",
+   "listing": "ok",
+   "title": "Stelpro Line Voltage Wall Thermostat - Double Pole 22A - SWT2F - White",
+   "rating": 3.9,
+   "reviews": "75",
+   "checkedAt": "2026-10-19",
+   "note": "verify-asins.mjs --only-candidates status ok. Double-pole 22A SWT2F."
+  },
+  {
+   "asin": "B07FTVGXGM",
+   "productId": "cadet-t522-w",
+   "role": "wired",
+   "listing": "ok",
+   "title": "Cadet Double Pole Line Voltage Thermostat for Baseboard & Wall Heaters",
+   "rating": 4.5,
+   "reviews": "120",
+   "checkedAt": "2026-10-19",
+   "note": "verify-asins.mjs --only-candidates status ok. Cadet T522-W. Different listing from offers-only B07F7FDSM6."
+  },
+  {
+   "asin": "B0DBPRCBL5",
+   "productId": "inkbird-c226t-plugin",
+   "role": "wired",
+   "listing": "ok",
+   "title": "INKBIRD Plug in Thermostat 15A 1800W, Programmable Heating Cooling Digital Temperature Controller",
+   "rating": 4.2,
+   "reviews": "80",
+   "checkedAt": "2026-10-19",
+   "note": "verify-asins.mjs --only-candidates status ok. Page ASIN matched. Size variant 1800W 15A, model C226T."
+  },
+  {
+   "asin": "B07Y2FDR4K",
+   "productId": "bnlink-t9-plugin",
+   "role": "wired",
+   "listing": "ok",
+   "title": "BN-LINK Temperature Controller Dual Thermostat Outlet for Heating Cooling, 15A/1875W",
+   "rating": 4.5,
+   "reviews": "784",
+   "checkedAt": "2026-10-19",
+   "note": "verify-asins.mjs --only-candidates status ok. Page ASIN matched. Model BNQ-T9, listing says 15A/1875W at 125VAC."
   }
  ]
 }

@@ -107,4 +107,22 @@ export const PAGES: PageEntry[] = [
     updated: "2026-10-09",
     rev: 2,
   },
+  {
+    href: "/garage-heater-thermostat",
+    id: "G-031",
+    title: "Garage heater thermostats: a 5,000W heater draws 20.8A, so match a 22A double-pole control",
+    h1: "Garage heater thermostats",
+    description:
+      "Line-voltage double-pole thermostats for a hardwired 240V garage heater, and 15A plug-in controllers for a 120V portable, with the amp match and the wiring caution.",
+    kind: "money",
+    layout: "verdict-first",
+    nav: { group: "heaters", label: "Thermostat" },
+    primaryKeyword: "garage heater thermostat",
+    volume: 390,
+    reviewed: "electrical",
+    indexable: true,
+    published: "2026-10-19",
+    updated: "2026-10-19",
+    rev: 1,
+  },
 ];

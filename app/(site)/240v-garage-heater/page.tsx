@@ -141,6 +141,13 @@ export default function Page() {
         Adding a large 240V circuit to an existing panel can also trigger <Num f="code.nec.220_83" /> — worth asking
         your electrician about before they open the panel, not after.
       </p>
+      <p>
+        The heater still needs a control. A 24V furnace thermostat cannot switch this load. A line-voltage
+        double-pole thermostat has to cover the heater&apos;s running current — a 22A control covers a 5,000W
+        heater and does not cover a 7,500W one. See{" "}
+        <Link href="/garage-heater-thermostat">garage heater thermostats</Link> for the match, the placement, and
+        why a licensed electrician should wire it.
+      </p>
 
       <h2>Shop for the size your circuit can carry</h2>
       <p>

@@ -33,6 +33,10 @@ export const PRODUCT_IDS = [
   "co-alarm-battery-10yr",
   "extinguisher-abc",
   "thermostat-line-voltage-dp",
+  "stelpro-swt2f",
+  "cadet-t522-w",
+  "inkbird-c226t-plugin",
+  "bnlink-t9-plugin",
   "fridge-heater-kit",
   "freeze-alarm-wifi",
   // fuel
