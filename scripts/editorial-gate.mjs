@@ -10,12 +10,8 @@ export function blobSha(bytes) {
 // Includes every article, not just routes an author remembers to classify as safety.
 // Shared factual inputs are protected too: changing a fact must not evade a page gate.
 export function protectedPath(path) {
-  return !/\.test\.[cm]?[jt]sx?$/.test(path) && (
-    /^app\/\(site\)\/.*\.(tsx?|mdx|json)$/.test(path) ||
-    /^lib\/(facts|pages|planner|safety|commerce)\/.*\.(tsx?|json)$/.test(path) ||
-    /^components\/(safety|result|commerce|planner|evidence|page)\/.*\.(tsx?|json)$/.test(path) ||
-    path === 'lib/site.ts'
-  );
+  return !/\.test\.[cm]?[jt]sx?$/.test(path) &&
+    /^(app|lib|components)\/.*\.(?:[cm]?[jt]sx?|mdx?|json)$/.test(path);
 }
 
 export function snapshot(root) {
@@ -28,7 +24,7 @@ export function snapshot(root) {
       else if (protectedPath(path)) files[path] = blobSha(readFileSync(resolve(root, path)));
     }
   }
-  for (const dir of ['app/(site)', 'lib', 'components']) walk(dir);
+  for (const dir of ['app', 'lib', 'components']) walk(dir);
   return files;
 }
 
@@ -76,7 +72,7 @@ async function allReviews(pr) {
 
 export async function enforceEditorialReview(root = process.cwd()) {
   const baselineBytes = readFileSync(resolve(root, 'docs/editorial/baseline.json'));
-  const expected = 'db39feda96ed5a39a74db4b650cd8c64dfe3ef5ae569111c0bf532f3d6fb9576';
+  const expected = '72b88853535e097bfc139c001b1c2388775ea4817bb10d69f25a249d17f641cd';
   if (createHash('sha256').update(baselineBytes).digest('hex') !== expected)
     throw new Error('Editorial baseline changed; it is an inventory, never an approval. Restore it.');
   const baseline = JSON.parse(baselineBytes);
@@ -98,8 +94,12 @@ export async function enforceEditorialReview(root = process.cwd()) {
       else if (/\/(fuel|fuels)\.ts$/.test(path)) roles.add('gas');
       else { roles.add('electrical'); roles.add('gas'); }
     }
+    // Other shared renderers/helpers can introduce advice without changing an article.
+    if (/^(components|lib)\//.test(path) && !path.startsWith('lib/pages/')) {
+      roles.add('electrical'); roles.add('gas');
+    }
     // An unclassified new article or changed classification is not a way around technical review.
-    if (!page && path.startsWith('app/(site)/')) {
+    if (!page && path.startsWith('app/')) {
       roles.add('electrical'); roles.add('gas');
     }
   }
