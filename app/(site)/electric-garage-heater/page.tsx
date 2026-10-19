@@ -43,7 +43,6 @@ const CLASS_ORDER: HeaterClassId[] = [
 
 const SUBPAGES: { href: "/240v-garage-heater" | "/portable-garage-heater" | "/ceiling-mount-garage-heater" | "/best-wall-mount-garage-heaters" | "/shop-heater" | "/garage-heater-thermostat"; label: string; blurb: string }[] = [
   { href: "/240v-garage-heater", label: "240V garage heaters", blurb: "Breaker size, wire gauge and GFCI for a hardwired 4-10 kW unit, and why 4 kW doesn't fit a 20A circuit." },
-  { href: "/garage-heater-thermostat", label: "Garage heater thermostats", blurb: "Line-voltage double-pole controls for a hardwired 240V heater, and 15A plug-in controllers for a portable." },
   { href: "/portable-garage-heater", label: "Portable garage heaters", blurb: "What a 15A or 20A garage outlet can actually run without tripping." },
   { href: "/ceiling-mount-garage-heater", label: "Ceiling-mount garage heaters", blurb: "Mounting height, throw and clearance for a 5 kW or 7.5 kW ceiling unit." },
   { href: "/best-wall-mount-garage-heaters", label: "Wall-mount garage heaters", blurb: "1.5 kW to 7.5 kW wall units, with the clearances from each manual." },
