@@ -78,7 +78,8 @@ export default function Page() {
         A low-voltage thermostat switches a control signal. The gas unit heater on the{" "}
         <Link href="/natural-gas-garage-heater">natural gas page</Link> uses 24V terminals for that. A hardwired
         electric heater has no control board waiting for that signal. The thermostat is in the power wires, so it
-        has to be rated for the heater&apos;s voltage and its running amps.
+        has to be rated for the heater&apos;s voltage and its running amps. Most smart Wi-Fi thermostats are
+        low-voltage units too, so they do not wire directly to a hardwired heater either.
       </p>
       <p>
         Double-pole means the control opens both hot legs. A single-pole control opens one. On a 240V circuit both
@@ -162,6 +163,8 @@ export default function Page() {
       <h2>Plug-in controllers stop at 15A</h2>
       <p>
         A plug-in thermostat is an outlet controller for a 120V cord, not a substitute for the wall control above.
+        It fits a standard 120V outlet only, so it cannot run a 240V heater. Plug it straight into the wall
+        receptacle, never into an extension cord or power strip.
         A 15A rating at 120V is <Num v={plugW120} unit="W" ev="C" src="15 A × 120 V" />. The same 15A at 125V is{" "}
         <Num v={plugW125} unit="W" ev="C" src="15 A × 125 V" />. The Inkbird listing title is 15A / 1,800W. The
         BN-LINK listing title is 15A / 1,875W at 125V. Neither number is a lab result from this site.
