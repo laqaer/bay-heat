@@ -156,6 +156,12 @@ export default function Page() {
         Plug directly into a wall receptacle every time.
       </p>
       <p>
+        A plug-in thermostat outlet is not an extension cord. It is still a device between the heater and the
+        wall, and it has its own 15A limit. Use one only if this heater&apos;s manual allows it. The{" "}
+        <Link href="/garage-heater-thermostat">garage heater thermostat</Link> page covers that limit, and the
+        line-voltage control a hardwired heater needs instead.
+      </p>
+      <p>
         <strong>Don&apos;t run two heaters off one 15A circuit.</strong> Two 1,500W heaters together draw{" "}
         <Num v={25} unit="A" ev="C" src="2 x circuit.1500w120v.amps (two 1,500W/120V loads on one circuit)" /> —
         already over a 20A breaker&apos;s rating, let alone a 15A one. If you need more heat than one portable

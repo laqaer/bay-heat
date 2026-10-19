@@ -26,6 +26,7 @@ export type ProductKind =
   | "co_alarm"
   | "extinguisher"
   | "thermostat_line_voltage"
+  | "thermostat_plugin"
   | "fridge_heater_kit"
   | "freeze_alarm"
   | "diesel_exhaust_kit"

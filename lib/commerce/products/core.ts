@@ -26,6 +26,11 @@ export const VERIFIED_ASINS = [
   // fuel and mini-split
   "B00LWW7V7K",
   "B0CTJDVB8K",
+  // thermostats (verify-asins.mjs --only-candidates, 2026-10-19, status ok)
+  "B00KRFKE7C",
+  "B07FTVGXGM",
+  "B0DBPRCBL5",
+  "B07Y2FDR4K",
   // safety
   "B00FHW7PBS",
   "B00F5CK9X6",
