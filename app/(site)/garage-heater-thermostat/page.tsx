@@ -58,8 +58,8 @@ export default function Page() {
   return (
     <ReportPage entry={entry} sources={sources}>
       <AnswerBlock>
-        A hardwired 240V garage heater needs a line-voltage thermostat. A 24V furnace thermostat cannot carry
-        this load. A 5,000W heater draws <Num f="circuit.5000w240v.amps" /> at 240V. A{" "}
+        Many hardwired garage heaters have a built-in thermostat, so check the manual first. If yours needs a wall
+        control, it has to be a line-voltage thermostat. A 24V furnace thermostat cannot carry this load. A 5,000W heater draws <Num f="circuit.5000w240v.amps" /> at 240V. A{" "}
         <Num f="t522.amps" /> double-pole control covers that draw. It does not cover a 7,500W heater.
       </AnswerBlock>
 
@@ -77,13 +77,14 @@ export default function Page() {
       <p>
         A low-voltage thermostat switches a control signal. The gas unit heater on the{" "}
         <Link href="/natural-gas-garage-heater">natural gas page</Link> uses 24V terminals for that. A hardwired
-        electric heater has no control board waiting for that signal. The thermostat is in the power wires, so it
-        has to be rated for the heater&apos;s voltage and its running amps. Most smart Wi-Fi thermostats are
+        electric heater wired for a wall control has no terminals for that signal. The wall thermostat is in the
+        power wires, so it has to be rated for the heater&apos;s voltage and its running amps. Most smart Wi-Fi thermostats are
         low-voltage units too, so they do not wire directly to a hardwired heater either.
       </p>
       <p>
         Double-pole means the control opens both hot legs. A single-pole control opens one. On a 240V circuit both
-        legs are hot, so the wall control for that heater is the double-pole model, the one with a real off stop.
+        legs are hot, so only a double-pole control fully de-energizes the heater at its off stop. A single-pole
+        line-voltage control rated for 240V can still regulate temperature. Use the type the heater manual names.
         The Honeywell CT410B manual is the plain version of that split: CT410A is single-line break, CT410B is
         double-line break, and both are rated <Num f="ct410b.amps" /> at 120–240V. Honeywell&apos;s store lists
         CT410B1017 as discontinued, and the Amazon listings checked on 2026-10-19 were unavailable, so it is not a
