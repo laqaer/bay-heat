@@ -110,10 +110,10 @@ export const PAGES: PageEntry[] = [
   {
     href: "/garage-heater-thermostat",
     id: "G-031",
-    title: "Garage heater thermostats — review in progress",
+    title: "Garage heater thermostats: check the control type, load and manufacturer instructions",
     h1: "Garage heater thermostats",
     description:
-      "This guide is temporarily unavailable pending recorded editorial and qualified electrical review.",
+      "A review draft explaining built-in, line-voltage and low-voltage controls, motor limits and why generic plug-in recommendations are withheld.",
     kind: "money",
     layout: "verdict-first",
     primaryKeyword: "garage heater thermostat",
@@ -123,6 +123,6 @@ export const PAGES: PageEntry[] = [
     indexable: false,
     published: "2026-10-19",
     updated: "2026-10-19",
-    rev: 2,
+    rev: 3,
   },
 ];
