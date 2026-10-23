@@ -39,9 +39,9 @@ Immediate metric, observed 2026-09-26 after merge commit `adb2754`:
 - IndexNow returned HTTP 202 for the nine submitted URLs.
 - The 28-day Search Console metric is still blocked. This is not a commercial success.
 
-## Result — 28-day search metric (recorded 2026-10-23 UTC)
+## Interim read — 28-day search metric (2026-10-23 UTC)
 
-Source: Search Console for `sc-domain:bayheatguide.com`, read through OpenSEO (read-only, no credits). Dates are Pacific Time. Before window: 2026-08-29 to 2026-09-25 (data starts 2026-09-05). After window: 2026-09-26 to 2026-10-23. The last three days of the after window can still change.
+Source: Search Console for `sc-domain:bayheatguide.com`, read through OpenSEO (read-only, no credits). Dates are Pacific Time. Before window: 2026-08-29 to 2026-09-25 (data starts 2026-09-05). After window: 2026-09-26 to 2026-10-23. This read is interim. The registered window ends on or after 2026-10-24, and Search Console data for the last three days are not final.
 
 Property totals: before 1 click, 51 impressions. After 0 clicks, 10 impressions.
 
@@ -57,9 +57,11 @@ Money pages (clicks / impressions, before → after):
 
 Edited pages (impressions, before → after): `/` 4 → 8, `/120v-vs-240v-garage-heater` 27 → 1, `/forced-air-vs-infrared-garage-heater` 0 → 0. Total 31 → 9, down 71 percent.
 
-Verdict: **no success.** Money-page clicks did not rise (1 → 0). No sale is recorded; no Associates report was read.
+Interim reading: no success signal. Money-page clicks did not rise (1 → 0). No sale is recorded; no Associates report was read.
 
-Stop rule: edited-page impressions fell more than 30 percent and money-page clicks did not rise, so the registered rule says to revert the retailer module. The sample is very small. Impressions also fell sitewide (51 → 10), including on pages without the module. The data do not show that the module caused the drop. The revert decision is the next step; this record does not make it.
+Stop rule: not evaluated yet. On these interim figures, edited-page impressions are down more than 30 percent and money-page clicks did not rise. The sample is very small (one baseline click). Impressions also fell sitewide (51 → 10), including on pages without the module, so the data do not show that the module caused the drop.
+
+Next step: on or after 2026-10-27, read the same windows with `dataState: final` (after window ending 2026-10-24). Record the verdict and the stop-rule result then. Do not revert the module on this interim read.
 
 ## Stop or pivot
 
