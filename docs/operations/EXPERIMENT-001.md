@@ -39,6 +39,28 @@ Immediate metric, observed 2026-09-26 after merge commit `adb2754`:
 - IndexNow returned HTTP 202 for the nine submitted URLs.
 - The 28-day Search Console metric is still blocked. This is not a commercial success.
 
+## Result — 28-day search metric (recorded 2026-10-23 UTC)
+
+Source: Search Console for `sc-domain:bayheatguide.com`, read through OpenSEO (read-only, no credits). Dates are Pacific Time. Before window: 2026-08-29 to 2026-09-25 (data starts 2026-09-05). After window: 2026-09-26 to 2026-10-23. The last three days of the after window can still change.
+
+Property totals: before 1 click, 51 impressions. After 0 clicks, 10 impressions.
+
+Money pages (clicks / impressions, before → after):
+
+| Page | Before | After |
+| --- | --- | --- |
+| `/best-ceiling-mount-garage-heaters-under-200` | 0 / 0 | 0 / 0 |
+| `/portable-garage-heaters-15a-circuit` | 1 / 7 | 0 / 2 |
+| `/best-wall-mount-garage-heaters` | 0 / 0 | 0 / 0 |
+| `/best-electric-garage-heaters-by-size` | 0 / 14 | 0 / 1 |
+| Total | 1 / 21 | 0 / 3 |
+
+Edited pages (impressions, before → after): `/` 4 → 8, `/120v-vs-240v-garage-heater` 27 → 1, `/forced-air-vs-infrared-garage-heater` 0 → 0. Total 31 → 9, down 71 percent.
+
+Verdict: **no success.** Money-page clicks did not rise (1 → 0). No sale is recorded; no Associates report was read.
+
+Stop rule: edited-page impressions fell more than 30 percent and money-page clicks did not rise, so the registered rule says to revert the retailer module. The sample is very small. Impressions also fell sitewide (51 → 10), including on pages without the module. The data do not show that the module caused the drop. The revert decision is the next step; this record does not make it.
+
 ## Stop or pivot
 
 - Remove a card if its recommendation contradicts the page it sits on.
