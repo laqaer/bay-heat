@@ -12,8 +12,8 @@ export type PageEntry = {
   primaryKeyword?: string;
   volume?: number;
   reviewed: "electrical" | "gas" | null;
-  // Review discipline, not proof of approval. Omission is pending; never infer human
-  // approval from layout. Changes to this registry are covered by the build gate.
+  // Not proof of approval. Absent is not the "pending" hold. The Lab stamp still
+  // says pending when this field is omitted.
   humanReview?: "full" | "sample" | "pending";
   indexable: boolean;
   published: string; // YYYY-MM-DD

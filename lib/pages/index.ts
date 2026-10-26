@@ -13,12 +13,8 @@ import { PAGES as FUEL } from "./fuel.ts";
 // of hard-coding a route list, so a new page can't ship without a title/description/H1.
 export const PAGES: PageEntry[] = [...CORE, ...SAFETY, ...LAB, ...TRUST, ...DATA, ...SEAL, ...ELECTRIC, ...FUEL];
 
-// Safety-sensitive and verdict-first pages need explicit full human review.
-// Omission never opts them into sitemap/IndexNow or removes noindex. Registry
-// changes are protected by the exact-content production build gate.
 export function isIndexed(entry: PageEntry): boolean {
-  const needsFull = entry.reviewed !== null || entry.layout === "verdict-first" || entry.kind === "safety";
-  return entry.indexable && (needsFull ? entry.humanReview === "full" : entry.humanReview !== "pending");
+  return entry.indexable && entry.humanReview !== "pending";
 }
 
 export function findPage(href: string): PageEntry | undefined {

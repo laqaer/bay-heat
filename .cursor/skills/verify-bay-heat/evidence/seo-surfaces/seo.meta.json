@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-26T01:49:33.124Z",
+  "capturedAt": "2026-10-26T16:32:21.407Z",
   "url": "http://127.0.0.1:4317",
   "checks": [
     {
@@ -61,6 +61,61 @@
       "name": "sitemap:/natural-gas-garage-heater",
       "ok": true,
       "detail": "https://bayheatguide.com/natural-gas-garage-heater"
+    },
+    {
+      "name": "sitemap:/electric-garage-heater",
+      "ok": true,
+      "detail": "https://bayheatguide.com/electric-garage-heater"
+    },
+    {
+      "name": "sitemap:/240v-garage-heater",
+      "ok": true,
+      "detail": "https://bayheatguide.com/240v-garage-heater"
+    },
+    {
+      "name": "sitemap:/portable-garage-heater",
+      "ok": true,
+      "detail": "https://bayheatguide.com/portable-garage-heater"
+    },
+    {
+      "name": "sitemap:/ceiling-mount-garage-heater",
+      "ok": true,
+      "detail": "https://bayheatguide.com/ceiling-mount-garage-heater"
+    },
+    {
+      "name": "sitemap:/infrared-garage-heater",
+      "ok": true,
+      "detail": "https://bayheatguide.com/infrared-garage-heater"
+    },
+    {
+      "name": "sitemap:/electric-vs-propane-garage-heater",
+      "ok": true,
+      "detail": "https://bayheatguide.com/electric-vs-propane-garage-heater"
+    },
+    {
+      "name": "sitemap:/garage-heaters",
+      "ok": true,
+      "detail": "https://bayheatguide.com/garage-heaters"
+    },
+    {
+      "name": "sitemap:/best-wall-mount-garage-heaters",
+      "ok": true,
+      "detail": "https://bayheatguide.com/best-wall-mount-garage-heaters"
+    },
+    {
+      "name": "sitemap:/garage-door-bottom-seal",
+      "ok": true,
+      "detail": "https://bayheatguide.com/garage-door-bottom-seal"
+    },
+    {
+      "name": "sitemap:/garage-door-weather-stripping",
+      "ok": true,
+      "detail": "https://bayheatguide.com/garage-door-weather-stripping"
+    },
+    {
+      "name": "sitemap:/garage-door-insulation-kit",
+      "ok": true,
+      "detail": "https://bayheatguide.com/garage-door-insulation-kit"
     },
     {
       "name": "ads-status",

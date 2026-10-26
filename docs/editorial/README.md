@@ -1,6 +1,6 @@
 # Recorded editorial review
 
-PR #35 showed that prose saying “review before merge” and `reviewed: "electrical"` do not enforce approval. Omitted `humanReview` now means pending; safety/verdict pages require explicit `full` to enter the sitemap. A site-wide reviewer environment variable never proves a page-specific review.
+PR #35 showed that prose saying “review before merge” and `reviewed: "electrical"` do not enforce approval. Sitemap membership follows `indexable` and excludes `humanReview: "pending"`. Omitted `humanReview` stays on the sitemap and still reads as pending on the Lab stamp. A site-wide reviewer environment variable never proves a page-specific review.
 
 ## Gates
 
@@ -22,7 +22,7 @@ The owner must review policy changes to `reviewers.json`, this baseline, the gat
 2. The named editor reads the complete article, citations, disclosures and recommendations. The qualified technical reviewer checks manufacturer instructions, applicable load types, limits and local-code qualifications. They submit GitHub **APPROVE** reviews on that content commit, including `BAYHEAT-EDITORIAL-APPROVED`, `BAYHEAT-ELECTRICAL-APPROVED`, or `BAYHEAT-GAS-APPROVED` for their respective roles. One qualified person may fill multiple roles if verified for them.
 3. Add an entry to `approvals.json`: `{"commit":"<40-character reviewed content SHA>","pr":123,"reviews":{"editorial":123456,"electrical":123457}}`. IDs are actual GitHub review IDs, not comments. Include the roles requested by the gate. Do not invent example identities or IDs as real records.
 4. The gate reads the reviewed commit tree and live reviews. It rejects missing, bot, dismissed, superseded change-request, mismatched-content and mismatched-commit approvals, expired or incomplete qualification records, truncated evidence, and unavailable GitHub evidence. A changed page classification cannot erase its prior technical scope. A renewed review or new content change needs a new receipt.
-5. For indexing, explicitly set the intended `humanReview: "full"` and `indexable: true` as part of the reviewed content commit; that change itself needs a receipt. Verify the live HTML, sitemap and deployment SHA after merge. Sitemap membership is eligibility, not proof of Google/Bing indexing.
+5. `humanReview: "full"` is a label claim. Set it only in a reviewed content commit, and that change needs a receipt. It is not what puts an `indexable` page into the sitemap. Verify the live HTML, sitemap and deployment SHA after merge. Sitemap membership is eligibility, not proof of Google/Bing indexing.
 
 This gate does not verify licenses against a registry automatically, replace the named human, audit unchanged legacy content, or make a generic thermostat rating prove compatibility.
 
