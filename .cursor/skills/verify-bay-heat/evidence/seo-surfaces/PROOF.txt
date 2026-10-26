@@ -1,3 +1,6 @@
 feature: seo-surfaces
-entry: bay-heat seo
-command: bay-heat seo
+entry: bay-heat seo --dir .cursor/skills/verify-bay-heat/evidence/seo-surfaces
+also: bay-heat follow --from / --name 240V
+local sitemap loc count: 30
+thermostat loc: absent
+240v noindex: false, tag=laqaer-20 present
