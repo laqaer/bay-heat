@@ -1,0 +1,3 @@
+feature: seo-surfaces
+entry: bay-heat seo
+command: bay-heat seo

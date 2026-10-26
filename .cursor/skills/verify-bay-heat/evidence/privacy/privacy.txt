@@ -1,0 +1,69 @@
+URL: http://127.0.0.1:4317/privacy
+TITLE: Privacy: what BayHeat collects (almost nothing) and why · BayHeat
+H1: Privacy policy
+CANONICAL: https://bayheatguide.com/privacy
+JSON_LD: WebSite, Organization, BreadcrumbList
+
+HEADINGS
+H1: Privacy policy
+H2: What we collect
+H2: What we don&#x27;t do
+H2: Clearing your data
+H2: Contact
+H2: Related
+
+NAVS
+NAV[Primary]: Planner -> /garage-heater-calculator | Shop heaters -> /shop-heater | Size chart -> /garage-heater-size | Best picks -> /best-garage-heater | Electric -> /electric-garage-heater | 240V -> /240v-garage-heater | Portable -> /portable-garage-heater | Ceiling -> /ceiling-mount-garage-heater | Wall-mount -> /best-wall-mount-garage-heaters | All fuels -> /garage-heaters | Infrared -> /infrared-garage-heater | Diesel -> /diesel-heater-for-garage | Propane -> /propane-heater-for-garage | Electric vs propane -> /electric-vs-propane-garage-heater | Mini-split -> /heat-pump-mini-split-for-garage | Natural gas -> /natural-gas-garage-heater | Bottom seal -> /garage-door-bottom-seal | Weather stripping -> /garage-door-weather-stripping | Door insulation kit -> /garage-door-insulation-kit | How to insulate -> /how-to-insulate-a-garage | Can I Run It? -> /can-i-run-it | The Lab -> /lab
+NAV[Breadcrumb]: Home -> /
+
+LINKS
+Skip to content -> #main
+BAYHEAT GARAGE CLIMATE LAB -> /
+Planner -> /garage-heater-calculator
+Shop heaters -> /shop-heater
+Size chart -> /garage-heater-size
+Best picks -> /best-garage-heater
+Electric -> /electric-garage-heater
+240V -> /240v-garage-heater
+Portable -> /portable-garage-heater
+Ceiling -> /ceiling-mount-garage-heater
+Wall-mount -> /best-wall-mount-garage-heaters
+All fuels -> /garage-heaters
+Infrared -> /infrared-garage-heater
+Diesel -> /diesel-heater-for-garage
+Propane -> /propane-heater-for-garage
+Electric vs propane -> /electric-vs-propane-garage-heater
+Mini-split -> /heat-pump-mini-split-for-garage
+Natural gas -> /natural-gas-garage-heater
+Bottom seal -> /garage-door-bottom-seal
+Weather stripping -> /garage-door-weather-stripping
+Door insulation kit -> /garage-door-insulation-kit
+How to insulate -> /how-to-insulate-a-garage
+Can I Run It? -> /can-i-run-it
+The Lab -> /lab
+Size my garage -> /garage-heater-calculator
+Home -> /
+hello@bayheatguide.com -> mailto:hello@bayheatguide.com
+how we work page -> /how-we-work
+Planner A ZIP code and five taps give you the heat load, the heater that fits, the breaker it needs, the cost per hour and the warm-up time — with every formula shown. -> /garage-heater-calculator
+Shop heaters Compare 240V electric, vented gas and diesel shop heaters by circuit, vent and CO rule, and see why a torpedo heater doesn&#x27;t belong in a closed shop. -> /shop-heater
+Can I Run It? Pick your heater and your situation. Get a GO, GO-IF or NO-GO verdict with the exact code section behind it — not a guess. -> /can-i-run-it
+The Lab Pre-registered tests, each with its prediction published before we measure. No claimed test without a published log. -> /lab
+Size it -> /garage-heater-calculator
+Power it -> /240v-garage-heater
+Price it -> /cost-to-heat-a-garage
+Fix it -> /how-to-insulate-a-garage
+Planner -> /garage-heater-calculator
+Can I Run It? -> /can-i-run-it
+Garage Heat Index -> /cost-to-heat-a-garage
+Methodology -> /garage-heater-calculator/methodology
+Lab -> /lab
+BH-001 -> /lab/reports/bh-001-the-4x-problem
+Notebook & corrections -> /lab/notebook
+How we work -> /how-we-work
+About -> /about
+How we make money -> /how-we-work#money
+Privacy -> /privacy
+hello@bayheatguide.com -> mailto:hello@bayheatguide.com
+2026-10-09 -> /lab/notebook
+Size my garage — 60 s -> /garage-heater-calculator

@@ -1,0 +1,14 @@
+{
+  "capturedAt": "2026-10-26T01:49:35.693Z",
+  "status": 200,
+  "url": "http://127.0.0.1:4317/about",
+  "contentType": "text/html; charset=utf-8",
+  "title": "About BayHeat: an open garage-climate model, a lab, and the people who check it · BayHeat",
+  "h1": "About BayHeat",
+  "canonical": "https://bayheatguide.com/about",
+  "jsonLdTypes": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList"
+  ]
+}

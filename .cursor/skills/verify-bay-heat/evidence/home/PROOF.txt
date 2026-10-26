@@ -1,5 +1,3 @@
 feature: home
-entry: Start with voltage
-also followed: Ceiling-mount guide from Buy the class the circuit allows
-command: bay-heat follow --from / --name "Start with voltage" and bay-heat follow --from / --name "Ceiling-mount guide"
-screenshots: tall 1280x3600 captures so the retailer module below the first viewport is visible
+entry: Size my garage
+command: bay-heat follow --from / --name "Size my garage"

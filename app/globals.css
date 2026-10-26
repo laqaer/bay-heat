@@ -1,55 +1,43 @@
 @import "tailwindcss";
 
-/*
-  BayHeat design system: "Inspection Grade".
-  Two surfaces: Report (light, default -- reading, tables, print, long-form) and Camera (dark, the
-  thermal-lab exhibit look -- home, the planner, and hub pages set data-surface="camera" on their outer
-  wrapper). See company/BLUEPRINT.md §4 and scratchpad/redteam/taste.md finding #1: the dark surface is the
-  flagship visual concept and must appear on the pages most visitors land on first, not only in a boxed-in
-  figure.
-
-  Palette deliberately differs from the old site's warm cream-and-rust ("BayHeat Guide") -- see taste.md
-  finding #2 -- with a cooler, less amber paper and a frost-ink link color instead of rust.
-*/
-
 :root {
-  --bg: #f5f6f4;
-  --surface: #ffffff;
-  --surface-2: #ececea;
-  --line: #d7d9d3;
-  --grid: #e6e8e3;
-  --text: #15171c;
-  --text-2: #565b66;
-  --link: #16607f;
-  --ember: #ff8a1f;
-  --ember-hover: #ff9d42;
-  --frost-ink: #16607f;
+  --bg: #f4e0b8;
+  --surface: #fff6e4;
+  --surface-2: #edd3a0;
+  --line: #c9a56a;
+  --grid: #e6c98a;
+  --text: #1a1008;
+  --text-2: #4a2f18;
+  --link: #6d3410;
+  --ember: #e8890c;
+  --ember-hover: #c86e00;
+  --frost-ink: #6d3410;
   --heat-ink: #8e1b0e;
-  --alarm: #b3261e;
+  --alarm: #9d1c1c;
   --go: #1f6b3a;
-  /* The alarm fill's own darker hue passes AA (4.5:1) with white text here, but the camera surface's
-     brighter --alarm (#ff4f3a, kept vivid on purpose against the dark bg) only clears AA with dark text --
-     found by an axe pass on the NO-GO verdict stamp. Two surfaces need opposite ink colors on the same fill. */
-  --alarm-ink: #ffffff;
-  --shadow-result: 0 0 0 1px var(--line), 0 24px 48px -24px rgba(0, 0, 0, 0.12);
+  /* The alarm fill's own darker hue passes AA (4.5:1) with light text here, but the camera surface's
+     brighter --alarm only clears AA with dark text -- found by an axe pass on the NO-GO verdict stamp.
+     Two surfaces need opposite ink colors on the same fill. */
+  --alarm-ink: #fff6e4;
+  --shadow-result: 0 0 0 1px var(--line), 0 24px 48px -28px rgb(26 16 8 / 0.35);
 }
 
 [data-surface="camera"] {
-  --bg: #08090c;
-  --surface: #12151b;
-  --surface-2: #1a1e26;
-  --line: #2a2f38;
-  --grid: #1e222a;
-  --text: #f3efe6;
-  --text-2: #a3a7b0;
-  --text-3: #80858f;
-  --ember: #ff8a1f;
-  --ember-hover: #ffb066;
-  --glow: #ffb547;
-  --frost: #5cc8e6;
-  --alarm: #ff4f3a;
-  --alarm-ink: #08090c;
-  --link: #5cc8e6;
+  --bg: #1a1008;
+  --surface: #2a1a0e;
+  --surface-2: #3a2614;
+  --line: #6b4a28;
+  --grid: #3a2614;
+  --text: #fff6e4;
+  --text-2: #f0d7a4;
+  --text-3: #e4c48a;
+  --ember: #ffb020;
+  --ember-hover: #ffc14d;
+  --glow: #ffb020;
+  --frost: #f0d7a4;
+  --alarm: #ff5a45;
+  --alarm-ink: #1a1008;
+  --link: #ffe3b0;
   /* Redeclare every --color-* alias here too: @theme inline's `--color-bg: var(--bg)` etc. resolve once,
      where they're declared (effectively at :root), and that RESOLVED value is what inherits down -- a
      descendant redefining --bg alone doesn't retroactively change an alias already fixed higher up the
@@ -70,7 +58,6 @@
   --color-glow: var(--glow);
 }
 
-/* Data ramps -- the only gradients in the system, always paired with a labeled °F scale. */
 :root {
   --forge-0: #3a0d0b;
   --forge-1: #8e1b0e;
@@ -82,9 +69,6 @@
   --frost-1: #16607f;
   --frost-2: #3fa7c9;
   --frost-3: #bce9f5;
-  /* Grade scale: the only non-temperature ramp, labeled "HEAT ESCAPES <- -> HOLDS HEAT". The C stop is a
-     distinct putty tone with real value contrast against both --bg and --surface (taste.md finding #6 --
-     the original near-white C stop nearly disappeared exactly at the "$675 of fixes" story's climax). */
   --grade-f: #3fa7c9;
   --grade-d: #bce9f5;
   --grade-c: #c9bfa0;
@@ -132,8 +116,6 @@
   font-variation-settings: "wdth" 125;
 }
 
-/* Evidence-chip and other small hit targets: a 24x24 minimum tap area independent of visual size
-   (WCAG 2.5.8; taste.md finding #11). */
 @utility tap-24 {
   min-width: 24px;
   min-height: 24px;
@@ -144,25 +126,41 @@
 
 html {
   scroll-behavior: smooth;
-  /* the mobile sticky bar is 56 px: keep focused controls and #anchor jumps clear of it (WCAG 2.4.11) */
   scroll-padding-bottom: 4rem;
 }
-/* Next.js 16 no longer forces scroll-behavior:auto during navigation; restore the old opt-out behavior
-   explicitly via the data attribute the router now checks (nextjs16-cheatsheet.md §2 B4). */
 html[data-scroll-behavior="smooth"] {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(180deg, rgb(255 246 228 / 0.35), transparent 220px);
   color: var(--text);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
   background: var(--ember);
-  color: #15171c;
+  color: #1a1008;
+}
+
+* {
+  caret-color: var(--ember);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border: 3px solid var(--bg);
 }
 
 /* Prose used inside the Report template's body columns. Wrapped in Tailwind's own `base` layer (rather than
@@ -231,7 +229,7 @@ body {
   color: var(--text);
   font-weight: 650;
 }
-} /* @layer base: .prose-report */
+}
 
 @media print {
   header,
@@ -255,44 +253,151 @@ body {
   }
 }
 
-/* Motion (MOGUL-MOTION-001): transform/opacity only, no JS. The hero shimmer is decoration inside the
-   fixed-aspect FIG. 1 frame, never data. Scroll reveals use CSS view timelines, so content is fully visible
-   with no JS, in browsers without support, and under reduced motion. */
+[data-surface="camera"] {
+  background-image:
+    radial-gradient(90% 55% at 78% -8%, rgb(255 176 32 / 0.42), transparent 58%),
+    radial-gradient(70% 40% at 0% 100%, rgb(255 176 32 / 0.16), transparent 52%);
+}
+
 .heat-shimmer {
-  background: radial-gradient(50% 45% at 50% 68%, color-mix(in oklab, var(--forge-3) 55%, transparent), transparent 70%);
-  opacity: 0.35;
+  background: radial-gradient(42% 36% at 50% 62%, color-mix(in oklab, var(--ember) 70%, transparent), transparent 72%);
+  opacity: 0.55;
 }
-.heat-shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, transparent 40%, rgb(255 241 201 / 0.14) 50%, transparent 60%);
-  opacity: 0;
+
+@layer components {
+  article table {
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+  article thead th {
+    background: color-mix(in oklab, var(--ember) 22%, var(--surface));
+    color: var(--text);
+    font-weight: 650;
+  }
+  article tbody tr:nth-child(even) {
+    background: color-mix(in oklab, var(--surface-2) 45%, var(--surface));
+  }
+  article :focus-visible {
+    outline: 2px solid var(--ember);
+    outline-offset: 2px;
+  }
 }
+
 @media (prefers-reduced-motion: no-preference) {
   .heat-shimmer {
-    animation: heat-glow 4s ease-in-out infinite alternate;
-  }
-  .heat-shimmer::after {
-    animation: heat-rise 6s ease-in infinite;
+    animation: heat-glow 7s cubic-bezier(0.16, 1, 0.3, 1) infinite alternate;
   }
   @supports (animation-timeline: view()) {
     .reveal {
       animation: reveal 1ms linear; /* 1ms: Firefox needs a nonzero duration; the timeline drives progress. No fill: off-screen content keeps full opacity (print, full-page renders) */
       animation-timeline: view();
-      animation-range: entry 0% entry 30%;
+      animation-range: entry 0% entry 25%;
     }
   }
 }
 @keyframes heat-glow {
-  from { opacity: 0.25; transform: translateY(3%) scale(1); }
-  to { opacity: 0.6; transform: translateY(-5%) scale(1.06); }
-}
-@keyframes heat-rise {
-  0% { opacity: 0; transform: translateY(45%); }
-  30% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-45%); }
+  from { opacity: 0.28; }
+  to { opacity: 0.62; }
 }
 @keyframes reveal {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(12px); }
+}
+
+header {
+  border-bottom: 2px solid var(--ember);
+  background-color: var(--surface);
+}
+
+header nav a,
+header button {
+  letter-spacing: 0.04em;
+}
+
+footer {
+  background-color: #1a1008;
+  background-image:
+    radial-gradient(60% 80% at 0% 0%, rgb(255 176 32 / 0.16), transparent 60%);
+  color: #f0d7a4;
+  border-top: 1px solid #6b4a28;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 640px;
+}
+
+footer::before {
+  content: "";
+  display: block;
+  height: 92px;
+  max-width: 1392px;
+  margin: 0 auto;
+  background-image:
+    url("/drawings/garage.svg"),
+    url("/drawings/heater.svg"),
+    url("/drawings/radiant.svg"),
+    url("/drawings/wiring.svg");
+  background-repeat: no-repeat;
+  background-size: 104px 78px;
+  background-position: 1.5rem center, 8.5rem center, 15.5rem center, 22.5rem center;
+}
+
+footer,
+footer p,
+footer li,
+footer span {
+  color: #f0d7a4;
+}
+
+footer a {
+  color: #ffe3b0;
+  text-underline-offset: 3px;
+}
+
+footer a:hover {
+  color: #fff6e4;
+}
+
+main h1 {
+  text-wrap: balance;
+}
+
+article > h1 {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1.15rem;
+}
+
+[data-buy-group] {
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--ember) 14%, var(--surface)), var(--surface) 42%);
+  box-shadow: 0 22px 40px -30px rgb(26 16 8 / 0.55);
+}
+
+.prose-report div[class*="border-l-"] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--line);
+  background: var(--surface-2);
+  padding: 0.9rem 1rem;
+}
+
+.prose-report div[class*="border-(--color-alarm)"] {
+  border-color: var(--alarm);
+  background: color-mix(in oklab, var(--alarm) 12%, var(--surface));
+}
+
+.prose-report div[class*="border-(--color-frost)"] {
+  border-color: var(--line);
+  background: var(--surface);
+}
+
+@media (max-width: 720px) {
+  footer::before {
+    background-image: url("/drawings/garage.svg"), url("/drawings/heater.svg");
+    background-position: 1rem center, 8rem center;
+  }
+}
+
+@media print {
+  footer::before {
+    display: none;
+  }
 }

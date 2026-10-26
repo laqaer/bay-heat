@@ -1,0 +1,3 @@
+feature: privacy
+entry: Privacy
+command: bay-heat follow --from / --name "Privacy"
