@@ -19,6 +19,8 @@ const eslintConfig = defineConfig([
     // runner, using syntax (top-level await outside a module the TS/Next parser expects, etc.) this
     // project's lint config isn't set up to parse -- not application code, not part of the Next.js build.
     ".claude/workflows/**",
+    // Skill drivers (.cursor/skills/**/*.cjs) use CommonJS require. Not application code.
+    ".cursor/**",
   ]),
 ]);
 
