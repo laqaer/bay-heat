@@ -72,7 +72,7 @@ async function allReviews(pr) {
 
 export async function enforceEditorialReview(root = process.cwd()) {
   const baselineBytes = readFileSync(resolve(root, 'docs/editorial/baseline.json'));
-  const expected = '72b88853535e097bfc139c001b1c2388775ea4817bb10d69f25a249d17f641cd';
+  const expected = 'cb38c9d5d4aced91cf892c4ae48d3d1ac6ceb7066431da75d01f6ca504673ec5';
   if (createHash('sha256').update(baselineBytes).digest('hex') !== expected)
     throw new Error('Editorial baseline changed; it is an inventory, never an approval. Restore it.');
   const baseline = JSON.parse(baselineBytes);

@@ -704,6 +704,17 @@ async function cmdSeo(args) {
     "https://bayheatguide.com/cost-to-heat-a-garage",
     "https://bayheatguide.com/best-garage-heater",
     "https://bayheatguide.com/natural-gas-garage-heater",
+    "https://bayheatguide.com/electric-garage-heater",
+    "https://bayheatguide.com/240v-garage-heater",
+    "https://bayheatguide.com/portable-garage-heater",
+    "https://bayheatguide.com/ceiling-mount-garage-heater",
+    "https://bayheatguide.com/infrared-garage-heater",
+    "https://bayheatguide.com/electric-vs-propane-garage-heater",
+    "https://bayheatguide.com/garage-heaters",
+    "https://bayheatguide.com/best-wall-mount-garage-heaters",
+    "https://bayheatguide.com/garage-door-bottom-seal",
+    "https://bayheatguide.com/garage-door-weather-stripping",
+    "https://bayheatguide.com/garage-door-insulation-kit",
   ]) {
     const label = loc.replace("https://bayheatguide.com", "").replace("</loc>", "/") || "/";
     check(`sitemap:${label}`, sitemap.body.includes(loc), loc);

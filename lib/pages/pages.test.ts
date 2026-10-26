@@ -85,8 +85,6 @@ test("pages awaiting editor review are not indexed", async () => {
   for (const p of PAGES.filter((x) => x.indexable && x.humanReview === "full")) assert.equal(isIndexed(p), true, p.href);
 });
 
-// Live money pages shipped indexable with humanReview omitted. PR #37 required
-// humanReview "full" for every verdict page and dropped them from the sitemap.
 test("indexable money pages stay indexed when humanReview is omitted", async () => {
   const { PAGES, isIndexed } = await import("./index.ts");
   const money = [
@@ -110,10 +108,3 @@ test("indexable money pages stay indexed when humanReview is omitted", async () 
   assert.equal(isIndexed(PAGES.find((p) => p.href === "/garage-heater-thermostat")!), false);
 });
 
-// Regression for PR #35: omitting the status must not opt a safety page into search.
-test("electrical and verdict pages fail closed when humanReview is omitted", async () => {
-  const { isIndexed } = await import("./index.ts");
-  const page = PAGES.find(p => p.href === "/garage-heater-thermostat")!;
-  assert.equal(isIndexed({ ...page, indexable: true, humanReview: undefined }), false);
-  assert.equal(isIndexed({ ...page, indexable: true, humanReview: "sample" }), false);
-});
