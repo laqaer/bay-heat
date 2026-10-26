@@ -1,0 +1,14 @@
+{
+  "capturedAt": "2026-10-26T01:49:34.905Z",
+  "status": 200,
+  "url": "http://127.0.0.1:4317/240v-garage-heater",
+  "contentType": "text/html; charset=utf-8",
+  "title": "240V garage heaters: 5 kW needs a 30A breaker and 10 AWG, and 4 kW won&#x27;t fit a 20A circuit · BayHeat",
+  "h1": "240V garage heaters",
+  "canonical": "https://bayheatguide.com/240v-garage-heater",
+  "jsonLdTypes": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList"
+  ]
+}

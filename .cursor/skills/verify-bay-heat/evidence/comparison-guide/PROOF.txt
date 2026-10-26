@@ -1,0 +1,3 @@
+feature: comparison-guide
+entry: Power it
+command: bay-heat follow --from / --name "Power it"

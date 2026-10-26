@@ -1,0 +1,13 @@
+{
+  "capturedAt": "2026-10-26T01:49:34.121Z",
+  "status": 200,
+  "url": "http://127.0.0.1:4317/garage-heater-calculator",
+  "contentType": "text/html; charset=utf-8",
+  "title": "Garage heater calculator: the BTU/h, breaker and cost per hour for your garage · BayHeat",
+  "h1": "Garage heater calculator",
+  "canonical": "https://bayheatguide.com/garage-heater-calculator",
+  "jsonLdTypes": [
+    "WebSite",
+    "Organization"
+  ]
+}

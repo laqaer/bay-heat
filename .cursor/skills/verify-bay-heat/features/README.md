@@ -1,11 +1,11 @@
-# BayHeat Guide verification map
+# BayHeat verification map
 
-This directory is the maintained source for verifying reader-facing behavior of BayHeat Guide. Read this index before driving the site, then use the matching feature file as the recipe.
+This directory is the maintained source for verifying reader-facing behavior of BayHeat. Read this index before driving the site, then use the matching feature file as the recipe.
 
 ## Baseline preconditions
 
 - Launch with `BAYHEAT_PORT=4317 BAYHEAT_HOST=127.0.0.1` and `helpers/bay-heat launch`.
-- Doctor must report `ok: yes` at `http://127.0.0.1:4317/` with title containing `BayHeat Guide` and the home `h1` about matching the circuit you have.
+- Doctor must report `ok: yes` at `http://127.0.0.1:4317/` with title containing `BayHeat` and the home `h1` containing `One garage. Seven answers.`
 - `helpers/bay-heat` is executable and the same `BAYHEAT_*` values are used for every command.
 - Never drive an instance this run did not start. A human `npm run dev` on port 3000 is off-limits unless `instance.json` owns that port.
 - No login, seed database, or API key is required. Do not open retailer or affiliate URLs.
@@ -13,16 +13,16 @@ This directory is the maintained source for verifying reader-facing behavior of 
 ## Driving conventions
 
 - Start every recipe from `/` unless the feature's preconditions say otherwise.
-- Prefer link accessible names and `nav` aria-labels (`Primary`, `Breadcrumb`, `On this page`) over CSS or pixels.
-- Treat commands as literal. Keep quoted names unchanged (`About & editorial standards`, `Start with voltage`).
+- Prefer link accessible names and `nav` aria-labels (`Primary`, `Breadcrumb`) over CSS or pixels.
+- Treat commands as literal. Keep quoted names unchanged (`Size my garage`, `Check my heater`).
 - Run HTTP and screenshots through `helpers/bay-heat`. Do not substitute a production GET for a local follow.
-- Desktop primary nav is `lg:flex` (visible at the helper's 1280×900 screenshot). Below that width the entry is the `Guides` summary.
+- Desktop primary nav is `lg:flex` (visible at the helper's 1280×900 screenshot). Below that width the heater links stay in the DOM inside the Heaters menu.
 - Cleanup may remove `/tmp/bay-heat-verify-*`. It must not remove `../evidence/`.
 
 ## Proof and skip reporting
 
 - Capture the user action and the resulting page, not only the final screen.
-- UI proof includes a text snapshot (`*.txt`) and a screenshot (`*.png`) that show BayHeat Guide and the page `h1`.
+- UI proof includes a text snapshot (`*.txt`) and a screenshot (`*.png`) that show BayHeat and the page `h1`.
 - HTTP-only proof is valid for `/robots.txt`, `/sitemap.xml`, and `/ads.txt`.
 - Record the feature id and entry point in `PROOF.txt` next to the artifacts.
 - An unreachable entry point is a skip: report the command and the missing link. Do not mark it verified via a different path.
@@ -40,8 +40,8 @@ Keep implementation details out of the map. Name only user paths, stable handles
 
 ## Features
 
-- [Home decision hub](./home.md) covers the homepage tree, CTAs, and the all-guides index.
-- [Comparison guide](./comparison-guide.md) covers a guide article (120 V vs 240 V) and the shared guide chrome used by every comparison page.
-- [About](./about.md) covers publisher identity, editorial standards, and contact.
-- [Privacy](./privacy.md) covers the privacy policy for a content and affiliate site.
+- [Home](./home.md) covers the homepage identity, planner CTA, safety check, and footer chrome.
+- [Comparison guide](./comparison-guide.md) covers the 240V garage heater article and the shared report chrome.
+- [About](./about.md) covers publisher identity and contact.
+- [Privacy](./privacy.md) covers the privacy policy.
 - [SEO surfaces](./seo-surfaces.md) covers `/robots.txt`, `/sitemap.xml`, and `/ads.txt`.

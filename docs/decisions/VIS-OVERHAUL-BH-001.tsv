@@ -1,0 +1,5 @@
+id	hypothesis	change	measure	result
+D1	A sodium paper and night bay can replace Inspection Grade without new fonts or components.	Tokens and unlayered chrome in app/globals.css. Component TSX left untouched because the editorial gate blocks unreviewed component edits.	Production build passes the editorial gate.	keep
+D2	A radiant SVG behind the home hero would read as warmth.	public/drawings/radiant-hero.svg as a CSS background on the hero.	Paired mobile Lighthouse on /. Before 5950ms CLS 0. With the SVG 6115ms CLS 0. LCP element stayed the h1.	revert
+D3	Footer drawings can carry the niche without touching LCP.	Four SVGs as footer::before backgrounds, plus content-visibility and a 640px intrinsic size.	Final 3-run medians match the baseline ranges. CLS 0.	keep
+D4	Unused stroke animations add weight and do not run on external SVG backgrounds.	Removed .radiant-volume and .circuit-draw after the hero SVG revert.	No DOM uses those classes. The wiring path stays drawn.	keep

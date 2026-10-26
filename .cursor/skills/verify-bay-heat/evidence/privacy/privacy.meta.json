@@ -1,0 +1,14 @@
+{
+  "capturedAt": "2026-10-26T01:49:36.431Z",
+  "status": 200,
+  "url": "http://127.0.0.1:4317/privacy",
+  "contentType": "text/html; charset=utf-8",
+  "title": "Privacy: what BayHeat collects (almost nothing) and why · BayHeat",
+  "h1": "Privacy policy",
+  "canonical": "https://bayheatguide.com/privacy",
+  "jsonLdTypes": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList"
+  ]
+}

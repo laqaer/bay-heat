@@ -1,0 +1,3 @@
+feature: about
+entry: About
+command: bay-heat follow --from / --name "About"

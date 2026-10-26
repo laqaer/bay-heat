@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-26T01:55:00.000Z",
+  "title": "Design System: BayHeat",
+  "extensions": {
+    "colorMeta": {
+      "sodium-paper": { "role": "neutral", "displayName": "Sodium paper", "canonical": "#f4e0b8" },
+      "lamp-cream": { "role": "neutral", "displayName": "Lamp cream", "canonical": "#fff6e4" },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#1a1008" },
+      "ember": { "role": "primary", "displayName": "Ember", "canonical": "#e8890c" },
+      "ember-hot": { "role": "primary", "displayName": "Ember hot", "canonical": "#ffb020" },
+      "night-bay": { "role": "neutral", "displayName": "Night bay", "canonical": "#1a1008" },
+      "alarm": { "role": "semantic", "displayName": "Alarm", "canonical": "#9d1c1c" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Home h1. Archivo wdth 118." },
+      "body": { "displayName": "Body", "purpose": "Report prose, 66ch." },
+      "label": { "displayName": "Label", "purpose": "Martian Mono section indices." }
+    },
+    "shadows": [
+      { "name": "pick", "value": "0 22px 40px -30px rgb(26 16 8 / 0.55)", "purpose": "Product pick only. Does not change box height." }
+    ],
+    "motion": [
+      { "name": "heat-glow", "value": "7s cubic-bezier(0.16, 1, 0.3, 1) alternate", "purpose": "Hero heat wash. Reduced motion zeros it." },
+      { "name": "reveal", "value": "view() entry 0% to 25%", "purpose": "Section entry. 1ms duration so Firefox keeps the timeline." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "drawings", "value": "720px" }
+    ],
+    "narrative": {
+      "northStar": "A sodium-lit garage at dusk",
+      "rules": [
+        "One ember frequency for chrome. Temperature ramps encode data.",
+        "Paper for articles. Night for the camera surface and the footer.",
+        "The headline is the LCP element. No viewport image behind it."
+      ]
+    }
+  }
+}

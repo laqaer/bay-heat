@@ -27,7 +27,7 @@ BAYHEAT_PORT=4317 BAYHEAT_HOST=127.0.0.1 \
   .cursor/skills/verify-bay-heat/helpers/bay-heat launch
 ```
 
-Ready when the helper prints `launched pid=… http://127.0.0.1:4317` and `GET /` is HTTP 200 with the string `BayHeat Guide`. The Next log is `/tmp/bay-heat-verify-4317/next.log`. Instance metadata is `/tmp/bay-heat-verify-4317/instance.json`.
+Ready when the helper prints `launched pid=… http://127.0.0.1:4317` and `GET /` is HTTP 200 with the strings `BayHeat` and `One garage. Seven answers.`. The Next log is `/tmp/bay-heat-verify-4317/next.log`. Instance metadata is `/tmp/bay-heat-verify-4317/instance.json`.
 
 Production-like (optional): `npm run build` then `BAYHEAT_MODE=start` with the same launch command. `next start` also accepts `--hostname` and `--port`. Default verification uses `dev` because that is the documented local command.
 
@@ -49,8 +49,8 @@ Pass means all of:
 - `/tmp/bay-heat-verify-$PORT/instance.json` exists and its `pid` is alive
 - that file's host/port match `BAYHEAT_HOST` / `BAYHEAT_PORT`
 - `GET /` is 200 (this is the listen check; `next-server` is often a child of the recorded pid)
-- `<title>` contains `BayHeat Guide`
-- `h1` is `Choose the electric garage heater that matches the circuit you have.`
+- `<title>` contains `BayHeat`
+- `h1` is `One garage. Seven answers.`
 - if a listener pid is visible, it is in that launch pid's process tree
 
 If doctor fails, do not drive. Launch this run's instance, or stop. A page that looks like BayHeat on a port you did not start is a foreign instance.
@@ -61,37 +61,33 @@ Harness: `helpers/bay-heat`. Stable handles are **accessible names and routes**,
 
 | Handle | What it is |
 | --- | --- |
-| Brand link `BayHeat Guide` | header logo/name → `/` |
-| `nav` named `Primary` | desktop guide links + `About` (hidden below the `lg` breakpoint) |
-| Summary `Guides` | mobile `<details>` menu (`lg:hidden`) |
-| `Start with voltage` | home CTA → `/120v-vs-240v-garage-heater` |
-| `Size by garage` | home CTA → `/best-electric-garage-heaters-by-size` |
-| Decision-tree labels | `120V vs 240V`, `Forced-air vs infrared`, `Size by garage`, `Insulate first`, `Wall vs ceiling` |
-| Guide cards under `All guides` | each `guides[].title` from `lib/site.ts` |
-| `nav` named `Breadcrumb` | `Home` plus the guide's `navLabel` |
-| `nav` named `On this page` | in-page TOC anchors |
-| Footer `About & editorial standards` | → `/about` |
+| Brand link `BAYHEAT` | header wordmark → `/` |
+| `nav` named `Primary` | `Planner`, `Can I Run It?`, `The Lab`, plus Heater and Seal menus (hidden below `lg`) |
+| `Size my garage` | header CTA → `/garage-heater-calculator` |
+| `Check my heater →` | home section → `/can-i-run-it` |
+| `240V` | Heaters menu → `/240v-garage-heater` |
+| `Infrared` | Heaters menu → `/infrared-garage-heater` |
+| `nav` named `Breadcrumb` | `Home` plus the page nav label |
+| Footer `Power it` | → `/240v-garage-heater` |
+| Footer `About` | → `/about` |
 | Footer `Privacy` | → `/privacy` |
-| Footer `Decision hub` | → `/` |
+| Footer `How we work` | → `/how-we-work` |
 
 Routes a reader can open:
 
 | Path | Identity `h1` |
 | --- | --- |
-| `/` | Choose the electric garage heater that matches the circuit you have. |
-| `/120v-vs-240v-garage-heater` | 120V vs 240V garage heaters: what your circuit can actually run |
-| `/best-electric-garage-heaters-by-size` | Electric garage heater size: 1-car, 2-car, and 3-car wattage ranges |
-| `/forced-air-vs-infrared-garage-heater` | Forced-air vs infrared garage heaters: drafty shops vs spot heat |
-| `/best-ceiling-mount-garage-heaters-under-200` | Ceiling-mount garage heaters under $200: Comfort Zone and Fahrenheat-class units |
-| `/portable-garage-heaters-15a-circuit` | Portable garage heaters on a 15 A circuit: milkhouse and utility units |
-| `/wall-mount-vs-ceiling-garage-heater` | Wall-mount vs ceiling-mount: joist load, throw, and headroom |
-| `/best-wall-mount-garage-heaters` | Wall-mount electric garage heaters: 5 kW utility, 7.5 kW shop, and 15 A wall units |
-| `/best-infrared-garage-heaters` | Infrared electric garage heaters: ceiling quartz, wall-or-ceiling carbon, and a 15 A tripod |
-| `/insulate-garage-before-heater-upgrade` | Seal and insulate first, or buy more watts? |
-| `/about` | About BayHeat Guide |
+| `/` | One garage. Seven answers. |
+| `/garage-heater-calculator` | Garage heater calculator |
+| `/can-i-run-it` | Can I run it? |
+| `/240v-garage-heater` | 240V garage heaters |
+| `/infrared-garage-heater` | Infrared garage heaters |
+| `/electric-vs-propane-garage-heater` | Electric vs propane garage heaters |
+| `/about` | About BayHeat |
 | `/privacy` | Privacy policy |
+| `/how-we-work` | How we work |
 
-Unknown paths render `That page is not in the shop.` with link `Back to BayHeat Guide`.
+Unknown paths render `This page moved or never existed.` with link `Size my garage`.
 
 Commands (always pass the same `BAYHEAT_PORT` / `BAYHEAT_HOST` as launch):
 
@@ -99,13 +95,13 @@ Commands (always pass the same `BAYHEAT_PORT` / `BAYHEAT_HOST` as launch):
 H=.cursor/skills/verify-bay-heat/helpers/bay-heat
 
 $H get /
-$H get / --expect "Decision tree" --expect "All guides"
+$H get / --expect "One garage. Seven answers." --expect "As an Amazon Associate"
 
-$H follow --from / --name "Start with voltage" \
-  --expect "120V vs 240V garage heaters: what your circuit can actually run"
+$H follow --from / --name "Size my garage" \
+  --expect "Garage heater calculator"
 
-$H follow --from / --name "About & editorial standards" \
-  --expect "About BayHeat Guide"
+$H follow --from / --name "About" \
+  --expect "About BayHeat"
 
 $H screenshot / --out .cursor/skills/verify-bay-heat/evidence/home/hub.png
 $H snapshot / --dir .cursor/skills/verify-bay-heat/evidence/home --screenshot
@@ -123,7 +119,7 @@ Minimum for a UI feature:
 
 - action: the `follow` or click that left the previous page (stdout + destination snapshot)
 - result: snapshot of the arrived page (`*.txt` headings/nav, `*.html`, `*.meta.json`, `*.png`)
-- identity: visible `BayHeat Guide` plus the page `h1` from the table above
+- identity: visible `BayHeat` plus the page `h1` from the table above
 
 Minimum for SEO files: `bay-heat seo --dir .cursor/skills/verify-bay-heat/evidence/seo-surfaces` and the saved bodies.
 
@@ -131,7 +127,7 @@ Standards:
 
 - Exercise the real reader path (named link or header/footer). A raw `get` of the destination is a skip of the entry point, not a pass.
 - Capture the action and the resulting page, not only the final screenshot.
-- Confirm on-page side effects that exist: JSON-LD `@type` (`WebSite` on every page via the root layout; `Article` + `BreadcrumbList` on guides; `Organization` on About), footer strings `Affiliate disclosure.` and `Safety.`, canonical host `https://bayheatguide.com`.
+- Confirm on-page side effects that exist: JSON-LD `@type` (`WebSite` and `Organization` on every page via the root layout; `BreadcrumbList` on report pages), footer disclosure `As an Amazon Associate`, canonical host `https://bayheatguide.com`.
 - Do not mock Next, and do not hit retailer/affiliate networks. Some Amazon Associates text links are live; do not follow them during verification.
 - Do not call this a dry-run of production. Local HTML still embeds production canonicals and JSON-LD URLs from `lib/site.ts`; that is expected and is not proof that production was requested.
 
