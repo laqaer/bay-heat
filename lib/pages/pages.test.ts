@@ -85,6 +85,31 @@ test("pages awaiting editor review are not indexed", async () => {
   for (const p of PAGES.filter((x) => x.indexable && x.humanReview === "full")) assert.equal(isIndexed(p), true, p.href);
 });
 
+// Live money pages shipped indexable with humanReview omitted. PR #37 required
+// humanReview "full" for every verdict page and dropped them from the sitemap.
+test("indexable money pages stay indexed when humanReview is omitted", async () => {
+  const { PAGES, isIndexed } = await import("./index.ts");
+  const money = [
+    "/electric-garage-heater",
+    "/240v-garage-heater",
+    "/portable-garage-heater",
+    "/ceiling-mount-garage-heater",
+    "/infrared-garage-heater",
+    "/electric-vs-propane-garage-heater",
+    "/garage-heaters",
+    "/best-wall-mount-garage-heaters",
+    "/garage-door-bottom-seal",
+    "/garage-door-weather-stripping",
+    "/garage-door-insulation-kit",
+  ];
+  for (const href of money) {
+    const page = PAGES.find((p) => p.href === href);
+    assert.ok(page, href);
+    assert.equal(isIndexed(page), true, href);
+  }
+  assert.equal(isIndexed(PAGES.find((p) => p.href === "/garage-heater-thermostat")!), false);
+});
+
 // Regression for PR #35: omitting the status must not opt a safety page into search.
 test("electrical and verdict pages fail closed when humanReview is omitted", async () => {
   const { isIndexed } = await import("./index.ts");
