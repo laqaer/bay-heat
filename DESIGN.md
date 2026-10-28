@@ -61,7 +61,7 @@ components:
 
 One amber frequency, two exposures. Long reads sit on lamp-lit paper. The home page, the planner, and the hubs sit in the bay at night, with the same sodium light coming from one source. Temperature ramps stay a separate cold-to-hot encoding. Safety stays red.
 
-The system is editorial and warm. Type is Archivo with a width axis and Martian Mono for labels. No new display face. The first paint is the headline. Motion is a slow glow on the hero heat and a short reveal as a section enters. Reduced motion turns both off.
+The system is editorial and warm. Type is Archivo with a width axis and Martian Mono for labels. No new display face. The first paint is the headline. Motion drifts the hero heat with opacity, scale, and a softer core. The hero section lines draw once. A home section or an article heading rises a short distance as it enters. A product plate warms its border on hover. The footer drawings change opacity slowly. Reduced motion snaps each of these to the resting frame. None of them changes layout size.
 
 The previous Inspection Grade world (cool paper, blue thermal camera) is the anti-reference. This file records the replacement that shipped in the visual overhaul. Assumptions, because the run had no question tool. The north star is the assigned concept-seed direction. The names of the colors are descriptive labels for the hex values already in `app/globals.css`.
 
