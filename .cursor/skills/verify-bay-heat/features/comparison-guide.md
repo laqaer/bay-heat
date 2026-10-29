@@ -29,9 +29,9 @@ Preconditions:
 - **Menu entry.** From `/`, choose `240V`. Run `bay-heat follow --from / --name "240V" --expect "240V garage heaters"`. Same path.
 - **Breadcrumb.** On the guide, choose `Home`. Run `bay-heat follow --from /240v-garage-heater --name "Home" --expect "One garage. Seven answers."`.
 - **Table and disclosure.** Run `bay-heat get /240v-garage-heater --expect "The breaker and wire, for every common size" --expect "Paid links:" --expect "General information." --expect "tag=laqaer-20"`.
-- **JSON-LD.** Run `bay-heat get /240v-garage-heater --expect "Questions" --expect "FAQPage"`. Printed `json-ld` includes `WebSite`, `Organization`, `BreadcrumbList`, and `FAQPage`. The visible question text matches the FAQPage `name` strings.
+- **JSON-LD.** Run `bay-heat get /240v-garage-heater`. Printed `json-ld` includes `WebSite`, `Organization`, and `BreadcrumbList`.
 - **Related.** Choose `Electric` from the related list. Run `bay-heat follow --from /240v-garage-heater --name "Electric" --expect "Electric garage heaters"`.
-- **Money page.** From `/`, choose `Infrared`. Run `bay-heat follow --from / --name "Infrared" --expect "Infrared garage heaters" --expect "tag=laqaer-20"`. The path is `/infrared-garage-heater`.
+- **Money page.** From `/`, choose `Infrared`. Run `bay-heat follow --from / --name "Infrared" --expect "Infrared garage heaters" --expect "tag=laqaer-20" --expect "Questions" --expect "FAQPage"`. The path is `/infrared-garage-heater`. The 240V guide does not have a Questions section.
 - **Proof.** Snapshot the 240V guide after the footer follow. Run `bay-heat snapshot /240v-garage-heater --dir .cursor/skills/verify-bay-heat/evidence/comparison-guide --screenshot`. The png and `*.txt` show `240V garage heaters` and `Related`. Write `PROOF.txt` with feature id `comparison-guide` and entry `Power it`.
 
 ## Gotchas

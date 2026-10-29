@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Fragment } from "react";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
-import { FaqList } from "@/components/page/FaqList";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { Num } from "@/components/evidence/Num";
@@ -20,8 +19,7 @@ import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
 import { primaryProduct } from "@/lib/commerce/products";
 import { route } from "@/lib/commerce/route";
 import { getSource } from "@/lib/facts";
-import { SAFETY_SCOPE, SITE_URL } from "@/lib/site";
-import { btuh, degF, kw } from "@/lib/format";
+import { SAFETY_SCOPE } from "@/lib/site";
 
 const entry = findPage("/electric-garage-heater")!;
 
@@ -56,8 +54,6 @@ const SOURCE_IDS = ["nec-2023", "cz798-manual", "hs1500tt-manual", "cz220-manual
 
 export default function Page() {
   const result = plan(EXAMPLE_A_INPUT);
-  const fourKw = classCircuit(heaterClass("e_240_4k"));
-  if (!fourKw) throw new Error("electric-garage-heater: 4 kW class has no circuit");
   // The worked example's electric answer: the heater class plan() sized circuits.forSize for (one circuit per heater).
   // Read from plan() itself, so the sentence can't name a heater size the circuit wasn't sized for.
   const electricPick = result.recommendations.find((r) => r.classId === result.circuits.forSizeClassId);
@@ -210,34 +206,6 @@ export default function Page() {
         </p>
         <p className="mt-2">{SAFETY_SCOPE}</p>
       </SafetyCallout>
-
-      <FaqList
-        url={`${SITE_URL}${entry.href}`}
-        items={[
-          {
-            question: "How big a range do electric garage heaters cover?",
-            answer: "They run from a 1,500 W plug-in heater to a 10,000 W hardwired unit. A bigger heater needs a bigger breaker and thicker wire, not just a higher price.",
-          },
-          {
-            question: "Will a 4,000 W 240 V heater fit a 20 A garage circuit?",
-            answer: `No. A 4,000 W hardwired heater needs its own ${fourKw.breakerA} A circuit. The 240 V page shows the breaker and wire for each size.`,
-          },
-          {
-            question: "How much heat does the Chicago example need?",
-            answer: electricPick
-              ? `The worked example is a 24×24 ft attached two-car garage in ${result.station.city}. It needs about ${btuh(result.heating.qSize)} BTU/h (${kw(result.heating.kwSize)} kW) to hold ${degF(EXAMPLE_A_INPUT.targetTemp)} on the design day. The planner's electric answer is ${result.circuits.forSizeCount > 1 ? `${result.circuits.forSizeCount} heaters of the ${heaterClass(electricPick.classId).label} class` : `one ${heaterClass(electricPick.classId).label}`}, each on its own ${result.circuits.forSize.breakerA} A breaker and ${result.circuits.forSize.wireNM} copper.`
-              : `The worked example is a 24×24 ft attached two-car garage in ${result.station.city}. It needs about ${btuh(result.heating.qSize)} BTU/h (${kw(result.heating.kwSize)} kW) to hold ${degF(EXAMPLE_A_INPUT.targetTemp)} on the design day.`,
-          },
-          {
-            question: "Is the price in the class table a live price?",
-            answer: "No. Price is a range class, never a live number. Check the price on the retailer's page before you buy.",
-          },
-          {
-            question: "Do these heaters need GFCI?",
-            answer: "Every 120 V class needs GFCI protection on the outlet it plugs into. A hardwired 240 V unit is not a receptacle, so that rule governs the garage's outlets, not the heater. Either way the circuit is sized for a continuous load, not just the running current. Your electrician and your local code edition govern.",
-          },
-        ]}
-      />
     </ReportPage>
   );
 }

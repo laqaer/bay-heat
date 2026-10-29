@@ -17,7 +17,7 @@ Mogul is the factory that ships small, useful buying-guide sites (circuit-honest
 
 - Next.js App Router (16) + TypeScript
 - Tailwind CSS v4
-- Static editorial pages. Live JSON-LD is `WebSite` and `Organization` on every page, plus `BreadcrumbList` on report pages. `FAQPage` is implemented for five heater pages and is not deployed. See [FAQPage status](#faqpage-status-bh-geo-001).
+- Static editorial pages. Live JSON-LD is `WebSite` and `Organization` on every page, plus `BreadcrumbList` on report pages. `FAQPage` is implemented for `/infrared-garage-heater` only and is not deployed. See [FAQPage status](#faqpage-status-bh-geo-001).
 - Static export (`npm run build` writes `out/`, plus `out/_redirects` and `out/_headers`), served as an assets-only Cloudflare Worker (`wrangler.jsonc`); no env vars required
 
 ## Local setup
@@ -86,11 +86,11 @@ Affiliate disclosure and electrical / fire-safety language appear in the footer 
 
 ## FAQPage status (BH-GEO-001)
 
-[PR #43](https://github.com/laqaer/bay-heat/pull/43) adds a visible Questions section and matching `FAQPage` JSON-LD on `/best-garage-heater`, `/electric-garage-heater`, `/240v-garage-heater`, `/portable-garage-heater`, and `/infrared-garage-heater`. The work id is BH-GEO-001. There is no separate GitHub issue.
+[PR #43](https://github.com/laqaer/bay-heat/pull/43) adds a visible Questions section and matching `FAQPage` JSON-LD on `/infrared-garage-heater` only. The other four money URLs stay as they are on `main` until a real electrical reviewer exists. The work id is BH-GEO-001. There is no separate GitHub issue. Cost is $0. Parked work ends 2026-11-28.
 
-- **Implemented.** The questions and `faqPageJsonLd` are in the head of PR #43. Revision `b80f8df` is the behavior commit. This status note is a later commit on the same branch.
-- **Locally verified, 2026-10-29.** `verify-bay-heat` on `http://127.0.0.1:4317` followed named links to the five pages. Each returned HTTP 200, showed Questions, and included `FAQPage`. The visible question and answer text matched the JSON-LD. `laqaer-20` counts stayed 16, 18, 12, 8, and 8. `npm test` passed 165 tests. `/garage-heater-thermostat` was not changed.
-- **Not merged. Not deployed. Not released.** The `check` job fails in `next typegen` because recorded editorial, electrical, and gas review is required, and `docs/editorial/reviewers.json` lists no reviewer. Production HTML does not include these questions until that review exists and the branch is merged.
+- **Implemented.** The questions live in `app/(site)/infrared-garage-heater/page.tsx` on the head of PR #43. There is no shared FAQ helper.
+- **Locally verified, 2026-10-29.** `verify-bay-heat` on `http://127.0.0.1:4317` followed `Infrared` from the home page. `/infrared-garage-heater` returned HTTP 200, showed Questions, included `FAQPage`, and the visible text matched the JSON-LD. It had eight `laqaer-20` links. The other four money pages had no Questions section. `npm test` passed 165 tests.
+- **Not merged. Not deployed. Not released.** The editorial gate for this diff asks for editorial review only. Production HTML does not include these questions until that review exists and the branch is merged.
 
 ## Editorial rules
 

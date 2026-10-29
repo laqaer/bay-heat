@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
-import { FaqList } from "@/components/page/FaqList";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
@@ -26,8 +25,7 @@ import type { CircuitSpec, GarageDoorType, GarageInput, HeaterClassId, Measure }
 import { verdictFor } from "@/lib/safety/verdict";
 import type { Situation } from "@/lib/safety/types";
 import type { Ev } from "@/lib/types/evidence";
-import { SAFETY_SCOPE, SAVINGS_VARY, SITE_URL } from "@/lib/site";
-import { btuh, kw, pct } from "@/lib/format";
+import { SAFETY_SCOPE, SAVINGS_VARY } from "@/lib/site";
 
 const entry = findPage("/best-garage-heater")!;
 
@@ -715,36 +713,6 @@ export default function Page() {
         dimensions. Then read the page for your class: <Link href="/240v-garage-heater">240 V</Link>, <Link href="/portable-garage-heater">portable</Link>,{" "}
         <Link href="/infrared-garage-heater">infrared</Link>, or <Link href="/garage-heaters">every fuel at your state&apos;s prices</Link>.
       </p>
-
-      <FaqList
-        url={`${SITE_URL}${entry.href}`}
-        items={[
-          {
-            question: "What is the best garage heater?",
-            answer: `The best garage heater is the one sized to your garage and your circuit. The example 2-car garage in ${station.city} needs ${btuh(asBuilt)} BTU/h (${kw(asBuilt / HEAT_CONTENT.btuPerKwh)} kW) as built. After sealing, it needs ${btuh(sealed)} BTU/h (${kw(sealed / HEAT_CONTENT.btuPerKwh)} kW). A 5 kW wall or ceiling heater covers that sealed load on a ${c5.breakerA} A, ${c5.wireNM}, 240 V circuit.`,
-          },
-          {
-            question: "Should I buy a bigger heater before I seal the garage?",
-            answer: `Seal and insulate first. On the example garage, the counted 5 kW units drop from ${fiveKwUnitsAsBuilt} to ${fiveKwUnitsSealed} after the cheap fixes. Wattage on the box does not say what your garage loses on a cold design day.`,
-          },
-          {
-            question: "When is a 1,500 W plug-in heater the right pick?",
-            answer: `It fits a small, tight 1-car garage used while you are there, with nothing else on its circuit. In ${oneMild.station.city} that garage's session load is ${btuh(oneMild.heating.qSize)} BTU/h, and one plug-in covers ${pct(mildFit)} of it. Do not buy a 1,500 W heater for an uninsulated 2-car garage. The same plug-in covers ${pct(bareTwoCarFit)} of that leaky example.`,
-          },
-          {
-            question: "When is infrared the right garage heater?",
-            answer: "It is the pick for spot heat in one bay with the door up, and only while you are there. Radiant heat lands on you and the floor. It does not warm the air in a closed garage.",
-          },
-          {
-            question: "Do star ratings or affiliate commissions decide the picks?",
-            answer: "No. The picks come from the makers' manuals and the load model, not from star ratings. A commission on a paid link does not change a pick.",
-          },
-          {
-            question: "Which heaters are left off the buy list?",
-            answer: "Diesel air heaters have no buy button on this page. Open-flame torpedo heaters are out for any enclosed garage.",
-          },
-        ]}
-      />
     </ReportPage>
   );
 }

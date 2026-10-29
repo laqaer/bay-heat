@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ReportPage } from "@/components/page/ReportPage";
-import { FaqList } from "@/components/page/FaqList";
+import { JsonLd } from "@/lib/jsonld";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { Callout } from "@/components/ui/Callout";
@@ -19,7 +19,7 @@ import { classCircuit } from "@/lib/planner/classCircuit";
 import { plan } from "@/lib/planner/plan";
 import { EXAMPLE_A_INPUT } from "@/lib/planner/fixtures";
 import { degF } from "@/lib/format";
-import { SITE_URL } from "@/lib/site";
+import { LOCALE, SITE_URL } from "@/lib/site";
 
 const entry = findPage("/infrared-garage-heater")!;
 
@@ -27,6 +27,33 @@ function numFact(id: string): number {
   const fact = getFact(id);
   if (!fact || typeof fact.value !== "number") throw new Error(`infrared-garage-heater: fact ${id} is missing or not a number`);
   return fact.value;
+}
+
+function Faq({ url, questions }: { url: string; questions: { question: string; answer: string }[] }) {
+  return (
+    <section id="faq">
+      <h2>Questions</h2>
+      {questions.map((item) => (
+        <div key={item.question}>
+          <h3>{item.question}</h3>
+          <p>{item.answer}</p>
+        </div>
+      ))}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          url,
+          inLanguage: LOCALE,
+          mainEntity: questions.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: { "@type": "Answer", text: item.answer },
+          })),
+        }}
+      />
+    </section>
+  );
 }
 
 export const metadata: Metadata = pageMetadata({
@@ -51,6 +78,32 @@ export default function Page() {
 
   const sources = SOURCE_IDS.map((id) => getSource(id)).filter((s): s is NonNullable<typeof s> => s !== null);
   const wallWatts = numFact("hs1500tt.watts");
+  const questions = [
+    {
+      question: "Does an infrared garage heater warm the air?",
+      answer: "Radiant heat warms people and surfaces directly. Forced air heats the room's air, which an open door or a leaky garage keeps flushing outside. A drafty shop or a bay with the door up often does better on radiant heat. A fully enclosed garage that needs even heat does better on forced air.",
+    },
+    {
+      question: "Why does the garage door matter more than the wattage?",
+      answer: "A forced-air heater raises the temperature of the air, then needs that warm air to stay in the room. Open the garage door and that air leaves. A radiant heater heats the person, the workbench, and the slab, so the heat still lands while the air is moving.",
+    },
+    {
+      question: "Is the 5°F radiant comfort difference a measurement?",
+      answer: `The planner treats radiant heat as feeling like forced-air heat run about 5°F warmer than the thermostat. On the worked example, holding ${degF(target)} by forced air is framed as comparable to about ${degF(comfortEquivalent)} of radiant air temperature. Nobody has logged that with a comfort survey in this garage. It is a modeled estimate, and it does not change the BTU/h design load.`,
+    },
+    {
+      question: "Which infrared class fits a workbench, and which fits a drafty shop?",
+      answer: `The 120 V wall heaters on this page are ${wallWatts.toLocaleString("en-US")} W. They are sized for a workbench or one bay, not a whole garage. The 240 V quartz or tube class aims down from a high ceiling for a drafty shop or a bay that runs with the door up. That class needs a ${irTubeCircuit.volts} V, ${irTubeCircuit.breakerA} A circuit.`,
+    },
+    {
+      question: "Where does radiant heat fall short?",
+      answer: "A finished workshop you sit in for hours wants even heat from forced air or a mini-split. Radiant heat only warms what is in its line of sight. It also does nothing for the air, so it will not hold tools, paint, or stored goods above a minimum temperature.",
+    },
+    {
+      question: "Does a 120 V infrared heater need GFCI?",
+      answer: "Yes. A 120 V unit needs GFCI protection on the outlet it plugs into. Keep the manual's clearance from anything flammable, and do not aim the heater at a vehicle's fuel fill or a gasoline can. Your electrician and your local code edition govern.",
+    },
+  ];
 
   return (
     <ReportPage entry={entry} sources={sources}>
@@ -179,35 +232,7 @@ export default function Page() {
         side by side, see <a href="/best-wall-mount-garage-heaters">wall-mount garage heaters →</a>.
       </p>
 
-      <FaqList
-        url={`${SITE_URL}${entry.href}`}
-        items={[
-          {
-            question: "Does an infrared garage heater warm the air?",
-            answer: "Radiant heat warms people and surfaces directly. Forced air heats the room's air, which an open door or a leaky garage keeps flushing outside. A drafty shop or a bay with the door up often does better on radiant heat. A fully enclosed garage that needs even heat does better on forced air.",
-          },
-          {
-            question: "Why does the garage door matter more than the wattage?",
-            answer: "A forced-air heater raises the temperature of the air, then needs that warm air to stay in the room. Open the garage door and that air leaves. A radiant heater heats the person, the workbench, and the slab, so the heat still lands while the air is moving.",
-          },
-          {
-            question: "Is the 5°F radiant comfort difference a measurement?",
-            answer: `The planner treats radiant heat as feeling like forced-air heat run about 5°F warmer than the thermostat. On the worked example, holding ${degF(target)} by forced air is framed as comparable to about ${degF(comfortEquivalent)} of radiant air temperature. Nobody has logged that with a comfort survey in this garage. It is a modeled estimate, and it does not change the BTU/h design load.`,
-          },
-          {
-            question: "Which infrared class fits a workbench, and which fits a drafty shop?",
-            answer: `The 120 V wall heaters on this page are ${wallWatts.toLocaleString("en-US")} W. They are sized for a workbench or one bay, not a whole garage. The 240 V quartz or tube class aims down from a high ceiling for a drafty shop or a bay that runs with the door up. That class needs a ${irTubeCircuit.volts} V, ${irTubeCircuit.breakerA} A circuit.`,
-          },
-          {
-            question: "Where does radiant heat fall short?",
-            answer: "A finished workshop you sit in for hours wants even heat from forced air or a mini-split. Radiant heat only warms what is in its line of sight. It also does nothing for the air, so it will not hold tools, paint, or stored goods above a minimum temperature.",
-          },
-          {
-            question: "Does a 120 V infrared heater need GFCI?",
-            answer: "Yes. A 120 V unit needs GFCI protection on the outlet it plugs into. Keep the manual's clearance from anything flammable, and do not aim the heater at a vehicle's fuel fill or a gasoline can. Your electrician and your local code edition govern.",
-          },
-        ]}
-      />
+      <Faq questions={questions} url={`${SITE_URL}${entry.href}`} />
     </ReportPage>
   );
 }

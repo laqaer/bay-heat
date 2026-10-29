@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
-import { FaqList } from "@/components/page/FaqList";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { Callout } from "@/components/ui/Callout";
@@ -16,7 +15,7 @@ import { getSource } from "@/lib/facts";
 import { route } from "@/lib/commerce/route";
 import { findProduct } from "@/lib/commerce/products";
 import { circuitFor } from "@/lib/planner/electrical";
-import { SAFETY_SCOPE, SITE_URL } from "@/lib/site";
+import { SAFETY_SCOPE } from "@/lib/site";
 
 const entry = findPage("/240v-garage-heater")!;
 
@@ -230,32 +229,6 @@ export default function Page() {
         </p>
         <p className="mt-2">{SAFETY_SCOPE}</p>
       </SafetyCallout>
-
-      <FaqList
-        url={`${SITE_URL}${entry.href}`}
-        items={[
-          {
-            question: "What breaker and wire does a 5,000 W 240 V garage heater need?",
-            answer: `A 5,000 W 240 V heater needs a ${c5k.breakerA} A breaker and ${c5k.wireNM} copper. It draws ${c5k.amps} A while it runs. The breaker is larger than that running current because a fixed electric heater is a continuous load.`,
-          },
-          {
-            question: "Will a 4,000 W 240 V heater run on a 20 A circuit?",
-            answer: `No. A 4,000 W heater draws ${c4k.amps} A, and the continuous-load rule sizes the breaker at 125% of that current. It needs its own ${c4k.breakerA} A circuit and ${c4k.wireNM} copper. It does not fit the 20 A circuit already run to most garages.`,
-          },
-          {
-            question: "What breaker and wire do 7,500 W and 10,000 W heaters need?",
-            answer: `A 7,500 W heater needs a ${c7k5.breakerA} A breaker and ${c7k5.wireNM} copper. A 10,000 W heater needs a ${c10k.breakerA} A breaker and ${c10k.wireNM} copper.`,
-          },
-          {
-            question: "Does a hardwired 240 V garage heater need GFCI?",
-            answer: "NEC 2023 requires GFCI on garage receptacles, the outlets you plug into. A hardwired 240 V heater has no plug, so that rule does not attach to the heater itself. It still covers other receptacles in the garage. Your electrician and your local code edition govern.",
-          },
-          {
-            question: "Is the price on this page a live Amazon price?",
-            answer: "No. Price is a range class, not a live number. Check the price on the retailer's page before you buy.",
-          },
-        ]}
-      />
     </ReportPage>
   );
 }

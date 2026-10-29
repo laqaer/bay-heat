@@ -2,7 +2,7 @@ URL: http://127.0.0.1:4317/240v-garage-heater
 TITLE: 240V garage heaters: 5 kW needs a 30A breaker and 10 AWG, and 4 kW won&#x27;t fit a 20A circuit · BayHeat
 H1: 240V garage heaters
 CANONICAL: https://bayheatguide.com/240v-garage-heater
-JSON_LD: WebSite, Organization, BreadcrumbList, FAQPage
+JSON_LD: WebSite, Organization, BreadcrumbList
 
 HEADINGS
 H1: 240V garage heaters
@@ -10,14 +10,8 @@ H2: The breaker and wire, for every common size
 H2: GFCI: when it applies and when it doesn&#x27;t
 H2: Shop for the size your circuit can carry
 H2: Safety
-H2: Questions
 H2: Related
 H2: Sources
-H3: What breaker and wire does a 5,000 W 240 V garage heater need?
-H3: Will a 4,000 W 240 V heater run on a 20 A circuit?
-H3: What breaker and wire do 7,500 W and 10,000 W heaters need?
-H3: Does a hardwired 240 V garage heater need GFCI?
-H3: Is the price on this page a live Amazon price?
 
 NAVS
 NAV[Primary]: Planner -> /garage-heater-calculator | Shop heaters -> /shop-heater | Size chart -> /garage-heater-size | Best picks -> /best-garage-heater | Electric -> /electric-garage-heater | 240V -> /240v-garage-heater | Portable -> /portable-garage-heater | Ceiling -> /ceiling-mount-garage-heater | Wall-mount -> /best-wall-mount-garage-heaters | All fuels -> /garage-heaters | Infrared -> /infrared-garage-heater | Diesel -> /diesel-heater-for-garage | Propane -> /propane-heater-for-garage | Electric vs propane -> /electric-vs-propane-garage-heater | Mini-split -> /heat-pump-mini-split-for-garage | Natural gas -> /natural-gas-garage-heater | Bottom seal -> /garage-door-bottom-seal | Weather stripping -> /garage-door-weather-stripping | Door insulation kit -> /garage-door-insulation-kit | How to insulate -> /how-to-insulate-a-garage | Can I Run It? -> /can-i-run-it | The Lab -> /lab

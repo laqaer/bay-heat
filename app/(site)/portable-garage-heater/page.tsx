@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
-import { FaqList } from "@/components/page/FaqList";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { Callout } from "@/components/ui/Callout";
@@ -11,19 +10,13 @@ import { QuickPick } from "@/components/commerce/QuickPick";
 import { BuyButton } from "@/components/ui/ButtonLink";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
-import { getFact, getSource } from "@/lib/facts";
+import { getSource } from "@/lib/facts";
 import { route } from "@/lib/commerce/route";
 import { findProduct } from "@/lib/commerce/products";
 import { fitsCordAndPlug } from "@/lib/planner/electrical";
-import { SAFETY_SCOPE, SITE_URL } from "@/lib/site";
+import { SAFETY_SCOPE } from "@/lib/site";
 
 const entry = findPage("/portable-garage-heater")!;
-
-function numFact(id: string): number {
-  const fact = getFact(id);
-  if (!fact || typeof fact.value !== "number") throw new Error(`portable-garage-heater: fact ${id} is missing or not a number`);
-  return fact.value;
-}
 
 export const metadata: Metadata = pageMetadata({
   path: entry.href,
@@ -37,8 +30,6 @@ export default function Page() {
   // Live calls against the same fitsCordAndPlug() the calculator uses -- not a hand-typed yes/no.
   const fitsShared15 = fitsCordAndPlug(1500, 120, 15);
   const fitsShared20 = fitsCordAndPlug(1500, 120, 20);
-  const draw = numFact("circuit.1500w120v.amps");
-  const shared15Cap = numFact("circuit.120v15a.continuous_a");
 
   const cz798 = findProduct("cz798-1500w-milkhouse")!;
   const hs1500tt = findProduct("hs1500tt-wall-infrared")!;
@@ -181,34 +172,6 @@ export default function Page() {
         </p>
         <p className="mt-2">{SAFETY_SCOPE}</p>
       </SafetyCallout>
-
-      <FaqList
-        url={`${SITE_URL}${entry.href}`}
-        items={[
-          {
-            question: "How many amps does a 1,500 W portable garage heater draw?",
-            answer: `A 1,500 W heater at 120 V draws ${draw} A.`,
-          },
-          {
-            question: "Can a 1,500 W heater share a 15 A garage circuit?",
-            answer: fitsShared15
-              ? `Yes. ${draw} A is within the ${shared15Cap} A cord-and-plug limit on a shared 15 A circuit.`
-              : `No. ${draw} A is over the ${shared15Cap} A cord-and-plug limit on a 15 A circuit shared with other outlets. As the only thing plugged into that circuit, the heater's own manual allows it. ${fitsShared20 ? "On a dedicated 20 A garage circuit it fits either way." : "The same cord-and-plug check also says it does not fit a dedicated 20 A garage circuit."}`,
-          },
-          {
-            question: "Can I run two portable heaters on one circuit?",
-            answer: `No. Two 1,500 W heaters draw ${draw * 2} A together. That is already over a 20 A breaker, and over a 15 A breaker. If you need more heat than one portable gives, move up to a hardwired class instead of adding a second cord.`,
-          },
-          {
-            question: "Can I plug a portable garage heater into an extension cord?",
-            answer: `No. A 1,500 W load pulls ${draw} A continuously. Plug it straight into a wall receptacle. An extension cord heats up at the plug and at every splice.`,
-          },
-          {
-            question: "Does a portable garage heater need GFCI?",
-            answer: "Yes. The receptacle it plugs into needs GFCI protection. Keep the heater a safe distance from anything flammable, per its own manual, and do not leave it running unattended overnight. Your electrician and your local code edition govern.",
-          },
-        ]}
-      />
     </ReportPage>
   );
 }
