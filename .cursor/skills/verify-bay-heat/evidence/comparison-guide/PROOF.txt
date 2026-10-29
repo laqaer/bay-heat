@@ -1,3 +1,3 @@
 feature: comparison-guide
 entry: Power it
-command: bay-heat follow --from / --name "Power it"
+command: bay-heat follow --from / --name "Power it"; bay-heat snapshot /240v-garage-heater --dir .cursor/skills/verify-bay-heat/evidence/comparison-guide --screenshot

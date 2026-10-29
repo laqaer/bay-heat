@@ -17,7 +17,7 @@ Mogul is the factory that ships small, useful buying-guide sites (circuit-honest
 
 - Next.js App Router (16) + TypeScript
 - Tailwind CSS v4
-- Static editorial pages, JSON-LD (`WebSite` + `Article` on guides)
+- Static editorial pages, JSON-LD (`WebSite` and `Organization` on every page, `BreadcrumbList` on report pages, `FAQPage` on the five heater pages that list questions)
 - Static export (`npm run build` writes `out/`, plus `out/_redirects` and `out/_headers`), served as an assets-only Cloudflare Worker (`wrangler.jsonc`); no env vars required
 
 ## Local setup
