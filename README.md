@@ -17,7 +17,7 @@ Mogul is the factory that ships small, useful buying-guide sites (circuit-honest
 
 - Next.js App Router (16) + TypeScript
 - Tailwind CSS v4
-- Static editorial pages, JSON-LD (`WebSite` and `Organization` on every page, `BreadcrumbList` on report pages, `FAQPage` on the five heater pages that list questions)
+- Static editorial pages. Live JSON-LD is `WebSite` and `Organization` on every page, plus `BreadcrumbList` on report pages. `FAQPage` is implemented for five heater pages and is not deployed. See [FAQPage status](#faqpage-status-bh-geo-001).
 - Static export (`npm run build` writes `out/`, plus `out/_redirects` and `out/_headers`), served as an assets-only Cloudflare Worker (`wrangler.jsonc`); no env vars required
 
 ## Local setup
@@ -83,6 +83,14 @@ That POSTs the homepage, the circuit and heat-type guides that now link to retai
 | `/96098d06c16790aabec2db1a232fee8f.txt` | IndexNow key file (public) |
 
 Affiliate disclosure and electrical / fire-safety language appear in the footer on every page.
+
+## FAQPage status (BH-GEO-001)
+
+[PR #43](https://github.com/laqaer/bay-heat/pull/43) adds a visible Questions section and matching `FAQPage` JSON-LD on `/best-garage-heater`, `/electric-garage-heater`, `/240v-garage-heater`, `/portable-garage-heater`, and `/infrared-garage-heater`. The work id is BH-GEO-001. There is no separate GitHub issue.
+
+- **Implemented.** The questions and `faqPageJsonLd` are in the head of PR #43. Revision `b80f8df` is the behavior commit. This status note is a later commit on the same branch.
+- **Locally verified, 2026-10-29.** `verify-bay-heat` on `http://127.0.0.1:4317` followed named links to the five pages. Each returned HTTP 200, showed Questions, and included `FAQPage`. The visible question and answer text matched the JSON-LD. `laqaer-20` counts stayed 16, 18, 12, 8, and 8. `npm test` passed 165 tests. `/garage-heater-thermostat` was not changed.
+- **Not merged. Not deployed. Not released.** The `check` job fails in `next typegen` because recorded editorial, electrical, and gas review is required, and `docs/editorial/reviewers.json` lists no reviewer. Production HTML does not include these questions until that review exists and the branch is merged.
 
 ## Editorial rules
 
