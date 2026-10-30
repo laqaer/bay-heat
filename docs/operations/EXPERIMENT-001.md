@@ -63,6 +63,20 @@ Stop rule: not evaluated yet. On these interim figures, edited-page impressions 
 
 Next step: on or after 2026-10-27, read the same windows with `dataState: final` (after window ending 2026-10-24). Record the verdict and the stop-rule result then. Do not revert the module on this interim read.
 
+## Final read — 28-day search metric (2026-10-30 UTC)
+
+Source: Search Console for `sc-domain:bayheatguide.com`, read through OpenSEO (read-only, no credits), `dataState: final`. Dates are Pacific Time. Before window: 2026-08-29 to 2026-09-25. After window: 2026-09-26 to 2026-10-24.
+
+Property totals: before 1 click, 62 impressions. After 0 clicks, 20 impressions.
+
+Money pages (clicks / impressions, before → after): total 1 / 21 → 0 / 3. The four registered pages were `/portable-garage-heaters-15a-circuit` 1 / 7 → 0 / 2, `/best-electric-garage-heaters-by-size` 0 / 14 → 0 / 1, and the ceiling-mount and wall-mount guides 0 / 0 → 0 / 0.
+
+Edited pages (impressions, before → after): `/` 4 → 9, `/120v-vs-240v-garage-heater` 27 → 1, `/forced-air-vs-infrared-garage-heater` 0 → 0. Total 31 → 10, down 68 percent.
+
+Verdict: no success signal. No sale is recorded; no Associates report was read.
+
+Stop rule: met on the numbers. Edited-page impressions fell more than 30 percent and money-page clicks did not rise (1 → 0). The baseline is one click, and impressions fell sitewide (62 → 20) on pages without the module, so the data do not show that the module caused the drop. The registered action is to revert the retailer module. This record does not revert it. The revert, or a written decision to keep it, is the next step.
+
 ## Stop or pivot
 
 - Remove a card if its recommendation contradicts the page it sits on.
