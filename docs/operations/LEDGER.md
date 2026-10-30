@@ -9,7 +9,7 @@ Amazon Associates earnings, processing fees, refunds, and hosting invoices are n
 | Line | Since mandate | Evidence |
 | --- | --- | --- |
 | Cash collected | Unknown | No Associates payment mail in the connected Gmail. No Stripe account connected. |
-| Earned revenue | Unknown | Tag `laqaer-20` is on production pages. Qualifying orders are not in this repo. Experiment 001 interim search read (2026-09-26 to 2026-10-23, not final): 0 Google clicks to money pages, down from 1 in the prior 28 days. See `EXPERIMENT-001.md`. |
+| Earned revenue | Unknown | Tag `laqaer-20` is on production pages. Qualifying orders are not in this repo. Experiment 001 final search read (2026-09-26 to 2026-10-24, final data): 0 Google clicks to money pages, down from 1 in the prior 28 days; stop rule met. See `EXPERIMENT-001.md`. |
 | Refunds and chargebacks | Unknown | No direct checkout. Amazon handles buyer refunds; commission reversal is not visible here. |
 | Expenses paid | $0 observed | Vercel user plan is Hobby, status active, data-cache excess billing disabled. No invoice was retrieved (project API returned 403 for team `laqaers-projects`). GitHub Actions on this public repo uses included minutes. OpenSEO credit balance is 0; no credit purchase was made. IndexNow and the production health check added no provider charge. |
 | Costs incurred, not billed | Unknown | Hobby-plan overages are not authorized and were not enabled. Delayed provider bills are not in scope. |
