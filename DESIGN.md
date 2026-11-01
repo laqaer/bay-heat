@@ -61,7 +61,7 @@ components:
 
 One amber frequency, two exposures. Long reads sit on lamp-lit paper. The home page, the planner, and the hubs sit in the bay at night, with the same sodium light coming from one source. Temperature ramps stay a separate cold-to-hot encoding. Safety stays red.
 
-The system is editorial and warm. Type is Archivo with a width axis and Martian Mono for labels. No new display face. The first paint is the headline. Motion drifts the hero heat with opacity, scale, and a softer core. The hero section lines draw once. A home section or an article heading rises a short distance as it enters. A product plate warms its border on hover. The footer drawings change opacity slowly. Reduced motion snaps each of these to the resting frame. None of them changes layout size.
+The system is editorial and warm. Type is Archivo with a width axis and Martian Mono for labels. No new display face. The first paint is the headline. Headlines use the font's normal letter-spacing. Motion is a short color change on header and footer links. Reduced motion shortens that change. Nothing fades, draws, or shifts the page.
 
 The previous Inspection Grade world (cool paper, blue thermal camera) is the anti-reference. This file records the replacement that shipped in the visual overhaul. Assumptions, because the run had no question tool. The north star is the assigned concept-seed direction. The names of the colors are descriptive labels for the hex values already in `app/globals.css`.
 
@@ -119,7 +119,7 @@ Sodium light on two surfaces. Paper is the long read. Night is the bay.
 - **Headline** (700, clamp about 1.5rem to 2.25rem, line-height 1.1, wdth 112): Section `h2` and article `h1`.
 - **Title** (650 to 700, 1.25rem): `h3` and card titles.
 - **Body** (400, line-height 1.6, max 66ch): Report prose.
-- **Label** (mono, 12px, tracking 0.16em, uppercase): Section indices and footer column titles.
+- **Label** (mono, 12px, tracking 0.16em): Footer column titles and short meta lines, as written.
 
 ### Named Rules
 
@@ -127,16 +127,11 @@ Sodium light on two surfaces. Paper is the long read. Night is the bay.
 
 ## Layout
 
-The page column is `max-w-[1392px]` with 16px padding, 24px from the `sm` breakpoint. Home sections stack full width with a top border. Report articles use the same column, then a 3xl prose measure. The sticky header is 56px, 64px from `sm`. The footer reserves about 640px of intrinsic size so `content-visibility: auto` does not shift layout when it paints.
+The page column is `max-w-[1392px]` with 16px padding, 24px from the `sm` breakpoint. Home sections stack full width. A background tone separates a section. Report articles use the same column, then a 3xl prose measure. The sticky header is 56px, 64px from `sm`. The footer reserves about 640px of intrinsic size so `content-visibility: auto` does not shift layout when it paints.
 
 ## Elevation & Depth
 
-Flat by default. A surface changes tone. A hairline separates it. The product pick is the one lifted surface, and the shadow is a short dark falloff that does not change the box height.
-
-### Shadow Vocabulary
-
-- **Pick** (`box-shadow: 0 22px 40px -30px rgb(26 16 8 / 0.55)`): `[data-buy-group]` only.
-- **Result** (`0 0 0 1px var(--line), 0 24px 48px -28px rgb(26 16 8 / 0.35)`): Token `--shadow-result`. Use it on a result plate, not on every card.
+Flat. A surface changes tone. Plates, buy groups, and the result block do not use a shadow or a box stroke. Tables keep a 1px line so rows stay readable. Menus keep a stroke so they separate from the page. `--shadow-result` is `none`.
 
 ### Named Rules
 
@@ -144,7 +139,7 @@ Flat by default. A surface changes tone. A hairline separates it. The product pi
 
 ## Shapes
 
-Corners are square. Borders are 1px. The header rule is 2px ember. Drawings are one stroke weight (1.6), cream on night, ember only on the hot object. Four drawings sit in a 92px footer band. Below 720px the band keeps the garage and the heater.
+Corners are square. The header rule is 2px ember. Plates have no stroke. Drawings are one stroke weight (1.6), cream on night, ember only on the hot object. Four drawings sit in a 92px footer band. Below 720px the band keeps the garage and the heater.
 
 ## Components
 
@@ -159,17 +154,17 @@ Corners are square. Borders are 1px. The header rule is 2px ember. Drawings are 
 
 - **Corner Style:** Square.
 - **Background:** Lamp cream on paper, night panel on the camera surface.
-- **Shadow Strategy:** None, except the product pick.
-- **Border:** 1px brass line, or night line `#6b4a28` on the bay.
+- **Shadow Strategy:** None.
+- **Border:** None on plates. A tone change separates a plate from the page. Tables and open menus keep a 1px line.
 - **Internal Padding:** 16px to 20px.
 
 ### Callouts
 
-A full 1px plate. Paper callouts use dust board. Alarm callouts use the alarm border and a 12% alarm wash. They are not a thick left bar.
+Paper callouts use a dust-board fill and no stroke. Alarm callouts keep the alarm border and a 12% alarm wash. They are not a thick left bar.
 
 ### Tables
 
-1px line, ember-mix header, zebra rows from the dust board. Horizontal scroll on small screens. The table box does not grow on hover.
+1px line, dust-board header, zebra rows from the dust board. Horizontal scroll on small screens. The table box does not grow on hover.
 
 ### Inputs / Fields
 
@@ -177,7 +172,7 @@ Stroke is the brass line. Focus is the ember outline. The caret is ember.
 
 ### Navigation
 
-Sticky paper header, 2px ember rule, uppercase labels with 0.04em tracking. The wordmark is Archivo extra bold. Desktop links sit in `Primary`. Below `lg` they collapse into the menu button. The footer is night, with cream links and the drawing band above the columns.
+Sticky paper header, 2px ember rule, nav labels as written, with 0.04em tracking. The wordmark is Archivo extra bold. Desktop links sit in `Primary`. Below `lg` they collapse into the menu button. The footer is night, with cream links and the drawing band above the columns.
 
 ### Drawings
 
@@ -188,7 +183,7 @@ Sticky paper header, 2px ember rule, uppercase labels with 0.04em tracking. The 
 ### Do:
 
 - **Do** keep the LCP element as the headline or a static image already on the page.
-- **Do** honor `prefers-reduced-motion` by leaving the heat glow and the reveal inside the no-preference block.
+- **Do** honor `prefers-reduced-motion`. Link color changes sit in the no-preference block.
 - **Do** keep affiliate hrefs, including `tag=laqaer-20`, and the disclosure next to the first paid link.
 - **Do** use tabular numbers for measurements.
 
