@@ -19,7 +19,7 @@
      brighter --alarm only clears AA with dark text -- found by an axe pass on the NO-GO verdict stamp.
      Two surfaces need opposite ink colors on the same fill. */
   --alarm-ink: #fff6e4;
-  --shadow-result: 0 0 0 1px var(--line), 0 24px 48px -28px rgb(26 16 8 / 0.35);
+  --shadow-result: none;
 }
 
 [data-surface="camera"] {
@@ -134,8 +134,6 @@ html[data-scroll-behavior="smooth"] {
 
 body {
   background-color: var(--bg);
-  background-image:
-    linear-gradient(180deg, rgb(255 246 228 / 0.35), transparent 220px);
   color: var(--text);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
@@ -177,7 +175,7 @@ body {
   font-weight: 700;
   font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   color: var(--text);
   scroll-margin-top: 6rem;
 }
@@ -257,15 +255,8 @@ body {
   }
 }
 
-[data-surface="camera"] {
-  background-image:
-    radial-gradient(90% 55% at 78% -8%, rgb(255 176 32 / 0.42), transparent 58%),
-    radial-gradient(70% 40% at 0% 100%, rgb(255 176 32 / 0.16), transparent 52%);
-}
-
 .heat-shimmer {
-  background: radial-gradient(42% 36% at 50% 62%, color-mix(in oklab, var(--ember) 70%, transparent), transparent 72%);
-  opacity: 0.55;
+  display: none;
 }
 
 @layer components {
@@ -274,12 +265,12 @@ body {
     border: 1px solid var(--line);
   }
   article thead th {
-    background: color-mix(in oklab, var(--ember) 22%, var(--surface));
+    background: var(--surface-2);
     color: var(--text);
     font-weight: 650;
   }
   article tbody tr:nth-child(even) {
-    background: color-mix(in oklab, var(--surface-2) 45%, var(--surface));
+    background: var(--surface-2);
   }
   article :focus-visible {
     outline: 2px solid var(--ember);
@@ -288,32 +279,6 @@ body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .heat-shimmer {
-    transform-origin: 50% 62%;
-    animation: heat-glow 9s cubic-bezier(0.16, 1, 0.3, 1) infinite alternate;
-  }
-  .heat-shimmer::after {
-    content: "";
-    position: absolute;
-    inset: 22% 20% 30%;
-    background: radial-gradient(closest-side, color-mix(in oklab, var(--ember) 80%, transparent), transparent 70%);
-    pointer-events: none;
-    animation: heat-core 12s cubic-bezier(0.16, 1, 0.3, 1) infinite alternate;
-  }
-  .heat-shimmer ~ svg :is(line, polyline, rect) {
-    stroke-dasharray: 640;
-    stroke-dashoffset: 640;
-    animation: bay-draw 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  @supports (animation-timeline: view()) {
-    .reveal,
-    .prose-report > h2 {
-      animation: reveal auto linear;
-      animation-timeline: view();
-      animation-range: entry 0% entry 18%;
-      animation-fill-mode: none;
-    }
-  }
   header a,
   header button,
   footer a {
@@ -321,41 +286,6 @@ body {
       color 180ms cubic-bezier(0.16, 1, 0.3, 1),
       background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  [data-buy-group] {
-    transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  [data-buy-group]:hover {
-    border-color: color-mix(in oklab, var(--ember) 72%, var(--line));
-  }
-  article a.block {
-    transition:
-      border-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
-      background-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  article a.block:hover {
-    border-color: color-mix(in oklab, var(--ember) 55%, var(--line));
-  }
-  footer::before {
-    animation: drawing-wake 11s ease-in-out infinite alternate;
-  }
-}
-@keyframes heat-glow {
-  from { opacity: 0.3; transform: scale(1) translate3d(0, 0, 0); }
-  to { opacity: 0.72; transform: scale(1.06) translate3d(0, -1.5%, 0); }
-}
-@keyframes heat-core {
-  from { opacity: 0.15; transform: scale(0.9); }
-  to { opacity: 0.5; transform: scale(1.12); }
-}
-@keyframes bay-draw {
-  to { stroke-dashoffset: 0; }
-}
-@keyframes drawing-wake {
-  from { opacity: 0.55; }
-  to { opacity: 1; }
-}
-@keyframes reveal {
-  from { opacity: 0; transform: translateY(10px); }
 }
 
 header {
@@ -370,8 +300,6 @@ header button {
 
 footer {
   background-color: #1a1008;
-  background-image:
-    radial-gradient(60% 80% at 0% 0%, rgb(255 176 32 / 0.16), transparent 60%);
   color: #f0d7a4;
   border-top: 1px solid #6b4a28;
   content-visibility: auto;
@@ -414,22 +342,14 @@ main h1 {
   text-wrap: balance;
 }
 
-article > h1 {
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 1.15rem;
-}
-
 [data-buy-group] {
-  border: 1px solid var(--line);
-  background:
-    linear-gradient(180deg, color-mix(in oklab, var(--ember) 14%, var(--surface)), var(--surface) 42%);
-  box-shadow: 0 22px 40px -30px rgb(26 16 8 / 0.55);
+  border-color: transparent;
+  background: var(--surface);
+  box-shadow: none;
 }
 
 .prose-report div[class*="border-l-"] {
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--line);
+  border-color: transparent;
   background: var(--surface-2);
   padding: 0.9rem 1rem;
 }
@@ -439,9 +359,54 @@ article > h1 {
   background: color-mix(in oklab, var(--alarm) 12%, var(--surface));
 }
 
-.prose-report div[class*="border-(--color-frost)"] {
-  border-color: var(--line);
-  background: var(--surface);
+.tracking-tight {
+  letter-spacing: 0;
+}
+
+.uppercase {
+  text-transform: none;
+}
+
+figure > figcaption > span.uppercase {
+  display: none;
+}
+
+:is(div, a, section):not(.absolute)[class~="border"][class*="border-(--color-line)"],
+details[class~="border"][class*="border-(--color-line)"] {
+  border-color: transparent;
+  background-color: var(--surface);
+}
+
+section[class*="border-(--color-line)"],
+li[class*="border-t"][class*="border-(--color-line)"],
+div[class*="border-t"][class*="border-(--color-line)"] {
+  border-top-color: transparent;
+}
+
+section > .reveal > ol > li > span.font-mono:first-child {
+  display: none;
+}
+
+div.not-prose.my-4 > div.flex.h-3 {
+  display: none;
+}
+
+div:has(> .heat-shimmer) {
+  background: var(--surface) !important;
+}
+
+.heat-shimmer + div,
+.heat-shimmer ~ svg + div > div:first-of-type,
+.heat-shimmer ~ svg + div + div {
+  display: none;
+}
+
+.heat-shimmer ~ svg + div + div + div {
+  border-color: transparent;
+}
+
+button:hover:not(:active) {
+  transform: none;
 }
 
 @media (max-width: 720px) {
