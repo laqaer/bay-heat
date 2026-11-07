@@ -2,6 +2,8 @@
 
 Status on 2026-10-09: **the site runs on Cloudflare at <https://bay-heat.laqaer-products.workers.dev>. `bayheatguide.com` still answers from Vercel.** The domain moves when the owner changes the nameservers at Name.com (step 2 below). Until then both hosts serve the same build from `main`.
 
+**Correction (2026-11-07).** The two hosts do not serve the same build. `deploy.yml` skipped its Deploy step in all 21 runs from 2026-10-09 to 2026-11-07, because the two secrets below are not set. The workers.dev copy is an earlier upload with an unknown revision. Its home title still has the doubled brand that #33 removed on 2026-10-16. Vercel serves `main` on bayheatguide.com. Evidence: [the #49 receipt correction](https://github.com/laqaer/bay-heat/pull/49#issuecomment-6709799767).
+
 ## How the site is built now
 
 The app is a Next.js static export (`output: "export"` in `next.config.ts`). It deploys as an assets-only Worker (`wrangler.jsonc`, `assets.directory: ./out`). No Worker script runs for page traffic. Static-asset requests are free and unlimited on the Workers Free plan, and the size and CPU limits for Worker code do not apply.
@@ -29,12 +31,12 @@ Converting to a static export changed four things:
 
 ## Deploys
 
-`.github/workflows/deploy.yml` builds and deploys on every push to `main`, and can be run by hand. It needs two repository secrets, which this agent cannot set: the GitHub proxy blocks the Actions secrets API.
+`.github/workflows/deploy.yml` builds the site on every push to `main`, and can be run by hand. It uploads only when two repository secrets exist. It needs two repository secrets, which this agent cannot set: the GitHub proxy blocks the Actions secrets API.
 
 - `CLOUDFLARE_API_TOKEN`: a token with **Workers Scripts: Edit** on the Laqaer Products account.
 - `CLOUDFLARE_ACCOUNT_ID`: `de80edcd32893f7153e5b793ad8317f9`.
 
-Without them the job builds, then skips the upload with a warning. To deploy by hand: `npm run build && CLOUDFLARE_ACCOUNT_ID=de80edcd32893f7153e5b793ad8317f9 npx wrangler@4.135.0 deploy`. CI (`ci.yml`) checks that the export, `_redirects`, `_headers`, and the share cards exist, and runs `wrangler deploy --dry-run`.
+Without them the job builds, then skips the upload with a warning. On 2026-11-07 they were still not set, and no run had uploaded. To deploy by hand: `npm run build && CLOUDFLARE_ACCOUNT_ID=de80edcd32893f7153e5b793ad8317f9 npx wrangler@4.135.0 deploy`. CI (`ci.yml`) checks that the export, `_redirects`, `_headers`, and the share cards exist, and runs `wrangler deploy --dry-run`.
 
 ## Cutover runbook
 

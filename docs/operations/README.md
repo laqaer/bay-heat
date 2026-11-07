@@ -16,7 +16,7 @@ Primary channel: organic search. Paid acquisition is not authorized.
 
 ## What exists
 
-- Public repo `laqaer/bay-heat`, production on Vercel (apex 200, `www` 308 to apex, trailing slash 308 to the canonical path). Public DNS is still Vercel (`ns1.vercel-dns.com`). A pending Cloudflare Free Website zone exists for `bayheatguide.com` and is not authoritative until Name.com nameservers change. The same static build already runs on Cloudflare at `bay-heat.laqaer-products.workers.dev`. See `docs/cloudflare-migration.md` for the cutover steps.
+- Public repo `laqaer/bay-heat`, production on Vercel (apex 200, `www` 308 to apex, trailing slash 308 to the canonical path). Public DNS is still Vercel (`ns1.vercel-dns.com`). A pending Cloudflare Free Website zone exists for `bayheatguide.com` and is not authoritative until Name.com nameservers change. An older build with an unknown revision runs on Cloudflare at `bay-heat.laqaer-products.workers.dev`. `deploy.yml` has never uploaded, because its two secrets are not set (see the correction under Maintenance guard). See `docs/cloudflare-migration.md` for the cutover steps.
 - Static Next.js export. No database, auth, or payment webhook.
 - Associates text links on the product guides. As of this change, the homepage, 120 V vs 240 V guide, and forced-air vs infrared guide also link the same listings.
 - IndexNow key file is live at `/96098d06c16790aabec2db1a232fee8f.txt`.
@@ -33,6 +33,8 @@ Issue [#48](https://github.com/laqaer/bay-heat/issues/48) allows one maintenance
 - After the build, CI runs `npm run check:affiliates`, its negative control and `npm run qa` on `out/`.
 
 This note records the source change only. It is not a deployment record. The merge, deployment and production-health receipts go on [#49](https://github.com/laqaer/bay-heat/pull/49) and [portfolio-ops#50](https://github.com/laqaer/portfolio-ops/issues/50). Vercel serves bayheatguide.com until the nameserver change ([#32](https://github.com/laqaer/bay-heat/issues/32)).
+
+**Correction (2026-11-07, after the merge).** The first #49 receipt called `deploy.yml` run 42389511925 a Cloudflare deploy. That was wrong. The run built the site and skipped its Deploy step, because `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are not set. All 21 `deploy.yml` runs since 2026-10-09 skipped that step. The coordinator's Vercel read shows that bayheatguide.com serves `73ef6ee`: deployment `dpl_naeXo4PLz4HydQ1NkxaoJb8WLPQs`, READY, target production. The [#49 receipt correction](https://github.com/laqaer/bay-heat/pull/49#issuecomment-6709799767) gives the step logs.
 
 ## Authority and budgets
 
