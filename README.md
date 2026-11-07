@@ -17,7 +17,7 @@ Mogul is the factory that ships small, useful buying-guide sites (circuit-honest
 
 - Next.js App Router (16) + TypeScript
 - Tailwind CSS v4
-- Static editorial pages, JSON-LD (`WebSite` + `Article` on guides)
+- Static editorial pages. Live JSON-LD is `WebSite` and `Organization` on every page, plus `BreadcrumbList` on report pages. `FAQPage` is implemented for `/infrared-garage-heater` only and is not deployed. See [FAQPage status](#faqpage-status-bh-geo-001).
 - Static export (`npm run build` writes `out/`, plus `out/_redirects` and `out/_headers`), served as an assets-only Cloudflare Worker (`wrangler.jsonc`); no env vars required
 
 ## Local setup
@@ -142,6 +142,14 @@ The 16 old URLs in `lib/redirects.ts` answer 308 to their new pages. For example
 A path with a trailing slash answers 308 to the path without it. On Cloudflare, rules in `out/_redirects` do this. Vercel answers the same 308 with no rule in `vercel.json` (observed on 2026-11-07).
 
 The footer on every page carries the Amazon Associates line. `npm run qa` checks the footer of every sitemap page.
+
+## FAQPage status (BH-GEO-001)
+
+[PR #43](https://github.com/laqaer/bay-heat/pull/43) adds a visible Questions section and matching `FAQPage` JSON-LD on `/infrared-garage-heater` only. The other four money URLs stay as they are on `main` until a real electrical reviewer exists. The work id is BH-GEO-001. There is no separate GitHub issue. Cost is $0. Parked work ends 2026-11-28.
+
+- **Implemented.** The questions live in `app/(site)/infrared-garage-heater/page.tsx` on the head of PR #43. There is no shared FAQ helper.
+- **Locally verified, 2026-10-29.** `verify-bay-heat` on `http://127.0.0.1:4317` followed `Infrared` from the home page. `/infrared-garage-heater` returned HTTP 200, showed Questions, included `FAQPage`, and the visible text matched the JSON-LD. It had eight `laqaer-20` links. The other four money pages had no Questions section. `npm test` passed 165 tests.
+- **Not merged. Not deployed. Not released.** The editorial gate for this diff asks for editorial review only. Production HTML does not include these questions until that review exists and the branch is merged.
 
 ## Editorial rules
 
