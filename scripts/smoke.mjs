@@ -27,7 +27,7 @@ const READY_MS = 180_000;
 function parseArgs(argv) {
   const out = { base: null };
   for (let i = 0; i < argv.length; i++) {
-    if (argv[i] === "--base") out.base = argv[++i];
+    if (argv[i] === "--base") out.base = argv[++i] ?? "";
     else throw new Error(`unknown argument: ${argv[i]}`);
   }
   if (out.base !== null && !/^https?:\/\/[^/]+$/.test(out.base.replace(/\/$/, ""))) {
@@ -55,7 +55,26 @@ async function get(base, path) {
     // A browser page load. The assets router serves the 404 page for a navigation request.
     headers: { "user-agent": "bayheat-smoke/1.0", accept: "text/html,application/xhtml+xml,*/*;q=0.8", "sec-fetch-mode": "navigate" },
   });
-  return { status: response.status, headers: response.headers, body: await response.text() };
+  const body = await response.text();
+  // The RSC payload in <script> repeats every string on the page; only the markup a reader sees counts.
+  return { status: response.status, headers: response.headers, body, markup: body.replace(/<script\b[\s\S]*?<\/script>/g, "") };
+}
+
+// One check. A request that throws (reset, timeout) fails this check only, so the run still reports every other one.
+async function attempt(label, check) {
+  try {
+    return await check();
+  } catch (error) {
+    return { label, problems: [`request failed: ${error instanceof Error ? error.message : String(error)}`] };
+  }
+}
+
+// Stop wrangler dev on Ctrl-C or SIGTERM too. It runs in its own process group, so the signal does not reach it.
+let stopServer = async () => {};
+for (const signal of ["SIGINT", "SIGTERM"]) {
+  process.once(signal, () => {
+    stopServer().finally(() => process.exit(signal === "SIGINT" ? 130 : 143));
+  });
 }
 
 async function startServer() {
@@ -93,6 +112,7 @@ async function startServer() {
       }
     }
   };
+  stopServer = stop;
   const deadline = Date.now() + READY_MS;
   while (Date.now() < deadline) {
     if (exited !== null) throw new Error(`wrangler dev exited with code ${exited} before it was ready:\n${log}`);
@@ -107,7 +127,8 @@ async function startServer() {
   throw new Error(`wrangler dev did not answer GET / with 200 within ${READY_MS / 1000} s:\n${log}`);
 }
 
-const trim = (url) => url.replace(/\/+$/, "");
+// The home page's canonical is the bare origin; every other canonical must equal its sitemap URL exactly.
+const sameUrl = (a, b) => a === b || ([a, b].every((u) => u === SITE || u === `${SITE}/`));
 
 async function checkPage(base, loc) {
   const path = new URL(loc).pathname;
@@ -116,13 +137,13 @@ async function checkPage(base, loc) {
   if (r.status !== 200) problems.push(`status ${r.status}${r.headers.get("location") ? ` -> ${r.headers.get("location")}` : ""}`);
   if (!(r.headers.get("content-type") ?? "").includes("text/html")) problems.push(`content-type ${r.headers.get("content-type")}`);
   if (r.headers.get("x-content-type-options") !== "nosniff") problems.push("no X-Content-Type-Options: nosniff");
-  const title = /<title>([^<]*)<\/title>/.exec(r.body)?.[1] ?? "";
+  const title = /<title>([^<]*)<\/title>/.exec(r.markup)?.[1] ?? "";
   if (!title.includes("BayHeat")) problems.push(`title ${JSON.stringify(title)}`);
-  if (!/<h1[\s>]/.test(r.body)) problems.push("no <h1>");
-  const canonical = /<link rel="canonical" href="([^"]*)"/.exec(r.body)?.[1];
-  if (!canonical || trim(canonical) !== trim(loc)) problems.push(`canonical ${canonical ?? "(none)"}`);
-  if (/<meta name="robots" content="[^"]*noindex/.test(r.body)) problems.push("noindex robots meta");
-  if (!r.body.includes(ASSOCIATE_LINE)) problems.push("no Amazon Associates line");
+  if (!/<h1[\s>]/.test(r.markup)) problems.push("no <h1>");
+  const canonical = /<link rel="canonical" href="([^"]*)"/.exec(r.markup)?.[1];
+  if (!canonical || !sameUrl(canonical, loc)) problems.push(`canonical ${canonical ?? "(none)"}`);
+  if (/<meta name="robots" content="[^"]*noindex/.test(r.markup)) problems.push("noindex robots meta");
+  if (!r.markup.includes(ASSOCIATE_LINE)) problems.push("no Amazon Associates line");
   return { label: `${r.status} ${path}`, problems };
 }
 
@@ -142,7 +163,7 @@ async function main() {
   try {
     process.stdout.write(`smoke ${new Date().toISOString()} ${server.base}${args.base ? "" : ` (${WRANGLER} dev on out/)`}\n`);
 
-    const sitemap = await get(server.base, "/sitemap.xml");
+    const sitemap = await get(server.base, "/sitemap.xml"); // nothing else can run without it, so a throw ends the run
     const locs = [...sitemap.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim());
     const sitemapProblems = [];
     if (sitemap.status !== 200) sitemapProblems.push(`status ${sitemap.status}`);
@@ -154,23 +175,29 @@ async function main() {
     results.push({ label: `${sitemap.status} /sitemap.xml (${locs.length} URLs)`, problems: sitemapProblems });
 
     for (const loc of locs.filter((l) => !offSite.includes(l))) {
-      results.push(await checkPage(server.base, loc));
+      results.push(await attempt(`ERR ${new URL(loc).pathname}`, () => checkPage(server.base, loc)));
       pages++;
     }
 
-    const robots = await get(server.base, "/robots.txt");
-    results.push({
-      label: `${robots.status} /robots.txt`,
-      problems: robots.status === 200 && robots.body.includes(`Sitemap: ${SITE}/sitemap.xml`) ? [] : [`status ${robots.status} or no Sitemap line`],
-    });
-    // One old URL from lib/redirects.ts (README "Deploy on Cloudflare"; the production healthcheck follows it too).
-    results.push(await checkRedirect(server.base, "/120v-vs-240v-garage-heater", "/240v-garage-heater"));
-    results.push(await checkRedirect(server.base, "/about/", "/about"));
-    const missing = await get(server.base, "/bayheat-smoke-no-such-page");
-    results.push({
-      label: `${missing.status} /bayheat-smoke-no-such-page`,
-      problems: missing.status === 404 && /<meta name="robots" content="[^"]*noindex/.test(missing.body) ? [] : [`expected the noindex 404 page, got ${missing.status}`],
-    });
+    results.push(
+      await attempt("ERR /robots.txt", async () => {
+        const robots = await get(server.base, "/robots.txt");
+        const problems = [];
+        if (robots.status !== 200) problems.push(`status ${robots.status}`);
+        if (!robots.body.includes(`Sitemap: ${SITE}/sitemap.xml`)) problems.push(`no "Sitemap: ${SITE}/sitemap.xml" line`);
+        return { label: `${robots.status} /robots.txt`, problems };
+      }),
+    );
+    // One old URL from lib/redirects.ts (README "Routes"; the production healthcheck requests it too).
+    results.push(await attempt("ERR /120v-vs-240v-garage-heater", () => checkRedirect(server.base, "/120v-vs-240v-garage-heater", "/240v-garage-heater")));
+    results.push(await attempt("ERR /about/", () => checkRedirect(server.base, "/about/", "/about")));
+    results.push(
+      await attempt("ERR /bayheat-smoke-no-such-page", async () => {
+        const missing = await get(server.base, "/bayheat-smoke-no-such-page");
+        const ok = missing.status === 404 && /<meta name="robots" content="[^"]*noindex/.test(missing.markup);
+        return { label: `${missing.status} /bayheat-smoke-no-such-page`, problems: ok ? [] : [`expected the noindex 404 page, got ${missing.status}`] };
+      }),
+    );
   } finally {
     await server.stop();
   }

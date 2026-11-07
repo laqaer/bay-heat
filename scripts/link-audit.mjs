@@ -24,6 +24,7 @@
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const RAIL_BUDGET_PX = 700;
 
@@ -49,7 +50,12 @@ function walk(dir) {
   });
 }
 
-const AMAZON_ANCHOR = /<a\b[^>]*href="(https:\/\/www\.amazon\.com[^"]*)"[^>]*>/g;
+// One attribute; a quoted value may hold ">" (a Tailwind class such as [&>p]:mt-2).
+const ATTR = String.raw`\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?`;
+// Any Amazon host: www.amazon.com, amazon.com, amazon.co.uk, and the amzn.to and a.co short links. A short link
+// carries no visible tag, so the untagged rule rejects it.
+const AMAZON_HOST = String.raw`(?:[\w-]+\.)*(?:amazon\.[a-z]{2,3}(?:\.[a-z]{2})?|amzn\.[a-z]{2,3}|a\.co)(?=[/?#:"])`;
+const AMAZON_ANCHOR = new RegExp(String.raw`<a(?:${ATTR})*?\s+href="(https?:\/\/${AMAZON_HOST}[^"]*)"(?:${ATTR})*\s*\/?>`, "g");
 
 export function auditHtml(html) {
   const links = [];
@@ -76,7 +82,7 @@ export function disclosureBeforeFirstLink(html) {
   const disclosure = html.indexOf("Paid links: we earn a commission");
   return disclosure !== -1 && disclosure < link;
 }
-const AMAZON_ANCHOR_ANY = /<a\b[^>]*href="https:\/\/www\.amazon\.com/;
+const AMAZON_ANCHOR_ANY = new RegExp(String.raw`<a(?:${ATTR})*?\s+href="https?:\/\/${AMAZON_HOST}`);
 
 function visibleText(html) {
   return html
@@ -113,19 +119,33 @@ export function missingProductWarnings(html, products, window = WARNING_WINDOW) 
   return [...out];
 }
 
-// The buy-plate rule (BLUEPRINT.md §5.5, §6.1): no dollar figure shares its nearest [data-buy-group] ancestor with
-// an a[href*="amazon."]. Amazon allows a price only from its own approved feeds, and a "$120" beside "Check price on
-// Amazon" reads as an Amazon price. The price class ($ to $$$$) is allowed: it has no digit after the sign.
+// The buy-plate rule (BLUEPRINT.md §5.5, §6.1). A buy plate is an element with the data-buy-group attribute. No dollar
+// figure may have a nearest buy plate that also holds an a[href*="amazon."]. Amazon allows a price only from its own
+// approved feeds. A "$120" beside "Check price on Amazon" reads as an Amazon price.
 //
-// Each group's own markup is its element minus any nested group, so a figure counts against the nearest group only.
-// Between the sign and the digit the check allows space, comments (React writes "$<!-- -->129") and inline tags,
-// because a reader still sees "$129" there; a block boundary ends the figure. A group with no closing tag fails.
-// One attribute; a quoted value may hold ">" (a Tailwind class such as [&>p]:mt-2).
-const ATTR = String.raw`\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?`;
+// - The figure belongs to its nearest buy plate: nested plates are blanked before the figure search. The Amazon link
+//   may sit anywhere in that plate, nested plates included.
+// - A figure is one dollar sign, then a digit (or ".99"). Space, comments and inline tags may sit between them,
+//   because a reader still sees "$129" there; React writes "$<!-- -->129". A block tag such as </p> ends the figure.
+// - Two or more dollar signs are the price class ($$ to $$$$), never a figure.
+// - Numeric entities are decoded first, so &#36;129 and $&#49;29 count. A buy plate with no closing tag fails.
 const START_TAG = new RegExp(String.raw`<([a-zA-Z][\w-]*)((?:${ATTR})*)\s*/?>`, "g");
-const AMAZON_HREF = new RegExp(String.raw`<a(?:${ATTR})*?\s+href\s*=\s*["']?[^"'\s>]*(?:amazon\.|amzn\.)`, "i");
-const INLINE = "a|abbr|b|bdi|bdo|code|data|em|i|kbd|mark|output|q|s|samp|small|span|strong|sub|sup|time|u|var";
-const DOLLAR_FIGURE = new RegExp(String.raw`[$\uFF04\uFE69](?:\s|&nbsp;|&#160;|&#xa0;|</?(?:${INLINE})(?:${ATTR})*\s*/?>)*\d`, "i");
+const AMAZON_HREF = new RegExp(String.raw`<a(?:${ATTR})*?\s+href\s*=\s*["']?[^"'\s>]*(?:amazon\.|amzn\.|\/\/a\.co\/)`, "i");
+const BLOCK = "address|article|aside|blockquote|caption|dd|details|dialog|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hgroup|hr|li|main|nav|ol|p|pre|section|summary|table|tbody|td|tfoot|th|thead|tr|ul";
+const SIGN = String.raw`$\uFF04\uFE69`;
+const BETWEEN = String.raw`\s|<\/?(?!(?:${BLOCK})(?=[\s/>]))[a-zA-Z][\w-]*(?:${ATTR})*\s*\/?>`;
+const DOLLAR_FIGURE = new RegExp(String.raw`(?<![${SIGN}])[${SIGN}](?![${SIGN}])(?:${BETWEEN})*\.?\p{Nd}`, "iu");
+const NAMED = { nbsp: "\u00a0", ensp: "\u2002", emsp: "\u2003", thinsp: "\u2009", dollar: "$" };
+
+// Decode numeric entities and a few named ones. Keep <, > and & encoded, so decoding cannot create a tag.
+function decodeForFigures(markup) {
+  return markup
+    .replace(/&#(?:x([0-9a-f]+)|(\d+));/gi, (m, hex, dec) => {
+      const code = hex ? parseInt(hex, 16) : Number(dec);
+      return code === 38 || code === 60 || code === 62 || code > 0x10ffff ? m : String.fromCodePoint(code);
+    })
+    .replace(/&(nbsp|ensp|emsp|thinsp|dollar);/gi, (m, name) => NAMED[name.toLowerCase()]);
+}
 
 function closeOf(dom, name, from) {
   const tag = new RegExp(String.raw`<(/?)${name}(?=[\s/>])(?:${ATTR})*\s*/?>`, "gi");
@@ -155,14 +175,15 @@ export function buyGroupViolations(html) {
       out.push({ rule: "unclosed-buy-group", sample: dom.slice(g.start, g.start + 80) });
       continue;
     }
-    let own = dom.slice(g.start, g.end);
+    const whole = dom.slice(g.start, g.end);
+    if (!AMAZON_HREF.test(whole)) continue;
+    let own = whole;
     for (const inner of groups) {
       if (inner === g || inner.start <= g.start || inner.start >= g.end) continue;
       const stop = inner.end === -1 ? g.end : Math.min(inner.end, g.end);
       own = own.slice(0, inner.start - g.start) + " ".repeat(stop - inner.start) + own.slice(stop - g.start);
     }
-    if (!AMAZON_HREF.test(own)) continue;
-    const decoded = own.replace(/&#0*36;|&#x0*24;|&dollar;/gi, "$");
+    const decoded = decodeForFigures(own);
     const figure = DOLLAR_FIGURE.exec(decoded);
     if (figure) out.push({ rule: "dollar-in-buy-group", sample: decoded.slice(figure.index, figure.index + 60).replace(/\s+/g, " ") });
   }
@@ -273,7 +294,8 @@ async function main() {
   process.stdout.write(`check-affiliates: pass, 0 rule violations in ${pages.length} pages, ${totals.links} paid links and ${buyGroups} buy groups under ${args.dir}\n`);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// pathToFileURL escapes a space in the checkout path; a plain "file://" + path would never match and skip main().
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((error) => {
     process.stderr.write(`link-audit: ${error instanceof Error ? error.message : String(error)}\n`);
     process.exitCode = 1;

@@ -14,8 +14,8 @@ Read [docs/HUB.md](docs/HUB.md) before material changes. Update the affected can
 
 ## E2E and checks
 
-E2E: HTTP smoke of the built site. Run `npm run build && npm run qa`. It serves `out/` with the pinned `wrangler dev` and requests every sitemap URL over HTTP. To check a deployed site, run `node scripts/smoke.mjs --base https://bayheatguide.com`.
+E2E: HTTP smoke of the built site. Run `npm run build && npm run qa`. The smoke serves `out/` with the pinned `wrangler dev` and requests every sitemap URL over HTTP. To check a deployed site, run `node scripts/smoke.mjs --base https://bayheatguide.com`.
 
-Affiliate rule: run `npm run check:affiliates` and then `npm run check:affiliates:control` on the same `out/`. The control runs the CLI on a page copy with `$129` in a buy plate; it must fail there. CI runs all three after the build. README "Checks" lists their limits.
+Affiliate rule: on the same `out/`, run `npm run check:affiliates` and then `npm run check:affiliates:control`. The control runs the CLI on page copies with `$129` in a buy plate. Each of those copies must fail. CI runs `check:affiliates`, `check:affiliates:control` and `qa` after the build. README "Checks" defines the terms and lists the limits.
 
-Do not run `npm run indexnow` as a check. It posts to the IndexNow API. The production healthcheck (`node scripts/healthcheck.mjs`) is read-only.
+Do not run `npm run indexnow` as a check. It posts to the IndexNow API. The production healthcheck (`node scripts/healthcheck.mjs`) only reads.

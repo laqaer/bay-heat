@@ -5,11 +5,9 @@
  *
  *   npm run build && npm run check:affiliates:control
  *
- * It copies one built page with a buy plate from out/ into a temporary directory, changes the copy, and runs
- * `node scripts/link-audit.mjs --check --dir <copy>` for each case:
- * - the unchanged copy must pass, so a failure below comes from the change and not from the copy;
- * - a dollar figure inside the plate must fail, written three ways ($129, React's "$<!-- -->129", &#36;129);
- * - the same figure just before the plate must pass, because the rule covers the plate only.
+ * It copies the built page with the most buy plates from out/ into a temporary directory. A buy plate is an element
+ * with the data-buy-group attribute. It changes the copy and runs `node scripts/link-audit.mjs --check --dir <copy>`
+ * for each case below. Cases that expect exit 1 must also name dollar-in-buy-group in the output.
  * Exit 0 when every case gives the expected result. Exit 1 and print the CLI output for each case that does not.
  */
 import { spawnSync } from "node:child_process";
@@ -20,10 +18,12 @@ import { fileURLToPath } from "node:url";
 
 const OUT = "out";
 const CLI = fileURLToPath(new URL("./link-audit.mjs", import.meta.url));
-const PLATE = /<[a-zA-Z][\w-]*\b[^>]*?\sdata-buy-group(?=[\s=/>])[^>]*>/;
+// A start tag that carries data-buy-group. Quoted attribute values may hold ">".
+const PLATE = /<[a-zA-Z][\w-]*(?:\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?)*?\s+data-buy-group(?=[\s=/>])(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?(?:\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?)*\s*\/?>/g;
+const LINK = '<a href="https://www.amazon.com/dp/B000000000?tag=laqaer-20" rel="sponsored nofollow noopener">Check price on Amazon</a>';
 
-// The first built page with an Amazon link soon after its first plate opens. Plain string checks only. A wrong pick
-// cannot pass: the "inside the plate" cases then exit 0 and the control fails.
+// The built page with the most buy plates. Plain string checks only. A wrong pick cannot pass: the cases that
+// expect exit 1 then exit 0, and the control fails.
 function sourcePage() {
   let names;
   try {
@@ -31,23 +31,40 @@ function sourcePage() {
   } catch {
     throw new Error(`${OUT}/ not found; run npm run build first`);
   }
+  let best = null;
   for (const name of names) {
     const html = readFileSync(join(OUT, name), "utf8");
-    const plate = PLATE.exec(html);
-    if (!plate) continue;
-    if (html.slice(plate.index, plate.index + 6000).includes('href="https://www.amazon.com/')) return { name, html, plate };
+    const plates = [...html.matchAll(PLATE)];
+    if (plates.length > (best?.plates.length ?? 1)) best = { name, html, plates };
   }
-  throw new Error(`no page in ${OUT}/ has a buy plate with an Amazon link; the control has nothing to change`);
+  if (!best) throw new Error(`no page in ${OUT}/ has two or more buy plates; the control has nothing to change`);
+  return best;
 }
 
-const { name, html, plate } = sourcePage();
-const inside = plate.index + plate[0].length;
+const { name, html, plates } = sourcePage();
+const first = plates[0];
+const last = plates[plates.length - 1];
+const at = (m) => m.index + m[0].length; // just inside the buy plate's start tag
+const insert = (pos, text) => html.slice(0, pos) + text + html.slice(pos);
+
 const cases = [
   { id: "unchanged copy", html, expect: 0 },
-  { id: "plain $129 inside the plate", html: html.slice(0, inside) + "<span>$129</span>" + html.slice(inside), expect: 1 },
-  { id: "React-split $<!-- -->129 inside the plate", html: html.slice(0, inside) + "<p>$<!-- -->129</p>" + html.slice(inside), expect: 1 },
-  { id: "entity &#36;129 inside the plate", html: html.slice(0, inside) + "<p>&#36;129</p>" + html.slice(inside), expect: 1 },
-  { id: "$129 just before the plate", html: html.slice(0, plate.index) + "<p>$129</p>" + html.slice(plate.index), expect: 0 },
+  { id: "$129 in the first buy plate", html: insert(at(first), "<span>$129</span>"), expect: 1 },
+  { id: "React-split $<!-- -->129", html: insert(at(first), "<p>$<!-- -->129</p>"), expect: 1 },
+  { id: "entity &#36;129", html: insert(at(first), "<p>&#36;129</p>"), expect: 1 },
+  {
+    id: "$ before the site's number chip (span, button, span)",
+    html: insert(at(first), '<p>Runs about $<span class="not-prose group"><button type="button"><span class="font-mono">129</span></button></span>/yr</p>'),
+    expect: 1,
+  },
+  { id: `$129 in the last buy plate (${plates.length} on the page)`, html: insert(at(last), "<p>$129</p>"), expect: 1 },
+  {
+    id: "$129 in an outer buy plate whose nested buy plate holds the link",
+    html: insert(at(first), `<div data-buy-group="true"><p>Our pick: $129</p><div data-buy-group="true">${LINK}</div></div>`),
+    expect: 1,
+  },
+  { id: "$129 just before the first buy plate", html: insert(first.index, "<p>$129</p>"), expect: 0 },
+  { id: "price class $$ followed by a number", html: insert(at(first), "<p>Price class: $$<!-- --> 240 V</p>"), expect: 0 },
 ];
 
 const root = mkdtempSync(join(tmpdir(), "bayheat-affiliate-control-"));

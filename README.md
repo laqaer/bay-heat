@@ -38,23 +38,28 @@ npm run build
 
 ## Checks
 
-CI (`.github/workflows/ci.yml`) runs these on every pull request. Run them from the repo root after `npm run build`. Each one reads the exported site in `out/`.
+CI (`.github/workflows/ci.yml`) runs these checks on every pull request to `main`. After `npm run build`, run them from the repo root. Each check reads the exported site in `out/`.
+
+Terms:
+- A **buy plate** is an element with the `data-buy-group` attribute. It holds a product and its buy button.
+- The **inline disclosure** is the "Paid links: we earn a commission…" text above the first paid link.
+- The **Amazon Associates line** is the footer sentence "As an Amazon Associate, BayHeat earns from qualifying purchases."
 
 | Command | What it proves |
 | --- | --- |
-| `npm run check:affiliates` | No page in `out/` breaks an affiliate rule. A buy plate (`[data-buy-group]`) with an Amazon link has no dollar figure. Every `www.amazon.com` link has the tag and `rel="sponsored nofollow"`. The disclosure is above the first paid link. A directly linked product shows its manual warning near the button. |
-| `npm run check:affiliates:control` | The check above fails when it should. It copies one built page, puts `$129` inside its buy plate, and runs the same CLI. That copy must fail; the unchanged copy must pass. |
-| `npm run qa` | E2E. It serves `out/` with the pinned `wrangler dev` and requests every sitemap URL over HTTP. Each page must return 200 with its canonical URL, a title, an `h1` and the Amazon Associates line. It also checks `robots.txt`, two 308 redirects and the 404 page. |
+| `npm run check:affiliates` | No page in `out/` breaks an affiliate rule. A buy plate with an Amazon link shows no dollar figure, such as `$129`. The check allows the price class (`$$` to `$$$$`). Each Amazon link has the tag and `rel="sponsored nofollow"`. A short link (`amzn.to`, `a.co`) fails, because it shows no tag. The inline disclosure comes before the first paid link. A directly linked product shows its manual warning near its button. |
+| `npm run check:affiliates:control` | The affiliate check fails when it must. The control copies the built page with the most buy plates. Six copies get a dollar figure inside a buy plate. The forms are plain, React-split, an entity, the site's number chip, the last buy plate and a nested buy plate. The control runs the same CLI on each copy, and each must fail. Three copies must pass: the unchanged copy, `$129` before a buy plate, and a price class. |
+| `npm run qa` | E2E. The smoke serves `out/` with the pinned `wrangler dev`. It requests every sitemap URL over HTTP. Each page must return 200, its canonical URL, a title, an `h1` and the Amazon Associates line. The smoke also checks `robots.txt`, two 308 redirects and the 404 page. |
 | `node scripts/source-audit.mjs` | Each product safety line on a page links or lists its manual. |
 
-`npm run check` runs type generation, typecheck, lint, unit tests, the build and the three `npm` checks above.
+`npm run check` runs type generation, typecheck, lint, unit tests and the build. Then it runs the three `npm` checks above.
 
-To check a running server instead of `out/`, give its origin: `node scripts/smoke.mjs --base https://bayheatguide.com`. It requests only that host. It never requests `amazon.com`.
+To check a running server instead of `out/`, give its origin: `node scripts/smoke.mjs --base https://bayheatguide.com`. The smoke then requests only that host. It never requests `amazon.com`.
 
 Limits:
-- The affiliate check reads static HTML only. A state that the browser renders later (for example a planner result) is not in `out/` and is not checked.
-- CI runs on pull requests only. A direct push to `main` skips these checks.
-- `npm run indexnow` is not a check. It sends URLs to the IndexNow API. Run it only after a production content change (see IndexNow below).
+- The affiliate check reads static HTML only. A state that the browser renders later, such as a planner result, is not in `out/`. The check does not see it.
+- CI runs on pull requests to `main` only. A direct push to `main` skips these checks.
+- `npm run indexnow` is not a check. It sends URLs to the IndexNow API. After a production content change, run it once (see IndexNow below).
 
 ## Deploy on Cloudflare
 
@@ -62,7 +67,7 @@ Limits:
 2. Every push to `main` deploys through `.github/workflows/deploy.yml`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. To deploy by hand: `CLOUDFLARE_ACCOUNT_ID=... npx wrangler@4.135.0 deploy`.
 3. To preview locally: `npm run build && npx wrangler@4.135.0 dev`. That serves `out/` with the same redirects and headers as production.
 4. `bayheatguide.com` moves from Vercel when the Name.com nameservers change. Until then `vercel.json` keeps the redirects and headers on Vercel. The steps are in `docs/cloudflare-migration.md`.
-5. Replace `public/ads.txt` before serving ads.
+5. Before you serve ads, set `ADSENSE_PUB_ID` in the build environment. `app/ads.txt/route.ts` then writes the seller line.
 
 ## IndexNow
 
@@ -80,7 +85,7 @@ That POSTs the homepage, the circuit and heat-type guides that now link to retai
 
 ## Routes
 
-`app/(site)` has 31 page routes. `lib/pages/index.ts` registers each one. The sitemap lists the 30 indexable pages. `/garage-heater-thermostat` is built but stays out of the sitemap until its review is done.
+`app/(site)` has 31 page routes. `lib/pages/index.ts` registers each one. The build exports all 31. The sitemap lists the 30 indexable pages. It leaves out `/garage-heater-thermostat` until that page's review is done.
 
 | Path | Page | Sitemap |
 | --- | --- | --- |
@@ -130,11 +135,13 @@ Generated files and other URLs:
 | `/404` page | `app/not-found.tsx` (`noindex`) |
 | `/96098d06c16790aabec2db1a232fee8f.txt` | `public/`; the IndexNow key file |
 | `/drawings/*.svg` | `public/drawings/` (4 files) |
-| `/r/<code>` | 302 to `/garage-heater-calculator?g=<code>` |
+| `/r/<code>` | Goes to `/garage-heater-calculator?g=<code>`: 302 on Cloudflare (`out/_redirects`), 307 on Vercel (`vercel.json`, `permanent: false`) |
 
-The 16 old URLs in `lib/redirects.ts` answer 308 to their new pages. Examples: `/120v-vs-240v-garage-heater` goes to `/240v-garage-heater`, and `/best-electric-garage-heaters-by-size` goes to `/garage-heater-size`. A path with a trailing slash answers 308 to the path without it. `vercel.json` holds the same rules for Vercel. `scripts/cloudflare-routing.mjs` writes them to `out/_redirects` for Cloudflare.
+The 16 old URLs in `lib/redirects.ts` answer 308 to their new pages. For example, `/120v-vs-240v-garage-heater` goes to `/240v-garage-heater`. `vercel.json` repeats these 16 rules for Vercel. `scripts/cloudflare-routing.mjs` writes them to `out/_redirects` for Cloudflare.
 
-The footer on every page carries the Amazon Associates disclosure. `npm run qa` checks it on every sitemap page.
+A path with a trailing slash answers 308 to the path without it. On Cloudflare, rules in `out/_redirects` do this. Vercel answers the same 308 with no rule in `vercel.json` (observed on 2026-11-07).
+
+The footer on every page carries the Amazon Associates line. `npm run qa` checks it on every sitemap page.
 
 ## Editorial rules
 
