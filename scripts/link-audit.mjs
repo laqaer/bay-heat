@@ -22,9 +22,9 @@
  * (no-paid-link, search-only, past-700px-mobile) are information, not violations. The check reads static HTML
  * only: a state that exists only after client-side rendering (a planner result) is not in out/ and is not checked.
  */
-import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, realpathSync, statSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 
 const RAIL_BUDGET_PX = 700;
 
@@ -52,17 +52,17 @@ function walk(dir) {
 
 // One attribute; a quoted value may hold ">" (a Tailwind class such as [&>p]:mt-2).
 const ATTR = String.raw`\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?`;
-// Any Amazon host: www.amazon.com, amazon.com, amazon.co.uk, and the amzn.to and a.co short links. A short link
-// carries no visible tag, so the untagged rule rejects it.
-const AMAZON_HOST = String.raw`(?:[\w-]+\.)*(?:amazon\.[a-z]{2,3}(?:\.[a-z]{2})?|amzn\.[a-z]{2,3}|a\.co)(?=[/?#:"])`;
-const AMAZON_ANCHOR = new RegExp(String.raw`<a(?:${ATTR})*?\s+href="(https?:\/\/${AMAZON_HOST}[^"]*)"(?:${ATTR})*\s*\/?>`, "g");
+// Any Amazon host, in any letter case, with or without a scheme: www.amazon.com, amazon.com, amazon.co.uk, and the
+// amzn.to, amzn.asia and a.co short links. A short link without a tag= parameter fails the untagged rule.
+const AMAZON_HOST = String.raw`(?:[\w-]+\.)*(?:amazon\.[a-z]{2,3}(?:\.[a-z]{2})?|amzn\.[a-z]{2,4}|a\.co)(?=[/?#:"])`;
+const AMAZON_ANCHOR = new RegExp(String.raw`<a(?:${ATTR})*?\s+href="((?:https?:)?\/\/${AMAZON_HOST}[^"]*)"(?:${ATTR})*\s*\/?>`, "gi");
 
 export function auditHtml(html) {
   const links = [];
   for (const m of html.matchAll(AMAZON_ANCHOR)) {
     const tag = m[0];
     const href = m[1].replace(/&amp;/g, "&");
-    const u = new URL(href);
+    const u = new URL(href, "https://www.amazon.com"); // the base only resolves a protocol-relative //host link
     const dp = /\/dp\/([A-Z0-9]{10})/.exec(u.pathname);
     links.push({
       kind: dp ? "dp" : u.pathname.includes("/cart/add") ? "cart" : "search",
@@ -82,7 +82,7 @@ export function disclosureBeforeFirstLink(html) {
   const disclosure = html.indexOf("Paid links: we earn a commission");
   return disclosure !== -1 && disclosure < link;
 }
-const AMAZON_ANCHOR_ANY = new RegExp(String.raw`<a(?:${ATTR})*?\s+href="https?:\/\/${AMAZON_HOST}`);
+const AMAZON_ANCHOR_ANY = new RegExp(String.raw`<a(?:${ATTR})*?\s+href="(?:https?:)?\/\/${AMAZON_HOST}`, "i");
 
 function visibleText(html) {
   return html
@@ -127,20 +127,23 @@ export function missingProductWarnings(html, products, window = WARNING_WINDOW) 
 //   may sit anywhere in that plate, nested plates included.
 // - A figure is one dollar sign, then a digit (or ".99"). Space, comments and inline tags may sit between them,
 //   because a reader still sees "$129" there; React writes "$<!-- -->129". A block tag such as </p> ends the figure.
-// - Two or more dollar signs are the price class ($$ to $$$$), never a figure.
-// - Numeric entities are decoded first, so &#36;129 and $&#49;29 count. A buy plate with no closing tag fails.
+// - Two or more adjacent dollar signs are a price class ($$ to $$$$), never a figure. A one-sign class ($) followed by
+//   a number in the same line reads as a price, so it fails; end the line after the class.
+// - Numeric entities are decoded first (with or without the closing ";"), so &#36;129 and $&#49;29 count. Zero-width
+//   characters and named entities between the sign and the digit do not hide a figure.
+// - A buy plate with no closing tag fails.
 const START_TAG = new RegExp(String.raw`<([a-zA-Z][\w-]*)((?:${ATTR})*)\s*/?>`, "g");
 const AMAZON_HREF = new RegExp(String.raw`<a(?:${ATTR})*?\s+href\s*=\s*["']?[^"'\s>]*(?:amazon\.|amzn\.|\/\/a\.co\/)`, "i");
 const BLOCK = "address|article|aside|blockquote|caption|dd|details|dialog|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hgroup|hr|li|main|nav|ol|p|pre|section|summary|table|tbody|td|tfoot|th|thead|tr|ul";
 const SIGN = String.raw`$\uFF04\uFE69`;
-const BETWEEN = String.raw`\s|<\/?(?!(?:${BLOCK})(?=[\s/>]))[a-zA-Z][\w-]*(?:${ATTR})*\s*\/?>`;
+const BETWEEN = String.raw`\s|[\u200B-\u200D\u2060\uFEFF]|&[a-zA-Z][a-zA-Z0-9]*;|<\/?(?!(?:${BLOCK})(?=[\s/>]))[a-zA-Z][\w-]*(?:${ATTR})*\s*\/?>`;
 const DOLLAR_FIGURE = new RegExp(String.raw`(?<![${SIGN}])[${SIGN}](?![${SIGN}])(?:${BETWEEN})*\.?\p{Nd}`, "iu");
 const NAMED = { nbsp: "\u00a0", ensp: "\u2002", emsp: "\u2003", thinsp: "\u2009", dollar: "$" };
 
 // Decode numeric entities and a few named ones. Keep <, > and & encoded, so decoding cannot create a tag.
 function decodeForFigures(markup) {
   return markup
-    .replace(/&#(?:x([0-9a-f]+)|(\d+));/gi, (m, hex, dec) => {
+    .replace(/&#(?:x([0-9a-f]+)|(\d+));?/gi, (m, hex, dec) => {
       const code = hex ? parseInt(hex, 16) : Number(dec);
       return code === 38 || code === 60 || code === 62 || code > 0x10ffff ? m : String.fromCodePoint(code);
     })
@@ -294,8 +297,15 @@ async function main() {
   process.stdout.write(`check-affiliates: pass, 0 rule violations in ${pages.length} pages, ${totals.links} paid links and ${buyGroups} buy groups under ${args.dir}\n`);
 }
 
-// pathToFileURL escapes a space in the checkout path; a plain "file://" + path would never match and skip main().
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+// Compare real paths: a space or a symlink in the checkout path must not skip main() and pass silently.
+function isMain() {
+  try {
+    return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+}
+if (process.argv[1] && isMain()) {
   main().catch((error) => {
     process.stderr.write(`link-audit: ${error instanceof Error ? error.message : String(error)}\n`);
     process.exitCode = 1;

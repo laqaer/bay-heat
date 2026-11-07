@@ -10,7 +10,7 @@
  * URL in it. Each page must answer 200 with text/html and no redirect, and its HTML must have:
  * - a <title> that names BayHeat, and an <h1>;
  * - a canonical link equal to the sitemap URL, and no noindex robots meta;
- * - the Amazon Associates line from the footer;
+ * - the Amazon Associates line inside its <footer> (the inline disclosure repeats the sentence, so only the footer counts);
  * - the X-Content-Type-Options: nosniff header.
  * It also checks robots.txt, one old URL's 308, the trailing-slash 308 and the 404 page.
  * It requests only the server under test, never amazon.com or another host. Exit 1 lists every failed check.
@@ -69,11 +69,12 @@ async function attempt(label, check) {
   }
 }
 
-// Stop wrangler dev on Ctrl-C or SIGTERM too. It runs in its own process group, so the signal does not reach it.
+// Stop wrangler dev on Ctrl-C, SIGTERM or SIGHUP too. It runs in its own process group, so the signal does not reach it.
 let stopServer = async () => {};
-for (const signal of ["SIGINT", "SIGTERM"]) {
+const SIGNAL_EXIT = { SIGHUP: 129, SIGINT: 130, SIGTERM: 143 };
+for (const [signal, code] of Object.entries(SIGNAL_EXIT)) {
   process.once(signal, () => {
-    stopServer().finally(() => process.exit(signal === "SIGINT" ? 130 : 143));
+    stopServer().finally(() => process.exit(code));
   });
 }
 
@@ -143,7 +144,8 @@ async function checkPage(base, loc) {
   const canonical = /<link rel="canonical" href="([^"]*)"/.exec(r.markup)?.[1];
   if (!canonical || !sameUrl(canonical, loc)) problems.push(`canonical ${canonical ?? "(none)"}`);
   if (/<meta name="robots" content="[^"]*noindex/.test(r.markup)) problems.push("noindex robots meta");
-  if (!r.markup.includes(ASSOCIATE_LINE)) problems.push("no Amazon Associates line");
+  const footer = /<footer\b[\s\S]*<\/footer>/.exec(r.markup)?.[0] ?? "";
+  if (!footer.includes(ASSOCIATE_LINE)) problems.push("no Amazon Associates line in the footer");
   return { label: `${r.status} ${path}`, problems };
 }
 

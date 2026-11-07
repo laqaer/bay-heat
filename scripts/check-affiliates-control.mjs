@@ -65,6 +65,7 @@ const cases = [
   },
   { id: "$129 just before the first buy plate", html: insert(first.index, "<p>$129</p>"), expect: 0 },
   { id: "price class $$ followed by a number", html: insert(at(first), "<p>Price class: $$<!-- --> 240 V</p>"), expect: 0 },
+  { id: "price class $ at the end of a line, a number on the next", html: insert(at(first), "<p>Price class: $</p><p>5 kW on 240 V</p>"), expect: 0 },
 ];
 
 const root = mkdtempSync(join(tmpdir(), "bayheat-affiliate-control-"));

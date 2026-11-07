@@ -43,13 +43,13 @@ CI (`.github/workflows/ci.yml`) runs these checks on every pull request to `main
 Terms:
 - A **buy plate** is an element with the `data-buy-group` attribute. It holds a product and its buy button.
 - The **inline disclosure** is the "Paid links: we earn a commission…" text above the first paid link.
-- The **Amazon Associates line** is the footer sentence "As an Amazon Associate, BayHeat earns from qualifying purchases."
+- The **Amazon Associates line** is the sentence "As an Amazon Associate, BayHeat earns from qualifying purchases." in the page footer. The inline disclosure repeats it.
 
 | Command | What it proves |
 | --- | --- |
-| `npm run check:affiliates` | No page in `out/` breaks an affiliate rule. A buy plate with an Amazon link shows no dollar figure, such as `$129`. The check allows the price class (`$$` to `$$$$`). Each Amazon link has the tag and `rel="sponsored nofollow"`. A short link (`amzn.to`, `a.co`) fails, because it shows no tag. The inline disclosure comes before the first paid link. A directly linked product shows its manual warning near its button. |
-| `npm run check:affiliates:control` | The affiliate check fails when it must. The control copies the built page with the most buy plates. Six copies get a dollar figure inside a buy plate. The forms are plain, React-split, an entity, the site's number chip, the last buy plate and a nested buy plate. The control runs the same CLI on each copy, and each must fail. Three copies must pass: the unchanged copy, `$129` before a buy plate, and a price class. |
-| `npm run qa` | E2E. The smoke serves `out/` with the pinned `wrangler dev`. It requests every sitemap URL over HTTP. Each page must return 200, its canonical URL, a title, an `h1` and the Amazon Associates line. The smoke also checks `robots.txt`, two 308 redirects and the 404 page. |
+| `npm run check:affiliates` | No page in `out/` breaks an affiliate rule. A buy plate with an Amazon link shows no dollar figure, such as `$129`. The check allows a price class of two to four signs (`$$` to `$$$$`). A one-sign class (`$`) followed by a number on the same line reads as a price, so it fails. Each Amazon link has the tag and `rel="sponsored nofollow"`. A short link (`amzn.to`, `a.co`) without a `tag=` parameter fails. The inline disclosure comes before the first Amazon link. A directly linked product shows its manual warning near its button. |
+| `npm run check:affiliates:control` | The affiliate check fails when it must. The control copies the built page with the most buy plates and makes ten copies. Six copies get a dollar figure inside a buy plate. The six forms are plain, React-split (`$<!-- -->129`), an entity, the number chip, the last buy plate and a nested buy plate. Four copies must pass: the unchanged copy, `$129` before a buy plate, and two price-class cases. The control runs the same CLI on all ten copies. |
+| `npm run qa` | E2E. The smoke serves `out/` with the pinned `wrangler dev`. It requests every sitemap URL over HTTP. Each page must return 200, its canonical URL, a title, an `h1`, and the Amazon Associates line in its footer. The smoke also checks `robots.txt`, two 308 redirects and the 404 page. |
 | `node scripts/source-audit.mjs` | Each product safety line on a page links or lists its manual. |
 
 `npm run check` runs type generation, typecheck, lint, unit tests and the build. Then it runs the three `npm` checks above.
@@ -141,7 +141,7 @@ The 16 old URLs in `lib/redirects.ts` answer 308 to their new pages. For example
 
 A path with a trailing slash answers 308 to the path without it. On Cloudflare, rules in `out/_redirects` do this. Vercel answers the same 308 with no rule in `vercel.json` (observed on 2026-11-07).
 
-The footer on every page carries the Amazon Associates line. `npm run qa` checks it on every sitemap page.
+The footer on every page carries the Amazon Associates line. `npm run qa` checks the footer of every sitemap page.
 
 ## Editorial rules
 

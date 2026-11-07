@@ -1,6 +1,6 @@
 # BayHeat Guide operating record
 
-Updated: 2026-09-26. Another agent should start here, then read `LEDGER.md` and `EXPERIMENT-001.md`.
+Updated: 2026-09-26, with the maintenance guard section from 2026-11-07. Another agent should start here, then read `LEDGER.md` and `EXPERIMENT-001.md`.
 
 ## Mission and offer
 
@@ -32,7 +32,7 @@ Issue [#48](https://github.com/laqaer/bay-heat/issues/48) allows one maintenance
 - `qa` runs the new `scripts/smoke.mjs`. That is an HTTP smoke of every sitemap URL, served by `wrangler dev`.
 - After the build, CI runs `npm run check:affiliates`, its negative control and `npm run qa` on `out/`.
 
-This note records the source change only. It is not a deployment record. The merge, deployment and production-health receipts are on [#49](https://github.com/laqaer/bay-heat/pull/49) and [portfolio-ops#50](https://github.com/laqaer/portfolio-ops/issues/50). Vercel serves bayheatguide.com until the nameserver change ([#32](https://github.com/laqaer/bay-heat/issues/32)).
+This note records the source change only. It is not a deployment record. The merge, deployment and production-health receipts go on [#49](https://github.com/laqaer/bay-heat/pull/49) and [portfolio-ops#50](https://github.com/laqaer/portfolio-ops/issues/50). Vercel serves bayheatguide.com until the nameserver change ([#32](https://github.com/laqaer/bay-heat/issues/32)).
 
 ## Authority and budgets
 
