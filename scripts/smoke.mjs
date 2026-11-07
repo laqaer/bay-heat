@@ -93,19 +93,29 @@ async function startServer() {
   };
   child.stdout.on("data", keep);
   child.stderr.on("data", keep);
+  // A child killed by a signal exits with code null, so keep both fields: exited stays null only while it runs.
   let exited = null;
-  child.on("exit", (code) => {
-    exited = code;
+  child.on("exit", (code, signal) => {
+    exited = { code, signal };
   });
+  // npx exits before wrangler and workerd do, so wait for the whole process group, not only the direct child.
+  const groupAlive = () => {
+    try {
+      process.kill(-child.pid, 0);
+      return true;
+    } catch {
+      return false;
+    }
+  };
   const stop = async () => {
-    if (exited !== null) return;
+    if (!groupAlive()) return;
     try {
       process.kill(-child.pid, "SIGTERM");
     } catch {
       return;
     }
-    for (let i = 0; i < 50 && exited === null; i++) await new Promise((r) => setTimeout(r, 100));
-    if (exited === null) {
+    for (let i = 0; i < 50 && groupAlive(); i++) await new Promise((r) => setTimeout(r, 100));
+    if (groupAlive()) {
       try {
         process.kill(-child.pid, "SIGKILL");
       } catch {
@@ -116,7 +126,10 @@ async function startServer() {
   stopServer = stop;
   const deadline = Date.now() + READY_MS;
   while (Date.now() < deadline) {
-    if (exited !== null) throw new Error(`wrangler dev exited with code ${exited} before it was ready:\n${log}`);
+    if (exited !== null) {
+      const how = exited.signal ? `on ${exited.signal}` : `with code ${exited.code}`;
+      throw new Error(`wrangler dev exited ${how} before it was ready:\n${log}`);
+    }
     try {
       if ((await get(base, "/")).status === 200) return { base, stop };
     } catch {
