@@ -3,49 +3,66 @@
  * Affiliate link audit: what does each built page actually offer a buyer, and where?
  *
  *   npm run build && node scripts/link-audit.mjs                      # static: counts, link kinds, tags, rel
+ *   npm run build && npm run check:affiliates                         # same audit; exits 1 on a rule violation
  *   node scripts/link-audit.mjs --rail http://localhost:3000          # + first paid link position in px
  *   node scripts/link-audit.mjs --json company/research/link-audit.json
  *
- * Static mode reads the prerendered HTML in .next/server/app and never touches the network. Rail mode drives a
+ * Static mode reads the exported HTML in out/ (the directory that deploys; --dir picks another) and never touches
+ * the network. Rail mode drives a
  * running static build (`npm start`, which serves out/ with wrangler dev) with Playwright (resolved from PLAYWRIGHT_MODULE, or the local/global install) and measures
  * how far down the page the first paid link sits at 390x844 and 1440x900 -- the blueprint's "first plate within
  * 700 px" rule (BLUEPRINT.md §3.3), which the model's click-through assumptions rest on.
  *
  * Flags each page: no paid link at all, search-only links (lower intent than a /dp/ link), a link missing the
  * tag or rel="sponsored nofollow", a disclosure that is not above the first paid link, a directly linked
- * product whose own manual warning is not on the page, and a first link past
- * the 700 px budget.
+ * product whose own manual warning is not on the page, a dollar figure in the same [data-buy-group] as an Amazon
+ * link, and a first link past the 700 px budget.
+ *
+ * --check (CI, after the build) exits 1 when any page carries a rule flag (RULE_FLAGS below). The other flags
+ * (no-paid-link, search-only, past-700px-mobile) are information, not violations. The check reads static HTML
+ * only: a state that exists only after client-side rendering (a planner result) is not in out/ and is not checked.
  */
-import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, realpathSync, statSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const RAIL_BUDGET_PX = 700;
 
 function parseArgs(argv) {
-  const out = { dir: ".next/server/app", json: null, rail: null };
+  const out = { dir: "out", json: null, rail: null, check: false };
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--dir") out.dir = argv[++i];
     else if (argv[i] === "--json") out.json = argv[++i];
     else if (argv[i] === "--rail") out.rail = argv[++i];
+    else if (argv[i] === "--check") out.check = true;
+    else throw new Error(`unknown argument: ${argv[i]}`);
   }
+  if (!out.dir) throw new Error("--dir needs a directory");
   return out;
 }
 
+// out/_next holds hashed JS/CSS chunks, never a page.
 function walk(dir) {
   return readdirSync(dir).flatMap((name) => {
     const p = join(dir, name);
-    return statSync(p).isDirectory() ? walk(p) : [p];
+    if (!statSync(p).isDirectory()) return [p];
+    return name === "_next" ? [] : walk(p);
   });
 }
 
-const AMAZON_ANCHOR = /<a\b[^>]*href="(https:\/\/www\.amazon\.com[^"]*)"[^>]*>/g;
+// One attribute; a quoted value may hold ">" (a Tailwind class such as [&>p]:mt-2).
+const ATTR = String.raw`\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?`;
+// Any Amazon host, in any letter case, with or without a scheme: www.amazon.com, amazon.com, amazon.co.uk, and the
+// amzn.to, amzn.asia and a.co short links. A short link without a tag= parameter fails the untagged rule.
+const AMAZON_HOST = String.raw`(?:[\w-]+\.)*(?:amazon\.[a-z]{2,3}(?:\.[a-z]{2})?|amzn\.[a-z]{2,4}|a\.co)(?=[/?#:"])`;
+const AMAZON_ANCHOR = new RegExp(String.raw`<a(?:${ATTR})*?\s+href="((?:https?:)?\/\/${AMAZON_HOST}[^"]*)"(?:${ATTR})*\s*\/?>`, "gi");
 
 export function auditHtml(html) {
   const links = [];
   for (const m of html.matchAll(AMAZON_ANCHOR)) {
     const tag = m[0];
     const href = m[1].replace(/&amp;/g, "&");
-    const u = new URL(href);
+    const u = new URL(href, "https://www.amazon.com"); // the base only resolves a protocol-relative //host link
     const dp = /\/dp\/([A-Z0-9]{10})/.exec(u.pathname);
     links.push({
       kind: dp ? "dp" : u.pathname.includes("/cart/add") ? "cart" : "search",
@@ -65,7 +82,7 @@ export function disclosureBeforeFirstLink(html) {
   const disclosure = html.indexOf("Paid links: we earn a commission");
   return disclosure !== -1 && disclosure < link;
 }
-const AMAZON_ANCHOR_ANY = /<a\b[^>]*href="https:\/\/www\.amazon\.com/;
+const AMAZON_ANCHOR_ANY = new RegExp(String.raw`<a(?:${ATTR})*?\s+href="(?:https?:)?\/\/${AMAZON_HOST}`, "i");
 
 function visibleText(html) {
   return html
@@ -101,6 +118,83 @@ export function missingProductWarnings(html, products, window = WARNING_WINDOW) 
   }
   return [...out];
 }
+
+// The buy-plate rule (BLUEPRINT.md §5.5, §6.1). A buy plate is an element with the data-buy-group attribute. No dollar
+// figure may have a nearest buy plate that also holds an a[href*="amazon."]. Amazon allows a price only from its own
+// approved feeds. A "$120" beside "Check price on Amazon" reads as an Amazon price.
+//
+// - The figure belongs to its nearest buy plate: nested plates are blanked before the figure search. The Amazon link
+//   may sit anywhere in that plate, nested plates included.
+// - A figure is one dollar sign, then a digit (or ".99"). Space, comments and inline tags may sit between them,
+//   because a reader still sees "$129" there; React writes "$<!-- -->129". A block tag such as </p> ends the figure.
+// - Two or more adjacent dollar signs are a price class ($$ to $$$$), never a figure. A one-sign class ($) followed by
+//   a number in the same line reads as a price, so it fails; end the line after the class.
+// - Numeric entities are decoded first (with or without the closing ";"), so &#36;129 and $&#49;29 count. Zero-width
+//   characters and named entities between the sign and the digit do not hide a figure.
+// - A buy plate with no closing tag fails.
+const START_TAG = new RegExp(String.raw`<([a-zA-Z][\w-]*)((?:${ATTR})*)\s*/?>`, "g");
+const AMAZON_HREF = new RegExp(String.raw`<a(?:${ATTR})*?\s+href\s*=\s*["']?[^"'\s>]*(?:amazon\.|amzn\.|\/\/a\.co\/)`, "i");
+const BLOCK = "address|article|aside|blockquote|caption|dd|details|dialog|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hgroup|hr|li|main|nav|ol|p|pre|section|summary|table|tbody|td|tfoot|th|thead|tr|ul";
+const SIGN = String.raw`$\uFF04\uFE69`;
+const BETWEEN = String.raw`\s|[\u200B-\u200D\u2060\uFEFF]|&[a-zA-Z][a-zA-Z0-9]*;|<\/?(?!(?:${BLOCK})(?=[\s/>]))[a-zA-Z][\w-]*(?:${ATTR})*\s*\/?>`;
+const DOLLAR_FIGURE = new RegExp(String.raw`(?<![${SIGN}])[${SIGN}](?![${SIGN}])(?:${BETWEEN})*\.?\p{Nd}`, "iu");
+const NAMED = { nbsp: "\u00a0", ensp: "\u2002", emsp: "\u2003", thinsp: "\u2009", dollar: "$" };
+
+// Decode numeric entities and a few named ones. Keep <, > and & encoded, so decoding cannot create a tag.
+function decodeForFigures(markup) {
+  return markup
+    .replace(/&#(?:x([0-9a-f]+)|(\d+));?/gi, (m, hex, dec) => {
+      const code = hex ? parseInt(hex, 16) : Number(dec);
+      return code === 38 || code === 60 || code === 62 || code > 0x10ffff ? m : String.fromCodePoint(code);
+    })
+    .replace(/&(nbsp|ensp|emsp|thinsp|dollar);/gi, (m, name) => NAMED[name.toLowerCase()]);
+}
+
+function closeOf(dom, name, from) {
+  const tag = new RegExp(String.raw`<(/?)${name}(?=[\s/>])(?:${ATTR})*\s*/?>`, "gi");
+  tag.lastIndex = from;
+  let depth = 1;
+  for (let m = tag.exec(dom); m; m = tag.exec(dom)) {
+    if (m[1]) depth--;
+    else if (!m[0].endsWith("/>")) depth++;
+    if (depth === 0) return m.index + m[0].length;
+  }
+  return -1;
+}
+
+export function buyGroupViolations(html) {
+  // Keep offsets: blank script and style bodies (the RSC payload repeats every string) and comments.
+  const dom = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<!--[\s\S]*?-->/g, (m) => " ".repeat(m.length));
+  const groups = [];
+  for (const m of dom.matchAll(START_TAG)) {
+    if (!/\sdata-buy-group(?=[\s=]|$)/.test(m[2])) continue;
+    const start = m.index;
+    const end = closeOf(dom, m[1], start + m[0].length);
+    groups.push({ start, end });
+  }
+  const out = [];
+  for (const g of groups) {
+    if (g.end === -1) {
+      out.push({ rule: "unclosed-buy-group", sample: dom.slice(g.start, g.start + 80) });
+      continue;
+    }
+    const whole = dom.slice(g.start, g.end);
+    if (!AMAZON_HREF.test(whole)) continue;
+    let own = whole;
+    for (const inner of groups) {
+      if (inner === g || inner.start <= g.start || inner.start >= g.end) continue;
+      const stop = inner.end === -1 ? g.end : Math.min(inner.end, g.end);
+      own = own.slice(0, inner.start - g.start) + " ".repeat(stop - inner.start) + own.slice(stop - g.start);
+    }
+    const decoded = decodeForFigures(own);
+    const figure = DOLLAR_FIGURE.exec(decoded);
+    if (figure) out.push({ rule: "dollar-in-buy-group", sample: decoded.slice(figure.index, figure.index + 60).replace(/\s+/g, " ") });
+  }
+  return { groups: groups.length, violations: out };
+}
+
+// Flags that break a rule. --check fails on any of them; every other flag is information.
+const RULE_FLAGS = /^(dollar-in-buy-group|unclosed-buy-group|disclosure-after-link|untagged|missing-rel|missing-product-warning:.+)$/;
 
 async function loadPlaywright() {
   const candidates = [process.env.PLAYWRIGHT_MODULE, "playwright", "/opt/node22/lib/node_modules/playwright/index.js"].filter(Boolean);
@@ -140,11 +234,19 @@ async function main() {
   const { ALL_PRODUCTS } = await import("../lib/commerce/products/index.ts");
   const files = walk(args.dir).filter((f) => f.endsWith(".html") && !/_not-found|_global-error/.test(f));
   const pages = [];
+  const details = [];
+  let buyGroups = 0;
   for (const f of files) {
     const route = "/" + relative(args.dir, f).replace(/\.html$/, "").replace(/^index$/, "");
     const html = readFileSync(f, "utf8");
     const links = auditHtml(html);
     const flags = [];
+    const plates = buyGroupViolations(html);
+    buyGroups += plates.groups;
+    for (const v of plates.violations) {
+      if (!flags.includes(v.rule)) flags.push(v.rule);
+      details.push(`${route}: ${v.rule}: ${JSON.stringify(v.sample)}`);
+    }
     if (!disclosureBeforeFirstLink(html)) flags.push("disclosure-after-link");
     for (const id of missingProductWarnings(html, ALL_PRODUCTS)) flags.push(`missing-product-warning:${id}`);
     if (links.length === 0) flags.push("no-paid-link");
@@ -181,6 +283,31 @@ async function main() {
   }
   process.stdout.write(`\nTOTAL ${totals.links} paid links: ${totals.dp} direct /dp/, ${totals.search} search, ${totals.cart} cart, across ${pages.filter((p) => p.links > 0).length} of ${pages.length} pages\n`);
   if (args.json) writeFileSync(args.json, JSON.stringify({ auditedAt: new Date().toISOString(), totals, pages }, null, 2));
+  if (!args.check) return;
+
+  // An empty or wrong directory must not pass as "no violations".
+  if (pages.length === 0) throw new Error(`no HTML pages under ${args.dir}; run npm run build first`);
+  const failing = pages.flatMap((p) => p.flags.filter((flag) => RULE_FLAGS.test(flag)).map((flag) => `${p.route}: ${flag}`));
+  if (failing.length > 0) {
+    process.stderr.write(`\ncheck-affiliates: FAIL, ${failing.length} rule violation(s) in ${args.dir}:\n`);
+    for (const line of [...failing, ...details]) process.stderr.write(`  ${line}\n`);
+    process.exitCode = 1;
+    return;
+  }
+  process.stdout.write(`check-affiliates: pass, 0 rule violations in ${pages.length} pages, ${totals.links} paid links and ${buyGroups} buy groups under ${args.dir}\n`);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) main();
+// Compare real paths: a space or a symlink in the checkout path must not skip main() and pass silently.
+function isMain() {
+  try {
+    return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+}
+if (process.argv[1] && isMain()) {
+  main().catch((error) => {
+    process.stderr.write(`link-audit: ${error instanceof Error ? error.message : String(error)}\n`);
+    process.exitCode = 1;
+  });
+}

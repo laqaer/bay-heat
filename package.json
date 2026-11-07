@@ -13,12 +13,10 @@
     "typecheck": "tsc --noEmit",
     "indexnow": "node scripts/indexnow.mjs",
     "test": "node --test 'lib/**/*.test.ts' 'scripts/*.test.mjs'",
-    "check": "npm run typegen && npm run typecheck && npm run lint && npm test && npm run build",
-    "posters": "node scripts/bake-posters.ts",
-    "index:build": "node scripts/build-index.ts",
-    "zip3:build": "node scripts/build-zip3.ts",
+    "check": "npm run typegen && npm run typecheck && npm run lint && npm test && npm run build && npm run check:affiliates && npm run check:affiliates:control && npm run qa",
     "qa": "node scripts/smoke.mjs",
-    "lint:content": "node scripts/check-affiliates.ts && node scripts/anti-slop.ts && node scripts/evidence-lint.ts",
+    "check:affiliates": "node scripts/link-audit.mjs --check --dir out",
+    "check:affiliates:control": "node scripts/check-affiliates-control.mjs",
     "check:editorial": "node scripts/editorial-gate.mjs"
   },
   "dependencies": {

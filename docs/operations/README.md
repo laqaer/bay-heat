@@ -1,6 +1,6 @@
 # BayHeat Guide operating record
 
-Updated: 2026-09-26. Another agent should start here, then read `LEDGER.md` and `EXPERIMENT-001.md`.
+Updated: 2026-09-26, with the maintenance guard section from 2026-11-07. Another agent should start here, then read `LEDGER.md` and `EXPERIMENT-001.md`.
 
 ## Mission and offer
 
@@ -22,6 +22,17 @@ Primary channel: organic search. Paid acquisition is not authorized.
 - IndexNow key file is live at `/96098d06c16790aabec2db1a232fee8f.txt`.
 - Search Console mail for the domain arrives at `add461977@gmail.com`. The OpenSEO project `017c97c0-1bce-4fed-ab1c-c17b8047cf6c` does not have Search Console or Google Analytics connected. OpenSEO credits: 0.
 - `laqaer/agent-prompts` was not found. `laqaer/junction` is a local coding-agent control plane, not this site’s ledger. It is not a dependency.
+
+## Maintenance guard (2026-11-07)
+
+Issue [#48](https://github.com/laqaer/bay-heat/issues/48) allows one maintenance PR whether the owner chooses keep or park. That PR is [#49](https://github.com/laqaer/bay-heat/pull/49). Campaign task: [portfolio-ops#50](https://github.com/laqaer/portfolio-ops/issues/50). The PR changes no page, price, product or business direction.
+
+- Before #49, `package.json` named seven files that never existed in this repository's history. [#21](https://github.com/laqaer/bay-heat/pull/21) ([`006dd3d`](https://github.com/laqaer/bay-heat/commit/006dd3d)) added the scripts that named them.
+- #49 removes `posters`, `index:build` and `zip3:build`. It replaces `lint:content` with `check:affiliates`. It does not write the anti-slop and evidence-lint scripts.
+- `qa` runs the new `scripts/smoke.mjs`. That is an HTTP smoke of every sitemap URL, served by `wrangler dev`.
+- After the build, CI runs `npm run check:affiliates`, its negative control and `npm run qa` on `out/`.
+
+This note records the source change only. It is not a deployment record. The merge, deployment and production-health receipts go on [#49](https://github.com/laqaer/bay-heat/pull/49) and [portfolio-ops#50](https://github.com/laqaer/portfolio-ops/issues/50). Vercel serves bayheatguide.com until the nameserver change ([#32](https://github.com/laqaer/bay-heat/issues/32)).
 
 ## Authority and budgets
 
