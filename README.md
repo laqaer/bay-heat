@@ -3,7 +3,7 @@
 Boring comparison site for electric garage and workshop heaters: 120V vs 240V, hardwired vs plug-in, forced-air vs infrared, portable vs ceiling-mount, wall vs ceiling, seal-first vs more watts, operating cost (watts × hours × your rate), and electric vs propane.
 
 **Brand:** BayHeat Guide  
-**Domain:** [bayheatguide.com](https://bayheatguide.com) (served by Vercel until the nameserver cutover; the same build runs on Cloudflare at [bay-heat.laqaer-products.workers.dev](https://bay-heat.laqaer-products.workers.dev). See `docs/cloudflare-migration.md`)  
+**Domain:** [bayheatguide.com](https://bayheatguide.com) (served by Vercel until the nameserver cutover. An older build with an unknown revision runs on Cloudflare at [bay-heat.laqaer-products.workers.dev](https://bay-heat.laqaer-products.workers.dev). See `docs/cloudflare-migration.md`)  
 **Contact:** [hello@bayheatguide.com](mailto:hello@bayheatguide.com)  
 **Publisher:** Laqaer Products
 
@@ -64,7 +64,7 @@ Limits:
 ## Deploy on Cloudflare
 
 1. `npm run build` runs `next build` (static export to `out/`) and then `scripts/cloudflare-routing.mjs`, which writes `out/_redirects` (from `lib/redirects.ts`) and `out/_headers`.
-2. Every push to `main` deploys through `.github/workflows/deploy.yml`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. To deploy by hand: `CLOUDFLARE_ACCOUNT_ID=... npx wrangler@4.135.0 deploy`.
+2. Every push to `main` runs `.github/workflows/deploy.yml`. It uploads only when the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` exist. They are not set: all 21 runs from 2026-10-09 to 2026-11-07 built the site and skipped the Deploy step. A green run does not prove a deploy, so read its Deploy step. To deploy by hand: `CLOUDFLARE_ACCOUNT_ID=... npx wrangler@4.135.0 deploy`.
 3. To preview locally: `npm run build && npx wrangler@4.135.0 dev`. That serves `out/` with the same redirects and headers as production.
 4. `bayheatguide.com` moves from Vercel when the Name.com nameservers change. Until then `vercel.json` keeps the redirects and headers on Vercel. The steps are in `docs/cloudflare-migration.md`.
 5. Before you serve ads, set `ADSENSE_PUB_ID` in the build environment. `app/ads.txt/route.ts` then writes the seller line.
