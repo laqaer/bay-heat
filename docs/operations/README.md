@@ -23,6 +23,16 @@ Primary channel: organic search. Paid acquisition is not authorized.
 - Search Console mail for the domain arrives at `add461977@gmail.com`. The OpenSEO project `017c97c0-1bce-4fed-ab1c-c17b8047cf6c` does not have Search Console or Google Analytics connected. OpenSEO credits: 0.
 - `laqaer/agent-prompts` was not found. `laqaer/junction` is a local coding-agent control plane, not this site’s ledger. It is not a dependency.
 
+## Maintenance guard (2026-11-07)
+
+Issue [#48](https://github.com/laqaer/bay-heat/issues/48) allows one maintenance PR whether the owner chooses keep or park. Campaign task: [portfolio-ops#50](https://github.com/laqaer/portfolio-ops/issues/50). The PR changes no page, price, product or business direction.
+
+- `package.json` names only files that exist. Seven named files never existed in this repository's history; #21 (`006dd3d`) added the scripts that named them. `posters`, `index:build` and `zip3:build` are removed. `lint:content` is replaced by `check:affiliates`; its anti-slop and evidence-lint files are not written. `qa` now runs `scripts/smoke.mjs`.
+- CI runs `npm run check:affiliates` and its negative control after the build, on `out/`.
+- CI runs `npm run qa`: an HTTP smoke of every sitemap URL, served by `wrangler dev`.
+
+The PR and portfolio-ops#50 hold the merge, deployment and production-health receipts for this change. Vercel serves bayheatguide.com until the nameserver change ([#32](https://github.com/laqaer/bay-heat/issues/32)).
+
 ## Authority and budgets
 
 New discretionary spend: **$0**. Do not buy ads, credits, domains, or plan upgrades. Do not enable Vercel excess billing. Do not subscribe the Cloudflare zone to a paid plan, transfer `bayheatguide.com` onto Cloudflare Registrar, or enable Email Sending.

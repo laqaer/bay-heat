@@ -51,8 +51,18 @@ jobs:
             test -s "$f" || { echo "::error::missing $f"; exit 1; }
           done
           grep -q "^/r/:code " out/_redirects
+      # The affiliate rules on the exported pages in out/: no dollar figure in a buy plate ([data-buy-group]) with an
+      # Amazon link, plus tag, rel, disclosure and manual-warning checks. Then prove the check fails when a copy of a
+      # built page gets a dollar figure inside its plate (the negative control drives the same CLI).
+      - name: Affiliate rule check
+        run: npm run check:affiliates
+      - name: Affiliate rule negative control
+        run: npm run check:affiliates:control
       # Every product safety line a page shows must list its manual in that page's Sources.
       - name: Source audit
         run: node scripts/source-audit.mjs
+      # E2E: serve out/ with wrangler dev and request every sitemap URL over HTTP (status, canonical, disclosure).
+      - name: HTTP smoke of every sitemap URL
+        run: npm run qa
       - name: Validate Worker config
         run: npx --yes wrangler@4.135.0 deploy --dry-run --outdir "$RUNNER_TEMP/wrangler-dry-run"
