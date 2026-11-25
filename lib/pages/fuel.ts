@@ -1,4 +1,5 @@
 import type { PageEntry } from "./types.ts";
+import { SEASONAL_UPDATED } from "./seasonal.ts";
 
 export const PAGES: PageEntry[] = [
   {
@@ -15,7 +16,7 @@ export const PAGES: PageEntry[] = [
     reviewed: null,
     indexable: true,
     published: "2026-10-02",
-    updated: "2026-10-09",
+    updated: SEASONAL_UPDATED,
     rev: 2,
   },
   {
@@ -32,7 +33,7 @@ export const PAGES: PageEntry[] = [
     reviewed: null,
     indexable: true,
     published: "2026-10-02",
-    updated: "2026-10-09",
+    updated: SEASONAL_UPDATED,
     rev: 2,
   },
   {

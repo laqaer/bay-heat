@@ -1,0 +1,77 @@
+URL: http://127.0.0.1:4317/garage-door-bottom-seal
+TITLE: Garage door bottom seals: match the retainer, close the gap, cut the draft · BayHeat
+H1: Garage door bottom seals
+CANONICAL: https://bayheatguide.com/garage-door-bottom-seal
+JSON_LD: WebSite, Organization, BreadcrumbList, Article
+
+HEADINGS
+H1: Garage door bottom seals
+H2: Which seal fits your track
+H2: What sealing the bottom actually saves
+H2: Buy the right seal
+H2: What not to buy
+H2: Related
+
+NAVS
+NAV[Primary]: Planner -> /garage-heater-calculator | Shop heaters -> /shop-heater | Size chart -> /garage-heater-size | Best picks -> /best-garage-heater | Electric -> /electric-garage-heater | 240V -> /240v-garage-heater | Portable -> /portable-garage-heater | Ceiling -> /ceiling-mount-garage-heater | Wall-mount -> /best-wall-mount-garage-heaters | All fuels -> /garage-heaters | Infrared -> /infrared-garage-heater | Diesel -> /diesel-heater-for-garage | Propane -> /propane-heater-for-garage | Electric vs propane -> /electric-vs-propane-garage-heater | Mini-split -> /heat-pump-mini-split-for-garage | Natural gas -> /natural-gas-garage-heater | Bottom seal -> /garage-door-bottom-seal | Weather stripping -> /garage-door-weather-stripping | Door insulation kit -> /garage-door-insulation-kit | How to insulate -> /how-to-insulate-a-garage | Can I Run It? -> /can-i-run-it | The Lab -> /lab
+NAV[Breadcrumb]: Home -> /
+
+LINKS
+Skip to content -> #main
+BAYHEAT GARAGE CLIMATE LAB -> /
+Planner -> /garage-heater-calculator
+Shop heaters -> /shop-heater
+Size chart -> /garage-heater-size
+Best picks -> /best-garage-heater
+Electric -> /electric-garage-heater
+240V -> /240v-garage-heater
+Portable -> /portable-garage-heater
+Ceiling -> /ceiling-mount-garage-heater
+Wall-mount -> /best-wall-mount-garage-heaters
+All fuels -> /garage-heaters
+Infrared -> /infrared-garage-heater
+Diesel -> /diesel-heater-for-garage
+Propane -> /propane-heater-for-garage
+Electric vs propane -> /electric-vs-propane-garage-heater
+Mini-split -> /heat-pump-mini-split-for-garage
+Natural gas -> /natural-gas-garage-heater
+Bottom seal -> /garage-door-bottom-seal
+Weather stripping -> /garage-door-weather-stripping
+Door insulation kit -> /garage-door-insulation-kit
+How to insulate -> /how-to-insulate-a-garage
+Can I Run It? -> /can-i-run-it
+The Lab -> /lab
+Size my garage -> /garage-heater-calculator
+Home -> /
+Report a problem -> mailto:hello@bayheatguide.com?subject=Correction:%20
+Check today&#x27;s price ↗ -> https://www.amazon.com/dp/B07P55PSW1?tag=laqaer-20
+See every seal type ↓ -> #buy
+Report a problem -> mailto:hello@bayheatguide.com?subject=Correction:%20
+Report a problem -> mailto:hello@bayheatguide.com?subject=Correction:%20
+full weather-stripping page -> /garage-door-weather-stripping
+Check today&#x27;s price ↗ -> https://www.amazon.com/dp/B07P43LTYH?tag=laqaer-20
+Check today&#x27;s price ↗ -> https://www.amazon.com/dp/B07P55PSW1?tag=laqaer-20
+Check today&#x27;s price ↗ -> https://www.amazon.com/dp/B0C9952GSX?tag=laqaer-20
+Check today&#x27;s price ↗ -> https://www.amazon.com/dp/B0D9Y1NWCT?tag=laqaer-20
+Weather stripping The perimeter stop seal, bottom seal and service-door kit that stop the biggest air leaks around a garage door — with the computed BTU/h it saves. -> /garage-door-weather-stripping
+Door insulation kit EPS and reflective kits for a steel garage door, what they change about your heat load, and when a bare ceiling means a kit barely helps. -> /garage-door-insulation-kit
+How to insulate Seal, then the door, then the ceiling — the order that pays back fastest, with a worked example: $675 of fixes cuts a 10 kW heater to 5 kW. -> /how-to-insulate-a-garage
+Planner A ZIP code and five taps give you the heat load, the heater that fits, the breaker it needs, the cost per hour and the warm-up time — with every formula shown. -> /garage-heater-calculator
+Size it -> /garage-heater-calculator
+Power it -> /240v-garage-heater
+Price it -> /cost-to-heat-a-garage
+Fix it -> /how-to-insulate-a-garage
+Planner -> /garage-heater-calculator
+Can I Run It? -> /can-i-run-it
+Garage Heat Index -> /cost-to-heat-a-garage
+Methodology -> /garage-heater-calculator/methodology
+Lab -> /lab
+BH-001 -> /lab/reports/bh-001-the-4x-problem
+Notebook & corrections -> /lab/notebook
+How we work -> /how-we-work
+About -> /about
+How we make money -> /how-we-work#money
+Privacy -> /privacy
+hello@bayheatguide.com -> mailto:hello@bayheatguide.com
+2026-10-09 -> /lab/notebook
+Size my garage — 60 s -> /garage-heater-calculator

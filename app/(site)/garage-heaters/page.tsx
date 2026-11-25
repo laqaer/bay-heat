@@ -5,7 +5,8 @@ import { AnswerBlock } from "@/components/evidence/AnswerBlock";
 import { Num } from "@/components/evidence/Num";
 import { Cost } from "@/components/commerce/Cost";
 import { Disclosure } from "@/components/commerce/Disclosure";
-import { QuickPick } from "@/components/commerce/QuickPick";
+import { SeasonalFreshness, SeasonalPick } from "@/lib/pages/seasonal-freshness";
+import { amazonCtaText } from "@/lib/pages/seasonal";
 import { BuyButton, ButtonLink } from "@/components/ui/ButtonLink";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { pageMetadata } from "@/lib/seo";
@@ -62,6 +63,7 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={sources}>
+      <SeasonalFreshness entry={entry} />
       <AnswerBlock>
         For BayHeat&apos;s standard 24×24 ft attached 2-car garage in Chicago, holding it at{" "}
         <Num v={EXAMPLE_A_INPUT.targetTemp} unit="°F" ev="S" src="EXAMPLE_A_INPUT.targetTemp — lib/planner/fixtures.ts" /> costs about{" "}
@@ -70,7 +72,7 @@ export default function Page() {
         diesel, in season. Your own garage and your own state&apos;s prices change both numbers — the calculator below runs them live.
       </AnswerBlock>
 
-      <QuickPick
+      <SeasonalPick
         productId="cz220-5kw-ceiling"
         page={entry.href}
         headline="A 5 kW ceiling heater on a 30 A circuit: enough for our example 2-car garage once it is sealed and insulated."
@@ -173,7 +175,7 @@ export default function Page() {
               {product.safetyLine ? <p className="mt-2 text-xs text-(--color-alarm)" data-source={product.safetyLine.sourceId}>{product.safetyLine.text}</p> : null}
               <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {product.priceClass}</p>
               <div className="mt-3">
-                <BuyButton href={primary.href}>{primary.label}</BuyButton>
+                <BuyButton href={primary.href}>{amazonCtaText(primary.partner, primary.label)}</BuyButton>
               </div>
             </div>
           );

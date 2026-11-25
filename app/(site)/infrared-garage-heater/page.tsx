@@ -5,7 +5,8 @@ import { Num } from "@/components/evidence/Num";
 import { Callout } from "@/components/ui/Callout";
 import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { Disclosure } from "@/components/commerce/Disclosure";
-import { QuickPick } from "@/components/commerce/QuickPick";
+import { SeasonalFreshness, SeasonalPick } from "@/lib/pages/seasonal-freshness";
+import { AMAZON_CTA, amazonCtaText } from "@/lib/pages/seasonal";
 import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { WhyNot } from "@/components/commerce/WhyNot";
 import { pageMetadata } from "@/lib/seo";
@@ -36,6 +37,9 @@ export default function Page() {
   const hs1500tt = findProduct("hs1500tt-wall-infrared")!;
   const dr238 = findProduct("dr238-1500w-infrared")!;
   const irTube = findProduct("e-ir-240-generic")!;
+  const hsLink = route(hs1500tt, "site", entry.href)[0];
+  const drLink = route(dr238, "site", entry.href)[0];
+  const tubeLink = route(irTube, "site", entry.href)[0];
   const irWallClass = heaterClass("e_ir_wall_1500");
   const irTubeClass = heaterClass("e_ir_240");
   const irTubeCircuit = classCircuit(irTubeClass)!;
@@ -44,7 +48,8 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={sources}>
-      <QuickPick
+      <SeasonalFreshness entry={entry} />
+      <SeasonalPick
         productId="dr238-1500w-infrared"
         page={entry.href}
         headline="For one bay or a workbench on a 120 V outlet with nothing else on that circuit: 1.5 kW carbon infrared. It mounts high, so check your ceiling height first."
@@ -110,11 +115,11 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)" data-source={hs1500tt.safetyLine?.sourceId}>{hs1500tt.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(hs1500tt, "site", entry.href)[0].href}>{route(hs1500tt, "site", entry.href)[0].label}</BuyButton>
+            <BuyButton href={hsLink.href}>{amazonCtaText(hsLink.partner, hsLink.label)}</BuyButton>
           </div>
           <p className="mt-3 text-sm text-(--color-fg-2)">
             Or the Dr. Infrared DR-238 (<Num f="dr238.watts" />, mounts at <Num f="dr238.mount_height_in" /> or higher):{" "}
-            <BuyTextLink href={route(dr238, "site", entry.href)[0].href}>{route(dr238, "site", entry.href)[0].label} ↗</BuyTextLink>
+            <BuyTextLink href={drLink.href}>{amazonCtaText(drLink.partner, drLink.label)}</BuyTextLink>
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)" data-source={dr238.safetyLine?.sourceId}>{dr238.safetyLine?.text}</p>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {hs1500tt.priceClass}</p>
@@ -132,7 +137,7 @@ export default function Page() {
           </p>
           <p className="mt-2 text-xs text-(--color-alarm)" data-source={irTube.safetyLine?.sourceId}>{irTube.safetyLine?.text}</p>
           <div className="mt-3">
-            <BuyButton href={route(irTube, "site", entry.href)[0].href}>Search on Amazon</BuyButton>
+            <BuyButton href={tubeLink.href}>{tubeLink.partner === "amazon" ? AMAZON_CTA : "Search on Amazon"}</BuyButton>
           </div>
           <p className="mt-2 font-mono text-xs text-(--color-fg-2)">Price class: {irTube.priceClass}</p>
         </div>

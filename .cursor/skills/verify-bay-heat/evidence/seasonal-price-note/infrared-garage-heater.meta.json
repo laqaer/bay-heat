@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-11-25T00:46:33.270Z",
+  "status": 200,
+  "url": "http://127.0.0.1:4317/infrared-garage-heater",
+  "contentType": "text/html; charset=utf-8",
+  "title": "Infrared vs forced-air garage heaters: which one wins with the door open · BayHeat",
+  "h1": "Infrared garage heaters",
+  "canonical": "https://bayheatguide.com/infrared-garage-heater",
+  "jsonLdTypes": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "Article"
+  ]
+}

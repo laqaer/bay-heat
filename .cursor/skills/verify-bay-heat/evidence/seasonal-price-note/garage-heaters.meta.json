@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-11-25T00:48:03.624Z",
+  "status": 200,
+  "url": "http://127.0.0.1:4317/garage-heaters",
+  "contentType": "text/html; charset=utf-8",
+  "title": "Garage heaters by fuel: electric, gas, propane, diesel or heat pump, at your prices · BayHeat",
+  "h1": "Garage heaters by fuel",
+  "canonical": "https://bayheatguide.com/garage-heaters",
+  "jsonLdTypes": [
+    "WebSite",
+    "Organization",
+    "BreadcrumbList",
+    "Article"
+  ]
+}

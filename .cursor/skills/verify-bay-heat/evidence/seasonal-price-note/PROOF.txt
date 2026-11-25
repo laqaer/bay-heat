@@ -1,0 +1,4 @@
+feature id: seasonal-price-note
+entry: Infrared, Bottom seal, and All fuels from /
+command: BAYHEAT_PORT=4317 BAYHEAT_HOST=127.0.0.1 .cursor/skills/verify-bay-heat/helpers/bay-heat follow --from / --name "Infrared|Bottom seal|All fuels"
+result: each follow returned HTTP 200 with the price note, Updated 2026-11-24, Check today's price, Article dateModified 2026-11-24, and tag=laqaer-20
