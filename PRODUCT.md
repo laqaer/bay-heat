@@ -26,7 +26,8 @@ The reader opens a guide or the planner, checks a ZIP or a circuit, and may foll
 
 Confirmed by the task and the repo:
 
-- Static Next.js site. Content, titles, meta, canonicals, JSON-LD, headings, and the sitemap stay as they are.
+- Static Next.js site. Titles, meta, canonicals, and headings stay as they are.
+- BH-BF-FRESH-001 is in source and is not deployed. `/best-infrared-garage-heaters` redirects to `/infrared-garage-heater`. That page, `/garage-door-bottom-seal`, and `/garage-heaters` show one note that Black Friday and holiday prices change daily. Amazon buttons on those pages read Check today's price. Article `dateModified` and the visible Updated line use `updated`, which is `2026-11-24`. Href, tag, and rel are unchanged. There are no new ASINs. `lib/pages/seasonal.test.ts` and verify-bay-heat cover the change.
 - Amazon links keep `tag=laqaer-20`.
 - No invented statistics.
 - Visual work is CSS, SVG, or a tiny canvas. No new heavy dependencies. `$0`.

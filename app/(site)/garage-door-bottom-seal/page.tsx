@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
 import { AnswerBlock } from "@/components/evidence/AnswerBlock";
-import { QuickPick } from "@/components/commerce/QuickPick";
+import { SeasonalFreshness, SeasonalPick } from "@/lib/pages/seasonal-freshness";
+import { amazonCtaText } from "@/lib/pages/seasonal";
 import { Num } from "@/components/evidence/Num";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { Cost } from "@/components/commerce/Cost";
@@ -50,6 +51,7 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={[]}>
+      <SeasonalFreshness entry={entry} />
       <AnswerBlock>
         A worn bottom seal on a 16 ft door is a small, cheap fix: sealing it on our standard 24×24 ft two-car
         worked example cuts about{" "}
@@ -58,7 +60,7 @@ export default function Page() {
         brand — match the track you already have, or the seal won&apos;t hold.
       </AnswerBlock>
 
-      <QuickPick
+      <SeasonalPick
         productId="seal-bottom-t-16ft"
         page={entry.href}
         headline="For a standard 16 ft double door with a flat retainer channel: a 1/4 in T-style seal. Single door? The 8 ft length is in the list below."
@@ -116,7 +118,7 @@ export default function Page() {
             <p className="font-medium text-(--color-fg)">{product.name}</p>
             <p className="mt-1 font-mono text-xs text-(--color-fg-2)">Price class: {product.priceClass}</p>
             <div className="mt-3">
-              {primary ? <BuyButton href={primary.href}>{primary.label}</BuyButton> : null}
+              {primary ? <BuyButton href={primary.href}>{amazonCtaText(primary.partner, primary.label)}</BuyButton> : null}
             </div>
           </div>
         ))}
