@@ -7,6 +7,7 @@ import { Disclosure } from "@/components/commerce/Disclosure";
 import { QuickPick } from "@/components/commerce/QuickPick";
 import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { WhyNot } from "@/components/commerce/WhyNot";
+import { JsonLd, articleForPage } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { getSource } from "@/lib/facts";
@@ -33,6 +34,7 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={sources}>
+      <JsonLd data={articleForPage(entry)} />
       <AnswerBlock>
         Three wall-listed electric classes cover most garages: a <Num f="hs1500tt.watts" /> infrared panel mounted
         at <Num f="hs1500tt.mount_height_in_us" /> with <Num f="hs1500tt.clearance_side_in" /> side clearance, a{" "}

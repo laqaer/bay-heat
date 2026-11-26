@@ -35,7 +35,7 @@ export const PAGES: PageEntry[] = [
   {
     href: "/lab/notebook",
     id: "G-007",
-    title: "Lab notebook: every model release, price refresh and correction",
+    title: "Lab notebook: model releases and corrections",
     h1: "The Lab notebook",
     description: "A dated log of every model version, price refresh and correction. We correct within 72 hours, or 24 for a safety issue.",
     kind: "lab",

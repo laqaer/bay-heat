@@ -4,10 +4,9 @@ export const PAGES: PageEntry[] = [
   {
     href: "/",
     id: "G-001",
-    title: "BayHeat — Garage Climate Lab",
+    title: "BayHeat, the Garage Climate Lab",
     h1: "One garage. Seven answers.",
-    description:
-      "BayHeat is the independent garage climate lab. An open model sizes the heater for your garage, grades every number by where it came from, and tells you plainly when a heater will trip your breaker or gas you.",
+    description: "One garage. Seven answers. Rules of thumb can't see your garage. Our open model can.",
     kind: "home",
     layout: "report-first",
     reviewed: null,

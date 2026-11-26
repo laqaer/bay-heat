@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
+import { JsonLd, articleForPage } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { Num } from "@/components/evidence/Num";
@@ -55,6 +56,7 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={[]}>
+      <JsonLd data={articleForPage(entry)} />
       <p className="text-xl font-medium text-(--color-fg)">$675 of fixes. Half the heater.</p>
       <p>
         Seal the leaks, treat the door, then the ceiling — in that order, because each one pays back faster than the

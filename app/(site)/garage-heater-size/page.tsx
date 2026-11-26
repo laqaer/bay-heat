@@ -9,6 +9,7 @@ import { findProduct } from "@/lib/commerce/products";
 import { getFact, getSource } from "@/lib/facts";
 import { GradeScale } from "@/components/figures/GradeScale";
 import { HeatLossBars } from "@/components/figures/HeatLossBars";
+import { JsonLd, articleForPage } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { PRESET_DEFAULTS } from "@/lib/planner/presets";
@@ -138,6 +139,7 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={SOURCE_IDS.map((id) => getSource(id)).filter((x): x is NonNullable<typeof x> => x !== null)}>
+      <JsonLd data={articleForPage(entry)} />
       <AnswerBlock>
         A tight, insulated 2-car garage in Chicago needs about{" "}
         <Num v={twoCarCold.tight.kwSize * 1000} unit="W" round={100} ev="C" src="heatLossDesign(), tight envelope, IL-chicago h99" /> to{" "}

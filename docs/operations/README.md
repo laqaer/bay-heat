@@ -36,6 +36,22 @@ This note records the source change only. It is not a deployment record. The mer
 
 **Correction (2026-11-07, after the merge).** The first #49 receipt called `deploy.yml` run 42389511925 a Cloudflare deploy. That was wrong. The run built the site and skipped its Deploy step, because `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are not set. All 21 `deploy.yml` runs since 2026-10-09 skipped that step. The coordinator's Vercel read shows that bayheatguide.com serves `73ef6ee`: deployment `dpl_naeXo4PLz4HydQ1NkxaoJb8WLPQs`, READY, target production. The [#49 receipt correction](https://github.com/laqaer/bay-heat/pull/49#issuecomment-6709799767) gives the step logs.
 
+## SEO titles and page schema (2026-11-26)
+
+Task FLEET-SEO-20261126. Pull request [#52](https://github.com/laqaer/bay-heat/pull/52). Code revision [`562a315`](https://github.com/laqaer/bay-heat/commit/562a3156e18314358635dbc236907efe652cee7c).
+
+Status of that revision: implemented in source. Not merged. Not deployed. Not released.
+
+Rendered `<title>` text is 30 to 65 characters on `/`, `/240v-garage-heater`, `/best-wall-mount-garage-heaters`, `/can-i-run-it`, `/diesel-heater-for-garage`, `/garage-heater-size`, `/lab/notebook`, and `/natural-gas-garage-heater`. The homepage title is absolute. The other seven titles use the `%s · BayHeat` template. The homepage meta description is the h1 plus the two hero sentences already on the page. Its decoded length is 84 characters.
+
+`Article` JSON-LD is on `/240v-garage-heater`, `/best-wall-mount-garage-heaters`, `/can-i-run-it`, `/diesel-heater-for-garage`, `/garage-heater-size`, `/how-to-insulate-a-garage`, `/lab/notebook`, and `/natural-gas-garage-heater`. Headline, description, and dates come from the page registry. The author is the Organization named BayHeat when no editor name is set. `/how-to-insulate-a-garage` has published and updated both set to `2026-10-02`, so both Article dates are that registry date.
+
+Tests on `562a315`: `npm test` passed, 168 tests, including `lib/pages/seo-fleet.test.ts`. Those tests check rendered title length, homepage description length, and Article or WebPage JSON-LD on the pages above.
+
+Local preview, same revision: `verify-bay-heat` served `next dev` at `http://127.0.0.1:4317`. Doctor passed. Each of the eight Article routes returned `Article` in the page JSON-LD. That preview is not `out/` and not production.
+
+Production boundary: `npm run build` stops in `next.config.ts` before it writes `out/`. The build calls `scripts/editorial-gate.mjs`, which requires a recorded editorial, electrical, and gas approval for the changed `app/` and `lib/` files. No approval was added. `npm run qa` was not run. `https://bayheatguide.com` was not requested. A merge does not deploy this change until that gate passes and a later production check reads the live HTML.
+
 ## Authority and budgets
 
 New discretionary spend: **$0**. Do not buy ads, credits, domains, or plan upgrades. Do not enable Vercel excess billing. Do not subscribe the Cloudflare zone to a paid plan, transfer `bayheatguide.com` onto Cloudflare Registrar, or enable Email Sending.

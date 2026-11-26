@@ -38,7 +38,7 @@ export const PAGES: PageEntry[] = [
   {
     href: "/diesel-heater-for-garage",
     id: "G-022",
-    title: "Diesel heater for a garage: cost per hour vs electric, and the exhaust rule",
+    title: "Diesel heater for a garage: the exhaust rule",
     h1: "Diesel heaters for a garage",
     description: "What a diesel air heater actually costs per hour at this week's fuel price, why the exhaust has to go outside, and when it beats electric.",
     kind: "money",
@@ -106,7 +106,7 @@ export const PAGES: PageEntry[] = [
   {
     href: "/natural-gas-garage-heater",
     id: "G-029",
-    title: "Natural gas garage heater: vent it outdoors, hang it high, hire a licensed fitter",
+    title: "Natural gas garage heater: vent it outdoors",
     h1: "Natural gas garage heaters",
     description: "How to size, vent and hook up a natural gas garage heater, why a vent-free one is a no in an attached garage, and its cost per hour against electric.",
     kind: "money",
