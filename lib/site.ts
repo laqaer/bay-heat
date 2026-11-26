@@ -6,6 +6,17 @@ import { SITE_URL, CONTACT_EMAIL, EDITOR_NAME, REVIEWERS_JSON } from "./env.publ
 export { SITE_URL, CONTACT_EMAIL };
 
 export const BRAND = "BayHeat";
+// Next applies this to every page title except the homepage, which sets title.absolute.
+export const TITLE_TEMPLATE = `%s · ${BRAND}`;
+
+export function metadataTitle(path: string, title: string): string | { absolute: string } {
+  return path === "/" ? { absolute: title } : title;
+}
+
+export function documentTitle(path: string, title: string): string {
+  const field = metadataTitle(path, title);
+  return typeof field === "string" ? TITLE_TEMPLATE.replace("%s", field) : field.absolute;
+}
 export const DESCRIPTOR = "Garage Climate Lab";
 export const TAGLINE = "Every number shows its work.";
 export const PUBLISHER = "Laqaer Products";
