@@ -42,7 +42,7 @@ export const PAGES: PageEntry[] = [
   {
     href: "/240v-garage-heater",
     id: "G-016",
-    title: "240V garage heaters: 5 kW needs a 30A breaker and 10 AWG, and 4 kW won't fit a 20A circuit",
+    title: "240V garage heaters: the breaker and the wire",
     h1: "240V garage heaters",
     description: "What a 240V garage heater actually needs: breaker size, wire gauge, GFCI, and why 4 kW doesn't fit a 20A circuit.",
     kind: "money",
@@ -93,7 +93,7 @@ export const PAGES: PageEntry[] = [
   {
     href: "/best-wall-mount-garage-heaters",
     id: "G-019",
-    title: "Wall-mount garage heaters: 1.5 kW, 5 kW and 7.5 kW, with the clearances from each manual",
+    title: "Wall-mount garage heaters and their clearances",
     h1: "Wall-mount garage heaters",
     description: "Wall-listed electric garage heaters from a 1.5 kW infrared panel to a 7.5 kW shop unit, with nameplate and manual figures only.",
     kind: "money",

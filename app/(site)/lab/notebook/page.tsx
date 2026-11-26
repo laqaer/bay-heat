@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportPage } from "@/components/page/ReportPage";
+import { JsonLd, articleForPage } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { Callout } from "@/components/ui/Callout";
@@ -17,6 +18,7 @@ export const metadata: Metadata = pageMetadata({
 export default function Page() {
   return (
     <ReportPage entry={entry} sources={[]}>
+      <JsonLd data={articleForPage(entry)} />
       <p>
         Every model version, price refresh and correction gets a dated line here, in the order it happened.
         Nothing is added after the fact and nothing is backdated.

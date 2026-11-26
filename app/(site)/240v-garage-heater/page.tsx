@@ -9,6 +9,7 @@ import { Disclosure } from "@/components/commerce/Disclosure";
 import { QuickPick } from "@/components/commerce/QuickPick";
 import { BuyButton, BuyTextLink } from "@/components/ui/ButtonLink";
 import { WhyNot } from "@/components/commerce/WhyNot";
+import { JsonLd, articleForPage } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { getSource } from "@/lib/facts";
@@ -44,6 +45,7 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={sources}>
+      <JsonLd data={articleForPage(entry)} />
       <AnswerBlock>
         A 5,000W 240V heater needs a <Num v={c5k.breakerA} unit="A" ev="C" src="circuitFor(5000, 240, 240)" /> breaker
         and {c5k.wireNM} copper. A 4,000W heater draws less current but still needs a{" "}

@@ -9,6 +9,7 @@ import { SafetyCallout } from "@/components/safety/SafetyCallout";
 import { QuickPick } from "@/components/commerce/QuickPick";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { BuyButton } from "@/components/ui/ButtonLink";
+import { JsonLd, articleForPage } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { getSource } from "@/lib/facts";
@@ -83,6 +84,7 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={sources}>
+      <JsonLd data={articleForPage(entry)} />
       <AnswerBlock>
         At the Midwest regional {prices.asOf.diesel} diesel price and Illinois&apos; {prices.asOf.elec} electricity price, a{" "}
         <Num v={repOutputBtuh} unit="BTU/h" round={100} ev="S" src="HEATER_CLASSES.diesel_air.outputBtuh — lib/planner/catalog.ts" />{" "}

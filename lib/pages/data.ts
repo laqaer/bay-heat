@@ -34,7 +34,7 @@ export const PAGES: PageEntry[] = [
   {
     href: "/garage-heater-size",
     id: "G-010",
-    title: "What size heater for a 1-, 2- or 3-car garage: 7,500 to 94,300 BTU/h, depending on the walls",
+    title: "Garage heater size for a 1-, 2- or 3-car garage",
     h1: "Garage heater size",
     description: "Wattage brackets for 1-, 2-, 3- and 4-car garages by insulation and climate — a planning bracket, not a load calculation.",
     kind: "guide",

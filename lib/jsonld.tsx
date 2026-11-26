@@ -80,6 +80,22 @@ export function articleJsonLd(opts: {
   };
 }
 
+export function articleForPage(entry: {
+  href: string;
+  h1: string;
+  description: string;
+  published: string;
+  updated: string;
+}) {
+  return articleJsonLd({
+    headline: entry.h1,
+    description: entry.description,
+    url: `${SITE_URL}${entry.href}`,
+    datePublished: entry.published,
+    dateModified: entry.updated,
+  });
+}
+
 export function datasetJsonLd(opts: {
   name: string;
   description: string;

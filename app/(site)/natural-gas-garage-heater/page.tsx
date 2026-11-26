@@ -11,6 +11,7 @@ import { QuickPick } from "@/components/commerce/QuickPick";
 import { Disclosure } from "@/components/commerce/Disclosure";
 import { PaidLabel } from "@/components/commerce/PaidLabel";
 import { BuyButton, ButtonLink } from "@/components/ui/ButtonLink";
+import { JsonLd, articleForPage } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 import { findPage } from "@/lib/pages";
 import { getFact, getSource } from "@/lib/facts";
@@ -268,6 +269,7 @@ export default function Page() {
 
   return (
     <ReportPage entry={entry} sources={sources}>
+      <JsonLd data={articleForPage(entry)} />
       <AnswerBlock>
         Size our insulated 3-car example in Chicago for about{" "}
         <BtuhKw btuh={example.load} src="heatLossDesign().qSize, 3-car, tight, IL-chicago" />: its design-day loss plus a{" "}

@@ -2,7 +2,7 @@
 // `openGraph` object replaces the layout's whole object, including `images` and `url`. Every page calls
 // pageMetadata() instead of hand-building a Metadata object, so canonical, og:url and og:image are always set.
 import type { Metadata, Route } from "next";
-import { BRAND, LOCALE, SITE_URL, TITLE_TEMPLATE, metadataTitle } from "@/lib/site";
+import { BRAND, LOCALE, SITE_URL, TITLE_TEMPLATE } from "@/lib/site";
 import { findPage, isIndexed } from "@/lib/pages";
 
 export function pageMetadata(p: {
@@ -21,7 +21,7 @@ export function pageMetadata(p: {
   const entry = findPage(p.path);
   const noindex = p.noindex || (entry !== undefined && !isIndexed(entry));
   return {
-    title: metadataTitle(p.path, p.title),
+    title: p.path === "/" ? { absolute: p.title } : p.title,
     description: p.description,
     alternates: { canonical: p.path },
     robots: noindex ? { index: false, follow: true } : undefined,
